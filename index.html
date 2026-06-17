@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benzjames - L'Écurie High-Tech & Couture</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+bj: {
+black: '#080808',
+dark: '#121212',
+border: '#222222',
+gold: '#D4AF37',
+red: '#E10600', // Rouge F1 officiel
+textMuted: '#8E8E93'
+}
+},
+fontFamily: {
+sans: ['Plus Jakarta Sans', 'sans-serif'],
+mono: ['JetBrains Mono', 'monospace']
+}
+}
+}
+}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+body {
+background-color: #080808;
+color: #ffffff;
+font-family: 'Plus Jakarta Sans', sans-serif;
+overflow-x: hidden;
+}
+.f1-grid {
+background-size: 40px 40px;
+background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+/* Smooth transition for editing overlay */
+.edit-highlight {
+position: relative;
+}
+.master-active .edit-highlight:hover {
+outline: 1px dashed #D4AF37;
+background-color: rgba(212, 175, 55, 0.05);
+}
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-bj-gold selection:text-black">
+
+<!-- MASTER NOTIFICATION BANNER -->
+<div id="master-banner" class="hidden bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50">
+<span>⚡ MASTER MODE ACTIF — MODIFICATION DU CANVAS AUTORISÉE</span>
+<button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
+</div>
+
+<!-- Header Navigation -->
+<header class="border-b border-bj-border/80 bg-bj-black/90 backdrop-blur-md sticky top-0 z-40 py-4 px-6 sm:px-12">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<!-- Brand Logo -->
+<div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('page-home')">
+<span class="text-xl font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
+<span class="hidden sm:inline-block px-2 py-0.5 border border-bj-red/50 text-[9px] text-bj-red uppercase tracking-widest font-bold">Aero-Couture</span>
+</div>
+
+<!-- 5 Pages Navigation -->
+<nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-bj-textMuted">
+<button onclick="navigateTo('page-home')" id="nav-page-home" class="hover:text-white transition-all text-white border-b border-bj-gold pb-1">L'Écurie</button>
+<button onclick="navigateTo('page-collection')" id="nav-page-collection" class="hover:text-white transition-all pb-1">La Collection</button>
+<button onclick="navigateTo('page-lab')" id="nav-page-lab" class="hover:text-white transition-all pb-1">Le Labo F1</button>
+<button onclick="navigateTo('page-vogue')" id="nav-page-vogue" class="hover:text-white transition-all pb-1">Vogue Look</button>
+<button onclick="navigateTo('page-preorder')" id="nav-page-preorder" class="hover:text-white transition-all pb-1">Configuration</button>
+</nav>
+
+<!-- CTA -->
+<button onclick="navigateTo('page-preorder')" class="bg-white hover:bg-neutral-200 text-black px-4 py-2 rounded text-xs uppercase tracking-widest font-bold transition-all">
+Reserver
+</button>
+</div>
+</header>
+
+<!-- MAIN APP WRAPPER -->
+<main class="flex-grow">
+
+<!-- PAGE 1: L'ÉCURIE (HOME HERO) -->
+<section id="page-home" class="f1-grid min-h-[85vh] flex items-center py-12 px-6 sm:px-12 transition-all duration-300">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+<!-- Text Column -->
+<div class="lg:col-span-7 space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-border rounded-full text-xs text-bj-gold font-mono">
+<span class="w-1.5 h-1.5 rounded-full bg-bj-red animate-pulse"></span>
+<span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
+<button onclick="editPageText('txt-home-tag')" class="master-only ml-2 text-bj-gold hover:text-white hidden">✏️</button>
+</div>
+<div class="edit-highlight p-2 rounded">
+<h1 class="text-4xl sm:text-6xl font-light tracking-tight leading-none text-white">
+<span id="txt-home-title-1">L'aérodynamique de la</span> <span id="txt-home-title-highlight" class="font-bold text-bj-gold">F1</span>.<br>
+<span id="txt-home-title-2">L'exigence de la</span> <span id="txt-home-title-serif" class="italic font-serif">Haute Couture</span>.
+</h1>
+<button onclick="editHomeTitles()" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️ Éditer Titre</button>
+</div>
+
+<div class="edit-highlight p-2 rounded relative">
+<p id="txt-home-desc" class="text-bj-textMuted text-base sm:text-lg max-w-xl leading-relaxed">
+Benzjames redéfinit l'accessoire de sport mécanique. Un alliage brut de composites légers, de tissus thermorégulés et d'une esthétique éditoriale taillée pour la vitesse.
+</p>
+<button onclick="editPageText('txt-home-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
+</div>
+
+<div class="flex flex-wrap gap-4 pt-4">
+<button onclick="navigateTo('page-collection')" class="bg-bj-gold hover:bg-white text-black font-extrabold px-8 py-4 rounded text-xs uppercase tracking-widest transition-all">
+Découvrir le Produit
+</button>
+<button onclick="navigateTo('page-lab')" class="border border-bj-border hover:border-white px-8 py-4 rounded text-xs text-white uppercase tracking-widest transition-all font-semibold">
+Spécifications Physiques
+</button>
+</div>
+</div>
+
+<!-- Visual Column -->
+<div class="lg:col-span-5 relative">
+<div class="border border-bj-border bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden">
+<div class="aspect-[4/5] bg-neutral-900 rounded-xl relative overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-t from-bj-black to-transparent opacity-80 z-10"></div>
+<div class="absolute inset-0 flex flex-col justify-between p-6 z-20">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-mono text-bj-gold uppercase tracking-widest">Model: Carbon Aero V1</span>
+<span class="text-[10px] font-mono text-bj-red">0.24 Cx</span>
+</div>
+<div class="space-y-2">
+<p class="text-xs font-mono text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
+<h3 class="text-2xl font-bold uppercase tracking-wider font-mono">MONACO GP EDITION</h3>
+</div>
+</div>
+<div class="w-48 h-48 rounded-full border-[1px] border-bj-gold/20 animate-spin" style="animation-duration: 20s;"></div>
+<div class="absolute w-36 h-36 rounded-full border-[1px] border-bj-red/40 animate-ping"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PAGE 2: LA COLLECTION (PRODUCTS) -->
+<section id="page-collection" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
+<div class="max-w-7xl mx-auto space-y-12">
+<div class="border-b border-bj-border pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+<div>
+<span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// LA GAMME SPORT</span>
+<div class="flex items-center gap-3">
+<h2 id="txt-col-title" class="text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
+<button onclick="editPageText('txt-col-title')" class="master-only text-bj-gold hidden">✏️</button>
+</div>
+</div>
+<div class="flex items-center gap-4 w-full sm:w-auto">
+<button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all">
+＋ Ajouter un produit
+</button>
+<span class="text-xs text-bj-textMuted font-mono whitespace-nowrap" id="txt-col-count">Affichage : 6 Modèles Exclusifs</span>
+</div>
+</div>
+
+<!-- Grid Produits dynamique -->
+<div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Généré dynamiquement en JS -->
+</div>
+</div>
+</section>
+
+<!-- PAGE 3: LE LABO F1 (INNOVATION & PHYSICS) -->
+<section id="page-lab" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Side: Interactive Telemetry UI -->
+<div class="lg:col-span-5 bg-bj-dark border border-bj-border rounded-xl p-6 space-y-6">
+<div class="border-b border-bj-border pb-4">
+<span class="text-xs font-mono text-bj-red uppercase tracking-widest">// VUE TÉLÉMÉTRIQUE</span>
+<h3 class="text-xl font-bold mt-1">Analyse Aérodynamique</h3>
+</div>
+
+<!-- Simulated Sensor Bars -->
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs font-mono mb-1">
+<span class="text-bj-textMuted">RÉSISTANCE AU VENT (Cx)</span>
+<span class="text-white">0.24 (Optimal)</span>
+</div>
+<div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
+<div class="bg-bj-red h-full" style="width: 82%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-mono mb-1">
+<span class="text-bj-textMuted">INDICE DE CONDUCTION THERMIQUE</span>
+<span class="text-white">94%</span>
+</div>
+<div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
+<div class="bg-bj-gold h-full" style="width: 94%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-mono mb-1">
+<span class="text-bj-textMuted">MASSE VOLUMIQUE DU COMPOSITE</span>
+<span class="text-white">42g (Ultra Léger)</span>
+</div>
+<div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
+<div class="bg-white h-full" style="width: 42%"></div>
+</div>
+</div>
+</div>
+
+<!-- Real-Time Interactive Simulation -->
+<div class="border border-bj-border p-4 rounded bg-black flex flex-col justify-between space-y-4">
+<span class="text-[10px] font-mono text-bj-textMuted">SIMULATION EN SOUFFLERIE (TEMPS RÉEL)</span>
+<div class="flex justify-center py-6">
+<span class="text-2xl font-mono text-bj-gold tracking-widest animate-pulse" id="sim-speed">FLOW: 120 km/h</span>
+</div>
+<input type="range" min="50" max="320" value="120" id="wind-slider" oninput="updateWindSpeed(this.value)" class="w-full accent-bj-gold">
+</div>
+</div>
+
+<!-- Right Side: Explanations -->
+<div class="lg:col-span-7 space-y-8 flex flex-col justify-center relative">
+<span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// FIRST PRINCIPLES DESIGN</span>
+<div class="edit-highlight p-2 rounded relative">
+<h2 id="txt-lab-title" class="text-4xl font-bold tracking-tight">Pas de fioritures, juste de la physique pure.</h2>
+<button onclick="editPageText('txt-lab-title')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
+</div>
+
+<div class="edit-highlight p-2 rounded relative">
+<p id="txt-lab-desc" class="text-bj-textMuted leading-relaxed">
+Chaque courbe d'une casquette Benzjames n'est pas le fruit du hasard. Nous utilisons des calculs d'écoulement des fluides pour s'assurer que même lors de vitesses extrêmes sur piste ou en conduite de cabriolet, la casquette maintienne un appui aérodynamique stable sans créer de turbulence au niveau du cou.
+</p>
+<button onclick="editPageText('txt-lab-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+<div class="border-l-2 border-bj-red pl-4 edit-highlight relative">
+<h4 id="txt-lab-card1-title" class="text-sm font-bold">Fibre de Carbone Tissée</h4>
+<p id="txt-lab-card1-desc" class="text-xs text-bj-textMuted mt-1">La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.</p>
+<button onclick="editCardTexts('txt-lab-card1-title', 'txt-lab-card1-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
+</div>
+<div class="border-l-2 border-bj-gold pl-4 edit-highlight relative">
+<h4 id="txt-lab-card2-title" class="text-sm font-bold">Technologie Anti-Peltier</h4>
+<p id="txt-lab-card2-desc" class="text-xs text-bj-textMuted mt-1">Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.</p>
+<button onclick="editCardTexts('txt-lab-card2-title', 'txt-lab-card2-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL) -->
+<section id="page-vogue" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
+<div class="max-w-7xl mx-auto space-y-12">
+<div class="text-center max-w-2xl mx-auto space-y-4 relative edit-highlight p-4 rounded">
+<span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// EDITORIAL CHIC</span>
+<h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight">Le Style en Mouvement</h2>
+<p id="txt-vogue-desc" class="text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
+<button onclick="editCardTexts('txt-vogue-title', 'txt-vogue-desc')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️</button>
+</div>
+
+<!-- Vogue Grid Photo Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<div class="md:col-span-8 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end">
+<div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
+<span class="text-bj-border text-8xl font-bold italic font-serif">VOGUE</span>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+<div class="z-20">
+<span class="text-xs font-mono text-bj-gold">SERIE MONACO GP</span>
+<h3 class="text-2xl font-bold mt-1">L'élégance asymétrique sur la grille de départ</h3>
+</div>
+</div>
+
+<div class="md:col-span-4 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end">
+<div class="absolute inset-0 bg-neutral-950 flex items-center justify-center">
+<span class="text-bj-border text-5xl font-bold font-mono">F1 EDIT</span>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+<div class="z-20">
+<span class="text-xs font-mono text-bj-red">SÉRIE LIMITÉE 1/1000</span>
+<h3 class="text-xl font-bold mt-1">La casquette sport redéfinie pour elle</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PAGE 5: CONFIGURATION & PRE-ORDER -->
+<section id="page-preorder" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- Configuration panel -->
+<div class="bg-bj-dark border border-bj-border rounded-2xl p-8 space-y-6">
+<div>
+<span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES</span>
+<h2 class="text-3xl font-bold mt-1">Configurez votre Numéro Unique</h2>
+</div>
+
+<div class="space-y-4">
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Sélectionnez le Modèle</label>
+<select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-semibold">
+<!-- Options de modèles synchronisées par JS -->
+</select>
+</div>
+
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
+<input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-mono">
+<p class="text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
+</div>
+</div>
+
+<!-- Live Simulation Certificate -->
+<div class="border border-dashed border-bj-border p-6 rounded bg-black/40 text-center space-y-4">
+<span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest">Génération du certificat d'authenticité de l'étiquette</span>
+<div class="space-y-1">
+<p class="text-lg font-mono text-bj-gold" id="config-display-code">BJ-042-42DF</p>
+<p class="text-[10px] text-bj-textMuted font-mono">Certificat d'empreinte généré à la volée</p>
+</div>
+</div>
+
+<!-- Client Info Form to capture leads -->
+<div class="space-y-4 pt-4 border-t border-bj-border">
+<div class="grid grid-cols-2 gap-4">
+<input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
+<input type="email" id="client-email" placeholder="Adresse email" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
+</div>
+<button onclick="submitPreorder()" class="w-full bg-bj-gold hover:bg-white text-black font-extrabold py-4 rounded text-xs uppercase tracking-widest transition-all">
+Vérifier la Disponibilité et Réserver
+</button>
+</div>
+</div>
+
+<!-- Live Preview of the selected cap (Vogue aesthetic) -->
+<div class="border border-bj-border rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden">
+<div>
+<span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final</span>
+<div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-border mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300">
+<!-- Overlay to maintain text readability over image -->
+<div class="absolute inset-0 bg-black/80 z-0"></div>
+<!-- Simulated Premium Box -->
+<div class="absolute inset-4 border border-bj-border/30 rounded flex flex-col justify-between p-6 z-10">
+<div class="flex justify-between items-start">
+<span class="text-[8px] font-mono text-bj-textMuted">BENZJAMES LABS</span>
+<span class="text-[8px] font-mono text-bj-red" id="box-weight">WEIGHT: 42G</span>
+</div>
+<div class="text-center space-y-2">
+<span class="text-xs uppercase tracking-[0.3em] text-bj-textMuted" id="box-slogan">L'APPUI AÉRODYNAMIQUE ULTIME</span>
+<h3 class="text-2xl font-bold uppercase tracking-widest text-white font-mono" id="box-title">MONZA</h3>
+<div class="inline-block px-3 py-1 bg-bj-dark border border-bj-border text-bj-gold font-mono text-sm" id="box-serial">
+N° 042 / 1000
+</div>
+</div>
+<div class="text-center">
+<span class="text-[8px] font-mono text-bj-textMuted">MACHINED & SIGNED IN FRANCE</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="pt-6 flex justify-between items-center">
+<div>
+<span class="text-xs text-bj-textMuted block">MÉTHODE D'AUTHENTIFICATION</span>
+<span class="text-sm font-bold text-white">NFC + Code d'Empreinte (Vérifié)</span>
+</div>
+<div class="text-right">
+<span class="text-xs text-bj-textMuted block">PRIX DE RÉSERVATION</span>
+<span class="text-lg font-mono text-bj-gold font-bold" id="box-price">240 €</span>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+</main>
+
+<!-- Master Login Dialog Modal -->
+<div id="modal-login" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+<div class="bg-bj-dark border border-bj-border p-8 rounded-2xl w-full max-w-md space-y-6">
+<div class="text-center">
+<span class="text-xs font-mono text-bj-gold uppercase tracking-widest">Benzjames Security Portal</span>
+<h3 class="text-2xl font-bold tracking-tight mt-1 text-white">Connexion Master</h3>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Identifiant Administrateur</label>
+<input type="text" id="login-id" value="DENIS_MASTER" readonly class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white/50 focus:outline-none font-mono text-sm">
+</div>
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Code Secret d'Écurie</label>
+<input type="password" id="login-password" placeholder="Mot de passe" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold font-mono text-sm">
+<p class="text-[10px] text-bj-textMuted mt-1">Indice : MASTER2026</p>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button onclick="closeLoginModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
+<button onclick="submitLogin()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Se Connecter</button>
+</div>
+</div>
+</div>
+
+<!-- Product Creation/Edition Modal -->
+<div id="modal-product" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+<div class="bg-bj-dark border border-bj-border p-6 rounded-2xl w-full max-w-xl space-y-6 my-8">
+<div class="flex justify-between items-center border-b border-bj-border pb-4">
+<h3 id="product-modal-title" class="text-xl font-bold text-white">Ajouter/Modifier un Article</h3>
+<button onclick="closeProductModal()" class="text-bj-textMuted hover:text-white text-xl font-mono">&times;</button>
+</div>
+<input type="hidden" id="edit-product-id">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Nom du Modèle (ex: Imola F1)</label>
+<input type="text" id="prod-name" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
+</div>
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Prix de vente (€)</label>
+<input type="number" id="prod-price" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-mono">
+</div>
+<div class="md:col-span-2">
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Slogan de l'article (ex: Vitesse et élégance pure)</label>
+<input type="text" id="prod-slogan" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
+</div>
+<div class="md:col-span-2">
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Description technique courte</label>
+<textarea id="prod-desc" rows="3" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm leading-relaxed"></textarea>
+</div>
+<div class="md:col-span-2">
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">URL de la photo de l'article (ou laisser vide pour motif F1)</label>
+<input type="text" id="prod-image" placeholder="https://exple.com/image.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-mono text-xs">
+<p class="text-[9px] text-bj-textMuted mt-1">Vous pouvez héberger vos photos de casquettes sur n'importe quel site et coller l'URL directe ici.</p>
+</div>
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Badge Catégorie</label>
+<input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm">
+</div>
+<div>
+<label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Poids simulé de l'article (g)</label>
+<input type="number" id="prod-weight" value="42" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-mono">
+</div>
+</div>
+
+<div class="flex gap-3 pt-4 border-t border-bj-border">
+<button onclick="closeProductModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
+<button onclick="saveProduct()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
+</div>
+</div>
+</div>
+
+<!-- Dynamic Generic Text Editing Modal -->
+<div id="modal-text-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+<div class="bg-bj-dark border border-bj-border p-6 rounded-2xl w-full max-w-lg space-y-6">
+<div>
+<span class="text-xs font-mono text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct</span>
+<h3 class="text-lg font-bold text-white mt-1">Modifier le texte sélectionné</h3>
+</div>
+<input type="hidden" id="edit-target-id">
+<div id="text-edit-input-container">
+<!-- Generates text input or textarea -->
+</div>
+<div class="flex gap-3 pt-2">
+<button onclick="closeTextEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
+<button onclick="saveTextEdit()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
+</div>
+</div>
+</div>
+
+<!-- Beautiful In-App Toast System (No Native Alerts) -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
+
+<!-- Footer -->
+<footer class="border-t border-bj-border py-8 px-6 sm:px-12 bg-bj-black text-center text-xs text-bj-textMuted">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+<span class="font-mono text-[10px] tracking-widest text-bj-gold">BENZJAMES GENUINE INTERACTION ENGINE</span>
+<p>© 2026 Benzjames. Tous droits réservés. Design propulsé par la physique.</p>
+<!-- Lock Button for master mode -->
+<button onclick="openLoginModal()" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs font-mono flex items-center gap-2 border border-bj-border/60 hover:border-bj-gold px-3 py-1 rounded">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+Master Portal
+</button>
+</div>
+</footer>
+
+<!-- INTERACTIVE APP SCRIPT -->
+<script>
+// Default Products Set
+const DEFAULT_PRODUCTS = [
+{
+id: "p1",
+name: "Monza Carbon Hybrid",
+price: 240,
+slogan: "L'appui aérodynamique ultime",
+desc: "Intègre une structure arrière en composite carbone flexible et un textile micro-perforé ultra-respirant.",
+image: "",
+badge: "F1 Aero",
+weight: 42
+},
+{
+id: "p2",
+name: "Monaco Active Thermal",
+price: 310,
+slogan: "Régulation thermique absolue",
+desc: "Équipée d'une cellule de régulation de température active par conduction. Technologie issue de l'aérospatiale.",
+image: "",
+badge: "Peltier Tech",
+weight: 51
+},
+{
+id: "p3",
+name: "Silverstone Track Femme",
+price: 220,
+slogan: "Le chic asymétrique sur grille",
+desc: "Design épuré ajusté, détails en fil d'or 18 carats brodé à la main et visière anti-reflets incurvée.",
+image: "",
+badge: "Vogue Edit",
+weight: 39
+},
+{
+id: "p4",
+name: "Suzuka Wind-Tunnel",
+price: 265,
+slogan: "Zéro traînée, pure performance",
+desc: "Profil hydrodynamique optimisé en soufflerie avec canaux de guidage d'air internes réduisant les frottements.",
+image: "",
+badge: "Wind Optimized",
+weight: 45
+},
+{
+id: "p5",
+name: "Singapore Night Run",
+price: 280,
+slogan: "Fibre optique active & haute couture",
+desc: "Comprend des micro-liserés luminescents alimentés par batterie ultra-fine, ajustables par télécommande tactile.",
+image: "",
+badge: "Lum Tech",
+weight: 48
+},
+{
+id: "p6",
+name: "Spa Rain Shield",
+price: 295,
+slogan: "Membrane hydrophobe d'écurie",
+desc: "Tissu technique à base de Gore-Tex® renforcé avec traitement imperméabilisant issu de la compétition F1.",
+image: "",
+badge: "Weatherproof",
+weight: 44
+}
+];
+
+// Global State
+let products = [];
+let pageTexts = {};
+let isMaster = false;
+
+// Custom Toast Notification System
+function showToast(title, message, type = 'success') {
+const container = document.getElementById('toast-container');
+const toast = document.createElement('div');
+let iconColor = 'text-bj-gold';
+let borderStyle = 'border-bj-border';
+if (type === 'error') {
+iconColor = 'text-bj-red';
+borderStyle = 'border-bj-red/30';
+}
+
+toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm`;
+toast.innerHTML = `
+<div class="p-1 rounded-md bg-black/40 ${iconColor}">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</div>
+<div class="flex-grow space-y-0.5">
+<strong class="text-xs text-white block uppercase tracking-wider font-bold">${title}</strong>
+<p class="text-[11px] text-bj-textMuted leading-normal">${message}</p>
+</div>
+<button onclick="this.parentElement.remove()" class="text-bj-textMuted hover:text-white font-mono text-xs">&times;</button>
+`;
+
+container.appendChild(toast);
+// Trigger animation
+setTimeout(() => {
+toast.classList.remove('opacity-0', 'translate-y-2');
+}, 10);
+
+// Auto-dismiss
+setTimeout(() => {
+toast.classList.add('opacity-0', 'translate-y-2');
+setTimeout(() => { toast.remove(); }, 300);
+}, 4000);
+}
+
+// Initialize Data from LocalStorage or default
+function initApp() {
+// Check Master Login Status
+isMaster = localStorage.getItem('bj_master_logged') === 'true';
+updateMasterModeUI();
+
+// Load Products
+const savedProducts = localStorage.getItem('bj_products');
+if (savedProducts) {
+products = JSON.parse(savedProducts);
+} else {
+products = [...DEFAULT_PRODUCTS];
+localStorage.setItem('bj_products', JSON.stringify(products));
+}
+
+// Load Page texts
+const savedTexts = localStorage.getItem('bj_page_texts');
+if (savedTexts) {
+pageTexts = JSON.parse(savedTexts);
+} else {
+// Default texts
+pageTexts = {
+'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES',
+'txt-home-title-1': "L'aérodynamique de la",
+'txt-home-title-highlight': 'F1',
+'txt-home-title-2': "L'exigence de la",
+'txt-home-title-serif': 'Haute Couture',
+'txt-home-desc': "Benzjames redéfinit l'accessoire de sport mécanique. Un alliage brut de composites légers, de tissus thermorégulés et d'une esthétique éditoriale taillée pour la vitesse.",
+'txt-col-title': 'Les Pièces Maîtresses',
+'txt-lab-title': 'Pas de fioritures, juste de la physique pure.',
+'txt-lab-desc': "Chaque courbe d'une casquette Benzjames n'est pas le fruit du hasard. Nous utilisons des calculs d'écoulement des fluides pour s'assurer que même lors de vitesses extrêmes sur piste ou en conduite de cabriolet, la casquette maintienne un appui aérodynamique stable sans créer de turbulence au niveau du cou.",
+'txt-lab-card1-title': 'Fibre de Carbone Tissée',
+'txt-lab-card1-desc': 'La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.',
+'txt-lab-card2-title': 'Technologie Anti-Peltier',
+'txt-lab-card2-desc': "Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.",
+'txt-vogue-title': 'Le Style en Mouvement',
+'txt-vogue-desc': 'Le minimalisme esthétique rencontre la puissance mécanique. Photographies d\'art et attitude asymétrique.'
+};
+localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+}
+
+renderApp();
+}
+
+// Apply state to DOM
+function renderApp() {
+// Apply page text values
+for (const [id, text] of Object.entries(pageTexts)) {
+const el = document.getElementById(id);
+if (el) el.innerText = text;
+}
+
+// Render Product Collection Grid
+const grid = document.getElementById('products-grid');
+grid.innerHTML = '';
+document.getElementById('txt-col-count').innerText = `Affichage : ${products.length} Modèles Exclusifs`;
+
+products.forEach((product, idx) => {
+const card = document.createElement('div');
+card.className = "bg-bj-dark border border-bj-border rounded-xl p-6 flex flex-col justify-between group hover:border-bj-gold/50 transition-all relative";
+// If custom image is set, use it. Otherwise, use a stylish abstract circle
+let imageHTML = `
+<div class="w-48 h-48 rounded-full border-[1.5px] border-bj-gold/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
+<span class="text-7xl font-extrabold text-bj-border/30 font-mono group-hover:text-bj-gold/10 transition-all">${String(idx + 1).padStart(2, '0')}</span>
+<div class="absolute w-24 h-24 rounded-full border border-dashed border-bj-red/20 group-hover:rotate-45 transition-all duration-700"></div>
+</div>
+`;
+
+if (product.image && product.image.trim() !== "") {
+imageHTML = `
+<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null; this.outerHTML='<div class=\\'text-center text-xs text-bj-red font-mono\\'>Erreur de chargement d\\'image</div>'">
+`;
+}
+
+card.innerHTML = `
+<!-- Master edit button inside product card -->
+<button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10" title="Éditer le produit">
+✏️
+</button>
+<div class="space-y-4">
+<div class="aspect-square bg-neutral-900 rounded-lg relative overflow-hidden flex items-center justify-center p-4">
+<div class="absolute top-3 left-3 bg-bj-red text-white text-[9px] font-bold px-2 py-0.5 tracking-widest uppercase">${product.badge}</div>
+${imageHTML}
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start gap-2">
+<h3 class="text-lg font-bold text-white group-hover:text-bj-gold transition-all leading-tight">${product.name}</h3>
+<span class="text-sm font-mono text-bj-gold font-bold whitespace-nowrap">${product.price} €</span>
+</div>
+<p class="text-[10px] uppercase font-mono text-bj-red tracking-wider" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
+</div>
+<p class="text-xs text-bj-textMuted leading-relaxed">${product.desc}</p>
+</div>
+<button onclick="selectProductForPreorder('${product.id}')" class="w-full mt-6 py-3 border border-bj-border hover:bg-white hover:text-black text-xs uppercase tracking-widest font-bold transition-all rounded">Configurateur</button>
+`;
+grid.appendChild(card);
+});
+
+// Re-render select options in pre-order page
+const select = document.getElementById('config-model');
+select.innerHTML = '';
+products.forEach(p => {
+const opt = document.createElement('option');
+opt.value = p.id;
+opt.innerText = `${p.name} (${p.price} €)`;
+select.appendChild(opt);
+});
+
+// Trigger updates on pre-order preview
+updatePreorderPrice();
+updatePreorderVisual();
+}
+
+// Tab router logic
+function navigateTo(pageId) {
+const pages = ['page-home', 'page-collection', 'page-lab', 'page-vogue', 'page-preorder'];
+pages.forEach(id => {
+const element = document.getElementById(id);
+if (element) element.classList.add('hidden');
+const navBtn = document.getElementById(`nav-${id}`);
+if (navBtn) {
+navBtn.classList.remove('text-white', 'border-b', 'border-bj-gold');
+navBtn.classList.add('text-bj-textMuted');
+}
+});
+
+const targetPage = document.getElementById(pageId);
+if (targetPage) targetPage.classList.remove('hidden');
+const activeNav = document.getElementById(`nav-${pageId}`);
+if (activeNav) {
+activeNav.classList.add('text-white', 'border-b', 'border-bj-gold');
+activeNav.classList.remove('text-bj-textMuted');
+}
+
+window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Lab Page Wind Simulator
+function updateWindSpeed(value) {
+document.getElementById('sim-speed').innerText = `FLOW: ${value} km/h`;
+}
+
+// Base 36 Cryptographic generation
+const BASE36_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function toBase36(num, padLen) {
+let result = "";
+let n = Math.abs(Math.floor(num));
+if (n === 0) result = "0";
+while (n > 0) {
+result = BASE36_ALPHABET[n % 36] + result;
+n = Math.floor(n / 36);
+}
+while (result.length < padLen) {
+result = "0" + result;
+}
+return result.substring(result.length - padLen);
+}
+
+function generateLiveCertificate(serial) {
+const padSerial = String(serial).padStart(3, '0');
+// Seed base checksum with salt 739151
+let hash = (serial * 31 + 739151) % 1679616;
+const codeB = toBase36(hash, 4);
+return `BJ-${padSerial}-${codeB}`;
+}
+
+// Live Config Preview and visual updates
+function updatePreorderVisual() {
+let serialInput = parseInt(document.getElementById('config-serial').value) || 1;
+if (serialInput < 1) serialInput = 1;
+if (serialInput > 1000) serialInput = 1000;
+const padSerial = String(serialInput).padStart(3, '0');
+const code = generateLiveCertificate(serialInput);
+
+document.getElementById('config-display-code').innerText = code;
+document.getElementById('box-serial').innerText = `N° ${padSerial} / 1000`;
+}
+
+function updatePreorderPrice() {
+const modelId = document.getElementById('config-model').value;
+const product = products.find(p => p.id === modelId) || products[0];
+
+if (!product) return;
+
+document.getElementById('box-price').innerText = `${product.price} €`;
+document.getElementById('box-title').innerText = product.name.split(' ')[0].toUpperCase();
+document.getElementById('box-weight').innerText = `WEIGHT: ${product.weight}G`;
+document.getElementById('box-slogan').innerText = (product.slogan || "Aero-Couture").toUpperCase();
+
+// Setup cover image background on live box if exists
+const container = document.getElementById('box-visual-container');
+if (product.image && product.image.trim() !== "") {
+container.style.backgroundImage = `url('${product.image}')`;
+} else {
+container.style.backgroundImage = 'none';
+}
+}
+
+function selectProductForPreorder(productId) {
+navigateTo('page-preorder');
+document.getElementById('config-model').value = productId;
+updatePreorderPrice();
+updatePreorderVisual();
+}
+
+// Lead submission handler
+function submitPreorder() {
+const name = document.getElementById('client-name').value.trim();
+const email = document.getElementById('client-email').value.trim();
+const serial = document.getElementById('config-serial').value;
+const selectEl = document.getElementById('config-model');
+const modelName = selectEl.options[selectEl.selectedIndex]?.text || "Modèle";
+
+if (!name || !email) {
+showToast("Fiches incomplètes", "Veuillez remplir votre Nom et votre Email pour soumettre la demande.", "error");
+return;
+}
+
+showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
+}
+
+/* MASTER MODE ENGINEERING (DENIS MASTER WORKFLOW) */
+
+function openLoginModal() {
+document.getElementById('login-password').value = '';
+document.getElementById('modal-login').classList.remove('hidden');
+}
+
+function closeLoginModal() {
+document.getElementById('modal-login').classList.add('hidden');
+}
+
+function submitLogin() {
+const pass = document.getElementById('login-password').value;
+if (pass === 'MASTER2026') {
+isMaster = true;
+localStorage.setItem('bj_master_logged', 'true');
+closeLoginModal();
+updateMasterModeUI();
+showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Mode Édition actif sur l'ensemble du Canvas.", "success");
+} else {
+showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejette l'identifiant.", "error");
+}
+}
+
+function logoutMaster() {
+isMaster = false;
+localStorage.setItem('bj_master_logged', 'false');
+updateMasterModeUI();
+showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas en mode consultation.", "success");
+}
+
+function updateMasterModeUI() {
+const banner = document.getElementById('master-banner');
+const masterElements = document.querySelectorAll('.master-only');
+if (isMaster) {
+document.body.classList.add('master-active');
+if (banner) banner.classList.remove('hidden');
+masterElements.forEach(el => el.classList.remove('hidden'));
+} else {
+document.body.classList.remove('master-active');
+if (banner) banner.classList.add('hidden');
+masterElements.forEach(el => el.classList.add('hidden'));
+}
+}
+
+// Dynamic Product Add/Edit Modal Controls
+function openProductModal(productId = '') {
+const modal = document.getElementById('modal-product');
+const titleEl = document.getElementById('product-modal-title');
+// Clear inputs
+document.getElementById('edit-product-id').value = productId;
+document.getElementById('prod-name').value = '';
+document.getElementById('prod-price').value = '';
+document.getElementById('prod-slogan').value = '';
+document.getElementById('prod-desc').value = '';
+document.getElementById('prod-image').value = '';
+document.getElementById('prod-badge').value = 'F1 Aero';
+document.getElementById('prod-weight').value = '42';
+
+if (productId) {
+titleEl.innerText = "Modifier l'Article Benzjames";
+const p = products.find(prod => prod.id === productId);
+if (p) {
+document.getElementById('prod-name').value = p.name;
+document.getElementById('prod-price').value = p.price;
+document.getElementById('prod-slogan').value = p.slogan || '';
+document.getElementById('prod-desc').value = p.desc;
+document.getElementById('prod-image').value = p.image || '';
+document.getElementById('prod-badge').value = p.badge || 'F1 Aero';
+document.getElementById('prod-weight').value = p.weight || '42';
+}
+} else {
+titleEl.innerText = "Ajouter une Pièce de Collection";
+}
+
+modal.classList.remove('hidden');
+}
+
+function closeProductModal() {
+document.getElementById('modal-product').classList.add('hidden');
+}
+
+function saveProduct() {
+const id = document.getElementById('edit-product-id').value;
+const name = document.getElementById('prod-name').value.trim();
+const price = parseInt(document.getElementById('prod-price').value) || 0;
+const slogan = document.getElementById('prod-slogan').value.trim();
+const desc = document.getElementById('prod-desc').value.trim();
+const image = document.getElementById('prod-image').value.trim();
+const badge = document.getElementById('prod-badge').value.trim();
+const weight = parseInt(document.getElementById('prod-weight').value) || 42;
+
+if (!name || !desc) {
+showToast("Formulaire Incomplet", "Les champs Nom et Description sont obligatoires.", "error");
+return;
+}
+
+if (id) {
+// Edit mode
+const idx = products.findIndex(p => p.id === id);
+if (idx !== -1) {
+products[idx] = { ...products[idx], name, price, slogan, desc, image, badge, weight };
+showToast("Article Modifié", `Le modèle ${name} a été reconfiguré avec succès.`);
+}
+} else {
+// Create mode
+const newId = 'p' + (Date.now());
+products.push({ id: newId, name, price, slogan, desc, image, badge, weight });
+showToast("Nouvel Article", `Le modèle ${name} est désormais disponible sur la grille.`);
+}
+
+localStorage.setItem('bj_products', JSON.stringify(products));
+renderApp();
+closeProductModal();
+}
+
+// Generic Text Editing Controls
+function editPageText(targetId, type = 'input') {
+if (!isMaster) return;
+const currentText = pageTexts[targetId] || document.getElementById(targetId).innerText;
+document.getElementById('edit-target-id').value = targetId;
+const container = document.getElementById('text-edit-input-container');
+container.innerHTML = '';
+
+if (type === 'textarea') {
+container.innerHTML = `
+<textarea id="edit-text-value" rows="5" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm leading-relaxed">${currentText}</textarea>
+`;
+} else {
+container.innerHTML = `
+<input type="text" id="edit-text-value" value="${currentText}" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
+`;
+}
+
+document.getElementById('modal-text-edit').classList.remove('hidden');
+}
+
+function editHomeTitles() {
+if (!isMaster) return;
+// Combined editor for the complex home header structure
+const container = document.getElementById('text-edit-input-container');
+container.innerHTML = `
+<div class="space-y-3">
+<label class="text-[10px] uppercase text-bj-textMuted block font-mono">Segment 1 (ex: L'aérodynamique de la)</label>
+<input type="text" id="edit-t1" value="${pageTexts['txt-home-title-1']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
+<label class="text-[10px] uppercase text-bj-textMuted block font-mono">Surlignage Or (ex: F1)</label>
+<input type="text" id="edit-thighlight" value="${pageTexts['txt-home-title-highlight']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
+<label class="text-[10px] uppercase text-bj-textMuted block font-mono">Segment 2 (ex: L'exigence de la)</label>
+<input type="text" id="edit-t2" value="${pageTexts['txt-home-title-2']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
+<label class="text-[10px] uppercase text-bj-textMuted block font-mono">Serif Italique (ex: Haute Couture)</label>
+<input type="text" id="edit-tserif" value="${pageTexts['txt-home-title-serif']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
+</div>
+<input type="hidden" id="edit-target-id" value="SPECIAL_HOME_TITLE">
+`;
+document.getElementById('modal-text-edit').classList.remove('hidden');
+}
+
+function editCardTexts(titleId, descId) {
+if (!isMaster) return;
+const container = document.getElementById('text-edit-input-container');
+container.innerHTML = `
+<div class="space-y-4">
+<div>
+<label class="text-[10px] uppercase text-bj-textMuted block font-mono mb-1">Titre</label>
+<input type="text" id="edit-card-title-val" value="${pageTexts[titleId]}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm font-bold">
+</div>
+<div>
+<label class="text-[10px] uppercase text-bj-textMuted block font-mono mb-1">Description</label>
+<textarea id="edit-card-desc-val" rows="3" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm leading-relaxed">${pageTexts[descId]}</textarea>
+</div>
+</div>
+<input type="hidden" id="edit-target-id" value="SPECIAL_CARD_EDIT">
+<input type="hidden" id="card-title-id" value="${titleId}">
+<input type="hidden" id="card-desc-id" value="${descId}">
+`;
+document.getElementById('modal-text-edit').classList.remove('hidden');
+}
+
+function closeTextEditModal() {
+document.getElementById('modal-text-edit').classList.add('hidden');
+}
+
+function saveTextEdit() {
+const targetId = document.getElementById('edit-target-id').value;
+
+if (targetId === "SPECIAL_HOME_TITLE") {
+pageTexts['txt-home-title-1'] = document.getElementById('edit-t1').value;
+pageTexts['txt-home-title-highlight'] = document.getElementById('edit-thighlight').value;
+pageTexts['txt-home-title-2'] = document.getElementById('edit-t2').value;
+pageTexts['txt-home-title-serif'] = document.getElementById('edit-tserif').value;
+} else if (targetId === "SPECIAL_CARD_EDIT") {
+const titleId = document.getElementById('card-title-id').value;
+const descId = document.getElementById('card-desc-id').value;
+pageTexts[titleId] = document.getElementById('edit-card-title-val').value;
+pageTexts[descId] = document.getElementById('edit-card-desc-val').value;
+} else {
+const newVal = document.getElementById('edit-text-value').value;
+pageTexts[targetId] = newVal;
+}
+
+localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+renderApp();
+closeTextEditModal();
+showToast("Texte Mis à Jour", "Le nouveau texte a été appliqué de manière permanente dans la mémoire locale.");
+}
+
+// Initialize application on page load
+window.onload = function() {
+initApp();
+}
+</script>
+</body>
+</html>
