@@ -101,7 +101,7 @@
         </div>
     </header>
 
-    <!-- MOBILE NAVIGATION OVERLAY -->
+    <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15) -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
         <!-- Top Bar inside drawer -->
         <div class="flex justify-between items-center">
@@ -113,19 +113,19 @@
             </button>
         </div>
 
-        <!-- Premium Large Mobile Navigation Menu -->
+        <!-- Premium Large Mobile Navigation Menu (Rouge F1 Ultra Lisible) -->
         <nav class="flex flex-col gap-8 text-center my-auto py-12">
             <span class="text-[9px] font-mono text-bj-gold tracking-[0.4em] uppercase mb-2">// DIRECTIVES D'ÉCURIE</span>
-            <button onclick="navigateToMobile('page-home')" class="text-2xl font-light uppercase tracking-widest text-white hover:text-bj-gold transition-all">L'Écurie</button>
-            <button onclick="navigateToMobile('page-collection')" class="text-2xl font-light uppercase tracking-widest text-white hover:text-bj-gold transition-all">La Collection</button>
-            <button onclick="navigateToMobile('page-lab')" class="text-2xl font-light uppercase tracking-widest text-white hover:text-bj-gold transition-all">Le Labo F1</button>
-            <button onclick="navigateToMobile('page-vogue')" class="text-2xl font-light uppercase tracking-widest text-white hover:text-bj-gold transition-all">Vogue Look</button>
-            <button onclick="navigateToMobile('page-preorder')" class="text-2xl font-light uppercase tracking-widest text-white hover:text-bj-gold transition-all">Configuration</button>
+            <button onclick="navigateToMobile('page-home')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">L'Écurie</button>
+            <button onclick="navigateToMobile('page-collection')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">La Collection</button>
+            <button onclick="navigateToMobile('page-lab')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Le Labo F1</button>
+            <button onclick="navigateToMobile('page-vogue')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Vogue Look</button>
+            <button onclick="navigateToMobile('page-preorder')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Configuration</button>
         </nav>
 
         <!-- CTA & Badge inside mobile drawer -->
         <div class="border-t border-bj-border/60 pt-6 text-center space-y-4">
-            <span class="text-[10px] font-mono text-bj-red tracking-widest uppercase block">// HIGH-TECH & HAUTE COUTURE</span>
+            <span class="text-[10px] font-mono text-bj-gold tracking-widest uppercase block">// HIGH-TECH & HAUTE COUTURE</span>
             <button onclick="navigateToMobile('page-preorder')" class="w-full bg-bj-gold hover:bg-white text-black py-4 rounded text-xs uppercase tracking-widest font-bold transition-all">
                 Accéder à l'Atelier
             </button>
@@ -835,6 +835,7 @@
             return result.substring(result.length - padLen);
         }
 
+        // Algorithme de hachage unique de Benzjames
         function generateLiveCertificate(serial) {
             const padSerial = String(serial).padStart(3, '0');
             // Seed base checksum with salt 739151
