@@ -31,11 +31,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght=400;700&family=Plus+Jakarta+Sans:wght=300;400;600;800&display=swap');
         
-        body {
+        body, html {
             background-color: #080808;
             color: #ffffff;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
         
         .f1-grid {
@@ -57,18 +61,52 @@
         #mobile-menu-overlay {
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
+
+        /* Viewport du slider horizontal */
+        .slider-viewport {
+            display: flex;
+            width: 500%; /* 5 pages */
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Chaque page prend exactement 1/5ème de la largeur et scrolle verticalement */
+        .page-slide {
+            width: 20%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding-top: 80px; /* Espace pour le header fixe */
+            padding-bottom: 120px; /* Espace pour le footer et le tachymètre */
+        }
+
+        /* Masquage discret de la scrollbar sur mobile */
+        .page-slide::-webkit-scrollbar {
+            width: 4px;
+        }
+        .page-slide::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 2px;
+        }
+
+        /* Animation de l'aiguille du tachymètre */
+        .tacho-needle {
+            transform-origin: 40px 40px;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-bj-gold selection:text-black">
+<body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between">
 
     <!-- MASTER NOTIFICATION BANNER -->
-    <div id="master-banner" class="hidden bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
+    <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
         <span>⚡ MASTER MODE ACTIF — MODIFICATION DU CANVAS AUTORISÉE</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
     </div>
 
-    <!-- Header Navigation -->
-    <header class="border-b border-bj-border/80 bg-bj-black/90 backdrop-blur-md sticky top-0 z-40 py-4 px-4 sm:px-12">
+    <!-- Header Navigation (Toujours fixe en haut) -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-border/80 bg-bj-black/90 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <!-- Brand Logo -->
             <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('page-home')">
@@ -101,7 +139,7 @@
         </div>
     </header>
 
-    <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15) -->
+    <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15 - Liens Rouge F1) -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
         <!-- Top Bar inside drawer -->
         <div class="flex justify-between items-center">
@@ -132,308 +170,343 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER -->
-    <main class="flex-grow">
+    <!-- MAIN APP WRAPPER (Masque le débordement horizontal global) -->
+    <main class="flex-grow overflow-hidden relative w-full h-full">
 
-        <!-- PAGE 1: L'ÉCURIE (HOME HERO) -->
-        <section id="page-home" class="f1-grid min-h-[85vh] flex items-center py-12 px-6 sm:px-12 transition-all duration-300">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
-                <!-- Text Column -->
-                <div class="lg:col-span-7 space-y-8">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-border rounded-full text-xs text-bj-gold font-mono">
-                        <span class="w-1.5 h-1.5 rounded-full bg-bj-red animate-pulse"></span>
-                        <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
-                        <button onclick="editPageText('txt-home-tag')" class="master-only ml-2 text-bj-gold hover:text-white hidden">✏️</button>
-                    </div>
-                    
-                    <div class="edit-highlight p-2 rounded">
-                        <h1 class="text-4xl sm:text-6xl font-light tracking-tight leading-none text-white">
-                            <span id="txt-home-title-1">L'aérodynamique de la</span> <span id="txt-home-title-highlight" class="font-bold text-bj-gold">F1</span>.<br>
-                            <span id="txt-home-title-2">L'exigence de la</span> <span id="txt-home-title-serif" class="italic font-serif">Haute Couture</span>.
-                        </h1>
-                        <button onclick="editHomeTitles()" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️ Éditer Titre</button>
-                    </div>
+        <!-- CONTENEUR SLIDER DE PAGES (Glissement fluide et gestion de touches) -->
+        <div id="main-slider" class="slider-viewport" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
 
-                    <div class="edit-highlight p-2 rounded relative">
-                        <p id="txt-home-desc" class="text-bj-textMuted text-base sm:text-lg max-w-xl leading-relaxed">
-                            Benzjames redéfinit l'accessoire de sport mécanique. Un alliage brut de composites légers, de tissus thermorégulés et d'une esthétique éditoriale taillée pour la vitesse.
-                        </p>
-                        <button onclick="editPageText('txt-home-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
-                    </div>
-
-                    <div class="flex flex-wrap gap-4 pt-4">
-                        <button onclick="navigateTo('page-collection')" class="bg-bj-gold hover:bg-white text-black font-extrabold px-8 py-4 rounded text-xs uppercase tracking-widest transition-all">
-                            Découvrir le Produit
-                        </button>
-                        <button onclick="navigateTo('page-lab')" class="border border-bj-border hover:border-white px-8 py-4 rounded text-xs text-white uppercase tracking-widest transition-all font-semibold">
-                            Spécifications Physiques
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Visual Column -->
-                <div class="lg:col-span-5 relative">
-                    <div class="border border-bj-border bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden">
-                        <div class="aspect-[4/5] bg-neutral-900 rounded-xl relative overflow-hidden flex items-center justify-center">
-                            <div class="absolute inset-0 bg-gradient-to-t from-bj-black to-transparent opacity-80 z-10"></div>
-                            <div class="absolute inset-0 flex flex-col justify-between p-6 z-20">
-                                <div class="flex justify-between items-start">
-                                    <span class="text-[10px] font-mono text-bj-gold uppercase tracking-widest">Model: Carbon Aero V1</span>
-                                    <span class="text-[10px] font-mono text-bj-red">0.24 Cx</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="text-xs font-mono text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
-                                    <h3 class="text-2xl font-bold uppercase tracking-wider font-mono">MONACO GP EDITION</h3>
-                                </div>
-                            </div>
-                            <div class="w-48 h-48 rounded-full border-[1px] border-bj-gold/20 animate-spin" style="animation-duration: 20s;"></div>
-                            <div class="absolute w-36 h-36 rounded-full border-[1px] border-bj-red/40 animate-ping"></div>
+            <!-- PAGE 1: L'ÉCURIE (HOME HERO) -->
+            <section id="page-home" class="page-slide f1-grid flex items-center px-6 sm:px-12">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full my-auto">
+                    <!-- Text Column -->
+                    <div class="lg:col-span-7 space-y-8">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-border rounded-full text-xs text-bj-gold font-mono">
+                            <span class="w-1.5 h-1.5 rounded-full bg-bj-red animate-pulse"></span>
+                            <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
+                            <button onclick="editPageText('txt-home-tag')" class="master-only ml-2 text-bj-gold hover:text-white hidden">✏️</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 2: LA COLLECTION (PRODUCTS) -->
-        <section id="page-collection" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
-            <div class="max-w-7xl mx-auto space-y-12">
-                <div class="border-b border-bj-border pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-                    <div>
-                        <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// LA GAMME SPORT</span>
-                        <div class="flex items-center gap-3">
-                            <h2 id="txt-col-title" class="text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
-                            <button onclick="editPageText('txt-col-title')" class="master-only text-bj-gold hidden">✏️</button>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 w-full sm:w-auto">
-                        <button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all">
-                            ＋ Ajouter un produit
-                        </button>
-                        <span class="text-xs text-bj-textMuted font-mono whitespace-nowrap" id="txt-col-count">Affichage : 6 Modèles Exclusifs</span>
-                    </div>
-                </div>
-
-                <!-- Grid Produits dynamique -->
-                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Généré dynamiquement en JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 3: LE LABO F1 (INNOVATION & PHYSICS) -->
-        <section id="page-lab" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
-                <!-- Left Side: Interactive Telemetry UI -->
-                <div class="lg:col-span-5 bg-bj-dark border border-bj-border rounded-xl p-6 space-y-6">
-                    <div class="border-b border-bj-border pb-4">
-                        <span class="text-xs font-mono text-bj-red uppercase tracking-widest">// VUE TÉLÉMÉTRIQUE</span>
-                        <h3 class="text-xl font-bold mt-1">Analyse Aérodynamique</h3>
-                    </div>
-
-                    <!-- Simulated Sensor Bars -->
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-xs font-mono mb-1">
-                                <span class="text-bj-textMuted">RÉSISTANCE AU VENT (Cx)</span>
-                                <span class="text-white">0.24 (Optimal)</span>
-                            </div>
-                            <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
-                                <div class="bg-bj-red h-full" style="width: 82%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs font-mono mb-1">
-                                <span class="text-bj-textMuted">INDICE DE CONDUCTION THERMIQUE</span>
-                                <span class="text-white">94%</span>
-                            </div>
-                            <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
-                                <div class="bg-bj-gold h-full" style="width: 94%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs font-mono mb-1">
-                                <span class="text-bj-textMuted">MASSE VOLUMIQUE DU COMPOSITE</span>
-                                <span class="text-white">42g (Ultra Léger)</span>
-                            </div>
-                            <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
-                                <div class="bg-white h-full" style="width: 42%"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Real-Time Interactive Simulation -->
-                    <div class="border border-bj-border p-4 rounded bg-black flex flex-col justify-between space-y-4">
-                        <span class="text-[10px] font-mono text-bj-textMuted">SIMULATION EN SOUFFLERIE (TEMPS RÉEL)</span>
-                        <div class="flex justify-center py-6">
-                            <span class="text-2xl font-mono text-bj-gold tracking-widest animate-pulse" id="sim-speed">FLOW: 120 km/h</span>
-                        </div>
-                        <input type="range" min="50" max="320" value="120" id="wind-slider" oninput="updateWindSpeed(this.value)" class="w-full accent-bj-gold">
-                    </div>
-                </div>
-
-                <!-- Right Side: Explanations -->
-                <div class="lg:col-span-7 space-y-8 flex flex-col justify-center relative">
-                    <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// FIRST PRINCIPLES DESIGN</span>
-                    
-                    <div class="edit-highlight p-2 rounded relative">
-                        <h2 id="txt-lab-title" class="text-4xl font-bold tracking-tight">Pas de fioritures, juste de la physique pure.</h2>
-                        <button onclick="editPageText('txt-lab-title')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
-                    </div>
-
-                    <div class="edit-highlight p-2 rounded relative">
-                        <p id="txt-lab-desc" class="text-bj-textMuted leading-relaxed">
-                            Chaque courbe d'une casquette Benzjames n'est pas le fruit du hasard. Nous utilisons des calculs d'écoulement des fluides pour s'assurer que même lors de vitesses extrêmes sur piste ou en conduite de cabriolet, la casquette maintienne un appui aérodynamique stable sans créer de turbulence au niveau du cou.
-                        </p>
-                        <button onclick="editPageText('txt-lab-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-                        <div class="border-l-2 border-bj-red pl-4 edit-highlight relative">
-                            <h4 id="txt-lab-card1-title" class="text-sm font-bold">Fibre de Carbone Tissée</h4>
-                            <p id="txt-lab-card1-desc" class="text-xs text-bj-textMuted mt-1">La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.</p>
-                            <button onclick="editCardTexts('txt-lab-card1-title', 'txt-lab-card1-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
-                        </div>
-                        <div class="border-l-2 border-bj-gold pl-4 edit-highlight relative">
-                            <h4 id="txt-lab-card2-title" class="text-sm font-bold">Technologie Anti-Peltier</h4>
-                            <p id="txt-lab-card2-desc" class="text-xs text-bj-textMuted mt-1">Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.</p>
-                            <button onclick="editCardTexts('txt-lab-card2-title', 'txt-lab-card2-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL) -->
-        <section id="page-vogue" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
-            <div class="max-w-7xl mx-auto space-y-12">
-                <div class="text-center max-w-2xl mx-auto space-y-4 relative edit-highlight p-4 rounded">
-                    <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// EDITORIAL CHIC</span>
-                    <h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight">Le Style en Mouvement</h2>
-                    <p id="txt-vogue-desc" class="text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
-                    <button onclick="editCardTexts('txt-vogue-title', 'txt-vogue-desc')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️</button>
-                </div>
-
-                <!-- Vogue Grid Photo Layout -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    <div class="md:col-span-8 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end">
-                        <div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
-                            <span class="text-bj-border text-8xl font-bold italic font-serif">VOGUE</span>
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                        <div class="z-20">
-                            <span class="text-xs font-mono text-bj-gold">SERIE MONACO GP</span>
-                            <h3 class="text-2xl font-bold mt-1">L'élégance asymétrique sur la grille de départ</h3>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-4 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end">
-                        <div class="absolute inset-0 bg-neutral-950 flex items-center justify-center">
-                            <span class="text-bj-border text-5xl font-bold font-mono">F1 EDIT</span>
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                        <div class="z-20">
-                            <span class="text-xs font-mono text-bj-red">SÉRIE LIMITÉE 1/1000</span>
-                            <h3 class="text-xl font-bold mt-1">La casquette sport redéfinie pour elle</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 5: CONFIGURATION & PRE-ORDER -->
-        <section id="page-preorder" class="hidden min-h-[85vh] py-16 px-6 sm:px-12 transition-all duration-300">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                <!-- Configuration panel -->
-                <div class="bg-bj-dark border border-bj-border rounded-2xl p-8 space-y-6">
-                    <div>
-                        <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES</span>
-                        <h2 class="text-3xl font-bold mt-1">Configurez votre Numéro Unique</h2>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Sélectionnez le Modèle</label>
-                            <select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-semibold">
-                                <!-- Options de modèles synchronisées par JS -->
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
-                            <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-mono">
-                            <p class="text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
-                        </div>
-                    </div>
-
-                    <!-- Live Simulation Certificate -->
-                    <div class="border border-dashed border-bj-border p-6 rounded bg-black/40 text-center space-y-4">
-                        <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest">Génération du certificat d'authenticité de l'étiquette</span>
-                        <div class="space-y-1">
-                            <p class="text-lg font-mono text-bj-gold" id="config-display-code">BJ-042-42DF</p>
-                            <p class="text-[10px] text-bj-textMuted font-mono">Certificat d'empreinte généré à la volée</p>
-                        </div>
-                    </div>
-
-                    <!-- Client Info Form to capture leads -->
-                    <div class="space-y-4 pt-4 border-t border-bj-border">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
-                            <input type="email" id="client-email" placeholder="Adresse email" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
-                        </div>
-                        <button onclick="submitPreorder()" class="w-full bg-bj-gold hover:bg-white text-black font-extrabold py-4 rounded text-xs uppercase tracking-widest transition-all">
-                            Vérifier la Disponibilité et Réserver
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Live Preview of the selected cap (Vogue aesthetic) -->
-                <div class="border border-bj-border rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden">
-                    <div>
-                        <span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final</span>
                         
-                        <div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-border mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300">
-                            <!-- Overlay to maintain text readability over image -->
-                            <div class="absolute inset-0 bg-black/80 z-0"></div>
-                            
-                            <!-- Simulated Premium Box -->
-                            <div class="absolute inset-4 border border-bj-border/30 rounded flex flex-col justify-between p-6 z-10">
-                                <div class="flex justify-between items-start">
-                                    <span class="text-[8px] font-mono text-bj-textMuted">BENZJAMES LABS</span>
-                                    <span class="text-[8px] font-mono text-bj-red" id="box-weight">WEIGHT: 42G</span>
-                                </div>
-                                <div class="text-center space-y-2">
-                                    <span class="text-xs uppercase tracking-[0.3em] text-bj-textMuted" id="box-slogan">L'APPUI AÉRODYNAMIQUE ULTIME</span>
-                                    <h3 class="text-2xl font-bold uppercase tracking-widest text-white font-mono" id="box-title">MONZA</h3>
-                                    <div class="inline-block px-3 py-1 bg-bj-dark border border-bj-border text-bj-gold font-mono text-sm" id="box-serial">
-                                        N° 042 / 1000
+                        <div class="edit-highlight p-2 rounded">
+                            <h1 class="text-4xl sm:text-6xl font-light tracking-tight leading-none text-white">
+                                <span id="txt-home-title-1">L'aérodynamique de la</span> <span id="txt-home-title-highlight" class="font-bold text-bj-gold">F1</span>.<br>
+                                <span id="txt-home-title-2">L'exigence de la</span> <span id="txt-home-title-serif" class="italic font-serif">Haute Couture</span>.
+                            </h1>
+                            <button onclick="editHomeTitles()" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️ Éditer Titre</button>
+                        </div>
+
+                        <div class="edit-highlight p-2 rounded relative">
+                            <p id="txt-home-desc" class="text-bj-textMuted text-base sm:text-lg max-w-xl leading-relaxed">
+                                Benzjames redéfinit l'accessoire de sport mécanique. Un alliage brut de composites légers, de tissus thermorégulés et d'une esthétique éditoriale taillée pour la vitesse.
+                            </p>
+                            <button onclick="editPageText('txt-home-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <button onclick="navigateTo('page-collection')" class="bg-bj-gold hover:bg-white text-black font-extrabold px-8 py-4 rounded text-xs uppercase tracking-widest transition-all">
+                                Découvrir le Produit
+                            </button>
+                            <button onclick="navigateTo('page-lab')" class="border border-bj-border hover:border-white px-8 py-4 rounded text-xs text-white uppercase tracking-widest transition-all font-semibold">
+                                Spécifications Physiques
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Column -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="border border-bj-border bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden">
+                            <div class="aspect-[4/5] bg-neutral-900 rounded-xl relative overflow-hidden flex items-center justify-center">
+                                <div class="absolute inset-0 bg-gradient-to-t from-bj-black to-transparent opacity-80 z-10"></div>
+                                <div class="absolute inset-0 flex flex-col justify-between p-6 z-20">
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-[10px] font-mono text-bj-gold uppercase tracking-widest">Model: Carbon Aero V1</span>
+                                        <span class="text-[10px] font-mono text-bj-red">0.24 Cx</span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <p class="text-xs font-mono text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
+                                        <h3 class="text-2xl font-bold uppercase tracking-wider font-mono">MONACO GP EDITION</h3>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <span class="text-[8px] font-mono text-bj-textMuted">MACHINED & SIGNED IN FRANCE</span>
+                                <div class="w-48 h-48 rounded-full border-[1px] border-bj-gold/20 animate-spin" style="animation-duration: 20s;"></div>
+                                <div class="absolute w-36 h-36 rounded-full border-[1px] border-bj-red/40 animate-ping"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2: LA COLLECTION (PRODUCTS) -->
+            <section id="page-collection" class="page-slide py-16 px-6 sm:px-12">
+                <div class="max-w-7xl mx-auto space-y-12">
+                    <div class="border-b border-bj-border pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                        <div>
+                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// LA GAMME SPORT</span>
+                            <div class="flex items-center gap-3">
+                                <h2 id="txt-col-title" class="text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
+                                <button onclick="editPageText('txt-col-title')" class="master-only text-bj-gold hidden">✏️</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 w-full sm:w-auto">
+                            <button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all">
+                                ＋ Ajouter un produit
+                            </button>
+                            <span class="text-xs text-bj-textMuted font-mono whitespace-nowrap" id="txt-col-count">Affichage : 6 Modèles Exclusifs</span>
+                        </div>
+                    </div>
+
+                    <!-- Grid Produits dynamique -->
+                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Généré dynamiquement en JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 3: LE LABO F1 (INNOVATION & PHYSICS) -->
+            <section id="page-lab" class="page-slide py-16 px-6 sm:px-12">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 h-full items-center">
+                    
+                    <!-- Left Side: Interactive Telemetry UI -->
+                    <div class="lg:col-span-5 bg-bj-dark border border-bj-border rounded-xl p-6 space-y-6">
+                        <div class="border-b border-bj-border pb-4">
+                            <span class="text-xs font-mono text-bj-red uppercase tracking-widest">// VUE TÉLÉMÉTRIQUE</span>
+                            <h3 class="text-xl font-bold mt-1">Analyse Aérodynamique</h3>
+                        </div>
+
+                        <!-- Simulated Sensor Bars -->
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1">
+                                    <span class="text-bj-textMuted">RÉSISTANCE AU VENT (Cx)</span>
+                                    <span class="text-white">0.24 (Optimal)</span>
                                 </div>
+                                <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
+                                    <div class="bg-bj-red h-full" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1">
+                                    <span class="text-bj-textMuted">INDICE DE CONDUCTION THERMIQUE</span>
+                                    <span class="text-white">94%</span>
+                                </div>
+                                <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
+                                    <div class="bg-bj-gold h-full" style="width: 94%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1">
+                                    <span class="text-bj-textMuted">MASSE VOLUMIQUE DU COMPOSITE</span>
+                                    <span class="text-white">42g (Ultra Léger)</span>
+                                </div>
+                                <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
+                                    <div class="bg-white h-full" style="width: 42%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Real-Time Interactive Simulation -->
+                        <div class="border border-bj-border p-4 rounded bg-black flex flex-col justify-between space-y-4">
+                            <span class="text-[10px] font-mono text-bj-textMuted">SIMULATION EN SOUFFLERIE (TEMPS RÉEL)</span>
+                            <div class="flex justify-center py-6">
+                                <span class="text-2xl font-mono text-bj-gold tracking-widest animate-pulse" id="sim-speed">FLOW: 120 km/h</span>
+                            </div>
+                            <input type="range" min="50" max="320" value="120" id="wind-slider" oninput="updateWindSpeed(this.value)" class="w-full accent-bj-gold">
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Explanations -->
+                    <div class="lg:col-span-7 space-y-8 flex flex-col justify-center relative">
+                        <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// FIRST PRINCIPLES DESIGN</span>
+                        
+                        <div class="edit-highlight p-2 rounded relative">
+                            <h2 id="txt-lab-title" class="text-4xl font-bold tracking-tight">Pas de fioritures, juste de la physique pure.</h2>
+                            <button onclick="editPageText('txt-lab-title')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
+                        </div>
+
+                        <div class="edit-highlight p-2 rounded relative">
+                            <p id="txt-lab-desc" class="text-bj-textMuted leading-relaxed">
+                                Chaque courbe d'une casquette Benzjames n'est pas le fruit du hasard. Nous utilisons des calculs d'écoulement des fluides pour s'assurer que même lors de vitesses extrêmes sur piste ou en conduite de cabriolet, la casquette maintienne un appui aérodynamique stable sans créer de turbulence au niveau du cou.
+                            </p>
+                            <button onclick="editPageText('txt-lab-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                            <div class="border-l-2 border-bj-red pl-4 edit-highlight relative">
+                                <h4 id="txt-lab-card1-title" class="text-sm font-bold">Fibre de Carbone Tissée</h4>
+                                <p id="txt-lab-card1-desc" class="text-xs text-bj-textMuted mt-1">La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.</p>
+                                <button onclick="editCardTexts('txt-lab-card1-title', 'txt-lab-card1-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
+                            </div>
+                            <div class="border-l-2 border-bj-gold pl-4 edit-highlight relative">
+                                <h4 id="txt-lab-card2-title" class="text-sm font-bold">Technologie Anti-Peltier</h4>
+                                <p id="txt-lab-card2-desc" class="text-xs text-bj-textMuted mt-1">Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.</p>
+                                <button onclick="editCardTexts('txt-lab-card2-title', 'txt-lab-card2-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-6 flex justify-between items-center">
-                        <div>
-                            <span class="text-xs text-bj-textMuted block">MÉTHODE D'AUTHENTIFICATION</span>
-                            <span class="text-sm font-bold text-white">NFC + Code d'Empreinte (Vérifié)</span>
+                </div>
+            </section>
+
+            <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL) -->
+            <section id="page-vogue" class="page-slide py-16 px-6 sm:px-12">
+                <div class="max-w-7xl mx-auto space-y-12">
+                    <div class="text-center max-w-2xl mx-auto space-y-4 relative edit-highlight p-4 rounded">
+                        <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// EDITORIAL CHIC</span>
+                        <h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight">Le Style en Mouvement</h2>
+                        <p id="txt-vogue-desc" class="text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
+                        <button onclick="editCardTexts('txt-vogue-title', 'txt-vogue-desc')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️</button>
+                    </div>
+
+                    <!-- Vogue Grid Photo Layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <div class="md:col-span-8 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end">
+                            <div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
+                                <span class="text-bj-border text-8xl font-bold italic font-serif">VOGUE</span>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+                            <div class="z-20">
+                                <span class="text-xs font-mono text-bj-gold">SERIE MONACO GP</span>
+                                <h3 class="text-2xl font-bold mt-1">L'élégance asymétrique sur la grille de départ</h3>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <span class="text-xs text-bj-textMuted block">PRIX DE RÉSERVATION</span>
-                            <span class="text-lg font-mono text-bj-gold font-bold" id="box-price">240 €</span>
+
+                        <div class="md:col-span-4 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end">
+                            <div class="absolute inset-0 bg-neutral-950 flex items-center justify-center">
+                                <span class="text-bj-border text-5xl font-bold font-mono">F1 EDIT</span>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+                            <div class="z-20">
+                                <span class="text-xs font-mono text-bj-red">SÉRIE LIMITÉE 1/1000</span>
+                                <h3 class="text-xl font-bold mt-1">La casquette sport redéfinie pour elle</h3>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-            </div>
-        </section>
+            <!-- PAGE 5: CONFIGURATION & PRE-ORDER -->
+            <section id="page-preorder" class="page-slide py-16 px-6 sm:px-12">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Configuration panel -->
+                    <div class="bg-bj-dark border border-bj-border rounded-2xl p-8 space-y-6">
+                        <div>
+                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES</span>
+                            <h2 class="text-3xl font-bold mt-1">Configurez votre Numéro Unique</h2>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Sélectionnez le Modèle</label>
+                                <select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-semibold">
+                                    <!-- Options de modèles synchronisées par JS -->
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
+                                <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-mono">
+                                <p class="text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
+                            </div>
+                        </div>
+
+                        <!-- Live Simulation Certificate -->
+                        <div class="border border-dashed border-bj-border p-6 rounded bg-black/40 text-center space-y-4">
+                            <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest">Génération du certificat d'authenticité de l'étiquette</span>
+                            <div class="space-y-1">
+                                <p class="text-lg font-mono text-bj-gold" id="config-display-code">BJ-042-42DF</p>
+                                <p class="text-[10px] text-bj-textMuted font-mono">Certificat d'empreinte généré à la volée</p>
+                            </div>
+                        </div>
+
+                        <!-- Client Info Form to capture leads -->
+                        <div class="space-y-4 pt-4 border-t border-bj-border">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
+                                <input type="email" id="client-email" placeholder="Adresse email" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
+                            </div>
+                            <button onclick="submitPreorder()" class="w-full bg-bj-gold hover:bg-white text-black font-extrabold py-4 rounded text-xs uppercase tracking-widest transition-all">
+                                Vérifier la Disponibilité et Réserver
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview of the selected cap (Vogue aesthetic) -->
+                    <div class="border border-bj-border rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden">
+                        <div>
+                            <span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final</span>
+                            
+                            <div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-border mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300">
+                                <!-- Overlay to maintain text readability over image -->
+                                <div class="absolute inset-0 bg-black/80 z-0"></div>
+                                
+                                <!-- Simulated Premium Box -->
+                                <div class="absolute inset-4 border border-bj-border/30 rounded flex flex-col justify-between p-6 z-10">
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-[8px] font-mono text-bj-textMuted">BENZJAMES LABS</span>
+                                        <span class="text-[8px] font-mono text-bj-red" id="box-weight">WEIGHT: 42G</span>
+                                    </div>
+                                    <div class="text-center space-y-2">
+                                        <span class="text-xs uppercase tracking-[0.3em] text-bj-textMuted" id="box-slogan">L'APPUI AÉRODYNAMIQUE ULTIME</span>
+                                        <h3 class="text-2xl font-bold uppercase tracking-widest text-white font-mono" id="box-title">MONZA</h3>
+                                        <div class="inline-block px-3 py-1 bg-bj-dark border border-bj-border text-bj-gold font-mono text-sm" id="box-serial">
+                                            N° 042 / 1000
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <span class="text-[8px] font-mono text-bj-textMuted">MACHINED & SIGNED IN FRANCE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-bj-textMuted block">MÉTHODE D'AUTHENTIFICATION</span>
+                                <span class="text-sm font-bold text-white">NFC + Code d'Empreinte (Vérifié)</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-bj-textMuted block">PRIX DE RÉSERVATION</span>
+                                <span class="text-lg font-mono text-bj-gold font-bold" id="box-price">240 €</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
 
     </main>
+
+    <!-- FIXED PREMIUM TACHOMETER GAUGE (Compte-tours de Navigation en bas à droite) -->
+    <div class="fixed bottom-20 right-6 z-50 bg-bj-black/90 border-2 border-bj-border/90 p-3 rounded-full shadow-2xl flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Compte-tours de Navigation" onclick="cyclePages()">
+        <div class="relative w-20 h-20">
+            <!-- SVG Tachometer face -->
+            <svg class="w-full h-full" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#151515" stroke-width="4"></circle>
+                <path d="M 16 57 A 34 34 0 0 1 16 23" fill="none" stroke="#333" stroke-width="2.5"></path>
+                <path d="M 23 16 A 34 34 0 0 1 57 16" fill="none" stroke="#D4AF37" stroke-width="2.5" opacity="0.6"></path>
+                <path d="M 57 23 A 34 34 0 0 1 64 40" fill="none" stroke="#E10600" stroke-width="2.5"></path>
+                
+                <!-- Repères de rapports (Pages) -->
+                <circle cx="16" cy="57" r="1.5" fill="#fff" id="tick-0"></circle>
+                <circle cx="16" cy="23" r="1.5" fill="#fff" id="tick-1"></circle>
+                <circle cx="40" cy="6" r="1.5" fill="#fff" id="tick-2"></circle>
+                <circle cx="64" cy="23" r="1.5" fill="#fff" id="tick-3"></circle>
+                <circle cx="64" cy="40" r="1.5" fill="#fff" id="tick-4"></circle>
+
+                <circle cx="40" cy="40" r="4" fill="#fff"></circle>
+                <!-- Aiguille rouge F1 -->
+                <line x1="40" y1="40" x2="40" y2="12" stroke="#E10600" stroke-width="2" class="tacho-needle" id="tacho-needle" transform="rotate(-110)"></line>
+            </svg>
+
+            <!-- Affichage digital interne -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center pt-8">
+                <span class="text-[10px] font-mono font-bold text-white leading-none" id="tacho-digit">P1</span>
+                <span class="text-[5px] font-mono uppercase tracking-widest text-bj-red font-bold">GEAR</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Master Login Dialog Modal -->
     <div id="modal-login" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
@@ -530,16 +603,17 @@
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
 
     <!-- Footer -->
-    <footer class="border-t border-bj-border py-8 px-6 sm:px-12 bg-bj-black text-center text-xs text-bj-textMuted">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <span class="font-mono text-[10px] tracking-widest text-bj-gold">BENZJAMES GENUINE INTERACTION ENGINE</span>
-            <p>© 2026 Benzjames. Tous droits réservés. Design propulsé par la physique.</p>
-            <!-- Lock Button for master mode -->
-            <button onclick="openLoginModal()" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs font-mono flex items-center gap-2 border border-bj-border/60 hover:border-bj-gold px-3 py-1 rounded">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                Master Portal
-            </button>
+    <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-border/30 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div class="flex items-center gap-4">
+            <span class="font-mono text-[9px] tracking-widest text-bj-gold">BENZJAMES HYPER-SLIDER V2</span>
+            <span id="slide-progress" class="font-mono text-bj-red font-bold">PAGE : 1 / 5</span>
         </div>
+        <p class="text-[9px]">© 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.</p>
+        <!-- Lock Button for master mode -->
+        <button onclick="openLoginModal()" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs font-mono flex items-center gap-2 border border-bj-border/60 hover:border-bj-gold px-3 py-1 rounded">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            Master Portal
+        </button>
     </footer>
 
     <!-- INTERACTIVE APP SCRIPT -->
@@ -571,7 +645,7 @@
                 name: "Silverstone Track Femme",
                 price: 220,
                 slogan: "Le chic asymétrique sur grille",
-                desc: "Design épuré ajusté, détails en fil d'or 18 carats brodé à la main et visière anti-reflets urineuse.",
+                desc: "Design épuré ajusté, détails en fil d'or 18 carats brodé à la main et visière anti-reflets.",
                 image: "",
                 badge: "Vogue Edit",
                 weight: 39
@@ -612,6 +686,12 @@
         let products = [];
         let pageTexts = {};
         let isMaster = false;
+        
+        // Slider State Engine
+        let currentPage = 0;
+        const totalPages = 5;
+        const pageIds = ['page-home', 'page-collection', 'page-lab', 'page-vogue', 'page-preorder'];
+        const angles = [-110, -55, 0, 55, 110];
 
         // Mobile Menu Drawer Control
         function toggleMobileMenu() {
@@ -647,7 +727,7 @@
                 borderStyle = 'border-bj-red/30';
             }
 
-            toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm`;
+            toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm z-50`;
             toast.innerHTML = `
                 <div class="p-1 rounded-md bg-black/40 ${iconColor}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -715,6 +795,7 @@
             }
 
             renderApp();
+            slideToPage(0); // Initialise la première page par défaut
         }
 
         // Apply state to DOM
@@ -788,30 +869,52 @@
             updatePreorderVisual();
         }
 
-        // Tab router logic
-        function navigateTo(pageId) {
-            const pages = ['page-home', 'page-collection', 'page-lab', 'page-vogue', 'page-preorder'];
-            pages.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) element.classList.add('hidden');
-                
+        // Custom horizontal slide implementation
+        function slideToPage(pageIndex) {
+            if (pageIndex < 0 || pageIndex >= totalPages) return;
+            currentPage = pageIndex;
+
+            const slider = document.getElementById('main-slider');
+            if (slider) slider.style.transform = `translateX(-${currentPage * 20}%)`;
+
+            // Update Tachometer needle & internal digit
+            const needle = document.getElementById('tacho-needle');
+            const digit = document.getElementById('tacho-digit');
+            const progress = document.getElementById('slide-progress');
+
+            if (needle) needle.style.transform = `rotate(${angles[currentPage]}deg)`;
+            if (digit) digit.innerText = `P${currentPage + 1}`;
+            if (progress) progress.innerText = `PAGE : ${currentPage + 1} / 5`;
+
+            // Synchroniser le menu Desktop (Soulignage Or de la page active)
+            pageIds.forEach((id, i) => {
                 const navBtn = document.getElementById(`nav-${id}`);
                 if (navBtn) {
-                    navBtn.classList.remove('text-white', 'border-b', 'border-bj-gold');
-                    navBtn.classList.add('text-bj-textMuted');
+                    if (i === currentPage) {
+                        navBtn.className = "text-white border-b border-bj-gold pb-1 transition-all font-semibold";
+                    } else {
+                        navBtn.className = "hover:text-white transition-all pb-1";
+                    }
                 }
             });
 
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) targetPage.classList.remove('hidden');
-            
-            const activeNav = document.getElementById(`nav-${pageId}`);
-            if (activeNav) {
-                activeNav.classList.add('text-white', 'border-b', 'border-bj-gold');
-                activeNav.classList.remove('text-bj-textMuted');
-            }
+            // Force le scroll en haut sur la nouvelle page chargée pour l'iPhone
+            const targetPage = document.getElementById(pageIds[currentPage]);
+            if (targetPage) targetPage.scrollTop = 0;
+        }
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Navigate via Page ID (Router adaptation)
+        function navigateTo(pageId) {
+            const index = pageIds.indexOf(pageId);
+            if (index !== -1) {
+                slideToPage(index);
+            }
+        }
+
+        // Cycle through page on Tachometer tap
+        function cyclePages() {
+            let next = (currentPage + 1) % totalPages;
+            slideToPage(next);
         }
 
         // Lab Page Wind Simulator
@@ -1110,6 +1213,39 @@
             renderApp();
             closeTextEditModal();
             showToast("Texte Mis à Jour", "Le nouveau texte a été appliqué de manière permanente dans la mémoire locale.");
+        }
+
+        /* CAPTEURS TACTILES SWIPE MOBILE COULISSANT */
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            analyzeSwipe();
+        }
+
+        function analyzeSwipe() {
+            const xDiff = touchStartX - touchEndX;
+            const yDiff = touchStartY - touchEndY;
+
+            // On ne déclenche le glissement de page que si le mouvement horizontal est dominant
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (Math.abs(xDiff) > 60) { // Seuil de déclenchement (sensibilité)
+                    if (xDiff > 0 && currentPage < totalPages - 1) {
+                        slideToPage(currentPage + 1); // Swipe gauche -> Page suivante
+                    } else if (xDiff < 0 && currentPage > 0) {
+                        slideToPage(currentPage - 1); // Swipe droite -> Page précédente
+                    }
+                }
+            }
         }
 
         // Initialize application on page load
