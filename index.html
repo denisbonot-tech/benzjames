@@ -17,6 +17,7 @@
                             border: '#222222',
                             gold: '#D4AF37',
                             red: '#E10600', // Rouge F1 officiel
+                            cyan: '#06B6D4', // Cyan TRON subtil
                             textMuted: '#8E8E93'
                         }
                     },
@@ -42,12 +43,22 @@
             height: 100%;
         }
         
-        .f1-grid {
+        /* Grille néon style TRON */
+        .tron-grid {
             background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
         }
         
+        /* Reflets de flux d'énergie TRON */
+        .tron-glow-border {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tron-glow-border:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+        }
+
         /* Smooth transition for editing overlay */
         .edit-highlight {
             position: relative;
@@ -106,16 +117,16 @@
     </div>
 
     <!-- Header Navigation (Toujours fixe en haut) -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-border/80 bg-bj-black/90 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
+    <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-cyan/20 bg-bj-black/90 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <!-- Brand Logo -->
             <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('page-home')">
                 <span class="text-xl font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
-                <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-red/50 text-[9px] text-bj-red uppercase tracking-widest font-bold">Aero-Couture</span>
+                <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold">Cyber-Couture</span>
             </div>
 
             <!-- 5 Pages Navigation (Desktop Only) -->
-            <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-bj-textMuted">
+            <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-bj-textMuted font-mono">
                 <button onclick="navigateTo('page-home')" id="nav-page-home" class="hover:text-white transition-all text-white border-b border-bj-gold pb-1">L'Écurie</button>
                 <button onclick="navigateTo('page-collection')" id="nav-page-collection" class="hover:text-white transition-all pb-1">La Collection</button>
                 <button onclick="navigateTo('page-lab')" id="nav-page-lab" class="hover:text-white transition-all pb-1">Le Labo F1</button>
@@ -125,13 +136,13 @@
 
             <!-- Actions CTA & Mobile Hamburger Menu -->
             <div class="flex items-center gap-3">
-                <button onclick="navigateTo('page-preorder')" class="bg-white hover:bg-neutral-200 text-black px-4 py-2 rounded text-xs uppercase tracking-widest font-bold transition-all">
+                <button onclick="navigateTo('page-preorder')" class="bg-white hover:bg-bj-cyan hover:text-white text-black px-4 py-2 rounded text-xs uppercase tracking-widest font-bold transition-all shadow-md">
                     Réserver
                 </button>
                 
                 <!-- Hamburger Trigger (Visible on mobile only) -->
-                <button onclick="toggleMobileMenu()" class="md:hidden text-white focus:outline-none p-2 rounded border border-bj-border bg-bj-dark hover:border-bj-gold transition-all" aria-label="Menu principal">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button onclick="toggleMobileMenu()" class="md:hidden text-white focus:outline-none p-2 rounded border border-bj-cyan/20 bg-bj-dark hover:border-bj-cyan transition-all" aria-label="Menu principal">
+                    <svg class="w-5 h-5 text-bj-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
                 </button>
@@ -142,7 +153,7 @@
     <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15 - Liens Rouge F1) -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
         <!-- Top Bar inside drawer -->
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center border-b border-bj-cyan/10 pb-4">
             <span class="text-lg font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
             <button onclick="toggleMobileMenu()" class="text-white focus:outline-none p-2 rounded-full border border-bj-border bg-bj-dark hover:border-bj-red transition-all">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,7 +173,7 @@
         </nav>
 
         <!-- CTA & Badge inside mobile drawer -->
-        <div class="border-t border-bj-border/60 pt-6 text-center space-y-4">
+        <div class="border-t border-bj-cyan/10 pt-6 text-center space-y-4">
             <span class="text-[10px] font-mono text-bj-gold tracking-widest uppercase block">// HIGH-TECH & HAUTE COUTURE</span>
             <button onclick="navigateToMobile('page-preorder')" class="w-full bg-bj-gold hover:bg-white text-black py-4 rounded text-xs uppercase tracking-widest font-bold transition-all">
                 Accéder à l'Atelier
@@ -177,19 +188,19 @@
         <div id="main-slider" class="slider-viewport" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
 
             <!-- PAGE 1: L'ÉCURIE (HOME HERO) -->
-            <section id="page-home" class="page-slide f1-grid flex items-center px-6 sm:px-12">
+            <section id="page-home" class="page-slide tron-grid flex items-center px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full my-auto">
                     <!-- Text Column -->
                     <div class="lg:col-span-7 space-y-8">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-border rounded-full text-xs text-bj-gold font-mono">
-                            <span class="w-1.5 h-1.5 rounded-full bg-bj-red animate-pulse"></span>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-cyan/20 rounded-full text-xs text-bj-cyan font-mono shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-bj-cyan animate-pulse"></span>
                             <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
                             <button onclick="editPageText('txt-home-tag')" class="master-only ml-2 text-bj-gold hover:text-white hidden">✏️</button>
                         </div>
                         
                         <div class="edit-highlight p-2 rounded">
                             <h1 class="text-4xl sm:text-6xl font-light tracking-tight leading-none text-white">
-                                <span id="txt-home-title-1">L'aérodynamique de la</span> <span id="txt-home-title-highlight" class="font-bold text-bj-gold">F1</span>.<br>
+                                <span id="txt-home-title-1">L'aérodynamique de la</span> <span id="txt-home-title-highlight" class="font-bold text-bj-cyan drop-shadow-[0_0_10px_rgba(6,182,212,0.3)]">F1</span>.<br>
                                 <span id="txt-home-title-2">L'exigence de la</span> <span id="txt-home-title-serif" class="italic font-serif">Haute Couture</span>.
                             </h1>
                             <button onclick="editHomeTitles()" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️ Éditer Titre</button>
@@ -206,7 +217,7 @@
                             <button onclick="navigateTo('page-collection')" class="bg-bj-gold hover:bg-white text-black font-extrabold px-8 py-4 rounded text-xs uppercase tracking-widest transition-all">
                                 Découvrir le Produit
                             </button>
-                            <button onclick="navigateTo('page-lab')" class="border border-bj-border hover:border-white px-8 py-4 rounded text-xs text-white uppercase tracking-widest transition-all font-semibold">
+                            <button onclick="navigateTo('page-lab')" class="border border-bj-cyan/30 hover:border-bj-cyan px-8 py-4 rounded text-xs text-bj-cyan uppercase tracking-widest transition-all font-semibold bg-bj-cyan/5">
                                 Spécifications Physiques
                             </button>
                         </div>
@@ -214,21 +225,22 @@
 
                     <!-- Visual Column -->
                     <div class="lg:col-span-5 relative">
-                        <div class="border border-bj-border bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden">
-                            <div class="aspect-[4/5] bg-neutral-900 rounded-xl relative overflow-hidden flex items-center justify-center">
+                        <div class="border border-bj-cyan/20 bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.05)]">
+                            <div class="aspect-[4/5] bg-neutral-950 rounded-xl relative overflow-hidden flex items-center justify-center border border-bj-cyan/10">
                                 <div class="absolute inset-0 bg-gradient-to-t from-bj-black to-transparent opacity-80 z-10"></div>
-                                <div class="absolute inset-0 flex flex-col justify-between p-6 z-20">
+                                <div class="absolute inset-0 flex flex-col justify-between p-6 z-20 font-mono">
                                     <div class="flex justify-between items-start">
-                                        <span class="text-[10px] font-mono text-bj-gold uppercase tracking-widest">Model: Carbon Aero V1</span>
-                                        <span class="text-[10px] font-mono text-bj-red">0.24 Cx</span>
+                                        <span class="text-[10px] text-bj-gold uppercase tracking-widest">Model: Carbon Aero V1</span>
+                                        <span class="text-[10px] text-bj-cyan">GRID_SYSTEM: ACTIVE</span>
                                     </div>
                                     <div class="space-y-2">
-                                        <p class="text-xs font-mono text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
-                                        <h3 class="text-2xl font-bold uppercase tracking-wider font-mono">MONACO GP EDITION</h3>
+                                        <p class="text-xs text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
+                                        <h3 class="text-2xl font-bold uppercase tracking-wider text-white">MONACO GP EDITION</h3>
                                     </div>
                                 </div>
-                                <div class="w-48 h-48 rounded-full border-[1px] border-bj-gold/20 animate-spin" style="animation-duration: 20s;"></div>
-                                <div class="absolute w-36 h-36 rounded-full border-[1px] border-bj-red/40 animate-ping"></div>
+                                <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 animate-spin" style="animation-duration: 25s;"></div>
+                                <div class="absolute w-36 h-36 rounded-full border-[1.5px] border-bj-red/30 animate-ping" style="animation-duration: 4s;"></div>
+                                <div class="absolute w-20 h-20 rounded-full border border-dashed border-bj-gold/20 animate-spin" style="animation-duration: 10s;"></div>
                             </div>
                         </div>
                     </div>
@@ -236,11 +248,11 @@
             </section>
 
             <!-- PAGE 2: LA COLLECTION (PRODUCTS) -->
-            <section id="page-collection" class="page-slide py-16 px-6 sm:px-12">
+            <section id="page-collection" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
-                    <div class="border-b border-bj-border pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                    <div class="border-b border-bj-cyan/20 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                         <div>
-                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// LA GAMME SPORT</span>
+                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// LA GAMME SPORT CYBER</span>
                             <div class="flex items-center gap-3">
                                 <h2 id="txt-col-title" class="text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
                                 <button onclick="editPageText('txt-col-title')" class="master-only text-bj-gold hidden">✏️</button>
@@ -250,7 +262,7 @@
                             <button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all">
                                 ＋ Ajouter un produit
                             </button>
-                            <span class="text-xs text-bj-textMuted font-mono whitespace-nowrap" id="txt-col-count">Affichage : 6 Modèles Exclusifs</span>
+                            <span class="text-xs text-bj-cyan font-mono whitespace-nowrap" id="txt-col-count">Affichage : 6 Modèles Exclusifs</span>
                         </div>
                     </div>
 
@@ -262,25 +274,25 @@
             </section>
 
             <!-- PAGE 3: LE LABO F1 (INNOVATION & PHYSICS) -->
-            <section id="page-lab" class="page-slide py-16 px-6 sm:px-12">
+            <section id="page-lab" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 h-full items-center">
                     
                     <!-- Left Side: Interactive Telemetry UI -->
-                    <div class="lg:col-span-5 bg-bj-dark border border-bj-border rounded-xl p-6 space-y-6">
+                    <div class="lg:col-span-5 bg-bj-dark border border-bj-cyan/20 rounded-xl p-6 space-y-6 shadow-[0_0_20px_rgba(6,182,212,0.05)]">
                         <div class="border-b border-bj-border pb-4">
-                            <span class="text-xs font-mono text-bj-red uppercase tracking-widest">// VUE TÉLÉMÉTRIQUE</span>
+                            <span class="text-xs font-mono text-bj-cyan uppercase tracking-widest">// VUE TÉLÉMÉTRIQUE FLUX</span>
                             <h3 class="text-xl font-bold mt-1">Analyse Aérodynamique</h3>
                         </div>
 
-                        <!-- Simulated Sensor Bars -->
+                        <!-- Simulated Sensor Bars (Pulsing look like TRON cells) -->
                         <div class="space-y-4">
                             <div>
                                 <div class="flex justify-between text-xs font-mono mb-1">
                                     <span class="text-bj-textMuted">RÉSISTANCE AU VENT (Cx)</span>
-                                    <span class="text-white">0.24 (Optimal)</span>
+                                    <span class="text-bj-cyan">0.24 (Optimal)</span>
                                 </div>
                                 <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
-                                    <div class="bg-bj-red h-full" style="width: 82%"></div>
+                                    <div class="bg-bj-cyan h-full shadow-[0_0_8px_#06B6D4]" style="width: 82%"></div>
                                 </div>
                             </div>
                             <div>
@@ -289,27 +301,27 @@
                                     <span class="text-white">94%</span>
                                 </div>
                                 <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
-                                    <div class="bg-bj-gold h-full" style="width: 94%"></div>
+                                    <div class="bg-bj-gold h-full shadow-[0_0_8px_#D4AF37]" style="width: 94%"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-xs font-mono mb-1">
                                     <span class="text-bj-textMuted">MASSE VOLUMIQUE DU COMPOSITE</span>
-                                    <span class="text-white">42g (Ultra Léger)</span>
+                                    <span class="text-bj-red">42g (Ultra Léger)</span>
                                 </div>
                                 <div class="w-full bg-bj-border h-2 rounded-full overflow-hidden">
-                                    <div class="bg-white h-full" style="width: 42%"></div>
+                                    <div class="bg-bj-red h-full shadow-[0_0_8px_#E10600]" style="width: 42%"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Real-Time Interactive Simulation -->
-                        <div class="border border-bj-border p-4 rounded bg-black flex flex-col justify-between space-y-4">
-                            <span class="text-[10px] font-mono text-bj-textMuted">SIMULATION EN SOUFFLERIE (TEMPS RÉEL)</span>
+                        <div class="border border-bj-cyan/20 p-4 rounded bg-black flex flex-col justify-between space-y-4">
+                            <span class="text-[10px] font-mono text-bj-textMuted">SIMULATION EN SOUFFLERIE CYBERNETIQUE</span>
                             <div class="flex justify-center py-6">
-                                <span class="text-2xl font-mono text-bj-gold tracking-widest animate-pulse" id="sim-speed">FLOW: 120 km/h</span>
+                                <span class="text-2xl font-mono text-bj-cyan tracking-widest animate-pulse drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]" id="sim-speed">FLOW: 120 km/h</span>
                             </div>
-                            <input type="range" min="50" max="320" value="120" id="wind-slider" oninput="updateWindSpeed(this.value)" class="w-full accent-bj-gold">
+                            <input type="range" min="50" max="320" value="120" id="wind-slider" oninput="updateWindSpeed(this.value)" class="w-full accent-bj-cyan">
                         </div>
                     </div>
 
@@ -318,7 +330,7 @@
                         <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// FIRST PRINCIPLES DESIGN</span>
                         
                         <div class="edit-highlight p-2 rounded relative">
-                            <h2 id="txt-lab-title" class="text-4xl font-bold tracking-tight">Pas de fioritures, juste de la physique pure.</h2>
+                            <h2 id="txt-lab-title" class="text-4xl font-bold tracking-tight text-white">Pas de fioritures, juste de la physique pure.</h2>
                             <button onclick="editPageText('txt-lab-title')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
                         </div>
 
@@ -329,14 +341,14 @@
                             <button onclick="editPageText('txt-lab-desc', 'textarea')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1 rounded text-xs border border-bj-border">✏️</button>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-                            <div class="border-l-2 border-bj-red pl-4 edit-highlight relative">
-                                <h4 id="txt-lab-card1-title" class="text-sm font-bold">Fibre de Carbone Tissée</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 font-mono">
+                            <div class="border-l-2 border-bj-red pl-4 edit-highlight relative bg-bj-red/5 p-3 rounded-r-lg border-y border-r border-bj-border/20">
+                                <h4 id="txt-lab-card1-title" class="text-sm font-bold text-white">Fibre de Carbone Tissée</h4>
                                 <p id="txt-lab-card1-desc" class="text-xs text-bj-textMuted mt-1">La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.</p>
                                 <button onclick="editCardTexts('txt-lab-card1-title', 'txt-lab-card1-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
                             </div>
-                            <div class="border-l-2 border-bj-gold pl-4 edit-highlight relative">
-                                <h4 id="txt-lab-card2-title" class="text-sm font-bold">Technologie Anti-Peltier</h4>
+                            <div class="border-l-2 border-bj-cyan pl-4 edit-highlight relative bg-bj-cyan/5 p-3 rounded-r-lg border-y border-r border-bj-cyan/10 shadow-[0_0_15px_rgba(6,182,212,0.03)]">
+                                <h4 id="txt-lab-card2-title" class="text-sm font-bold text-white">Technologie Anti-Peltier</h4>
                                 <p id="txt-lab-card2-desc" class="text-xs text-bj-textMuted mt-1">Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.</p>
                                 <button onclick="editCardTexts('txt-lab-card2-title', 'txt-lab-card2-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
                             </div>
@@ -347,36 +359,36 @@
             </section>
 
             <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL) -->
-            <section id="page-vogue" class="page-slide py-16 px-6 sm:px-12">
+            <section id="page-vogue" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-4 relative edit-highlight p-4 rounded">
-                        <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// EDITORIAL CHIC</span>
-                        <h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight">Le Style en Mouvement</h2>
+                        <span class="text-xs font-mono text-bj-cyan uppercase tracking-widest">// VIRTUAL GRID CHIC</span>
+                        <h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight text-white">Le Style en Mouvement</h2>
                         <p id="txt-vogue-desc" class="text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
                         <button onclick="editCardTexts('txt-vogue-title', 'txt-vogue-desc')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️</button>
                     </div>
 
                     <!-- Vogue Grid Photo Layout -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                        <div class="md:col-span-8 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end">
+                        <div class="md:col-span-8 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end tron-glow-border">
                             <div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
-                                <span class="text-bj-border text-8xl font-bold italic font-serif">VOGUE</span>
+                                <span class="text-bj-border text-8xl font-bold italic font-serif opacity-30 select-none">VOGUE</span>
                             </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+                            <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                             <div class="z-20">
-                                <span class="text-xs font-mono text-bj-gold">SERIE MONACO GP</span>
-                                <h3 class="text-2xl font-bold mt-1">L'élégance asymétrique sur la grille de départ</h3>
+                                <span class="text-xs font-mono text-bj-cyan uppercase">Série Monaco Grid GP</span>
+                                <h3 class="text-2xl font-bold mt-1 text-white uppercase font-mono tracking-wider">L'élégance asymétrique sur la grille de départ</h3>
                             </div>
                         </div>
 
-                        <div class="md:col-span-4 bg-bj-dark border border-bj-border rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end">
+                        <div class="md:col-span-4 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end tron-glow-border">
                             <div class="absolute inset-0 bg-neutral-950 flex items-center justify-center">
-                                <span class="text-bj-border text-5xl font-bold font-mono">F1 EDIT</span>
+                                <span class="text-bj-border text-5xl font-bold font-mono opacity-20 select-none">F1 CYBER</span>
                             </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+                            <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                             <div class="z-20">
                                 <span class="text-xs font-mono text-bj-red">SÉRIE LIMITÉE 1/1000</span>
-                                <h3 class="text-xl font-bold mt-1">La casquette sport redéfinie pour elle</h3>
+                                <h3 class="text-xl font-bold mt-1 text-white uppercase font-mono">La casquette sport redéfinie pour elle</h3>
                             </div>
                         </div>
                     </div>
@@ -384,89 +396,89 @@
             </section>
 
             <!-- PAGE 5: CONFIGURATION & PRE-ORDER -->
-            <section id="page-preorder" class="page-slide py-16 px-6 sm:px-12">
+            <section id="page-preorder" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
                     <!-- Configuration panel -->
-                    <div class="bg-bj-dark border border-bj-border rounded-2xl p-8 space-y-6">
+                    <div class="bg-bj-dark border border-bj-cyan/20 rounded-2xl p-8 space-y-6 shadow-[0_0_30px_rgba(6,182,212,0.05)]">
                         <div>
-                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES</span>
-                            <h2 class="text-3xl font-bold mt-1">Configurez votre Numéro Unique</h2>
+                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES VIRTUAL</span>
+                            <h2 class="text-3xl font-bold mt-1 text-white">Configurez votre Numéro Unique</h2>
                         </div>
 
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Sélectionnez le Modèle</label>
-                                <select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-semibold">
+                                <select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-semibold text-sm">
                                     <!-- Options de modèles synchronisées par JS -->
                                 </select>
                             </div>
 
                             <div>
-                                <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
-                                <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold transition-all font-mono">
+                                <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
+                                <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-mono text-lg text-bj-cyan">
                                 <p class="text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
                             </div>
                         </div>
 
                         <!-- Live Simulation Certificate -->
-                        <div class="border border-dashed border-bj-border p-6 rounded bg-black/40 text-center space-y-4">
-                            <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest">Génération du certificat d'authenticité de l'étiquette</span>
+                        <div class="border border-dashed border-bj-cyan/30 p-6 rounded bg-black/60 text-center space-y-4 shadow-inner">
+                            <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest block">Génération du certificat d'authenticité de l'étiquette</span>
                             <div class="space-y-1">
-                                <p class="text-lg font-mono text-bj-gold" id="config-display-code">BJ-042-42DF</p>
+                                <p class="text-xl font-mono text-bj-cyan drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]" id="config-display-code">BJ-042-42DF</p>
                                 <p class="text-[10px] text-bj-textMuted font-mono">Certificat d'empreinte généré à la volée</p>
                             </div>
                         </div>
 
                         <!-- Client Info Form to capture leads -->
-                        <div class="space-y-4 pt-4 border-t border-bj-border">
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
-                                <input type="email" id="client-email" placeholder="Adresse email" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm transition-all">
+                        <div class="space-y-4 pt-4 border-t border-bj-cyan/10">
+                            <div class="grid grid-cols-2 gap-4 font-mono">
+                                <input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs transition-all">
+                                <input type="email" id="client-email" placeholder="Adresse email" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs transition-all">
                             </div>
-                            <button onclick="submitPreorder()" class="w-full bg-bj-gold hover:bg-white text-black font-extrabold py-4 rounded text-xs uppercase tracking-widest transition-all">
+                            <button onclick="submitPreorder()" class="w-full bg-bj-cyan hover:bg-white hover:text-black text-black font-extrabold py-4 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                                 Vérifier la Disponibilité et Réserver
                             </button>
                         </div>
                     </div>
 
                     <!-- Live Preview of the selected cap (Vogue aesthetic) -->
-                    <div class="border border-bj-border rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden">
+                    <div class="border border-bj-cyan/20 rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.03)]">
                         <div>
-                            <span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final</span>
+                            <span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final Vectoriel</span>
                             
-                            <div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-border mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300">
+                            <div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-cyan/30 mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300 shadow-[inset_0_0_30px_rgba(6,182,212,0.2)]">
                                 <!-- Overlay to maintain text readability over image -->
-                                <div class="absolute inset-0 bg-black/80 z-0"></div>
+                                <div class="absolute inset-0 bg-black/85 z-0"></div>
                                 
                                 <!-- Simulated Premium Box -->
-                                <div class="absolute inset-4 border border-bj-border/30 rounded flex flex-col justify-between p-6 z-10">
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-[8px] font-mono text-bj-textMuted">BENZJAMES LABS</span>
-                                        <span class="text-[8px] font-mono text-bj-red" id="box-weight">WEIGHT: 42G</span>
+                                <div class="absolute inset-4 border border-bj-cyan/20 rounded flex flex-col justify-between p-6 z-10 bg-black/10">
+                                    <div class="flex justify-between items-start font-mono">
+                                        <span class="text-[8px] text-bj-cyan">BENZJAMES LABS_</span>
+                                        <span class="text-[8px] text-bj-red" id="box-weight">WEIGHT: 42G</span>
                                     </div>
                                     <div class="text-center space-y-2">
                                         <span class="text-xs uppercase tracking-[0.3em] text-bj-textMuted" id="box-slogan">L'APPUI AÉRODYNAMIQUE ULTIME</span>
-                                        <h3 class="text-2xl font-bold uppercase tracking-widest text-white font-mono" id="box-title">MONZA</h3>
-                                        <div class="inline-block px-3 py-1 bg-bj-dark border border-bj-border text-bj-gold font-mono text-sm" id="box-serial">
+                                        <h3 class="text-3xl font-bold uppercase tracking-widest text-white font-mono drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" id="box-title">MONZA</h3>
+                                        <div class="inline-block px-3 py-1 bg-bj-dark border border-bj-cyan/30 text-bj-gold font-mono text-sm shadow-[0_0_10px_rgba(212,175,55,0.1)]" id="box-serial">
                                             N° 042 / 1000
                                         </div>
                                     </div>
-                                    <div class="text-center">
-                                        <span class="text-[8px] font-mono text-bj-textMuted">MACHINED & SIGNED IN FRANCE</span>
+                                    <div class="text-center font-mono">
+                                        <span class="text-[8px] text-bj-textMuted">MACHINED & SIGNED IN FRANCE</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="pt-6 flex justify-between items-center">
+                        <div class="pt-6 flex justify-between items-center font-mono">
                             <div>
                                 <span class="text-xs text-bj-textMuted block">MÉTHODE D'AUTHENTIFICATION</span>
                                 <span class="text-sm font-bold text-white">NFC + Code d'Empreinte (Vérifié)</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-xs text-bj-textMuted block">PRIX DE RÉSERVATION</span>
-                                <span class="text-lg font-mono text-bj-gold font-bold" id="box-price">240 €</span>
+                                <span class="text-lg text-bj-gold font-bold" id="box-price">240 €</span>
                             </div>
                         </div>
                     </div>
@@ -479,11 +491,14 @@
     </main>
 
     <!-- FIXED PREMIUM TACHOMETER GAUGE (Compte-tours de Navigation en bas à droite) -->
-    <div class="fixed bottom-20 right-6 z-50 bg-bj-black/90 border-2 border-bj-border/90 p-3 rounded-full shadow-2xl flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Compte-tours de Navigation" onclick="cyclePages()">
+    <div class="fixed bottom-20 right-6 z-50 bg-bj-black/95 border-2 border-bj-cyan/30 p-3 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.2)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Compte-tours de Navigation" onclick="cyclePages()">
         <div class="relative w-20 h-20">
             <!-- SVG Tachometer face -->
             <svg class="w-full h-full" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="34" fill="none" stroke="#151515" stroke-width="4"></circle>
+                <!-- Glowing Cyan background ring for TRON soft touch -->
+                <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(6, 182, 212, 0.15)" stroke-width="6" class="animate-pulse"></circle>
+                
                 <path d="M 16 57 A 34 34 0 0 1 16 23" fill="none" stroke="#333" stroke-width="2.5"></path>
                 <path d="M 23 16 A 34 34 0 0 1 57 16" fill="none" stroke="#D4AF37" stroke-width="2.5" opacity="0.6"></path>
                 <path d="M 57 23 A 34 34 0 0 1 64 40" fill="none" stroke="#E10600" stroke-width="2.5"></path>
@@ -510,89 +525,89 @@
 
     <!-- Master Login Dialog Modal -->
     <div id="modal-login" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-bj-dark border border-bj-border p-8 rounded-2xl w-full max-w-md space-y-6">
-            <div class="text-center">
-                <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">Benzjames Security Portal</span>
-                <h3 class="text-2xl font-bold tracking-tight mt-1 text-white">Connexion Master</h3>
+        <div class="bg-bj-dark border border-bj-cyan/20 p-8 rounded-2xl w-full max-w-md space-y-6">
+            <div class="text-center font-mono">
+                <span class="text-xs text-bj-gold uppercase tracking-widest">Benzjames Security Portal</span>
+                <h3 class="text-2xl font-bold tracking-tight mt-1 text-white uppercase">Connexion Master</h3>
             </div>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Identifiant Administrateur</label>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Identifiant Administrateur</label>
                     <input type="text" id="login-id" value="DENIS_MASTER" readonly class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white/50 focus:outline-none font-mono text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Code Secret d'Écurie</label>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Code Secret d'Écurie</label>
                     <input type="password" id="login-password" placeholder="Mot de passe" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold font-mono text-sm">
-                    <p class="text-[10px] text-bj-textMuted mt-1">Indice : MASTER2026</p>
+                    <p class="text-[10px] text-bj-textMuted mt-1 font-mono">Indice : MASTER2026</p>
                 </div>
             </div>
-            <div class="flex gap-3 pt-2">
+            <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeLoginModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
-                <button onclick="submitLogin()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Se Connecter</button>
+                <button onclick="submitLogin()" class="w-1/2 bg-bj-cyan hover:bg-white hover:text-black text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Se Connecter</button>
             </div>
         </div>
     </div>
 
     <!-- Product Creation/Edition Modal -->
     <div id="modal-product" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
-        <div class="bg-bj-dark border border-bj-border p-6 rounded-2xl w-full max-w-xl space-y-6 my-8">
-            <div class="flex justify-between items-center border-b border-bj-border pb-4">
-                <h3 id="product-modal-title" class="text-xl font-bold text-white">Ajouter/Modifier un Article</h3>
+        <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-xl space-y-6 my-8">
+            <div class="flex justify-between items-center border-b border-bj-cyan/15 pb-4">
+                <h3 id="product-modal-title" class="text-xl font-bold text-white uppercase font-mono">Ajouter/Modifier un Article</h3>
                 <button onclick="closeProductModal()" class="text-bj-textMuted hover:text-white text-xl font-mono">&times;</button>
             </div>
             <input type="hidden" id="edit-product-id">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Nom du Modèle (ex: Imola F1)</label>
-                    <input type="text" id="prod-name" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
+                    <input type="text" id="prod-name" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-semibold">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Prix de vente (€)</label>
-                    <input type="number" id="prod-price" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-mono">
+                    <input type="number" id="prod-price" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Slogan de l'article (ex: Vitesse et élégance pure)</label>
-                    <input type="text" id="prod-slogan" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
+                    <input type="text" id="prod-slogan" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-semibold">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Description technique courte</label>
-                    <textarea id="prod-desc" rows="3" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm leading-relaxed"></textarea>
+                    <textarea id="prod-desc" rows="3" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan leading-relaxed"></textarea>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">URL de la photo de l'article (ou laisser vide pour motif F1)</label>
-                    <input type="text" id="prod-image" placeholder="https://exple.com/image.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-mono text-xs">
+                    <input type="text" id="prod-image" placeholder="https://exple.com/image.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan text-[10px]">
                     <p class="text-[9px] text-bj-textMuted mt-1">Vous pouvez héberger vos photos de casquettes sur n'importe quel site et coller l'URL directe ici.</p>
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Badge Catégorie</label>
-                    <input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm">
+                    <input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Poids simulé de l'article (g)</label>
-                    <input type="number" id="prod-weight" value="42" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold text-sm font-mono">
+                    <input type="number" id="prod-weight" value="42" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-4 border-t border-bj-border">
+            <div class="flex gap-3 pt-4 border-t border-bj-cyan/15 font-mono">
                 <button onclick="closeProductModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
-                <button onclick="saveProduct()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
+                <button onclick="saveProduct()" class="w-1/2 bg-bj-cyan hover:bg-white hover:text-black text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
             </div>
         </div>
     </div>
 
     <!-- Dynamic Generic Text Editing Modal -->
     <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-bj-dark border border-bj-border p-6 rounded-2xl w-full max-w-lg space-y-6">
-            <div>
-                <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct</span>
-                <h3 class="text-lg font-bold text-white mt-1">Modifier le texte sélectionné</h3>
+        <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
+            <div class="font-mono">
+                <span class="text-xs text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct</span>
+                <h3 class="text-lg font-bold text-white mt-1 uppercase">Modifier le texte sélectionné</h3>
             </div>
             <input type="hidden" id="edit-target-id">
-            <div id="text-edit-input-container">
+            <div id="text-edit-input-container" class="font-mono text-xs">
                 <!-- Generates text input or textarea -->
             </div>
-            <div class="flex gap-3 pt-2">
+            <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeTextEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
                 <button onclick="saveTextEdit()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
             </div>
@@ -603,15 +618,15 @@
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
 
     <!-- Footer -->
-    <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-border/30 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2">
+    <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-cyan/10 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2 font-mono">
         <div class="flex items-center gap-4">
-            <span class="font-mono text-[9px] tracking-widest text-bj-gold">BENZJAMES HYPER-SLIDER V2</span>
-            <span id="slide-progress" class="font-mono text-bj-red font-bold">PAGE : 1 / 5</span>
+            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER-SLIDER V2.1 // TRON_SOFT</span>
+            <span id="slide-progress" class="text-bj-red font-bold">PAGE : 1 / 5</span>
         </div>
         <p class="text-[9px]">© 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.</p>
         <!-- Lock Button for master mode -->
-        <button onclick="openLoginModal()" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs font-mono flex items-center gap-2 border border-bj-border/60 hover:border-bj-gold px-3 py-1 rounded">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <button onclick="openLoginModal()" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs flex items-center gap-2 border border-bj-cyan/20 bg-bj-dark px-3 py-1 rounded">
+            <svg class="w-3.5 h-3.5 text-bj-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             Master Portal
         </button>
     </footer>
@@ -721,13 +736,13 @@
             const toast = document.createElement('div');
             
             let iconColor = 'text-bj-gold';
-            let borderStyle = 'border-bj-border';
+            let borderStyle = 'border-bj-cyan/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]';
             if (type === 'error') {
                 iconColor = 'text-bj-red';
-                borderStyle = 'border-bj-red/30';
+                borderStyle = 'border-bj-red/30 shadow-[0_0_15px_rgba(225,6,0,0.15)]';
             }
 
-            toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm z-50`;
+            toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm z-50 font-mono text-xs`;
             toast.innerHTML = `
                 <div class="p-1 rounded-md bg-black/40 ${iconColor}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -814,12 +829,12 @@
 
             products.forEach((product, idx) => {
                 const card = document.createElement('div');
-                card.className = "bg-bj-dark border border-bj-border rounded-xl p-6 flex flex-col justify-between group hover:border-bj-gold/50 transition-all relative";
+                card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-6 flex flex-col justify-between group hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all duration-300 relative tron-glow-border";
                 
                 // If custom image is set, use it. Otherwise, use a stylish abstract circle
                 let imageHTML = `
-                    <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-gold/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
-                        <span class="text-7xl font-extrabold text-bj-border/30 font-mono group-hover:text-bj-gold/10 transition-all">${String(idx + 1).padStart(2, '0')}</span>
+                    <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
+                        <span class="text-7xl font-extrabold text-bj-cyan/10 font-mono group-hover:text-bj-cyan/35 transition-all select-none">${String(idx + 1).padStart(2, '0')}</span>
                         <div class="absolute w-24 h-24 rounded-full border border-dashed border-bj-red/20 group-hover:rotate-45 transition-all duration-700"></div>
                     </div>
                 `;
@@ -836,20 +851,20 @@
                         ✏️
                     </button>
                     <div class="space-y-4">
-                        <div class="aspect-square bg-neutral-900 rounded-lg relative overflow-hidden flex items-center justify-center p-4">
-                            <div class="absolute top-3 left-3 bg-bj-red text-white text-[9px] font-bold px-2 py-0.5 tracking-widest uppercase">${product.badge}</div>
+                        <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-border">
+                            <div class="absolute top-3 left-3 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md">${product.badge}</div>
                             ${imageHTML}
                         </div>
                         <div class="space-y-1">
                             <div class="flex justify-between items-start gap-2">
-                                <h3 class="text-lg font-bold text-white group-hover:text-bj-gold transition-all leading-tight">${product.name}</h3>
+                                <h3 class="text-lg font-bold text-white group-hover:text-bj-cyan transition-all leading-tight uppercase font-mono tracking-wider">${product.name}</h3>
                                 <span class="text-sm font-mono text-bj-gold font-bold whitespace-nowrap">${product.price} €</span>
                             </div>
                             <p class="text-[10px] uppercase font-mono text-bj-red tracking-wider" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
                         </div>
                         <p class="text-xs text-bj-textMuted leading-relaxed">${product.desc}</p>
                     </div>
-                    <button onclick="selectProductForPreorder('${product.id}')" class="w-full mt-6 py-3 border border-bj-border hover:bg-white hover:text-black text-xs uppercase tracking-widest font-bold transition-all rounded">Configurateur</button>
+                    <button onclick="selectProductForPreorder('${product.id}')" class="w-full mt-6 py-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-xs uppercase tracking-widest font-bold transition-all rounded font-mono text-bj-cyan">Configurateur</button>
                 `;
                 grid.appendChild(card);
             });
