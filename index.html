@@ -43,6 +43,7 @@
             height: 100%;
         }
 
+        /* */
         /* Grille néon style TRON avec perspective */
         .tron-grid {
             background-size: 50px 50px;
@@ -107,6 +108,7 @@
             border-radius: 2px;
         }
 
+        /* */
         /* Animation de l'aiguille du tachymètre */
         .tacho-needle {
             transform-origin: 40px 40px;
@@ -125,15 +127,10 @@
 </head>
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade">
 
-    <!-- -->
-    <!-- MASTER NOTIFICATION BANNER (Optimisé avec boutons d'export/import) -->
+    <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
         <span>⚡ MASTER MODE ACTIF — MODIFICATION DU CANVAS AUTORISÉE</span>
-        <div class="flex gap-2">
-            <button onclick="exportData()" class="bg-black text-white px-2 py-1 rounded text-[10px] hover:bg-bj-cyan hover:text-black transition-all">📤 Exporter Config</button>
-            <button onclick="importData()" class="bg-black text-white px-2 py-1 rounded text-[10px] hover:bg-bj-cyan hover:text-black transition-all">📥 Importer Config</button>
-            <button onclick="logoutMaster()" class="bg-black text-white px-2 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
-        </div>
+        <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
     </div>
 
     <!-- Header Navigation (Fixe en haut) -->
@@ -145,6 +142,7 @@
                 <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold">Cyber-Couture</span>
             </div>
 
+            <!-- -->
             <!-- 5 Pages Navigation (Desktop Only) -->
             <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-bj-textMuted font-mono">
                 <button onclick="navigateTo('page-home')" id="nav-page-home" class="hover:text-white transition-all text-white border-b border-bj-gold pb-1">L'Écurie</button>
@@ -201,16 +199,36 @@
         </div>
     </div>
 
-    <!-- -->
     <!-- MAIN APP WRAPPER (Glissement horizontal global) -->
     <main class="flex-grow overflow-hidden relative w-full h-full">
 
+        <!-- -->
         <!-- CONTENEUR SLIDER DE PAGES -->
         <div id="main-slider" class="slider-viewport" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
 
-            <!-- PAGE 1: L'ÉCURIE (HOME HERO AVEC DESIGN TRON PUR) -->
+            <!-- PAGE 1: L'ÉCURIE (HOME HERO AVEC F1 VECTORIELLE EN COURBE) -->
             <section id="page-home" class="page-slide tron-grid flex items-center px-6 sm:px-12 relative overflow-hidden">
                 
+                <!-- BACKGROUND DE F1 DE FACE EN COURBE VECTORIEL (Estompé à 8%) -->
+                <div class="absolute inset-0 z-0 flex items-center justify-center opacity-10 pointer-events-none select-none">
+                    <svg class="w-full max-w-4xl h-auto" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Perspective grid lines curving away -->
+                        <path d="M50 450 Q 400 350 750 450" stroke="#06B6D4" stroke-width="2" stroke-dasharray="10 15"></path>
+                        <path d="M100 400 Q 400 320 700 400" stroke="#D4AF37" stroke-width="1.5"></path>
+                        <path d="M150 350 Q 400 290 650 350" stroke="#06B6D4" stroke-width="1" stroke-dasharray="5 5"></path>
+                        <!-- Stylized F1 Front nose outline coming through the curves -->
+                        <path d="M400 120 L350 250 L380 250 L380 320 L280 330 L280 350 L520 350 L520 330 L420 320 L420 250 L450 250 Z" stroke="#06B6D4" stroke-width="3"></path>
+                        <!-- front wing -->
+                        <path d="M220 350 L220 380 L350 380 L350 360 L450 360 L450 380 L580 380 L580 350 Z" stroke="#E10600" stroke-width="4"></path>
+                        <!-- Suspension arms -->
+                        <path d="M350 220 L250 260 M450 220 L550 260" stroke="#D4AF37" stroke-width="2"></path>
+                        <path d="M350 240 L250 290 M450 240 L550 290" stroke="#06B6D4" stroke-width="2"></path>
+                        <!-- Tires -->
+                        <rect x="200" y="240" width="60" height="120" rx="10" stroke="#06B6D4" stroke-width="2" fill="black"></rect>
+                        <rect x="540" y="240" width="60" height="120" rx="10" stroke="#06B6D4" stroke-width="2" fill="black"></rect>
+                    </svg>
+                </div>
+
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full my-auto relative z-10">
                     <!-- Text Column -->
                     <div class="lg:col-span-7 space-y-8">
@@ -257,7 +275,7 @@
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-xs text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
-                                        <h3 class="text-2xl font-bold uppercase tracking-wider text-white font-mono">MONACO GP EDITION</h3>
+                                        <h3 class="text-2xl font-bold uppercase tracking-wider text-white">MONACO GP EDITION</h3>
                                     </div>
                                 </div>
                                 <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 animate-spin" style="animation-duration: 25s;"></div>
@@ -269,6 +287,7 @@
                 </div>
             </section>
 
+            <!-- -->
             <!-- PAGE 2: LA COLLECTION (PRODUCTS WITH NEON BRACKETS) -->
             <section id="page-collection" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
@@ -381,6 +400,7 @@
                 </div>
             </section>
 
+            <!-- -->
             <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL DE CAROUSEL) -->
             <section id="page-vogue" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
@@ -399,7 +419,7 @@
                             </div>
                             <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                             <div class="z-20">
-                                <span class="text-xs font-mono text-bj-cyan tracking-wider">// Série Monaco Grid GP</span>
+                                <span class="text-xs font-mono text-bj-cyan uppercase tracking-wider">// Série Monaco Grid GP</span>
                                 <h3 class="text-2xl font-bold mt-1 text-white uppercase font-mono tracking-wider">L'élégance asymétrique sur la grille de départ</h3>
                             </div>
                         </div>
@@ -548,7 +568,6 @@
         </div>
     </div>
 
-    <!-- -->
     <!-- Master Login Dialog Modal -->
     <div id="modal-login" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-8 rounded-2xl w-full max-w-md space-y-6">
@@ -600,26 +619,11 @@
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Description technique courte</label>
                     <textarea id="prod-desc" rows="3" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan leading-relaxed"></textarea>
                 </div>
-                
-                <!-- SÉLECTEUR DE FICHIER GAGNE-TEMPS (Mac & iPhone 15 direct) -->
                 <div class="md:col-span-2">
-                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Photo de l'article (Importer depuis Galerie / Fichiers / Photo en direct)</label>
-                    <div class="flex items-center gap-4">
-                        <label class="flex-grow flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-5 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
-                            <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <span class="text-[10px] text-white font-mono uppercase tracking-widest text-center" id="file-upload-label">Sélectionner sur l'appareil</span>
-                            <input type="file" id="prod-image-file" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
-                        </label>
-                        <!-- Aperçu Vignette de l'Image sélectionnée -->
-                        <div id="modal-image-preview" class="w-20 h-20 rounded bg-neutral-950 border border-bj-border flex items-center justify-center overflow-hidden">
-                            <span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>
-                        </div>
-                    </div>
-                    <p class="text-[9px] text-bj-textMuted mt-2">L'image sera enregistrée localement dans la mémoire de votre appareil.</p>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">URL de la photo de l'article (ou laisser vide pour motif F1)</label>
+                    <input type="text" id="prod-image" placeholder="https://exple.com/image.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan text-[10px]">
+                    <p class="text-[9px] text-bj-textMuted mt-1">Vous pouvez héberger vos photos de casquettes sur n'importe quel site et coller l'URL directe ici.</p>
                 </div>
-
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Badge Catégorie</label>
                     <input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
@@ -672,7 +676,6 @@
         </button>
     </footer>
 
-    <!-- -->
     <!-- INTERACTIVE APP SCRIPT -->
     <script>
         // Default Products Set
@@ -743,7 +746,6 @@
         let products = [];
         let pageTexts = {};
         let isMaster = false;
-        let tempImageData = ""; // Stockage Base64 temporaire pour l'upload d'image
         
         // Slider State Engine
         let currentPage = 0;
@@ -894,7 +896,7 @@
                         ✏️
                     </button>
                     <div class="space-y-4">
-                        <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-cyan/15">
+                        <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-border">
                             <div class="absolute top-3 left-3 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md">${product.badge}</div>
                             ${imageHTML}
                         </div>
@@ -1061,63 +1063,7 @@
             showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
         }
 
-        /* */
-        /* MASTER MODE CONFIGURATION EXPORT & IMPORT (Cross-device data transfer) */
-        
-        function exportData() {
-            const dataToExport = {
-                products: products,
-                pageTexts: pageTexts
-            };
-            const jsonString = JSON.stringify(dataToExport);
-
-            // Copy config to clipboard using robust fallback
-            const textarea = document.createElement('textarea');
-            textarea.value = jsonString;
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast("Configuration Exportée", "Le code de configuration complet a été copié. Envoie-le sur ton iPhone par Note, SMS ou E-mail, puis importe-le !", "success");
-                } else {
-                    showToast("Erreur", "Impossible de copier dans le presse-papier.", "error");
-                }
-            } catch (err) {
-                showToast("Erreur", "L'accès au presse-papier a échoué.", "error");
-            }
-            document.body.removeChild(textarea);
-        }
-
-        function importData() {
-            const inputCode = prompt("Colle ici le code de configuration exporté depuis ton Mac ou un autre appareil :");
-            if (!inputCode || inputCode.trim() === "") return;
-
-            try {
-                const parsedData = JSON.parse(inputCode);
-                
-                if (parsedData.products && Array.isArray(parsedData.products) && parsedData.pageTexts) {
-                    // Update state and LocalStorage
-                    products = parsedData.products;
-                    pageTexts = parsedData.pageTexts;
-                    
-                    localStorage.setItem('bj_products', JSON.stringify(products));
-                    localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
-                    
-                    showToast("Showroom synchronisé !", "Toutes tes casquettes, photos et textes personnalisés ont été importés avec succès.", "success");
-                    
-                    // Refresh rendering
-                    renderApp();
-                } else {
-                    showToast("Code Invalide", "Le format du code collé est incorrect.", "error");
-                }
-            } catch (e) {
-                showToast("Échec de l'importation", "Impossible de lire le code. Assure-toi d'avoir copié le bloc de texte en entier.", "error");
-            }
-        }
-
-        /* MASTER MODE SECURITY MANAGEMENT */
+        /* MASTER MODE ENGINEERING (DENIS MASTER WORKFLOW) */
 
         function openLoginModal() {
             document.getElementById('login-password').value = '';
@@ -1163,30 +1109,6 @@
             }
         }
 
-        // GESTIONNAIRE DE SÉLECTION D'IMAGE DIRECTE (Sans URL)
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            // Alerte si l'image est trop lourde pour préserver la mémoire de l'appareil (Limite recommandée 1.5 Mo)
-            if (file.size > 1.5 * 1024 * 1024) {
-                showToast("Fichier trop lourd", "Veuillez choisir une image de moins de 1.5 Mo pour optimiser les performances de l'iPhone.", "error");
-                e.target.value = "";
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                tempImageData = event.target.result;
-                document.getElementById('file-upload-label').innerText = file.name;
-                
-                // Rendu de l'aperçu instantané
-                const preview = document.getElementById('modal-image-preview');
-                preview.innerHTML = `<img src="${tempImageData}" class="w-full h-full object-cover">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
         // Dynamic Product Add/Edit Modal Controls
         function openProductModal(productId = '') {
             const modal = document.getElementById('modal-product');
@@ -1198,15 +1120,9 @@
             document.getElementById('prod-price').value = '';
             document.getElementById('prod-slogan').value = '';
             document.getElementById('prod-desc').value = '';
-            document.getElementById('prod-image-file').value = '';
-            document.getElementById('file-upload-label').innerText = "Sélectionner sur l'appareil";
+            document.getElementById('prod-image').value = '';
             document.getElementById('prod-badge').value = 'F1 Aero';
             document.getElementById('prod-weight').value = '42';
-            
-            tempImageData = ""; // Reset temporary memory
-            
-            const preview = document.getElementById('modal-image-preview');
-            preview.innerHTML = `<span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>`;
 
             if (productId) {
                 titleEl.innerText = "Modifier l'Article Benzjames";
@@ -1216,15 +1132,9 @@
                     document.getElementById('prod-price').value = p.price;
                     document.getElementById('prod-slogan').value = p.slogan || '';
                     document.getElementById('prod-desc').value = p.desc;
+                    document.getElementById('prod-image').value = p.image || '';
                     document.getElementById('prod-badge').value = p.badge || 'F1 Aero';
                     document.getElementById('prod-weight').value = p.weight || '42';
-                    
-                    // Chargement de l'image stockée si disponible
-                    if (p.image && p.image.trim() !== "") {
-                        tempImageData = p.image;
-                        preview.innerHTML = `<img src="${tempImageData}" class="w-full h-full object-cover">`;
-                        document.getElementById('file-upload-label').innerText = "Image existante chargée";
-                    }
                 }
             } else {
                 titleEl.innerText = "Ajouter une Pièce de Collection";
@@ -1243,6 +1153,7 @@
             const price = parseInt(document.getElementById('prod-price').value) || 0;
             const slogan = document.getElementById('prod-slogan').value.trim();
             const desc = document.getElementById('prod-desc').value.trim();
+            const image = document.getElementById('prod-image').value.trim();
             const badge = document.getElementById('prod-badge').value.trim();
             const weight = parseInt(document.getElementById('prod-weight').value) || 42;
 
@@ -1255,31 +1166,13 @@
                 // Edit mode
                 const idx = products.findIndex(p => p.id === id);
                 if (idx !== -1) {
-                    products[idx] = { 
-                        ...products[idx], 
-                        name, 
-                        price, 
-                        slogan, 
-                        desc, 
-                        image: tempImageData, // Empreinte de fichier direct sauvegardée !
-                        badge, 
-                        weight 
-                    };
+                    products[idx] = { ...products[idx], name, price, slogan, desc, image, badge, weight };
                     showToast("Article Modifié", `Le modèle ${name} a été reconfiguré avec succès.`);
                 }
             } else {
                 // Create mode
                 const newId = 'p' + (Date.now());
-                products.push({ 
-                    id: newId, 
-                    name, 
-                    price, 
-                    slogan, 
-                    desc, 
-                    image: tempImageData, 
-                    badge, 
-                    weight 
-                });
+                products.push({ id: newId, name, price, slogan, desc, image, badge, weight });
                 showToast("Nouvel Article", `Le modèle ${name} est désormais disponible sur la grille.`);
             }
 
