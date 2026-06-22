@@ -737,6 +737,54 @@
     <!-- -->
     <!-- INTERACTIVE APP SCRIPT -->
     <script>
+        const dbName = "BenzjamesDB";
+        const storeName = "videos";
+
+        function getDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, 1);
+                request.onupgradeneeded = function(e) {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        db.createObjectStore(storeName);
+                    }
+                };
+                request.onsuccess = function(e) {
+                    resolve(e.target.result);
+                };
+                request.onerror = function(e) {
+                    reject(e.target.error);
+                };
+            });
+        }
+
+        async function saveVideoToDB(key, val) {
+            try {
+                const db = await getDB();
+                const tx = db.transaction(storeName, "readwrite");
+                const store = tx.objectStore(storeName);
+                store.put(val, key);
+                return new Promise((resolve) => tx.oncomplete = resolve);
+            } catch (e) {
+                console.error("IndexedDB Save Error:", e);
+            }
+        }
+
+        async function getVideoFromDB(key) {
+            try {
+                const db = await getDB();
+                const tx = db.transaction(storeName, "readonly");
+                const store = tx.objectStore(storeName);
+                return new Promise((resolve) => {
+                    const req = store.get(key);
+                    req.onsuccess = () => resolve(req.result);
+                });
+            } catch (e) {
+                console.error("IndexedDB Load Error:", e);
+                return null;
+            }
+        }
+
         const DEFAULT_PRODUCTS = [
             {
                 id: "p1",
@@ -804,7 +852,7 @@
         let pageTexts = {};
         let isMaster = false;
         let tempImageData = ""; 
-        let tempVideoData = "";
+        let tempVideoFile = null;
         
         let currentPage = 0;
         const totalPages = 5;
@@ -867,8 +915,7 @@
             }, 4000);
         }
 
-        /* */
-        function initApp() {
+        async function initApp() {
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
 
@@ -903,13 +950,19 @@
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             }
 
-            // Load home video from memory
-            const savedVideo = localStorage.getItem('bj_home_video');
+            // Load home video from IndexedDB database
+            const savedVideo = await getVideoFromDB('home_video');
             const player = document.getElementById('hud-video-player');
             if (savedVideo && player) {
-                document.getElementById('hud-video-src').src = savedVideo;
+                let videoUrl = "";
+                if (savedVideo instanceof Blob) {
+                    videoUrl = URL.createObjectURL(savedVideo);
+                } else {
+                    videoUrl = savedVideo; // It is an external HTTPS link string
+                }
+                document.getElementById('hud-video-src').src = videoUrl;
                 player.load();
-                player.play().catch(e => console.log("Auto-play blocked, waiting for interaction"));
+                player.play().catch(e => console.log("Auto-play wait for gesture"));
             }
 
             renderApp();
@@ -1169,12 +1222,11 @@
             reader.readAsDataURL(file);
         }
 
-        // Direct Video Customizer logic for Page 1 Screen
         function openVideoEditModal() {
-            tempVideoData = "";
+            tempVideoFile = null;
             document.getElementById('video-url-input').value = "";
             document.getElementById('video-file-picker').value = "";
-            document.getElementById('video-upload-label').innerText = "Sélectionner une vidéo";
+            document.getElementById('video-upload-label').innerText = "Sélectionner une vidéo (Max 100 Mo)";
             document.getElementById('modal-video-edit').classList.remove('hidden');
         }
 
@@ -1186,39 +1238,38 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            // Warn on huge files for localStorage
-            if (file.size > 4 * 1024 * 1024) {
-                showToast("Fichier lourd", "Une vidéo locale de plus de 4 Mo peut ralentir l'iPhone ou saturer la mémoire locale. Privilégiez un lien URL si possible.", "error");
+            // Warn on extremely heavy files (above 120MB)
+            if (file.size > 120 * 1024 * 1024) {
+                showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'iPhone. Privilégiez un fichier optimisé.", "error");
+                e.target.value = "";
+                return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                tempVideoData = event.target.result;
-                document.getElementById('video-upload-label').innerText = file.name;
-                showToast("Vidéo chargée", "Le fichier vidéo local est prêt à être appliqué.", "success");
-            };
-            reader.readAsDataURL(file);
+            tempVideoFile = file;
+            document.getElementById('video-upload-label').innerText = file.name + " (" + (file.size / (1024 * 1024)).toFixed(1) + " Mo)";
+            showToast("Vidéo chargée", "Le fichier vidéo est prêt à être appliqué.", "success");
         }
 
-        function saveVideoEdit() {
+        async function saveVideoEdit() {
             const urlInput = document.getElementById('video-url-input').value.trim();
             const player = document.getElementById('hud-video-player');
             const source = document.getElementById('hud-video-src');
             
-            let finalVideoSrc = "";
-
-            if (tempVideoData) {
-                finalVideoSrc = tempVideoData;
+            if (tempVideoFile) {
+                showToast("Enregistrement en cours...", "Veuillez patienter pendant l'écriture dans la base de données de l'iPhone.", "info");
+                // Save Binary Blob to IndexedDB
+                await saveVideoToDB('home_video', tempVideoFile);
+                const videoUrl = URL.createObjectURL(tempVideoFile);
+                source.src = videoUrl;
+                player.load();
+                player.play().catch(e => console.log("Playback wait for click"));
+                showToast("Écran configuré", "La vidéo haute définition a été enregistrée de manière permanente.", "success");
             } else if (urlInput) {
-                finalVideoSrc = urlInput;
-            }
-
-            if (finalVideoSrc) {
-                localStorage.setItem('bj_home_video', finalVideoSrc);
-                source.src = finalVideoSrc;
+                await saveVideoToDB('home_video', urlInput);
+                source.src = urlInput;
                 player.load();
                 player.play().catch(e => console.log("Playback failed"));
-                showToast("Écran configuré", "La vidéo d'accueil a été mise à jour.", "success");
+                showToast("Écran configuré", "Le lien vidéo externe a été mis à jour.", "success");
             }
 
             closeVideoEditModal();
