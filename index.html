@@ -43,7 +43,6 @@
             height: 100%;
         }
 
-        /* */
         /* Grille néon style TRON asymétrique et soutenue */
         .tron-grid {
             background-color: #050505;
@@ -72,7 +71,6 @@
             background-position: 0 0, 0 18px, 18px -18px, -18px 0px;
         }
 
-        /* Reflets de flux d'énergie TRON */
         .tron-glow-border {
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             border-color: rgba(6, 182, 212, 0.15);
@@ -82,7 +80,6 @@
             box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 10px rgba(6, 182, 212, 0.1);
         }
 
-        /* Smooth transition for editing overlay */
         .edit-highlight {
             position: relative;
         }
@@ -99,18 +96,16 @@
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Chaque page prend exactement 1/5ème de la largeur et scrolle verticalement */
         .page-slide {
             width: 20%;
             height: 100%;
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding-top: 80px; /* Espace pour le header fixe */
-            padding-bottom: 120px; /* Espace pour le footer et le tachymètre */
+            padding-top: 80px; 
+            padding-bottom: 120px; 
         }
 
-        /* Masquage discret de la scrollbar */
         .page-slide::-webkit-scrollbar {
             width: 4px;
         }
@@ -133,12 +128,40 @@
             0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.2); }
             100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.5); }
         }
+
+        /* Rhythmic Glitch/Blink calqué sur le code binaire 1101 (Flash, Flash, pause, Flash) */
+        @keyframes binaryRhythm {
+            0%, 15% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }   /* 1 */
+            20%, 35% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }  /* 1 */
+            40%, 55% { opacity: 0.15; filter: none; }                                      /* 0 */
+            60%, 80% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }  /* 1 */
+            85%, 100% { opacity: 0.15; filter: none; }                                     /* Pause */
+        }
+        .cyber-beacon-blink {
+            animation: binaryRhythm 2.8s infinite;
+        }
+
+        /* Serpentine Scrolling Title Animation over 4 Lines */
+        @keyframes serpentineTrack {
+            0% { transform: translate(100%, 72px); }      /* Ligne 4 (Bas) - Départ Droite */
+            22% { transform: translate(-100%, 72px); }    /* Ligne 4 - Arrivée Gauche */
+            25% { transform: translate(-100%, 48px); }    /* Remonte à la Ligne 3 */
+            47% { transform: translate(100%, 48px); }     /* Ligne 3 - Retour Droite */
+            50% { transform: translate(100%, 24px); }     /* Remonte à la Ligne 2 */
+            72% { transform: translate(-100%, 24px); }    /* Ligne 2 - Retour Gauche */
+            75% { transform: translate(-100%, 0px); }     /* Remonte à la Ligne 1 (Haut) */
+            97% { transform: translate(100%, 0px); }      /* Ligne 1 - Sortie Droite */
+            100% { transform: translate(100%, 72px); }    /* Retour au départ */
+        }
+        .serpent-scroller {
+            animation: serpentineTrack 24s linear infinite;
+            will-change: transform;
+        }
     </style>
 </head>
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade">
 
-    <!-- -->
-    <!-- MASTER NOTIFICATION BANNER (Optimisé sans fonctions d'import/export d'origine) -->
+    <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
         <span>⚡ MASTER MODE ACTIF — CONFIGURATION DIRECTE AUTORISÉE</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
@@ -178,9 +201,8 @@
         </div>
     </header>
 
-    <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15 - Liens Rouge F1) -->
+    <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15) -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
-        <!-- Top Bar inside drawer -->
         <div class="flex justify-between items-center border-b border-bj-cyan/10 pb-4">
             <span class="text-lg font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
             <button onclick="toggleMobileMenu()" class="text-white focus:outline-none p-2 rounded-full border border-bj-border bg-bj-dark hover:border-bj-red transition-all">
@@ -190,7 +212,6 @@
             </button>
         </div>
 
-        <!-- Premium Mobile Navigation Menu -->
         <nav class="flex flex-col gap-8 text-center my-auto py-12">
             <span class="text-[9px] font-mono text-bj-gold tracking-[0.4em] uppercase mb-2">// DIRECTIVES D'ÉCURIE</span>
             <button onclick="navigateToMobile('page-home')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">L'Écurie</button>
@@ -208,43 +229,49 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER (Glissement horizontal global) -->
+    <!-- MAIN APP WRAPPER -->
     <main class="flex-grow overflow-hidden relative w-full h-full">
 
         <!-- CONTENEUR SLIDER DE PAGES -->
         <div id="main-slider" class="slider-viewport" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
 
-            <!-- -->
             <!-- PAGE 1: L'ÉCURIE (HOME HERO AVEC INTEGRATION HUD VIDEO MONITOR) -->
             <section id="page-home" class="page-slide tron-grid flex items-center px-6 sm:px-12 relative overflow-hidden">
                 
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto relative z-10">
                     <!-- Text & Video Column -->
                     <div class="lg:col-span-7 space-y-6">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-cyan/30 rounded-full text-xs text-bj-cyan font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)]">
-                            <span class="w-1.5 h-1.5 rounded-full bg-bj-cyan animate-pulse"></span>
+                        <!-- Clignotant Tactique (1101) -->
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-cyan/30 rounded-full text-xs text-bj-cyan font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)] cyber-beacon-blink">
+                            <span class="w-1.5 h-1.5 rounded-full bg-bj-cyan"></span>
                             <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
-                            <button onclick="editPageText('txt-home-tag')" class="master-only ml-2 text-bj-gold hover:text-white hidden">✏️</button>
                         </div>
                         
-                        <div class="edit-highlight p-1 rounded">
-                            <h1 class="text-3xl sm:text-5xl font-light tracking-tight leading-none text-white">
-                                <span id="txt-home-title-1">L'aérodynamique de la</span> <span id="txt-home-title-highlight" class="font-bold text-bj-cyan drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]">F1</span>.<br>
-                                <span id="txt-home-title-2">L'exigence de la</span> <span id="txt-home-title-serif" class="italic font-serif text-bj-gold">Haute Couture</span>.
-                            </h1>
-                            <button onclick="editHomeTitles()" class="master-only absolute top-1 right-1 text-bj-gold hidden bg-black/80 p-1 rounded text-[10px] border border-bj-border">✏️ Titre</button>
+                        <!-- Serpentine Flow Title over 4 Channels -->
+                        <div class="h-28 relative overflow-hidden border border-bj-cyan/15 bg-black/60 rounded-xl p-2 font-mono shadow-[inset_0_0_15px_rgba(6,182,212,0.1)]">
+                            <!-- Rows guidelines -->
+                            <div class="absolute top-0 w-full border-b border-bj-cyan/5 h-6"></div>
+                            <div class="absolute top-6 w-full border-b border-bj-cyan/5 h-6"></div>
+                            <div class="absolute top-12 w-full border-b border-bj-cyan/5 h-6"></div>
+                            <div class="absolute top-18 w-full h-6"></div>
+                            
+                            <!-- Serpent Text Node -->
+                            <div class="serpent-scroller absolute text-sm sm:text-base font-bold uppercase tracking-wider whitespace-nowrap">
+                                <span class="text-bj-cyan">⚡ L'aérodynamique de la F1</span>
+                                <span class="text-bj-gold mx-6">:: L'exigence de la Haute Couture ::</span>
+                                <span class="text-bj-red mr-6">Benzjames Cyber-Couture V2</span>
+                                <span class="text-white">🚀 Vitesse et Singularité Pure</span>
+                            </div>
                         </div>
 
-                        <!-- ÉCRAN DE DIFFUSION VIDÉO HUD (Remplaçant le texte descriptif) -->
+                        <!-- ÉCRAN DE DIFFUSION VIDÉO HUD -->
                         <div class="border border-bj-cyan/30 bg-black/90 p-1.5 rounded-xl relative overflow-hidden shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-                            <!-- Technical HUD Frame elements -->
                             <div class="absolute top-3 left-4 text-[7px] font-mono text-bj-cyan/60 tracking-widest z-10 select-none">// SYSTEM_FEED_01 // SECURE_STREAM</div>
                             <div class="absolute top-3 right-4 flex items-center gap-1.5 z-10 select-none">
                                 <span class="w-1.5 h-1.5 bg-bj-red rounded-full animate-ping"></span>
                                 <span class="text-[7px] font-mono text-bj-red tracking-wider font-bold">LIVE</span>
                             </div>
 
-                            <!-- Interactive Edit Button on Screen (Master Mode Only) -->
                             <button onclick="openVideoEditModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold/90 text-black px-4 py-2 rounded font-mono text-[11px] font-bold shadow-lg hover:bg-white transition-all uppercase tracking-wider">
                                 ✏️ Configurer Écran Vidéo
                             </button>
@@ -290,7 +317,6 @@
                 </div>
             </section>
 
-            <!-- -->
             <!-- PAGE 2: LA COLLECTION (PRODUCTS WITH NEON BRACKETS) -->
             <section id="page-collection" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
@@ -310,18 +336,13 @@
                         </div>
                     </div>
 
-                    <!-- Grid Produits dynamique -->
-                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Généré dynamiquement en JS -->
-                    </div>
+                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
                 </div>
             </section>
 
-            <!-- -->
             <!-- PAGE 3: LE LABO F1 (INNOVATION & GLOWING telemetry) -->
             <section id="page-lab" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 h-full items-center">
-                    
                     <!-- Left Side: Interactive Telemetry UI -->
                     <div class="lg:col-span-5 bg-bj-dark border border-bj-cyan/20 rounded-xl p-6 space-y-6 shadow-[0_0_25px_rgba(6,182,212,0.1)]">
                         <div class="border-b border-bj-border pb-4">
@@ -360,7 +381,6 @@
                             </div>
                         </div>
 
-                        <!-- Real-Time Interactive Simulation -->
                         <div class="border border-bj-cyan/20 p-4 rounded bg-black flex flex-col justify-between space-y-4 shadow-inner">
                             <span class="text-[10px] font-mono text-bj-textMuted">SIMULATION EN SOUFFLERIE CYBERNETIQUE</span>
                             <div class="flex justify-center py-6">
@@ -390,20 +410,16 @@
                             <div class="border border-bj-red/30 pl-4 edit-highlight relative bg-bj-red/5 p-4 rounded-lg shadow-[0_0_15px_rgba(225,6,0,0.05)]">
                                 <h4 id="txt-lab-card1-title" class="text-sm font-bold text-white uppercase tracking-wider">// Fibre de Carbone</h4>
                                 <p id="txt-lab-card1-desc" class="text-xs text-bj-textMuted mt-1">La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.</p>
-                                <button onclick="editCardTexts('txt-lab-card1-title', 'txt-lab-card1-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
                             </div>
                             <div class="border border-bj-cyan/30 pl-4 edit-highlight relative bg-bj-cyan/5 p-4 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.05)]">
                                 <h4 id="txt-lab-card2-title" class="text-sm font-bold text-white uppercase tracking-wider">// Technologie Peltier</h4>
                                 <p id="txt-lab-card2-desc" class="text-xs text-bj-textMuted mt-1">Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.</p>
-                                <button onclick="editCardTexts('txt-lab-card2-title', 'txt-lab-card2-desc')" class="master-only absolute top-1 right-1 text-bj-gold hidden">✏️</button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- -->
             <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL DE CAROUSEL) -->
             <section id="page-vogue" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
@@ -411,10 +427,8 @@
                         <span class="text-xs font-mono text-bj-cyan uppercase tracking-widest">// VIRTUAL GRID CHIC</span>
                         <h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight text-white">Le Style en Mouvement</h2>
                         <p id="txt-vogue-desc" class="text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
-                        <button onclick="editCardTexts('txt-vogue-title', 'txt-vogue-desc')" class="master-only absolute top-2 right-2 text-bj-gold hidden bg-black/80 p-1.5 rounded text-xs border border-bj-border">✏️</button>
                     </div>
 
-                    <!-- Vogue Grid Photo Layout (TRON vector styling) -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                         <div class="md:col-span-8 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end tron-glow-border">
                             <div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
@@ -441,12 +455,10 @@
                 </div>
             </section>
 
-            <!-- -->
             <!-- PAGE 5: CONFIGURATION & PRE-ORDER (CYBER PACKAGING PREVIEW) -->
             <section id="page-preorder" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
-                    <!-- Configuration panel -->
                     <div class="bg-bj-dark border border-bj-cyan/20 rounded-2xl p-8 space-y-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
                         <div>
                             <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES VIRTUAL</span>
@@ -489,16 +501,13 @@
                         </div>
                     </div>
 
-                    <!-- Live Preview of the selected cap (Vogue aesthetic) -->
+                    <!-- Live Preview of the selected cap -->
                     <div class="border border-bj-cyan/20 rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.05)]">
                         <div>
                             <span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final Vectoriel</span>
                             
                             <div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-cyan/30 mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300 shadow-[inset_0_0_30px_rgba(6,182,212,0.2)]">
-                                <!-- Overlay to maintain text readability over image -->
                                 <div class="absolute inset-0 bg-black/85 z-0"></div>
-                                
-                                <!-- Simulated Premium Box -->
                                 <div class="absolute inset-4 border border-bj-cyan/20 rounded flex flex-col justify-between p-6 z-10 bg-black/10">
                                     <div class="flex justify-between items-start font-mono">
                                         <span class="text-[8px] text-bj-cyan">BENZJAMES LABS_</span>
@@ -537,21 +546,18 @@
 
     </main>
 
-    <!-- -->
-    <!-- FIXED PREMIUM TACHOMETER GAUGE (Compte-tours de Navigation en bas à droite) -->
-    <div class="fixed bottom-20 right-6 z-50 bg-bj-black/95 border-2 border-bj-cyan/30 p-3 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Compte-tours de Navigation" onclick="cyclePages()">
-        <div class="relative w-20 h-20">
+    <!-- FIXED PREMIUM TACHOMETER GAUGE (Compte-tours de Navigation - Réduit et placé tout en bas à droite) -->
+    <div class="fixed bottom-14 right-4 z-50 bg-bj-black/95 border border-bj-cyan/30 p-1.5 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Navigation" onclick="cyclePages()">
+        <div class="relative w-10 h-10">
             <!-- SVG Tachometer face -->
             <svg class="w-full h-full" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="34" fill="none" stroke="#151515" stroke-width="4"></circle>
-                <!-- Glowing Cyan background ring for TRON soft touch -->
                 <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(6, 182, 212, 0.15)" stroke-width="6" class="animate-pulse"></circle>
                 
                 <path d="M 16 57 A 34 34 0 0 1 16 23" fill="none" stroke="#333" stroke-width="2.5"></path>
                 <path d="M 23 16 A 34 34 0 0 1 57 16" fill="none" stroke="#D4AF37" stroke-width="2.5" opacity="0.6"></path>
                 <path d="M 57 23 A 34 34 0 0 1 64 40" fill="none" stroke="#E10600" stroke-width="2.5"></path>
                 
-                <!-- Repères de rapports (Pages) -->
                 <circle cx="16" cy="57" r="1.5" fill="#fff" id="tick-0"></circle>
                 <circle cx="16" cy="23" r="1.5" fill="#fff" id="tick-1"></circle>
                 <circle cx="40" cy="6" r="1.5" fill="#fff" id="tick-2"></circle>
@@ -559,19 +565,17 @@
                 <circle cx="64" cy="40" r="1.5" fill="#fff" id="tick-4"></circle>
 
                 <circle cx="40" cy="40" r="4" fill="#fff"></circle>
-                <!-- Aiguille rouge F1 -->
-                <line x1="40" y1="40" x2="40" y2="12" stroke="#E10600" stroke-width="2" class="tacho-needle" id="tacho-needle" transform="rotate(-110)"></line>
+                <line x1="40" y1="40" x2="40" y2="12" stroke="#E10600" stroke-width="2.5" class="tacho-needle" id="tacho-needle" transform="rotate(-110)"></line>
             </svg>
 
-            <!-- Affichage digital interne -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center pt-8">
-                <span class="text-[10px] font-mono font-bold text-white leading-none" id="tacho-digit">P1</span>
-                <span class="text-[5px] font-mono uppercase tracking-widest text-bj-red font-bold">GEAR</span>
+            <!-- Digital Inner Display scaled to fit micro size -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center pt-4">
+                <span class="text-[7px] font-mono font-bold text-white leading-none" id="tacho-digit">P1</span>
+                <span class="text-[4px] font-mono uppercase tracking-widest text-bj-red font-bold">GEAR</span>
             </div>
         </div>
     </div>
 
-    <!-- -->
     <!-- Master Login Dialog Modal -->
     <div id="modal-login" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-8 rounded-2xl w-full max-w-md space-y-6">
@@ -624,9 +628,8 @@
                     <textarea id="prod-desc" rows="3" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan leading-relaxed"></textarea>
                 </div>
                 
-                <!-- SÉLECTEUR DE FICHIER GAGNE-TEMPS -->
                 <div class="md:col-span-2">
-                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Photo de l'article (Importer depuis Galerie / Fichiers / Photo en direct)</label>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Photo de l'article</label>
                     <div class="flex items-center gap-4">
                         <label class="flex-grow flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-5 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                             <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -635,12 +638,10 @@
                             <span class="text-[10px] text-white font-mono uppercase tracking-widest text-center" id="file-upload-label">Sélectionner sur l'appareil</span>
                             <input type="file" id="prod-image-file" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
                         </label>
-                        <!-- Aperçu Vignette de l'Image sélectionnée -->
                         <div id="modal-image-preview" class="w-20 h-20 rounded bg-neutral-950 border border-bj-border flex items-center justify-center overflow-hidden">
                             <span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>
                         </div>
                     </div>
-                    <p class="text-[9px] text-bj-textMuted mt-2">L'image sera enregistrée localement dans la mémoire de votre appareil.</p>
                 </div>
 
                 <div>
@@ -681,7 +682,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// option B : Importer depuis votre photothèque / appareil</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// option B : Importer depuis votre photothèque</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -707,9 +708,7 @@
                 <h3 class="text-lg font-bold text-white mt-1 uppercase">Modifier le texte sélectionné</h3>
             </div>
             <input type="hidden" id="edit-target-id">
-            <div id="text-edit-input-container" class="font-mono text-xs">
-                <!-- Generates text input or textarea -->
-            </div>
+            <div id="text-edit-input-container" class="font-mono text-xs"></div>
             <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeTextEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
                 <button onclick="saveTextEdit()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
@@ -717,24 +716,22 @@
         </div>
     </div>
 
-    <!-- Beautiful In-App Toast System (No Native Alerts) -->
+    <!-- Toast System -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
 
     <!-- Footer -->
     <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-cyan/10 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2 font-mono">
         <div class="flex items-center gap-4">
-            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER-SLIDER V2.1 // TRON_SOFT</span>
+            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER-SLIDER V2.2 // TRON_SOFT</span>
             <span id="slide-progress" class="text-bj-red font-bold">PAGE : 1 / 5</span>
         </div>
         <p class="text-[9px]">© 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.</p>
-        <!-- Lock Button for master mode -->
         <button onclick="openLoginModal()" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs flex items-center gap-2 border border-bj-cyan/20 bg-bj-dark px-3 py-1 rounded">
             <svg class="w-3.5 h-3.5 text-bj-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             Master Portal
         </button>
     </footer>
 
-    <!-- -->
     <!-- INTERACTIVE APP SCRIPT -->
     <script>
         const dbName = "BenzjamesDB";
@@ -879,7 +876,6 @@
             toggleMobileMenu();
         }
 
-        /* */
         function showToast(title, message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -933,17 +929,9 @@
             } else {
                 pageTexts = {
                     'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES',
-                    'txt-home-title-1': "L'aérodynamique de la",
-                    'txt-home-title-highlight': 'F1',
-                    'txt-home-title-2': "L'exigence de la",
-                    'txt-home-title-serif': 'Haute Couture',
                     'txt-col-title': 'Les Pièces Maîtresses',
                     'txt-lab-title': 'Pas de fioritures, juste de la physique pure.',
                     'txt-lab-desc': "Chaque courbe d'une casquette Benzjames n'est pas le fruit du hasard. Nous utilisons des calculs d'écoulement des fluides pour s'assurer que même lors de vitesses extrêmes sur piste ou en conduite de cabriolet, la casquette maintienne un appui aérodynamique stable sans créer de turbulence au niveau du cou.",
-                    'txt-lab-card1-title': 'Fibre de Carbone Tissée',
-                    'txt-lab-card1-desc': 'La visière intègre de la fibre de carbone sèche pré-imprégnée pour une rigidité structurelle maximale.',
-                    'txt-lab-card2-title': 'Technologie Anti-Peltier',
-                    'txt-lab-card2-desc': "Une couche réfléchissante d'atomes d'argent empêche le rayonnement infrarouge de surchauffer le crâne.",
                     'txt-vogue-title': 'Le Style en Mouvement',
                     'txt-vogue-desc': 'Le minimalisme esthétique rencontre la puissance mécanique. Photographies d\'art et attitude asymétrique.'
                 };
@@ -958,11 +946,11 @@
                 if (savedVideo instanceof Blob) {
                     videoUrl = URL.createObjectURL(savedVideo);
                 } else {
-                    videoUrl = savedVideo; // It is an external HTTPS link string
+                    videoUrl = savedVideo; 
                 }
                 document.getElementById('hud-video-src').src = videoUrl;
                 player.load();
-                player.play().catch(e => console.log("Auto-play wait for gesture"));
+                player.play().catch(e => console.log("Auto-play gesture lock"));
             }
 
             renderApp();
@@ -976,64 +964,66 @@
             }
 
             const grid = document.getElementById('products-grid');
-            grid.innerHTML = '';
-            
-            document.getElementById('txt-col-count').innerText = `Affichage : ${products.length} Modèles Exclusifs`;
+            if (grid) {
+                grid.innerHTML = '';
+                document.getElementById('txt-col-count').innerText = `Affichage : ${products.length} Modèles Exclusifs`;
 
-            products.forEach((product, idx) => {
-                const card = document.createElement('div');
-                card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-6 flex flex-col justify-between group hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all duration-300 relative tron-glow-border";
-                
-                let imageHTML = `
-                    <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
-                        <span class="text-7xl font-extrabold text-bj-cyan/10 font-mono group-hover:text-bj-cyan/35 transition-all select-none">${String(idx + 1).padStart(2, '0')}</span>
-                        <div class="absolute w-24 h-24 rounded-full border border-dashed border-bj-red/20 group-hover:rotate-45 transition-all duration-700"></div>
-                    </div>
-                `;
-
-                if (product.image && product.image.trim() !== "") {
-                    imageHTML = `
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null; this.outerHTML='<div class=\\'text-center text-xs text-bj-red font-mono\\'>Erreur de chargement d\\'image</div>'">
+                products.forEach((product, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-6 flex flex-col justify-between group hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all duration-300 relative tron-glow-border";
+                    
+                    let imageHTML = `
+                        <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
+                            <span class="text-7xl font-extrabold text-bj-cyan/10 font-mono group-hover:text-bj-cyan/35 transition-all select-none">${String(idx + 1).padStart(2, '0')}</span>
+                            <div class="absolute w-24 h-24 rounded-full border border-dashed border-bj-red/20 group-hover:rotate-45 transition-all duration-700"></div>
+                        </div>
                     `;
-                }
 
-                card.innerHTML = `
-                    <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10" title="Éditer le produit">
-                        ✏️
-                    </button>
-                    <div class="space-y-4">
-                        <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-cyan/15">
-                            <div class="absolute top-3 left-3 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md">${product.badge}</div>
-                            ${imageHTML}
-                        </div>
-                        <div class="space-y-1">
-                            <div class="flex justify-between items-start gap-2">
-                                <h3 class="text-lg font-bold text-white group-hover:text-bj-cyan transition-all leading-tight uppercase font-mono tracking-wider">${product.name}</h3>
-                                <span class="text-sm font-mono text-bj-gold font-bold whitespace-nowrap">${product.price} €</span>
+                    if (product.image && product.image.trim() !== "") {
+                        imageHTML = `
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null; this.outerHTML='<div class=\\'text-center text-xs text-bj-red font-mono\\'>Erreur de chargement de l\\'image</div>'">
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10" title="Éditer le produit">
+                            ✏️
+                        </button>
+                        <div class="space-y-4">
+                            <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-cyan/15">
+                                <div class="absolute top-3 left-3 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md">${product.badge}</div>
+                                ${imageHTML}
                             </div>
-                            <p class="text-[10px] uppercase font-mono text-bj-red tracking-wider" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
+                            <div class="space-y-1">
+                                <div class="flex justify-between items-start gap-2">
+                                    <h3 class="text-lg font-bold text-white group-hover:text-bj-cyan transition-all leading-tight uppercase font-mono tracking-wider">${product.name}</h3>
+                                    <span class="text-sm font-mono text-bj-gold font-bold whitespace-nowrap">${product.price} €</span>
+                                </div>
+                                <p class="text-[10px] uppercase font-mono text-bj-red tracking-wider" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
+                            </div>
+                            <p class="text-xs text-bj-textMuted leading-relaxed">${product.desc}</p>
                         </div>
-                        <p class="text-xs text-bj-textMuted leading-relaxed">${product.desc}</p>
-                    </div>
-                    <button onclick="selectProductForPreorder('${product.id}')" class="w-full mt-6 py-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-xs uppercase tracking-widest font-bold transition-all rounded font-mono text-bj-cyan">Configurateur</button>
-                `;
-                grid.appendChild(card);
-            });
+                        <button onclick="selectProductForPreorder('${product.id}')" class="w-full mt-6 py-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-xs uppercase tracking-widest font-bold transition-all rounded font-mono text-bj-cyan">Configurateur</button>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
 
             const select = document.getElementById('config-model');
-            select.innerHTML = '';
-            products.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p.id;
-                opt.innerText = `${p.name} (${p.price} €)`;
-                select.appendChild(opt);
-            });
+            if (select) {
+                select.innerHTML = '';
+                products.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.innerText = `${p.name} (${p.price} €)`;
+                    select.appendChild(opt);
+                });
+            }
 
             updatePreorderPrice();
             updatePreorderVisual();
         }
 
-        /* */
         function slideToPage(pageIndex) {
             if (pageIndex < 0 || pageIndex >= totalPages) return;
             currentPage = pageIndex;
@@ -1110,12 +1100,16 @@
             const padSerial = String(serialInput).padStart(3, '0');
             const code = generateLiveCertificate(serialInput);
 
-            document.getElementById('config-display-code').innerText = code;
-            document.getElementById('box-serial').innerText = `N° ${padSerial} / 1000`;
+            const dispCode = document.getElementById('config-display-code');
+            const boxSerial = document.getElementById('box-serial');
+            if (dispCode) dispCode.innerText = code;
+            if (boxSerial) boxSerial.innerText = `N° ${padSerial} / 1000`;
         }
 
         function updatePreorderPrice() {
-            const modelId = document.getElementById('config-model').value;
+            const modelSelect = document.getElementById('config-model');
+            if (!modelSelect) return;
+            const modelId = modelSelect.value;
             const product = products.find(p => p.id === modelId) || products[0];
 
             if (!product) return;
@@ -1155,7 +1149,6 @@
             showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
         }
 
-        /* */
         function openLoginModal() {
             document.getElementById('login-password').value = '';
             document.getElementById('modal-login').classList.remove('hidden');
@@ -1182,7 +1175,7 @@
             isMaster = false;
             localStorage.setItem('bj_master_logged', 'false');
             updateMasterModeUI();
-            showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas en mode consultation.", "success");
+            showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.", "success");
         }
 
         function updateMasterModeUI() {
@@ -1200,13 +1193,12 @@
             }
         }
 
-        /* */
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
 
             if (file.size > 1.5 * 1024 * 1024) {
-                showToast("Fichier trop lourd", "Veuillez choisir une image de moins de 1.5 Mo pour optimiser les performances de l'iPhone.", "error");
+                showToast("Fichier trop lourd", "Veuillez choisir une image de moins de 1.5 Mo.", "error");
                 e.target.value = "";
                 return;
             }
@@ -1238,9 +1230,8 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            // Warn on extremely heavy files (above 120MB)
             if (file.size > 120 * 1024 * 1024) {
-                showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'iPhone. Privilégiez un fichier optimisé.", "error");
+                showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'appareil.", "error");
                 e.target.value = "";
                 return;
             }
@@ -1256,13 +1247,12 @@
             const source = document.getElementById('hud-video-src');
             
             if (tempVideoFile) {
-                showToast("Enregistrement en cours...", "Veuillez patienter pendant l'écriture dans la base de données de l'iPhone.", "info");
-                // Save Binary Blob to IndexedDB
+                showToast("Enregistrement...", "Écriture dans la base de données sécurisée...", "info");
                 await saveVideoToDB('home_video', tempVideoFile);
                 const videoUrl = URL.createObjectURL(tempVideoFile);
                 source.src = videoUrl;
                 player.load();
-                player.play().catch(e => console.log("Playback wait for click"));
+                player.play().catch(e => console.log("Playback wait"));
                 showToast("Écran configuré", "La vidéo haute définition a été enregistrée de manière permanente.", "success");
             } else if (urlInput) {
                 await saveVideoToDB('home_video', urlInput);
@@ -1275,7 +1265,6 @@
             closeVideoEditModal();
         }
 
-        /* */
         function openProductModal(productId = '') {
             const modal = document.getElementById('modal-product');
             const titleEl = document.getElementById('product-modal-title');
@@ -1350,7 +1339,7 @@
                         badge, 
                         weight 
                     };
-                    showToast("Article Modifié", `Le modèle ${name} a été reconfiguré avec succès.`);
+                    showToast("Article Modifié", `Le modèle ${name} a été reconfiguré.`);
                 }
             } else {
                 const newId = 'p' + (Date.now());
@@ -1364,7 +1353,7 @@
                     badge, 
                     weight 
                 });
-                showToast("Nouvel Article", `Le modèle ${name} est désormais disponible sur la grille.`);
+                showToast("Nouvel Article", `Le modèle ${name} est disponible.`);
             }
 
             localStorage.setItem('bj_products', JSON.stringify(products));
@@ -1372,7 +1361,6 @@
             closeProductModal();
         }
 
-        /* */
         function editPageText(targetId, type = 'input') {
             if (!isMaster) return;
             const currentText = pageTexts[targetId] || document.getElementById(targetId).innerText;
@@ -1394,78 +1382,21 @@
             document.getElementById('modal-text-edit').classList.remove('hidden');
         }
 
-        function editHomeTitles() {
-            if (!isMaster) return;
-            const container = document.getElementById('text-edit-input-container');
-            container.innerHTML = `
-                <div class="space-y-3">
-                    <label class="text-[10px] uppercase text-bj-textMuted block font-mono">Segment 1 (ex: L'aérodynamique de la)</label>
-                    <input type="text" id="edit-t1" value="${pageTexts['txt-home-title-1']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
-                    
-                    <label class="text-[10px] uppercase text-bj-textMuted block font-mono">Surlignage Or (ex: F1)</label>
-                    <input type="text" id="edit-thighlight" value="${pageTexts['txt-home-title-highlight']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
-                    
-                    <label class="text-[10px] uppercase text-bj-textMuted block font-mono">Segment 2 (ex: L'exigence de la)</label>
-                    <input type="text" id="edit-t2" value="${pageTexts['txt-home-title-2']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
-                    
-                    <label class="text-[10px] uppercase text-bj-textMuted block font-mono">Serif Italique (ex: Haute Couture)</label>
-                    <input type="text" id="edit-tserif" value="${pageTexts['txt-home-title-serif']}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm">
-                </div>
-                <input type="hidden" id="edit-target-id" value="SPECIAL_HOME_TITLE">
-            `;
-            document.getElementById('modal-text-edit').classList.remove('hidden');
-        }
-
-        function editCardTexts(titleId, descId) {
-            if (!isMaster) return;
-            const container = document.getElementById('text-edit-input-container');
-            container.innerHTML = `
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-[10px] uppercase text-bj-textMuted block font-mono mb-1">Titre</label>
-                        <input type="text" id="edit-card-title-val" value="${pageTexts[titleId]}" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm font-bold">
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase text-bj-textMuted block font-mono mb-1">Description</label>
-                        <textarea id="edit-card-desc-val" rows="3" class="w-full bg-bj-black border border-bj-border rounded p-2 text-white text-sm leading-relaxed">${pageTexts[descId]}</textarea>
-                    </div>
-                </div>
-                <input type="hidden" id="edit-target-id" value="SPECIAL_CARD_EDIT">
-                <input type="hidden" id="card-title-id" value="${titleId}">
-                <input type="hidden" id="card-desc-id" value="${descId}">
-            `;
-            document.getElementById('modal-text-edit').classList.remove('hidden');
-        }
-
         function closeTextEditModal() {
             document.getElementById('modal-text-edit').classList.add('hidden');
         }
 
         function saveTextEdit() {
             const targetId = document.getElementById('edit-target-id').value;
-
-            if (targetId === "SPECIAL_HOME_TITLE") {
-                pageTexts['txt-home-title-1'] = document.getElementById('edit-t1').value;
-                pageTexts['txt-home-title-highlight'] = document.getElementById('edit-thighlight').value;
-                pageTexts['txt-home-title-2'] = document.getElementById('edit-t2').value;
-                pageTexts['txt-home-title-serif'] = document.getElementById('edit-tserif').value;
-            } else if (targetId === "SPECIAL_CARD_EDIT") {
-                const titleId = document.getElementById('card-title-id').value;
-                const descId = document.getElementById('card-desc-id').value;
-                pageTexts[titleId] = document.getElementById('edit-card-title-val').value;
-                pageTexts[descId] = document.getElementById('edit-card-desc-val').value;
-            } else {
-                const newVal = document.getElementById('edit-text-value').value;
-                pageTexts[targetId] = newVal;
-            }
+            const newVal = document.getElementById('edit-text-value').value;
+            pageTexts[targetId] = newVal;
 
             localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             renderApp();
             closeTextEditModal();
-            showToast("Texte Mis à Jour", "Le nouveau texte a été appliqué de manière permanente dans la mémoire locale.");
+            showToast("Texte Mis à Jour", "Le texte a été appliqué de manière permanente.");
         }
 
-        /* */
         let touchStartX = 0;
         let touchEndX = 0;
         let touchStartY = 0;
