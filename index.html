@@ -30,7 +30,7 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght=400;700&family=Plus+Jakarta+Sans:wght=300;400;600;700;800&display=swap');
         
         body, html {
             background-color: #050505;
@@ -43,6 +43,7 @@
             height: 100%;
         }
 
+        /* */
         /* Grille néon style TRON asymétrique et soutenue */
         .tron-grid {
             background-color: #050505;
@@ -61,12 +62,12 @@
             background-size: 55px 55px, 55px 55px, 100% 100%, 100% 100%;
         }
 
-        /* Damier de course en fondu plus soutenu */
+        /* Damier de course en fondu plus soutenu - Intensité augmentée à 0.07 pour un look plus affirmé */
         .checkered-fade {
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%), 
-                              linear-gradient(-45deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%), 
-                              linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.025) 75%), 
-                              linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.025) 75%);
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.07) 25%, transparent 25%), 
+                              linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.07) 75%), 
+                              linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.07) 75%);
             background-size: 36px 36px;
             background-position: 0 0, 0 18px, 18px -18px, -18px 0px;
         }
@@ -96,6 +97,7 @@
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* */
         .page-slide {
             width: 20%;
             height: 100%;
@@ -176,6 +178,7 @@
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade">
 
     <!-- MASTER NOTIFICATION BANNER -->
+    <!-- -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
         <span>⚡ MASTER MODE ACTIF — CONFIGURATION DIRECTE AUTORISÉE</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
@@ -216,6 +219,7 @@
     </header>
 
     <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15) -->
+    <!-- -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
         <div class="flex justify-between items-center border-b border-bj-cyan/10 pb-4">
             <span class="text-lg font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
@@ -250,6 +254,7 @@
         <div id="main-slider" class="slider-viewport" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
 
             <!-- PAGE 1: L'ÉCURIE (HOME HERO AVEC INTEGRATION HUD VIDEO MONITOR) -->
+            <!-- -->
             <section id="page-home" class="page-slide tron-grid flex items-center px-6 sm:px-12 relative overflow-hidden">
                 
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto relative z-10">
@@ -332,6 +337,7 @@
             </section>
 
             <!-- PAGE 2: LA COLLECTION (PRODUCTS WITH NEON BRACKETS) -->
+            <!-- -->
             <section id="page-collection" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
                     <div class="border-b border-bj-cyan/20 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
@@ -355,6 +361,7 @@
             </section>
 
             <!-- PAGE 3: COURS DU JOUR (BOURSE DE LA MARQUE - OFFICIEL SECONDARY EXCHANGE) -->
+            <!-- -->
             <section id="page-exchange" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-8">
                     <!-- Section Header with running financial ticker -->
@@ -457,6 +464,7 @@
             </section>
 
             <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL DE CAROUSEL) -->
+            <!-- -->
             <section id="page-vogue" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-4 relative edit-highlight p-4 rounded">
@@ -494,6 +502,7 @@
             </section>
 
             <!-- PAGE 5: CONFIGURATION & PRE-ORDER (CYBER PACKAGING PREVIEW) -->
+            <!-- -->
             <section id="page-preorder" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
@@ -584,7 +593,8 @@
 
     </main>
 
-    <!-- FIXED PREMIUM TACHOMETER GAUGE (Navigation Control Wheel) -->
+    <!-- FIXED PREMIUM TACHOMETER GAUGE (Navigation Control Wheel - REDUIT DE MOITIÉ ET PLACE EN BAS À DROITE) -->
+    <!-- -->
     <div class="fixed bottom-14 right-4 z-50 bg-bj-black/95 border border-bj-cyan/30 p-1.5 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Navigation" onclick="cyclePages()">
         <div class="relative w-10 h-10">
             <!-- SVG Tachometer face -->
@@ -615,6 +625,7 @@
     </div>
 
     <!-- Master Login Dialog Modal -->
+    <!-- -->
     <div id="modal-login" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-8 rounded-2xl w-full max-w-md space-y-6">
             <div class="text-center font-mono">
@@ -840,6 +851,7 @@
     </footer>
 
     <!-- INTERACTIVE APP SCRIPT -->
+    <!-- -->
     <script>
         const dbName = "BenzjamesDB";
         const storeName = "videos";
@@ -1029,6 +1041,7 @@
             toggleMobileMenu();
         }
 
+        /* */
         function showToast(title, message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -1120,6 +1133,7 @@
             slideToPage(0);
         }
 
+        /* */
         function renderApp() {
             for (const [id, text] of Object.entries(pageTexts)) {
                 const el = document.getElementById(id);
@@ -1203,6 +1217,7 @@
             renderListings();
         }
 
+        /* */
         // Rendu dynamique du flux boursier / reventes
         function renderListings() {
             const feed = document.getElementById('listings-feed');
@@ -1254,6 +1269,7 @@
             });
         }
 
+        /* */
         // Évaluation boursière déterministe en fonction de l'exemplaire, du prix d'origine et du code
         function calculateCote() {
             const modelId = document.getElementById('eval-model').value;
@@ -1300,9 +1316,10 @@
             }
 
             document.getElementById('eval-screen').classList.remove('hidden');
-            showToast("Authentification Terminée", "Certification de rareté validée sur les canaux officiels.");
+            showToast("Authentification Terminée", "La rareté du modèle a été scrupuleusement vérifiée sur les registres.");
         }
 
+        /* */
         // Bidding Interactive Feature
         function bidOnListing(listingId) {
             if (!currentUser) {
@@ -1375,6 +1392,7 @@
             }
         }
 
+        /* */
         // Post listing logic
         function openPostListingModal() {
             if (!currentUser) {
@@ -1464,6 +1482,7 @@
             slideToPage(next);
         }
 
+        /* */
         const BASE36_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         function toBase36(num, padLen) {
             let result = "";
@@ -1543,6 +1562,7 @@
             showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
         }
 
+        /* */
         function openLoginModal() {
             document.getElementById('login-password').value = '';
             document.getElementById('modal-login').classList.remove('hidden');
@@ -1608,6 +1628,7 @@
             reader.readAsDataURL(file);
         }
 
+        /* */
         function openVideoEditModal() {
             tempVideoFile = null;
             document.getElementById('video-url-input').value = "";
@@ -1659,6 +1680,7 @@
             closeVideoEditModal();
         }
 
+        /* */
         function openProductModal(productId = '') {
             const modal = document.getElementById('modal-product');
             const titleEl = document.getElementById('product-modal-title');
@@ -1755,6 +1777,7 @@
             closeProductModal();
         }
 
+        /* */
         function editPageText(targetId, type = 'input') {
             if (!isMaster) return;
             const currentText = pageTexts[targetId] || document.getElementById(targetId).innerText;
