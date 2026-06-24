@@ -47,21 +47,18 @@
         .tron-grid {
             background-color: #050505;
             background-image:
-                /* Grille principale */
                 linear-gradient(to right, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
-                /* Lignes asymétriques aléatoires verticales (Cyan et Or) */
                 linear-gradient(90deg, transparent 18%, rgba(6, 182, 212, 0.18) 18.5%, rgba(6, 182, 212, 0.18) 19%, transparent 19.5%,
                                       transparent 46%, rgba(212, 175, 55, 0.15) 46.5%, rgba(212, 175, 55, 0.15) 47%, transparent 47.5%,
                                       transparent 71%, rgba(6, 182, 212, 0.22) 71.5%, rgba(6, 182, 212, 0.22) 72%, transparent 72.5%),
-                /* Lignes asymétriques aléatoires horizontales */
                 linear-gradient(180deg, transparent 24%, rgba(6, 182, 212, 0.18) 24.5%, rgba(6, 182, 212, 0.18) 25%, transparent 25.5%,
                                        transparent 59%, rgba(212, 175, 55, 0.15) 59.5%, rgba(212, 175, 55, 0.15) 60%, transparent 60.5%,
                                        transparent 84%, rgba(6, 182, 212, 0.22) 84.5%, rgba(6, 182, 212, 0.22) 85%, transparent 85.5%);
             background-size: 55px 55px, 55px 55px, 100% 100%, 100% 100%;
         }
 
-        /* Damier de course en fondu plus soutenu - Intensité augmentée à 0.07 pour un look plus affirmé */
+        /* Damier de course en fondu soutenu */
         .checkered-fade {
             background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.07) 25%, transparent 25%), 
                               linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 25%, transparent 25%), 
@@ -80,12 +77,14 @@
             box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 10px rgba(6, 182, 212, 0.1);
         }
 
+        /* Structure d'Édition interactive pour le Master */
         .edit-highlight {
-            position: relative;
+            transition: all 0.2s ease-in-out;
         }
         .master-active .edit-highlight:hover {
             outline: 1px dashed #D4AF37;
-            background-color: rgba(212, 175, 55, 0.05);
+            background-color: rgba(212, 175, 55, 0.1) !important;
+            cursor: pointer;
         }
 
         /* Viewport du slider horizontal */
@@ -120,42 +119,31 @@
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Bouton pulsant de flux TRON */
-        .tron-pulsate {
-            animation: cyanPulse 2s infinite alternate;
-        }
-        @keyframes cyanPulse {
-            0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.2); }
-            100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.5); }
-        }
-
         /* Rhythmic Glitch/Blink */
         @keyframes binaryRhythm {
-            0%, 15% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }   /* 1 */
-            20%, 35% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }  /* 1 */
-            40%, 55% { opacity: 0.15; filter: none; }                                      /* 0 */
-            60%, 80% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }  /* 1 */
-            85%, 100% { opacity: 0.15; filter: none; }                                     /* Pause */
+            0%, 15% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }
+            20%, 35% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }
+            40%, 55% { opacity: 0.15; filter: none; }
+            60%, 80% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }
+            85%, 100% { opacity: 0.15; filter: none; }
         }
         .cyber-beacon-blink {
             animation: binaryRhythm 2.8s infinite;
         }
 
-        /* Serpentine Scrolling Title Animation over 4 Lines */
-        @keyframes serpentineTrack {
-            0% { transform: translate(100%, 72px); }      /* Ligne 4 (Bas) - Départ Droite */
-            22% { transform: translate(-100%, 72px); }    /* Ligne 4 - Arrivée Gauche */
-            25% { transform: translate(-100%, 48px); }    /* Remonte à la Ligne 3 */
-            47% { transform: translate(100%, 48px); }     /* Ligne 3 - Retour Droite */
-            50% { transform: translate(100%, 24px); }     /* Remonte à la Ligne 2 */
-            72% { transform: translate(-100%, 24px); }    /* Ligne 2 - Retour Gauche */
-            75% { transform: translate(-100%, 0px); }     /* Remonte à la Ligne 1 (Haut) */
-            97% { transform: translate(100%, 0px); }      /* Ligne 1 - Sortie Droite */
-            100% { transform: translate(100%, 72px); }    /* Retour au départ */
+        /* Défilement doux et continu pour le titre */
+        @keyframes slowHorizontalMarquee {
+            0% { transform: translateX(10%); }
+            50% { transform: translateX(-40%); }
+            100% { transform: translateX(10%); }
         }
-        .serpent-scroller {
-            animation: serpentineTrack 24s linear infinite;
-            will-change: transform;
+        .slow-marquee-container {
+            display: flex;
+            width: max-content;
+            animation: slowHorizontalMarquee 28s ease-in-out infinite;
+        }
+        .slow-marquee-container:hover {
+            animation-play-state: paused;
         }
 
         /* Ticker text simulation */
@@ -177,15 +165,15 @@
 
     <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
-        <span>⚡ MASTER MODE ACTIF — CONFIGURATION DIRECTE AUTORISÉE</span>
+        <span>⚡ MODE CONFIGURATEUR MASTER ACTIF — CLIQUEZ SUR LES TEXTES POUR MODIFIER</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
     </div>
 
     <!-- Header Navigation (Fixe en haut) -->
     <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-cyan/20 bg-bj-black/90 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('page-home')">
+            <!-- Brand Logo (Click 5 times secrets to trigger master portal) -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogoClick()">
                 <span class="text-xl font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
                 <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold">Cyber-Couture</span>
             </div>
@@ -201,17 +189,11 @@
 
             <!-- Actions CTA & Client Account portal icon -->
             <div class="flex items-center gap-3">
-                <!-- Shopping Cart & User Profile Combined luxury icon -->
                 <button onclick="openUnifiedPortalModal()" class="p-2 border border-bj-cyan/20 hover:border-bj-gold rounded bg-bj-dark hover:bg-black text-bj-cyan hover:text-bj-gold transition-all relative flex items-center justify-center" title="Espace Client & Panier">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    <!-- Cart Badge Indicator if there are items -->
                     <span id="header-cart-badge" class="hidden absolute -top-1 -right-1 bg-bj-red text-white text-[8px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center px-1">0</span>
-                </button>
-
-                <button onclick="navigateTo('page-preorder')" class="bg-white hover:bg-bj-cyan hover:text-white text-black px-4 py-2 rounded text-xs uppercase tracking-widest font-bold transition-all shadow-md tron-pulsate">
-                    Réserver
                 </button>
                 
                 <!-- Hamburger Trigger (Visible on mobile only) -->
@@ -224,7 +206,7 @@
         </div>
     </header>
 
-    <!-- MOBILE NAVIGATION OVERLAY (Optimisé pour iPhone 15) -->
+    <!-- MOBILE NAVIGATION OVERLAY -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
         <div class="flex justify-between items-center border-b border-bj-cyan/10 pb-4">
             <span class="text-lg font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
@@ -243,13 +225,6 @@
             <button onclick="navigateToMobile('page-vogue')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Vogue Look</button>
             <button onclick="navigateToMobile('page-preorder')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Configuration</button>
         </nav>
-
-        <div class="border-t border-bj-cyan/10 pt-6 text-center space-y-4">
-            <span class="text-[10px] font-mono text-bj-gold tracking-widest uppercase block">// HIGH-TECH & HAUTE COUTURE</span>
-            <button onclick="navigateToMobile('page-preorder')" class="w-full bg-bj-gold hover:bg-white text-black py-4 rounded text-xs uppercase tracking-widest font-bold transition-all">
-                Accéder à l'Atelier
-            </button>
-        </div>
     </div>
 
     <!-- MAIN APP WRAPPER -->
@@ -264,25 +239,18 @@
                     <!-- Text & Video Column -->
                     <div class="lg:col-span-7 space-y-6">
                         <!-- Clignotant Tactique -->
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-cyan/30 rounded-full text-xs text-bj-cyan font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)] cyber-beacon-blink">
+                        <div onclick="editPageText('txt-home-tag')" class="edit-highlight inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-cyan/30 rounded-full text-xs text-bj-cyan font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)] cyber-beacon-blink">
                             <span class="w-1.5 h-1.5 rounded-full bg-bj-cyan"></span>
                             <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
                         </div>
                         
-                        <!-- Serpentine Flow Title over 4 Channels -->
-                        <div class="h-28 relative overflow-hidden border border-bj-cyan/15 bg-black/60 rounded-xl p-2 font-mono shadow-[inset_0_0_15px_rgba(6,182,212,0.1)]">
-                            <!-- Rows guidelines -->
-                            <div class="absolute top-0 w-full border-b border-bj-cyan/5 h-6"></div>
-                            <div class="absolute top-6 w-full border-b border-bj-cyan/5 h-6"></div>
-                            <div class="absolute top-12 w-full border-b border-bj-cyan/5 h-6"></div>
-                            <div class="absolute top-18 w-full h-6"></div>
+                        <!-- Premium Horizontal Smooth Scrolling Title Container -->
+                        <div onclick="editPageText('txt-home-scroller')" class="edit-highlight h-16 relative overflow-hidden border border-bj-cyan/15 bg-black/70 rounded-xl p-3 font-mono shadow-[inset_0_0_15px_rgba(6,182,212,0.1)] flex items-center">
+                            <div class="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none"></div>
                             
-                            <!-- Serpent Text Node -->
-                            <div class="serpent-scroller absolute text-sm sm:text-base font-bold uppercase tracking-wider whitespace-nowrap">
-                                <span class="text-bj-cyan">⚡ L'aérodynamique de la F1</span>
-                                <span class="text-bj-gold mx-6">:: L'exigence de la Haute Couture ::</span>
-                                <span class="text-bj-red mr-6">Benzjames Cyber-Couture V2</span>
-                                <span class="text-white">🚀 Vitesse et Singularité Pure</span>
+                            <div class="slow-marquee-container text-sm sm:text-base font-bold uppercase tracking-wider whitespace-nowrap">
+                                <span id="txt-home-scroller" class="text-white">⚡ L'aérodynamique de la F1 :: L'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 🚀 Vitesse et Singularité Pure</span>
                             </div>
                         </div>
 
@@ -344,10 +312,9 @@
                 <div class="max-w-7xl mx-auto space-y-12">
                     <div class="border-b border-bj-cyan/20 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                         <div>
-                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// LA GAMME SPORT CYBER</span>
+                            <span onclick="editPageText('txt-col-tag')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest" id="txt-col-tag">// LA GAMME SPORT CYBER</span>
                             <div class="flex items-center gap-3">
-                                <h2 id="txt-col-title" class="text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
-                                <button onclick="editPageText('txt-col-title')" class="master-only text-bj-gold hidden">✏️</button>
+                                <h2 onclick="editPageText('txt-col-title')" id="txt-col-title" class="edit-highlight text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
                             </div>
                         </div>
                         <div class="flex items-center gap-4 w-full sm:w-auto">
@@ -367,8 +334,8 @@
                 <div class="max-w-7xl mx-auto space-y-8">
                     <!-- Section Header with running financial ticker -->
                     <div class="border-b border-bj-cyan/20 pb-4">
-                        <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// CO-EXISTENCE & INDICE DE RARETÉ</span>
-                        <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight mt-1">Bourse & Marché d'Échange Officiel</h2>
+                        <span onclick="editPageText('txt-exchange-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest" id="txt-exchange-subtitle">// CO-EXISTENCE & INDICE DE RARETÉ</span>
+                        <h2 onclick="editPageText('txt-exchange-title')" class="edit-highlight text-3xl sm:text-4xl font-black uppercase tracking-tight mt-1" id="txt-exchange-title">Bourse & Marché d'Échange Officiel</h2>
                         
                         <!-- Simulated Live Index Ticker -->
                         <div class="ticker-wrap bg-bj-dark border border-bj-cyan/15 rounded p-2 mt-4 font-mono text-[11px] text-bj-cyan">
@@ -390,8 +357,8 @@
                         <!-- Left Panel: Authentication & Dynamic Valuation Engine -->
                         <div class="lg:col-span-5 bg-bj-dark border border-bj-cyan/20 rounded-2xl p-6 space-y-6 shadow-[0_0_25px_rgba(6,182,212,0.1)]">
                             <div class="border-b border-bj-border pb-3">
-                                <span class="text-[9px] font-mono text-bj-cyan uppercase tracking-widest">// CORE PROTOCOL ENGINE</span>
-                                <h3 class="text-lg font-bold text-white mt-1">Évaluer sa Pièce Unique</h3>
+                                <span onclick="editPageText('txt-eval-tag')" class="edit-highlight text-[9px] font-mono text-bj-cyan uppercase tracking-widest" id="txt-eval-tag">// CORE PROTOCOL ENGINE</span>
+                                <h3 onclick="editPageText('txt-eval-title')" class="edit-highlight text-lg font-bold text-white mt-1" id="txt-eval-title">Évaluer sa Pièce Unique</h3>
                             </div>
 
                             <div class="space-y-4 text-xs font-mono">
@@ -452,10 +419,10 @@
 
                             <!-- Active Offers Dashboard -->
                             <div class="space-y-4">
-                                <h4 class="text-sm font-mono text-bj-gold uppercase tracking-widest font-bold">// TRANSACTIONS & ENCHÈRES EN DIRECT</h4>
+                                <h4 onclick="editPageText('txt-live-feed')" class="edit-highlight text-sm font-mono text-bj-gold uppercase tracking-widest" id="txt-live-feed">// TRANSACTIONS & ENCHÈRES EN DIRECT</h4>
                                 
                                 <div id="listings-feed" class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
-                                    <!-- Populated dynamically via JS. Each item has interactive biddings or buy-now options -->
+                                    <!-- Populated dynamically via JS -->
                                 </div>
                             </div>
                         </div>
@@ -467,16 +434,15 @@
             <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL DE CAROUSEL) -->
             <section id="page-vogue" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
-                    <div class="text-center max-w-2xl mx-auto space-y-4 relative edit-highlight p-4 rounded">
-                        <span class="text-xs font-mono text-bj-cyan uppercase tracking-widest">// VIRTUAL GRID CHIC</span>
-                        <h2 id="txt-vogue-title" class="text-4xl font-bold uppercase tracking-tight text-white">Le Style en Mouvement</h2>
-                        <p id="txt-vogue-desc" class="text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
+                    <div class="text-center max-w-2xl mx-auto space-y-4 p-4 rounded">
+                        <span onclick="editPageText('txt-vogue-tag')" class="edit-highlight text-xs font-mono text-bj-cyan uppercase tracking-widest" id="txt-vogue-tag">// VIRTUAL GRID CHIC</span>
+                        <h2 onclick="editPageText('txt-vogue-title')" id="txt-vogue-title" class="edit-highlight text-4xl font-bold uppercase tracking-tight text-white">Le Style en Mouvement</h2>
+                        <p onclick="editPageText('txt-vogue-desc', 'textarea')" id="txt-vogue-desc" class="edit-highlight text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                         <!-- Vogue block 1 -->
                         <div class="md:col-span-8 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end tron-glow-border">
-                            <!-- Integration of the high-end generated model image with Master custom upload -->
                             <div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
                                 <img id="vogue-img-1" src="watermarked_img_17316994393276431109.png" alt="Benzjames premium lookbook model" class="w-full h-full object-cover">
                             </div>
@@ -488,15 +454,14 @@
                                 <input type="file" accept="image/*" class="hidden" onchange="handleVogueImageSelect(event, 'bj_vogue_img1')">
                             </label>
 
-                            <div class="z-20 pointer-events-none">
-                                <span class="text-xs font-mono text-bj-cyan tracking-wider">// Série Monaco Grid GP</span>
-                                <h3 class="text-2xl font-bold mt-1 text-white uppercase font-mono tracking-wider">L'élégance asymétrique sur la grille de départ</h3>
+                            <div class="z-20 cursor-pointer text-left">
+                                <span onclick="editPageText('txt-vogue-card1-tag')" id="txt-vogue-card1-tag" class="edit-highlight text-xs font-mono text-bj-cyan tracking-wider block">// Série Monaco Grid GP</span>
+                                <h3 onclick="editPageText('txt-vogue-card1-title')" id="txt-vogue-card1-title" class="edit-highlight text-2xl font-bold mt-1 text-white uppercase font-mono tracking-wider">L'élégance asymétrique sur la grille de départ</h3>
                             </div>
                         </div>
 
                         <!-- Vogue block 2 -->
                         <div class="md:col-span-4 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end tron-glow-border">
-                            <!-- Alternate view from our generated outputs -->
                             <div class="absolute inset-0 bg-neutral-950 flex items-center justify-center">
                                 <img id="vogue-img-2" src="watermarked_img_2777806938911924353.png" alt="Benzjames sportswear active profile" class="w-full h-full object-cover">
                             </div>
@@ -508,9 +473,9 @@
                                 <input type="file" accept="image/*" class="hidden" onchange="handleVogueImageSelect(event, 'bj_vogue_img2')">
                             </label>
 
-                            <div class="z-20 pointer-events-none">
-                                <span class="text-xs font-mono text-bj-red tracking-widest">SÉRIE LIMITÉE 1/1000</span>
-                                <h3 class="text-xl font-bold mt-1 text-white uppercase font-mono">La casquette sport redéfinie pour elle</h3>
+                            <div class="z-20 cursor-pointer text-left">
+                                <span onclick="editPageText('txt-vogue-card2-tag')" id="txt-vogue-card2-tag" class="edit-highlight text-xs font-mono text-bj-red tracking-widest block">SÉRIE LIMITÉE 1/1000</span>
+                                <h3 onclick="editPageText('txt-vogue-card2-title')" id="txt-vogue-card2-title" class="edit-highlight text-xl font-bold mt-1 text-white uppercase font-mono">La casquette sport redéfinie pour elle</h3>
                             </div>
                         </div>
                     </div>
@@ -523,8 +488,8 @@
                     
                     <div class="bg-bj-dark border border-bj-cyan/20 rounded-2xl p-8 space-y-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
                         <div>
-                            <span class="text-xs font-mono text-bj-gold uppercase tracking-widest">// ATELIER BENZJAMES VIRTUAL</span>
-                            <h2 class="text-3xl font-bold mt-1 text-white">Configurez votre Numéro Unique</h2>
+                            <span onclick="editPageText('txt-preorder-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest" id="txt-preorder-subtitle">// ATELIER BENZJAMES VIRTUAL</span>
+                            <h2 onclick="editPageText('txt-preorder-title')" class="edit-highlight text-3xl font-bold mt-1 text-white" id="txt-preorder-title">Configurez votre Numéro Unique</h2>
                         </div>
 
                         <div class="space-y-4">
@@ -538,7 +503,7 @@
                             <div>
                                 <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
                                 <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-mono text-lg text-bj-cyan">
-                                <p class="text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
+                                <p onclick="editPageText('txt-preorder-desc')" id="txt-preorder-desc" class="edit-highlight text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
                             </div>
                         </div>
 
@@ -608,7 +573,7 @@
 
     </main>
 
-    <!-- FIXED PREMIUM TACHOMETER GAUGE (Navigation Control Wheel - REDUIT DE MOITIÉ ET PLACE EN BAS À DROITE) -->
+    <!-- FIXED PREMIUM TACHOMETER GAUGE -->
     <div class="fixed bottom-14 right-4 z-50 bg-bj-black/95 border border-bj-cyan/30 p-1.5 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Navigation" onclick="cyclePages()">
         <div class="relative w-10 h-10">
             <!-- SVG Tachometer face -->
@@ -644,7 +609,7 @@
             <!-- Modal Tabs Header -->
             <div class="flex border-b border-bj-cyan/10 bg-black font-mono text-xs uppercase">
                 <button onclick="switchUnifiedTab('client-tab')" id="tab-btn-client" class="flex-1 py-4 text-center border-b-2 border-bj-gold text-bj-gold font-bold transition-all focus:outline-none">
-                    🛍️ Mon Espace & Panier
+                    Mon Espace & Panier
                 </button>
                 <button onclick="switchUnifiedTab('master-tab')" id="tab-btn-master" class="flex-1 py-4 text-center border-b-2 border-transparent text-bj-textMuted transition-all focus:outline-none">
                     🔑 Accès Écurie (Master)
@@ -728,7 +693,7 @@
                             </div>
                             <div>
                                 <label class="block text-bj-textMuted mb-1 font-bold">CODE SECRET MASTER</label>
-                                <input type="password" id="login-password" placeholder="Saisir code d'accès" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold">
+                                <input type="password" id="login-password" placeholder="Saisir code d'accès (MASTER2026)" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold">
                             </div>
                         </div>
                         <button onclick="submitLogin()" class="w-full bg-bj-gold hover:bg-white hover:text-black text-black font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)]">
@@ -740,7 +705,7 @@
                     <div id="master-admin-dashboard" class="hidden space-y-6">
                         <div class="bg-black/60 border border-bj-gold/30 p-4 rounded-xl font-mono text-xs space-y-2">
                             <span class="text-[9px] text-bj-gold uppercase tracking-widest block font-bold">👑 SESSION MASTER ACTIVÉE</span>
-                            <p class="text-bj-textMuted leading-relaxed">Vous êtes connecté en tant que Chef d'écurie. Vous pouvez survoler n'importe quelle zone de texte ou de visuel de lookbook pour éditer les contenus en direct.</p>
+                            <p class="text-bj-textMuted leading-relaxed">Vous êtes connecté en tant que Chef d'écurie. Vous pouvez cliquer sur n'importe quelle zone de texte ou de visuel de lookbook pour éditer les contenus en direct.</p>
                         </div>
 
                         <!-- Master Password Hardening widget -->
@@ -759,7 +724,6 @@
                 </div>
             </div>
 
-            <!-- Modal universal footer controls -->
             <div class="bg-bj-black/80 border-t border-bj-cyan/10 p-4 flex justify-end">
                 <button onclick="closeUnifiedPortalModal()" class="border border-bj-border hover:border-white text-white font-mono text-xs uppercase tracking-widest font-bold py-2.5 px-6 rounded transition-all">
                     Fermer le Portail
@@ -897,7 +861,7 @@
                     <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// option B : Importer depuis votre photothèque</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2-2V8a2 2 0 002 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
                         <span class="text-[9px] text-white font-mono uppercase tracking-widest text-center" id="video-upload-label">Sélectionner une vidéo</span>
                         <input type="file" id="video-file-picker" accept="video/*" class="hidden" onchange="handleVideoFileSelect(event)">
@@ -916,7 +880,7 @@
     <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
-                <span class="text-xs text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct</span>
+                <span class="text-xs text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct (Master)</span>
                 <h3 class="text-lg font-bold text-white mt-1 uppercase">Modifier le texte sélectionné</h3>
             </div>
             <input type="hidden" id="edit-target-id">
@@ -931,17 +895,15 @@
     <!-- Toast System -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
 
-    <!-- Footer -->
+    <!-- Footer (Master Portal triggers on Double Clicking the copyright text) -->
     <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-cyan/10 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2 font-mono">
         <div class="flex items-center gap-4">
             <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER-SLIDER V2.2 // TRON_SOFT</span>
             <span id="slide-progress" class="text-bj-red font-bold">PAGE : 1 / 5</span>
         </div>
-        <p class="text-[9px]">© 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.</p>
-        <button onclick="openUnifiedPortalModal('master-tab')" id="btn-master-portal" class="text-bj-textMuted hover:text-white transition-all text-xs flex items-center gap-2 border border-bj-cyan/20 bg-bj-dark px-3 py-1 rounded">
-            <svg class="w-3.5 h-3.5 text-bj-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            Master Portal
-        </button>
+        <p class="text-[9px] cursor-pointer select-none" ondblclick="openUnifiedPortalModal('master-tab')" title="Double-cliquez ici pour ouvrir l'Espace Master">
+            © 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.
+        </p>
     </footer>
 
     <!-- INTERACTIVE APP SCRIPT -->
@@ -1133,7 +1095,6 @@
             toggleMobileMenu();
         }
 
-        /* Toast system */
         function showToast(title, message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -1169,6 +1130,18 @@
             }, 4000);
         }
 
+        /* Secret Master Code Activation through clicking logo 5 times */
+        let logoClicks = 0;
+        function handleLogoClick() {
+            logoClicks++;
+            if (logoClicks >= 5) {
+                logoClicks = 0;
+                openUnifiedPortalModal('master-tab');
+                showToast("Accès Écurie", "Demande de connexion administrative sécurisée initiée.");
+            }
+            setTimeout(() => { logoClicks = 0; }, 3000);
+        }
+
         async function initApp() {
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
@@ -1181,14 +1154,12 @@
                 localStorage.setItem('bj_products', JSON.stringify(products));
             }
 
-            // Restore Cart state
             const savedCart = localStorage.getItem('bj_cart');
             if (savedCart) {
                 activeCart = JSON.parse(savedCart);
             }
             updateCartBadge();
 
-            // Client connection state
             currentUser = JSON.parse(localStorage.getItem('bj_user'));
             updateUserUI();
 
@@ -1206,14 +1177,28 @@
             } else {
                 pageTexts = {
                     'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES',
+                    'txt-home-scroller': '⚡ L\'aérodynamique de la F1 :: L\'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 🚀 Vitesse et Singularité Pure',
+                    'txt-col-tag': '// LA GAMME SPORT CYBER',
                     'txt-col-title': 'Les Pièces Maîtresses',
+                    'txt-exchange-subtitle': '// CO-EXISTENCE & INDICE DE RARETÉ',
+                    'txt-exchange-title': 'Bourse & Marché d\'Échange Officiel',
+                    'txt-eval-tag': '// CORE PROTOCOL ENGINE',
+                    'txt-eval-title': 'Évaluer sa Pièce Unique',
+                    'txt-live-feed': '// TRANSACTIONS & ENCHÈRES EN DIRECT',
+                    'txt-vogue-tag': '// VIRTUAL GRID CHIC',
                     'txt-vogue-title': 'Le Style en Mouvement',
-                    'txt-vogue-desc': 'Le minimalisme esthétique rencontre la puissance mécanique. Photographies d\'art et attitude asymétrique.'
+                    'txt-vogue-desc': 'Le minimalisme esthétique rencontre la puissance mécanique. Photographies d\'art et attitude asymétrique.',
+                    'txt-vogue-card1-tag': '// Série Monaco Grid GP',
+                    'txt-vogue-card1-title': 'L\'élégance asymétrique sur la grille de départ',
+                    'txt-vogue-card2-tag': 'SÉRIE LIMITÉE 1/1000',
+                    'txt-vogue-card2-title': 'La casquette sport redéfinie pour elle',
+                    'txt-preorder-subtitle': '// ATELIER BENZJAMES VIRTUAL',
+                    'txt-preorder-title': 'Configurez votre Numéro Unique',
+                    'txt-preorder-desc': 'Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.'
                 };
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             }
 
-            // Load Vogue Custom Lookbook Images if uploaded by Master
             const savedVogue1 = localStorage.getItem('bj_vogue_img1');
             if (savedVogue1) {
                 document.getElementById('vogue-img-1').src = savedVogue1;
@@ -1223,7 +1208,6 @@
                 document.getElementById('vogue-img-2').src = savedVogue2;
             }
 
-            // Load home video from IndexedDB database
             const savedVideo = await getVideoFromDB('home_video');
             const player = document.getElementById('hud-video-player');
             if (savedVideo && player) {
@@ -1718,7 +1702,6 @@
             slideToPage(next);
         }
 
-        /* Certificate and code hashers */
         const BASE36_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         function toBase36(num, padLen) {
             let result = "";
@@ -1806,7 +1789,8 @@
                 isMaster = true;
                 localStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
-                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Mode Édition actif sur l'ensemble du Canvas.", "success");
+                closeUnifiedPortalModal();
+                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Cliquez directement sur n'importe quel bloc de texte pour le modifier !", "success");
             } else {
                 showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejette l'identifiant.", "error");
             }
@@ -1866,7 +1850,6 @@
                 const b64 = event.target.result;
                 localStorage.setItem(imgKey, b64);
                 
-                // Live change lookbook visual
                 if (imgKey === 'bj_vogue_img1') {
                     document.getElementById('vogue-img-1').src = b64;
                 } else if (imgKey === 'bj_vogue_img2') {
@@ -2045,7 +2028,6 @@
             closeProductModal();
         }
 
-        /* Inline page text editor */
         function editPageText(targetId, type = 'input') {
             if (!isMaster) return;
             const currentText = pageTexts[targetId] || document.getElementById(targetId).innerText;
