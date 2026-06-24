@@ -286,7 +286,16 @@
                     <!-- Visual Column -->
                     <div class="lg:col-span-5 relative">
                         <div class="border border-bj-cyan/20 bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+                            
+                            <button onclick="openRightMediaModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold/90 text-black px-4 py-2 rounded font-mono text-[11px] font-bold shadow-lg hover:bg-white transition-all uppercase tracking-wider">
+                                ✏️ Configurer Visuel Droite
+                            </button>
+
                             <div class="aspect-[4/5] bg-neutral-950 rounded-xl relative overflow-hidden flex items-center justify-center border border-bj-cyan/15">
+                                
+                                <img id="right-custom-img" class="absolute inset-0 w-full h-full object-cover hidden z-0" src="" alt="Carbon Aero Custom Model">
+                                <video id="right-custom-video" class="absolute inset-0 w-full h-full object-cover hidden z-0" autoplay loop muted playsinline src=""></video>
+
                                 <div class="absolute inset-0 bg-gradient-to-t from-bj-black to-transparent opacity-80 z-10"></div>
                                 <div class="absolute inset-0 flex flex-col justify-between p-6 z-20 font-mono">
                                     <div class="flex justify-between items-start">
@@ -298,9 +307,9 @@
                                         <h3 class="text-2xl font-bold uppercase tracking-wider text-white">MONACO GP EDITION</h3>
                                     </div>
                                 </div>
-                                <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 animate-spin" style="animation-duration: 25s;"></div>
-                                <div class="absolute w-36 h-36 rounded-full border-[1.5px] border-bj-red/30 animate-ping" style="animation-duration: 4s;"></div>
-                                <div class="absolute w-20 h-20 rounded-full border border-dashed border-bj-gold/20 animate-spin" style="animation-duration: 10s;"></div>
+                                <div class="right-default-decor w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 animate-spin" style="animation-duration: 25s;"></div>
+                                <div class="absolute right-default-decor w-36 h-36 rounded-full border-[1.5px] border-bj-red/30 animate-ping" style="animation-duration: 4s;"></div>
+                                <div class="absolute right-default-decor w-20 h-20 rounded-full border border-dashed border-bj-gold/20 animate-spin" style="animation-duration: 10s;"></div>
                             </div>
                         </div>
                     </div>
@@ -933,6 +942,50 @@
         </div>
     </div>
 
+    <!-- Right Side Custom Media Configuration Modal -->
+    <div id="modal-right-media" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
+            <div class="font-mono">
+                <span class="text-xs text-bj-gold uppercase tracking-widest">Contrôle Visuel Droite</span>
+                <h3 class="text-lg font-bold text-white mt-1 uppercase">Configurer l'Image ou Vidéo</h3>
+            </div>
+            
+            <div class="space-y-4 font-mono text-xs text-bj-textMuted">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Type de Visuel</label>
+                    <select id="right-media-type-select" onchange="toggleRightMediaInputFields()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan font-mono">
+                        <option value="default">Rings de Compétition (Défaut)</option>
+                        <option value="image">Image</option>
+                        <option value="video">Vidéo</option>
+                    </select>
+                </div>
+
+                <!-- URL input fields -->
+                <div id="right-media-url-container" class="hidden">
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A : Lien URL Direct (Image ou Vidéo MP4)</label>
+                    <input type="text" id="right-media-url" placeholder="https://example.com/media.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
+                </div>
+
+                <!-- File picker upload field -->
+                <div id="right-media-file-container" class="hidden">
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B : Importer un fichier depuis l'appareil</label>
+                    <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
+                        <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-[9px] text-white font-mono uppercase tracking-widest text-center" id="right-media-upload-label">Sélectionner Photo ou Vidéo</span>
+                        <input type="file" id="right-media-file-picker" accept="image/*,video/*" class="hidden" onchange="handleRightMediaFileSelect(event)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2 font-mono">
+                <button onclick="closeRightMediaModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
+                <button onclick="saveRightMedia()" class="w-1/2 bg-bj-cyan hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Dynamic Generic Text Editing Modal -->
     <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
@@ -1124,6 +1177,7 @@
         let isMaster = false;
         let tempImageData = ""; 
         let tempVideoFile = null;
+        let tempRightMediaFile = null;
         let currentUser = null; 
         let activeCart = [];
 
@@ -1289,8 +1343,131 @@
                 player.play().catch(e => console.log("Auto-play gesture lock"));
             }
 
+            await loadRightMedia();
+
             renderApp();
             slideToPage(0);
+        }
+
+        async function loadRightMedia() {
+            const type = localStorage.getItem('bj_right_media_type') || 'default';
+            const typeSelect = document.getElementById('right-media-type-select');
+            if (typeSelect) typeSelect.value = type;
+
+            const imgEl = document.getElementById('right-custom-img');
+            const videoEl = document.getElementById('right-custom-video');
+            const decors = document.querySelectorAll('.right-default-decor');
+
+            if (type === 'default') {
+                imgEl.classList.add('hidden');
+                videoEl.classList.add('hidden');
+                decors.forEach(d => d.classList.remove('hidden'));
+                return;
+            }
+
+            const savedData = await getVideoFromDB('right_media_data');
+            if (!savedData) {
+                imgEl.classList.add('hidden');
+                videoEl.classList.add('hidden');
+                decors.forEach(d => d.classList.remove('hidden'));
+                return;
+            }
+
+            let mediaUrl = "";
+            if (savedData instanceof Blob) {
+                mediaUrl = URL.createObjectURL(savedData);
+            } else {
+                mediaUrl = savedData; 
+            }
+
+            if (type === 'image') {
+                imgEl.src = mediaUrl;
+                imgEl.classList.remove('hidden');
+                videoEl.classList.add('hidden');
+                decors.forEach(d => d.classList.add('hidden'));
+            } else if (type === 'video') {
+                videoEl.src = mediaUrl;
+                videoEl.classList.remove('hidden');
+                imgEl.classList.add('hidden');
+                decors.forEach(d => d.classList.add('hidden'));
+                videoEl.load();
+                videoEl.play().catch(e => console.log("Playback wait right column"));
+            }
+        }
+
+        function openRightMediaModal() {
+            tempRightMediaFile = null;
+            document.getElementById('right-media-url').value = "";
+            document.getElementById('right-media-file-picker').value = "";
+            document.getElementById('right-media-upload-label').innerText = "Sélectionner Photo ou Vidéo (Max 120 Mo)";
+            
+            const type = localStorage.getItem('bj_right_media_type') || 'default';
+            document.getElementById('right-media-type-select').value = type;
+            
+            toggleRightMediaInputFields();
+            document.getElementById('modal-right-media').classList.remove('hidden');
+        }
+
+        function closeRightMediaModal() {
+            document.getElementById('modal-right-media').classList.add('hidden');
+        }
+
+        function toggleRightMediaInputFields() {
+            const type = document.getElementById('right-media-type-select').value;
+            const urlContainer = document.getElementById('right-media-url-container');
+            const fileContainer = document.getElementById('right-media-file-container');
+
+            if (type === 'default') {
+                urlContainer.classList.add('hidden');
+                fileContainer.classList.add('hidden');
+            } else {
+                urlContainer.classList.remove('hidden');
+                fileContainer.classList.remove('hidden');
+            }
+        }
+
+        function handleRightMediaFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 120 * 1024 * 1024) {
+                showToast("Fichier trop lourd", "Veuillez choisir un fichier de moins de 120 Mo.", "error");
+                e.target.value = "";
+                return;
+            }
+
+            tempRightMediaFile = file;
+            document.getElementById('right-media-upload-label').innerText = file.name + " (" + (file.size / (1024 * 1024)).toFixed(1) + " Mo)";
+            showToast("Visuel importé", "Votre fichier est prêt pour intégration !", "success");
+        }
+
+        async function saveRightMedia() {
+            const type = document.getElementById('right-media-type-select').value;
+            const urlInput = document.getElementById('right-media-url').value.trim();
+
+            localStorage.setItem('bj_right_media_type', type);
+
+            if (type === 'default') {
+                showToast("Restauration", "Cinématique néon d'origine réactivée.");
+                await loadRightMedia();
+                closeRightMediaModal();
+                return;
+            }
+
+            if (tempRightMediaFile) {
+                showToast("Enregistrement...", "Stockage sécurisé local...", "info");
+                await saveVideoToDB('right_media_data', tempRightMediaFile);
+                showToast("Visuel Configuré", "L'import a été enregistré avec succès.", "success");
+            } else if (urlInput) {
+                showToast("Enregistrement...", "Liaison par adresse web...", "info");
+                await saveVideoToDB('right_media_data', urlInput);
+                showToast("Visuel Configuré", "Le lien réseau a été validé de manière permanente.", "success");
+            } else {
+                showToast("Paramètre conservé", "Type changé sans nouveau fichier.", "info");
+            }
+
+            await loadRightMedia();
+            closeRightMediaModal();
         }
 
         function renderApp() {
