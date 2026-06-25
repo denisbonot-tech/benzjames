@@ -1018,6 +1018,31 @@
 
     <!-- INTERACTIVE APP SCRIPT -->
     <script>
+        // Protection contre le blocage du localStorage sur Mac (Safari / Mode Privé)
+        const safeStorage = {
+            getItem(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    return window[`_fallback_${key}`] || null;
+                }
+            },
+            setItem(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    window[`_fallback_${key}`] = value;
+                }
+            },
+            removeItem(key) {
+                try {
+                    localStorage.removeItem(key);
+                } catch (e) {
+                    delete window[`_fallback_${key}`];
+                }
+            }
+        };
+
         const dbName = "BenzjamesDB";
         const storeName = "videos";
 
@@ -1257,42 +1282,42 @@
         }
 
         async function initApp() {
-            isMaster = localStorage.getItem('bj_master_logged') === 'true';
+            isMaster = safeStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
 
-            const savedProducts = localStorage.getItem('bj_products');
+            const savedProducts = safeStorage.getItem('bj_products');
             if (savedProducts) {
                 products = JSON.parse(savedProducts);
             } else {
                 products = [...DEFAULT_PRODUCTS];
-                localStorage.setItem('bj_products', JSON.stringify(products));
+                safeStorage.setItem('bj_products', JSON.stringify(products));
             }
 
-            const savedCart = localStorage.getItem('bj_cart');
+            const savedCart = safeStorage.getItem('bj_cart');
             if (savedCart) {
                 activeCart = JSON.parse(savedCart);
             }
             updateCartBadge();
 
-            currentUser = JSON.parse(localStorage.getItem('bj_user'));
+            currentUser = JSON.parse(safeStorage.getItem('bj_user'));
             updateUserUI();
 
-            const savedListings = localStorage.getItem('bj_listings');
+            const savedListings = safeStorage.getItem('bj_listings');
             if (savedListings) {
                 exchangeListings = JSON.parse(savedListings);
             } else {
                 exchangeListings = [...DEFAULT_EXCHANGE_LISTINGS];
-                localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+                safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             }
 
             // Load Recovery Configuration
-            const savedRecoveryEmail = localStorage.getItem('bj_master_recovery_email');
+            const savedRecoveryEmail = safeStorage.getItem('bj_master_recovery_email');
             if (savedRecoveryEmail) {
                 const inputRecovery = document.getElementById('harden-recovery-email');
                 if (inputRecovery) inputRecovery.value = savedRecoveryEmail;
             }
 
-            const savedTexts = localStorage.getItem('bj_page_texts');
+            const savedTexts = safeStorage.getItem('bj_page_texts');
             if (savedTexts) {
                 pageTexts = JSON.parse(savedTexts);
             } else {
@@ -1317,14 +1342,14 @@
                     'txt-preorder-title': 'Configurez votre Numéro Unique',
                     'txt-preorder-desc': 'Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.'
                 };
-                localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+                safeStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             }
 
-            const savedVogue1 = localStorage.getItem('bj_vogue_img1');
+            const savedVogue1 = safeStorage.getItem('bj_vogue_img1');
             if (savedVogue1) {
                 document.getElementById('vogue-img-1').src = savedVogue1;
             }
-            const savedVogue2 = localStorage.getItem('bj_vogue_img2');
+            const savedVogue2 = safeStorage.getItem('bj_vogue_img2');
             if (savedVogue2) {
                 document.getElementById('vogue-img-2').src = savedVogue2;
             }
@@ -1350,7 +1375,7 @@
         }
 
         async function loadRightMedia() {
-            const type = localStorage.getItem('bj_right_media_type') || 'default';
+            const type = safeStorage.getItem('bj_right_media_type') || 'default';
             const typeSelect = document.getElementById('right-media-type-select');
             if (typeSelect) typeSelect.value = type;
 
@@ -1445,7 +1470,7 @@
             const type = document.getElementById('right-media-type-select').value;
             const urlInput = document.getElementById('right-media-url').value.trim();
 
-            localStorage.setItem('bj_right_media_type', type);
+            safeStorage.setItem('bj_right_media_type', type);
 
             if (type === 'default') {
                 showToast("Restauration", "Cinématique néon d'origine réactivée.");
@@ -1565,7 +1590,7 @@
                 ...product
             });
 
-            localStorage.setItem('bj_cart', JSON.stringify(activeCart));
+            safeStorage.setItem('bj_cart', JSON.stringify(activeCart));
             updateCartBadge();
             showToast("Panier Mis à Jour", `La pièce "${product.name}" a été ajoutée à votre panier d'achat.`);
         }
@@ -1623,7 +1648,7 @@
 
         function removeCartItem(cartId) {
             activeCart = activeCart.filter(item => item.cartId !== cartId);
-            localStorage.setItem('bj_cart', JSON.stringify(activeCart));
+            safeStorage.setItem('bj_cart', JSON.stringify(activeCart));
             updateCartBadge();
         }
 
@@ -1641,7 +1666,7 @@
             setTimeout(() => {
                 showToast("Félicitations !", `La commande d'une valeur de ${activeCart.reduce((acc, curr) => acc + curr.price, 0)} € a été validée pour @${currentUser.pseudonym}.`);
                 activeCart = [];
-                localStorage.removeItem('bj_cart');
+                try { localStorage.removeItem('bj_cart'); } catch(e) {}
                 updateCartBadge();
                 closeUnifiedPortalModal();
             }, 1800);
@@ -1657,14 +1682,14 @@
             }
 
             currentUser = { pseudonym: pseudo, wallet: wallet };
-            localStorage.setItem('bj_user', JSON.stringify(currentUser));
+            safeStorage.setItem('bj_user', JSON.stringify(currentUser));
             updateUserUI();
             showToast("Compte Créé !", `Bienvenue dans le cercle privé Benzjames, @${pseudo} !`);
         }
 
         function logoutClient() {
             currentUser = null;
-            localStorage.removeItem('bj_user');
+            safeStorage.removeItem('bj_user');
             updateUserUI();
             showToast("Déconnexion", "Votre session client a été déconnectée.");
         }
@@ -1830,7 +1855,7 @@
             if (listing) {
                 listing.currentPrice += 20;
                 listing.highestBidder = currentUser.pseudonym;
-                localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+                safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                 renderListings();
                 showToast("Offre Enregistrée", `Vous êtes le meilleur enchérisseur à ${listing.currentPrice} € !`);
             }
@@ -1851,7 +1876,7 @@
                 setTimeout(() => {
                     showToast("Félicitations !", `Vous êtes le nouveau propriétaire de la casquette N°${item.serial} !`);
                     exchangeListings.splice(listingIdx, 1);
-                    localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+                    safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                     renderListings();
                 }, 1500);
             }
@@ -1899,7 +1924,7 @@
             };
 
             exchangeListings.unshift(newListing);
-            localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+            safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             renderListings();
             closePostListingModal();
             showToast("Fiche mise en bourse", `Votre ${product.name} N°${serialVal} est en ligne !`);
@@ -2098,7 +2123,7 @@
                     logsContainer.appendChild(successDiv);
                     
                     // Retrieve actual stored password to inject dynamically inside the mailto link!
-                    const currentPwd = localStorage.getItem('bj_master_password') || 'MASTER2026';
+                    const currentPwd = safeStorage.getItem('bj_master_password') || 'MASTER2026';
                     
                     // Setup mailto hyperlink attributes
                     const subject = encodeURIComponent("🚨 Benzjames Écurie - Recouvrement du Code Master");
@@ -2106,7 +2131,7 @@
                         "=== PROTOCOLE BENZJAMES SECURE RECOVERY ===\n\n" +
                         "Bonjour Chef d'écurie,\n\n" +
                         "Une requête de recouvrement pour votre Code Secret Master a été initiée depuis votre terminal.\n\n" +
-                        "Voici vos accès actuels :\n" +
+                        "Voici vos accès actifs :\n" +
                         "• Identifiant : DENIS_MASTER\n" +
                         "• Code Secret d'accès : " + currentPwd + "\n\n" +
                         "Conseil de sécurité : Une fois connecté, vous pouvez à tout moment modifier ou renforcer ce code d'accès depuis votre panneau de contrôle Master.\n\n" +
@@ -2131,28 +2156,28 @@
                 showToast("Email invalide", "Format d'adresse de messagerie non supporté.", "error");
                 return;
             }
-            localStorage.setItem('bj_master_recovery_email', email);
+            safeStorage.setItem('bj_master_recovery_email', email);
             showToast("Recouvrement mis à jour", `L'adresse '${email}' a été associée comme relais principal.`);
         }
 
         function submitLogin() {
             const pass = document.getElementById('login-password').value;
-            const expectedPwd = localStorage.getItem('bj_master_password') || 'MASTER2026';
+            const expectedPwd = safeStorage.getItem('bj_master_password') || 'MASTER2026';
 
             if (pass === expectedPwd) {
                 isMaster = true;
-                localStorage.setItem('bj_master_logged', 'true');
+                safeStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
                 closeUnifiedPortalModal();
                 showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Cliquez directement sur n'importe quel bloc de texte pour le modifier !", "success");
             } else {
-                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejette l'identifiant.", "error");
+                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejoette l'identifiant.", "error");
             }
         }
 
         function logoutMaster() {
             isMaster = false;
-            localStorage.setItem('bj_master_logged', 'false');
+            safeStorage.setItem('bj_master_logged', 'false');
             updateMasterModeUI();
             showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.", "success");
         }
@@ -2164,7 +2189,7 @@
                 return;
             }
 
-            localStorage.setItem('bj_master_password', newPwd);
+            safeStorage.setItem('bj_master_password', newPwd);
             document.getElementById('harden-new-pwd').value = "";
             showToast("Sécurité Renforcée", "Le nouveau code fort d'écurie a été configuré avec succès.", "success");
         }
@@ -2202,7 +2227,7 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 const b64 = event.target.result;
-                localStorage.setItem(imgKey, b64);
+                safeStorage.setItem(imgKey, b64);
                 
                 if (imgKey === 'bj_vogue_img1') {
                     document.getElementById('vogue-img-1').src = b64;
@@ -2377,7 +2402,7 @@
                 showToast("Nouvel Article", `Le modèle ${name} est disponible.`);
             }
 
-            localStorage.setItem('bj_products', JSON.stringify(products));
+            safeStorage.setItem('bj_products', JSON.stringify(products));
             renderApp();
             closeProductModal();
         }
@@ -2412,7 +2437,7 @@
             const newVal = document.getElementById('edit-text-value').value;
             pageTexts[targetId] = newVal;
 
-            localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+            safeStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             renderApp();
             closeTextEditModal();
             showToast("Texte Mis à Jour", "Le texte a été appliqué de manière permanente.");
