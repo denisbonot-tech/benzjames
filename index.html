@@ -610,7 +610,7 @@
                     <div id="client-not-registered" class="space-y-4">
                         <div class="text-center font-mono">
                             <span class="text-[10px] text-bj-cyan uppercase tracking-widest">// CONNECTIQUE CLIENT</span>
-                            <h3 class="text-lg font-bold text-white uppercase mt-1">Ouvrir un Compte Propriétaire</h3>
+                            <h3 class="text-lg font-bold text-white uppercase mt-1 font-sans">Ouvrir un Compte Propriétaire</h3>
                             <p class="text-[11px] text-bj-textMuted mt-1">Gérez votre panier d'achats et suivez vos réservations exclusives.</p>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
@@ -641,7 +641,7 @@
                     <div class="border-t border-bj-cyan/10 pt-4 space-y-4">
                         <h4 class="text-xs font-mono text-bj-gold uppercase tracking-widest font-bold flex justify-between items-center">
                             🛒 <span>Mon Panier d'Achat</span>
-                            <span id="cart-items-count" class="bg-bj-cyan text-black rounded-full px-2 py-0.5 text-[9px] font-bold">0 Article</span>
+                            <span id="cart-items-count" class="bg-bj-cyan text-black rounded-full px-2 py-0.5 text-[9px] font-bold font-mono font-bold">0 Article</span>
                         </h4>
                         <div id="cart-items-container" class="space-y-3 max-h-[180px] overflow-y-auto pr-1"></div>
                         
@@ -662,7 +662,7 @@
                     <div id="master-login-fields" class="space-y-4">
                         <div class="text-center font-mono">
                             <span class="text-[10px] text-bj-gold uppercase tracking-widest">// CONTRÔLE D'ÉCURIE</span>
-                            <h3 class="text-lg font-bold text-white uppercase mt-1">Authentification Administrative</h3>
+                            <h3 class="text-lg font-bold text-white uppercase mt-1 font-sans">Authentification Administrative</h3>
                             <p class="text-[11px] text-bj-textMuted mt-1">Saisissez l'étiquette code d'accès par défaut : <strong class="text-bj-gold font-bold">Master2026</strong> pour activer l'éditeur direct de toutes les pages.</p>
                         </div>
                         <div class="space-y-3 font-mono text-xs">
@@ -672,22 +672,29 @@
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-1">
-                                    <label class="block text-bj-textMuted font-bold">CODE SECRET MASTER</label>
+                                    <label class="block text-bj-textMuted font-bold font-mono">CODE SECRET MASTER</label>
                                     <button onclick="switchMasterLoginMode('forgot')" class="text-bj-cyan hover:text-white transition-all text-[9px] uppercase tracking-wider">// Code oublié ?</button>
                                 </div>
                                 <input type="password" id="login-password" placeholder="Saisir code d'accès (Standard: Master2026)" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold font-bold">
                             </div>
                         </div>
-                        <button onclick="submitLogin()" class="w-full bg-bj-gold hover:bg-white hover:text-black text-black font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-                            Se connecter au Portail
-                        </button>
+                        
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button onclick="submitLogin()" class="flex-1 bg-bj-gold hover:bg-white hover:text-black text-black font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+                                Se connecter au Portail
+                            </button>
+                            <!-- NOUVEAU: Bouton de secours rapide pour restaurer Master2026 si l'utilisateur est perdu -->
+                            <button onclick="resetMasterPasswordToDefault()" class="border border-bj-red/30 hover:bg-bj-red/10 text-bj-red font-bold px-3 py-2 rounded font-mono text-[9px] uppercase tracking-wider transition-all" title="En cas d'Accès Refusé répétitif">
+                                Réinitialiser d'usine
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Recovery Segment -->
                     <div id="master-forgot-fields" class="hidden space-y-4">
                         <div class="text-center font-mono">
                             <span class="text-[10px] text-bj-cyan uppercase tracking-widest">// PROTOCOLE DE RECOUVREMENT ZERO-TRUST</span>
-                            <h3 class="text-lg font-bold text-white uppercase mt-1">Renvoyer le Code Secret</h3>
+                            <h3 class="text-lg font-bold text-white uppercase mt-1 font-sans">Renvoyer le Code Secret</h3>
                             <p class="text-[11px] text-bj-textMuted mt-1">Saisissez l'adresse mail du propriétaire master pour recevoir le jeton d'accès d'usine.</p>
                         </div>
                         <div class="space-y-3 font-mono text-xs">
@@ -765,34 +772,34 @@
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-md space-y-4">
             <div class="font-mono text-center">
                 <span class="text-[10px] text-bj-gold uppercase tracking-widest">// SECURE REGISTRY</span>
-                <h3 class="text-lg font-bold text-white uppercase mt-1">Inscrire une Annonce</h3>
+                <h3 class="text-lg font-bold text-white uppercase mt-1 font-sans">Inscrire une Annonce</h3>
             </div>
             <div class="space-y-3 font-mono text-xs">
                 <div>
-                    <label class="block text-bj-textMuted mb-1">Modèle de casquette</label>
-                    <select id="listing-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold"></select>
+                    <label class="block text-bj-textMuted mb-1 font-bold">Modèle de casquette</label>
+                    <select id="listing-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold font-mono"></select>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-bj-textMuted mb-1">N° Série (1-1000)</label>
-                        <input type="number" id="listing-serial" value="100" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold">
+                        <label class="block text-bj-textMuted mb-1 font-bold">N° Série (1-1000)</label>
+                        <input type="number" id="listing-serial" value="100" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold font-mono">
                     </div>
                     <div>
-                        <label class="block text-bj-textMuted mb-1">Clé de Sécurité</label>
-                        <input type="text" id="listing-secret" placeholder="BJ-XXX-XXXX" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white uppercase font-bold">
+                        <label class="block text-bj-textMuted mb-1 font-bold">Clé de Sécurité</label>
+                        <input type="text" id="listing-secret" placeholder="BJ-XXX-XXXX" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white uppercase font-bold font-mono">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-bj-textMuted mb-1">Mode de vente</label>
-                        <select id="listing-mode" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold">
+                        <label class="block text-bj-textMuted mb-1 font-bold">Mode de vente</label>
+                        <select id="listing-mode" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold font-mono">
                             <option value="fixed">Prix Fixe</option>
                             <option value="auction">Enchère</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-bj-textMuted mb-1">Prix de départ (€)</label>
-                        <input type="number" id="listing-price" value="250" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-bj-gold font-bold">
+                        <label class="block text-bj-textMuted mb-1 font-bold">Prix de départ (€)</label>
+                        <input type="number" id="listing-price" value="250" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-bj-gold font-bold font-mono">
                     </div>
                 </div>
             </div>
@@ -866,13 +873,13 @@
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
                 <span class="text-xs text-bj-gold uppercase tracking-widest">Contrôle Écran d'Écurie</span>
-                <h3 class="text-lg font-bold text-white mt-1 uppercase">Configurer la Vidéo d'Accueil</h3>
+                <h3 class="text-lg font-bold text-white mt-1 uppercase font-sans">Configurer la Vidéo d'Accueil</h3>
             </div>
             
-            <div class="space-y-4 font-mono text-xs text-bj-textMuted">
+            <div class="space-y-4 font-mono text-xs text-bj-textMuted font-mono">
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A : coller un lien MP4 en ligne</label>
-                    <input type="text" id="video-url-input" placeholder="https://example.com/video.mp4" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
+                    <input type="text" id="video-url-input" placeholder="https://example.com/video.mp4" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono font-bold">
                 </div>
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-bj-cyan/15"></div>
@@ -902,12 +909,12 @@
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
                 <span class="text-xs text-bj-gold uppercase tracking-widest">Contrôle Visuel Droite</span>
-                <h3 class="text-lg font-bold text-white mt-1 uppercase">Configurer l'Image ou Vidéo</h3>
+                <h3 class="text-lg font-bold text-white mt-1 uppercase font-sans">Configurer l'Image ou Vidéo</h3>
             </div>
             
             <div class="space-y-4 font-mono text-xs text-bj-textMuted">
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Type de Visuel</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold font-mono">// Type de Visuel</label>
                     <select id="right-media-type-select" onchange="toggleRightMediaInputFields()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan font-mono font-bold">
                         <option value="default">Rings de Compétition (Défaut)</option>
                         <option value="image">Image</option>
@@ -916,12 +923,12 @@
                 </div>
                 <!-- URL inputs -->
                 <div id="right-media-url-container" class="hidden">
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A : Lien URL Direct (Image ou Vidéo MP4)</label>
-                    <input type="text" id="right-media-url" placeholder="https://example.com/media.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold font-mono">// Option A : Lien URL Direct (Image ou Vidéo MP4)</label>
+                    <input type="text" id="right-media-url" placeholder="https://example.com/media.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono font-bold">
                 </div>
                 <!-- File Picker -->
                 <div id="right-media-file-container" class="hidden">
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B : Importer un fichier depuis l'appareil</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold font-mono">// Option B : Importer un fichier depuis l'appareil</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -943,7 +950,7 @@
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
                 <span class="text-xs text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct (Master)</span>
-                <h3 class="text-lg font-bold text-white mt-1 uppercase">Modifier le texte sélectionné</h3>
+                <h3 class="text-lg font-bold text-white mt-1 uppercase font-sans">Modifier le texte sélectionné</h3>
             </div>
             <input type="hidden" id="edit-target-id">
             <div id="text-edit-input-container" class="font-mono text-xs"></div>
@@ -955,7 +962,7 @@
     </div>
 
     <!-- Toast System -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none font-mono"></div>
 
     <!-- Footer -->
     <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-cyan/10 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2 font-mono">
@@ -1301,7 +1308,7 @@
                 document.getElementById('vogue-img-2').src = savedVogue2;
             }
 
-            // Tentative de chargement sécurisé de la vidéo locale
+            // Tentative de chargement de la vidéo d'accueil
             try {
                 const savedVideo = await getVideoFromDB('home_video');
                 const player = document.getElementById('hud-video-player');
@@ -1475,7 +1482,7 @@
                     }
 
                     card.innerHTML = `
-                        <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10 shadow-lg font-mono" title="Éditer le produit">
+                        <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10 shadow-lg font-mono font-bold" title="Éditer le produit">
                             ✏ Edit
                         </button>
                         <div class="space-y-4">
@@ -1580,7 +1587,7 @@
                 div.className = "flex justify-between items-center bg-black/40 border border-bj-cyan/10 rounded-lg p-2.5 font-mono text-xs";
                 div.innerHTML = `
                     <div>
-                        <strong class="text-white block truncate max-w-[150px] uppercase">${item.name}</strong>
+                        <strong class="text-white block truncate max-w-[150px] uppercase font-mono">${item.name}</strong>
                         <span class="text-[9px] text-bj-gold font-bold">${item.badge}</span>
                     </div>
                     <div class="flex items-center gap-3">
@@ -1671,6 +1678,16 @@
             switchMasterLoginMode('login');
         }
 
+        // NOUVEAU: Réinitialisation forcée d'usine en cas de blocage d'accès local
+        function resetMasterPasswordToDefault() {
+            localStorage.setItem('bj_master_password', 'Master2026');
+            const pwdInput = document.getElementById('login-password');
+            if (pwdInput) {
+                pwdInput.value = 'Master2026';
+            }
+            showToast("Système Réinitialisé", "Le mot de passe d'écurie par défaut 'Master2026' a été restauré.", "success");
+        }
+
         function closeUnifiedPortalModal() {
             document.getElementById('modal-unified-portal').classList.add('hidden');
         }
@@ -1710,28 +1727,28 @@
                 div.className = "bg-bj-dark/95 border border-bj-cyan/15 rounded-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4 hover:border-bj-gold/40 transition-all font-mono text-xs";
                 
                 div.innerHTML = `
-                    <div class="space-y-1 text-center md:text-left w-full">
+                    <div class="space-y-1 text-center md:text-left w-full font-mono">
                         <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                            <span class="px-2 py-0.5 bg-black text-[9px] border border-bj-cyan/40 text-bj-cyan font-bold rounded font-mono">N° ${item.serial}</span>
+                            <span class="px-2 py-0.5 bg-black text-[9px] border border-bj-cyan/40 text-bj-cyan font-bold rounded">N° ${item.serial}</span>
                             <span class="text-[9px] text-bj-textMuted">${item.secretKey}</span>
                             <span class="text-[9px] text-bj-gold font-bold">Propriétaire: @${item.seller}</span>
                         </div>
-                        <h4 class="text-sm font-black text-white uppercase tracking-wider">${item.modelName}</h4>
+                        <h4 class="text-sm font-black text-white uppercase tracking-wider font-mono">${item.modelName}</h4>
                         <p class="text-[10px] text-bj-textMuted">Régime de vente: <span class="text-white">${isAuction ? 'Enchère interactive' : 'Prix Fixe immédiat'}</span></p>
                     </div>
                     <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-end">
                         <div class="text-center sm:text-right min-w-[100px]">
-                            <span class="text-[9px] text-bj-textMuted uppercase block text-[8px]">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
-                            <span class="text-lg font-black text-bj-gold">${item.currentPrice} €</span>
-                            ${item.highestBidder ? `<span class="text-[8px] text-bj-cyan block">Offre par @${item.highestBidder}</span>` : ''}
+                            <span class="text-[9px] text-bj-textMuted uppercase block text-[8px] font-mono">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
+                            <span class="text-lg font-black text-bj-gold font-mono">${item.currentPrice} €</span>
+                            ${item.highestBidder ? `<span class="text-[8px] text-bj-cyan block font-mono">Offre par @${item.highestBidder}</span>` : ''}
                         </div>
                         <div class="w-full sm:w-auto">
                             ${isAuction ? `
-                                <button onclick="bidOnListing('${item.id}')" class="w-full sm:w-auto bg-bj-cyan text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all font-mono">
+                                <button onclick="bidOnListing('${item.id}')" class="w-full sm:w-auto bg-bj-cyan text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all font-mono font-bold">
                                     Enchérir (+20€)
                                 </button>
                             ` : `
-                                <button onclick="buyFixedListing('${item.id}')" class="w-full sm:w-auto bg-bj-gold text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all font-mono">
+                                <button onclick="buyFixedListing('${item.id}')" class="w-full sm:w-auto bg-bj-gold text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all font-mono font-bold">
                                     Acheter
                                 </button>
                             `}
@@ -2077,7 +2094,8 @@
             const pass = document.getElementById('login-password').value.trim();
             const expectedPwd = localStorage.getItem('bj_master_password') || 'Master2026';
             
-            if (pass.toLowerCase() === expectedPwd.toLowerCase()) {
+            // MODIFICATION MAJEURE : On tolère la casse d'usine OU le mot de passe personnalisé d'usine si l'utilisateur l'a corrompu.
+            if (pass.toLowerCase() === expectedPwd.toLowerCase() || pass.toLowerCase() === 'master2026') {
                 isMaster = true;
                 localStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
