@@ -12,12 +12,12 @@
                 extend: {
                     colors: {
                         bj: {
-                            black: '#050505',
-                            dark: '#0e0e0e',
-                            border: '#1b1b1b',
                             gold: '#D4AF37',
                             red: '#E10600',
-                            cyan: '#06B6D4', // Cyan TRON pur
+                            cyan: '#06B6D4',
+                            dark: '#0e0e0e',
+                            black: '#050505',
+                            border: '#1b1b1b',
                             textMuted: '#8E8E93'
                         }
                     },
@@ -30,7 +30,7 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght=400;700&family=Plus+Jakarta+Sans:wght=300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
         body, html {
             background-color: #050505;
@@ -49,21 +49,17 @@
             background-image:
                 linear-gradient(to right, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, transparent 18%, rgba(6, 182, 212, 0.18) 18.5%, rgba(6, 182, 212, 0.18) 19%, transparent 19.5%,
-                                      transparent 46%, rgba(212, 175, 55, 0.15) 46.5%, rgba(212, 175, 55, 0.15) 47%, transparent 47.5%,
-                                      transparent 71%, rgba(6, 182, 212, 0.22) 71.5%, rgba(6, 182, 212, 0.22) 72%, transparent 72.5%),
-                linear-gradient(180deg, transparent 24%, rgba(6, 182, 212, 0.18) 24.5%, rgba(6, 182, 212, 0.18) 25%, transparent 25.5%,
-                                       transparent 59%, rgba(212, 175, 55, 0.15) 59.5%, rgba(212, 175, 55, 0.15) 60%, transparent 60.5%,
-                                       transparent 84%, rgba(6, 182, 212, 0.22) 84.5%, rgba(6, 182, 212, 0.22) 85%, transparent 85.5%);
+                linear-gradient(90deg, transparent 18%, rgba(6, 182, 212, 0.18) 18.5%, rgba(6, 182, 212, 0.18) 19%, transparent 19.5%, transparent 46%, rgba(212, 175, 55, 0.15) 46.5%, rgba(212, 175, 55, 0.15) 47%, transparent 47.5%, transparent 59%, rgba(212, 175, 55, 0.15) 59.5%, rgba(212, 175, 55, 0.15) 60%, transparent 60.5%, transparent 71%, rgba(6, 182, 212, 0.22) 71.5%, rgba(6, 182, 212, 0.22) 72%, transparent 72.5%, transparent 84%, rgba(6, 182, 212, 0.22) 84.5%, rgba(6, 182, 212, 0.22) 85%, transparent 85.5%);
             background-size: 55px 55px, 55px 55px, 100% 100%, 100% 100%;
         }
 
         /* Damier de course en fondu soutenu */
         .checkered-fade {
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.07) 25%, transparent 25%), 
-                              linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 25%, transparent 25%), 
-                              linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.07) 75%), 
-                              linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.07) 75%);
+            background-image: 
+                linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%);
             background-size: 36px 36px;
             background-position: 0 0, 0 18px, 18px -18px, -18px 0px;
         }
@@ -72,6 +68,7 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             border-color: rgba(6, 182, 212, 0.15);
         }
+
         .tron-glow-border:hover {
             border-color: rgba(6, 182, 212, 0.6);
             box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 10px rgba(6, 182, 212, 0.1);
@@ -101,8 +98,8 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding-top: 80px; 
-            padding-bottom: 120px; 
+            padding-top: 80px;
+            padding-bottom: 120px;
         }
 
         .page-slide::-webkit-scrollbar {
@@ -127,21 +124,24 @@
             60%, 80% { opacity: 1; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)); }
             85%, 100% { opacity: 0.15; filter: none; }
         }
+
         .cyber-beacon-blink {
             animation: binaryRhythm 2.8s infinite;
         }
 
         /* Défilement doux et continu pour le titre */
         @keyframes slowHorizontalMarquee {
-            0% { transform: translateX(10%); }
+            0% { transform: translateX(5%); }
             50% { transform: translateX(-40%); }
-            100% { transform: translateX(10%); }
+            100% { transform: translateX(5%); }
         }
+
         .slow-marquee-container {
             display: flex;
             width: max-content;
             animation: slowHorizontalMarquee 28s ease-in-out infinite;
         }
+
         .slow-marquee-container:hover {
             animation-play-state: paused;
         }
@@ -151,31 +151,35 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
+
         .ticker-wrap {
             overflow: hidden;
             white-space: nowrap;
         }
+
         .ticker-content {
             display: inline-block;
             animation: tickerEffect 30s linear infinite;
         }
     </style>
 </head>
-<body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade">
+
+<body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade" onclick="unlockVideoAutoplay()">
 
     <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
-        <span>⚡ MODE CONFIGURATEUR MASTER ACTIF — CLIQUEZ SUR LES TEXTES POUR MODIFIER</span>
+        <span>> MODE CONFIGURATEUR MASTER ACTIF - CLIQUEZ SUR LES TEXTES & IMAGES POUR MODIFIER</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
     </div>
 
     <!-- Header Navigation (Fixe en haut) -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-cyan/20 bg-bj-black/90 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
+    <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-cyan/20 bg-bj-black/95 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Brand Logo (Click 5 times secrets to trigger master portal) -->
+            
+            <!-- Brand Logo -->
             <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogoClick()">
                 <span class="text-xl font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
-                <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold">Cyber-Couture</span>
+                <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold font-mono">Cyber-Couture</span>
             </div>
 
             <!-- 5 Pages Navigation (Desktop Only) -->
@@ -189,14 +193,20 @@
 
             <!-- Actions CTA & Client Account portal icon -->
             <div class="flex items-center gap-3">
-                <button onclick="openUnifiedPortalModal()" class="p-2 border border-bj-cyan/20 hover:border-bj-gold rounded bg-bj-dark hover:bg-black text-bj-cyan hover:text-bj-gold transition-all relative flex items-center justify-center" title="Espace Client & Panier">
+                <!-- Bouton d'accès direct Master2026 -->
+                <button onclick="openUnifiedPortalModal('master-tab')" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 border border-bj-gold/40 hover:border-bj-gold rounded bg-bj-dark font-mono text-[10px] text-bj-gold uppercase tracking-wider transition-all animate-pulse" title="Accès Configuration Écurie">
+                    <span>🔑 Master2026</span>
+                </button>
+
+                <!-- Espace Client & Panier -->
+                <button onclick="openUnifiedPortalModal('client-tab')" class="p-2 border border-bj-cyan/20 hover:border-bj-gold rounded bg-bj-dark hover:bg-black text-bj-cyan hover:text-bj-gold transition-all relative flex items-center justify-center" title="Espace Client & Panier">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                     <span id="header-cart-badge" class="hidden absolute -top-1 -right-1 bg-bj-red text-white text-[8px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center px-1">0</span>
                 </button>
-                
-                <!-- Hamburger Trigger (Visible on mobile only) -->
+
+                <!-- Hamburger Trigger (Mobile) -->
                 <button onclick="toggleMobileMenu()" class="md:hidden text-white focus:outline-none p-2 rounded border border-bj-cyan/20 bg-bj-dark hover:border-bj-cyan transition-all" aria-label="Menu principal">
                     <svg class="w-5 h-5 text-bj-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -207,7 +217,7 @@
     </header>
 
     <!-- MOBILE NAVIGATION OVERLAY -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none">
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-bj-black/98 z-50 flex flex-col justify-between p-8 translate-x-full opacity-0 pointer-events-none transition-all duration-300">
         <div class="flex justify-between items-center border-b border-bj-cyan/10 pb-4">
             <span class="text-lg font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
             <button onclick="toggleMobileMenu()" class="text-white focus:outline-none p-2 rounded-full border border-bj-border bg-bj-dark hover:border-bj-red transition-all">
@@ -216,41 +226,43 @@
                 </svg>
             </button>
         </div>
-
-        <nav class="flex flex-col gap-8 text-center my-auto py-12">
+        
+        <nav class="flex flex-col gap-6 text-center my-auto py-8">
             <span class="text-[9px] font-mono text-bj-gold tracking-[0.4em] uppercase mb-2">// DIRECTIVES D'ÉCURIE</span>
-            <button onclick="navigateToMobile('page-home')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">L'Écurie</button>
-            <button onclick="navigateToMobile('page-collection')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">La Collection</button>
-            <button onclick="navigateToMobile('page-exchange')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Cours du Jour</button>
-            <button onclick="navigateToMobile('page-vogue')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Vogue Look</button>
-            <button onclick="navigateToMobile('page-preorder')" class="text-2xl font-semibold uppercase tracking-widest text-bj-red hover:text-bj-gold active:text-bj-gold transition-all">Configuration</button>
+            <button onclick="navigateToMobile('page-home')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">L'Écurie</button>
+            <button onclick="navigateToMobile('page-collection')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">La Collection</button>
+            <button onclick="navigateToMobile('page-exchange')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">Cours du Jour</button>
+            <button onclick="navigateToMobile('page-vogue')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">Vogue Look</button>
+            <button onclick="navigateToMobile('page-preorder')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">Configuration</button>
+            
+            <div class="border-t border-bj-cyan/10 pt-6 mt-4">
+                <button onclick="toggleMobileMenu(); openUnifiedPortalModal('master-tab')" class="w-full py-2 bg-bj-gold text-black rounded font-mono text-xs uppercase font-bold tracking-wider">
+                    🔑 Authentifier Master2026
+                </button>
+            </div>
         </nav>
     </div>
 
     <!-- MAIN APP WRAPPER -->
     <main class="flex-grow overflow-hidden relative w-full h-full">
-
-        <!-- CONTENEUR SLIDER DE PAGES -->
         <div id="main-slider" class="slider-viewport" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
-
-            <!-- PAGE 1: L'ÉCURIE (HOME HERO AVEC INTEGRATION HUD VIDEO MONITOR) -->
+            
+            <!-- PAGE 1: L'ÉCURIE -->
             <section id="page-home" class="page-slide tron-grid flex items-center px-6 sm:px-12 relative overflow-hidden">
-                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full my-auto relative z-10">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full relative z-10 my-auto">
+                    
                     <!-- Text & Video Column -->
                     <div class="lg:col-span-7 space-y-6">
-                        <!-- Clignotant Tactique -->
                         <div onclick="editPageText('txt-home-tag')" class="edit-highlight inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-cyan/30 rounded-full text-xs text-bj-cyan font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)] cyber-beacon-blink">
                             <span class="w-1.5 h-1.5 rounded-full bg-bj-cyan"></span>
-                            <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES</span>
+                            <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES UNIQUES</span>
                         </div>
-                        
-                        <!-- Premium Horizontal Smooth Scrolling Title Container -->
+
                         <div onclick="editPageText('txt-home-scroller')" class="edit-highlight h-16 relative overflow-hidden border border-bj-cyan/15 bg-black/70 rounded-xl p-3 font-mono shadow-[inset_0_0_15px_rgba(6,182,212,0.1)] flex items-center">
                             <div class="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none"></div>
                             <div class="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none"></div>
-                            
                             <div class="slow-marquee-container text-sm sm:text-base font-bold uppercase tracking-wider whitespace-nowrap">
-                                <span id="txt-home-scroller" class="text-white">⚡ L'aérodynamique de la F1 :: L'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 🚀 Vitesse et Singularité Pure</span>
+                                <span id="txt-home-scroller" class="text-white">F1 :: L'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 Pure</span>
                             </div>
                         </div>
 
@@ -263,11 +275,11 @@
                             </div>
 
                             <button onclick="openVideoEditModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold/90 text-black px-4 py-2 rounded font-mono text-[11px] font-bold shadow-lg hover:bg-white transition-all uppercase tracking-wider">
-                                ✏️ Configurer Écran Vidéo
+                                Configurer Écran Vidéo
                             </button>
 
                             <div class="aspect-[16/9] w-full rounded-lg bg-neutral-950 overflow-hidden relative flex items-center justify-center">
-                                <video id="hud-video-player" class="w-full h-full object-cover" autoplay loop muted playsinline poster="https://placehold.co/800x450/050505/06B6D4?text=BENZJAMES+FEED">
+                                <video id="hud-video-player" class="w-full h-full object-cover" autoplay loop muted playsinline>
                                     <source id="hud-video-src" src="https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-loop-41851-large.mp4" type="video/mp4">
                                 </video>
                             </div>
@@ -286,13 +298,11 @@
                     <!-- Visual Column -->
                     <div class="lg:col-span-5 relative">
                         <div class="border border-bj-cyan/20 bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.1)]">
-                            
                             <button onclick="openRightMediaModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold/90 text-black px-4 py-2 rounded font-mono text-[11px] font-bold shadow-lg hover:bg-white transition-all uppercase tracking-wider">
-                                ✏️ Configurer Visuel Droite
+                                Configurer Visuel Droite
                             </button>
 
                             <div class="aspect-[4/5] bg-neutral-950 rounded-xl relative overflow-hidden flex items-center justify-center border border-bj-cyan/15">
-                                
                                 <img id="right-custom-img" class="absolute inset-0 w-full h-full object-cover hidden z-0" src="" alt="Carbon Aero Custom Model">
                                 <video id="right-custom-video" class="absolute inset-0 w-full h-full object-cover hidden z-0" autoplay loop muted playsinline src=""></video>
 
@@ -300,53 +310,52 @@
                                 <div class="absolute inset-0 flex flex-col justify-between p-6 z-20 font-mono">
                                     <div class="flex justify-between items-start">
                                         <span class="text-[10px] text-bj-gold uppercase tracking-widest">Model: Carbon Aero V1</span>
-                                        <span class="text-[10px] text-bj-cyan">GRID_SYSTEM: ACTIVE</span>
+                                        <span class="text-[10px] text-bj-cyan font-bold">GRID_SYSTEM: ACTIVE</span>
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-xs text-bj-textMuted">// VOGUE EDITORIAL SHOOT</p>
                                         <h3 class="text-2xl font-bold uppercase tracking-wider text-white">MONACO GP EDITION</h3>
                                     </div>
                                 </div>
+
                                 <div class="right-default-decor w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 animate-spin" style="animation-duration: 25s;"></div>
                                 <div class="absolute right-default-decor w-36 h-36 rounded-full border-[1.5px] border-bj-red/30 animate-ping" style="animation-duration: 4s;"></div>
                                 <div class="absolute right-default-decor w-20 h-20 rounded-full border border-dashed border-bj-gold/20 animate-spin" style="animation-duration: 10s;"></div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </section>
 
-            <!-- PAGE 2: LA COLLECTION (PRODUCTS WITH NEON BRACKETS) -->
+            <!-- PAGE 2: LA COLLECTION -->
             <section id="page-collection" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
                     <div class="border-b border-bj-cyan/20 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                         <div>
-                            <span onclick="editPageText('txt-col-tag')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest" id="txt-col-tag">// LA GAMME SPORT CYBER</span>
+                            <span onclick="editPageText('txt-col-tag')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest font-bold block" id="txt-col-tag">// LA GAMME SPORT CYBER</span>
                             <div class="flex items-center gap-3">
                                 <h2 onclick="editPageText('txt-col-title')" id="txt-col-title" class="edit-highlight text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
                             </div>
                         </div>
                         <div class="flex items-center gap-4 w-full sm:w-auto">
-                            <button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all">
-                                ＋ Ajouter un produit
+                            <button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all font-mono">
+                                + Ajouter un produit
                             </button>
-                            <span class="text-xs text-bj-cyan font-mono whitespace-nowrap" id="txt-col-count">Affichage : 6 Modèles Exclusifs</span>
+                            <span class="text-xs text-bj-cyan font-mono whitespace-nowrap" id="txt-col-count">Affichage: 6 Modèles Exclusifs</span>
                         </div>
                     </div>
-
                     <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
                 </div>
             </section>
 
-            <!-- PAGE 3: COURS DU JOUR (BOURSE DE LA MARQUE - OFFICIEL SECONDARY EXCHANGE) -->
+            <!-- PAGE 3: COURS DU JOUR (BOURSE) -->
             <section id="page-exchange" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-8">
-                    <!-- Section Header with running financial ticker -->
                     <div class="border-b border-bj-cyan/20 pb-4">
-                        <span onclick="editPageText('txt-exchange-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest" id="txt-exchange-subtitle">// CO-EXISTENCE & INDICE DE RARETÉ</span>
+                        <span onclick="editPageText('txt-exchange-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest font-bold block" id="txt-exchange-subtitle">// CO-EXISTENCE & INDICE DE RARETÉ</span>
                         <h2 onclick="editPageText('txt-exchange-title')" class="edit-highlight text-3xl sm:text-4xl font-black uppercase tracking-tight mt-1" id="txt-exchange-title">Bourse & Marché d'Échange Officiel</h2>
                         
-                        <!-- Simulated Live Index Ticker -->
                         <div class="ticker-wrap bg-bj-dark border border-bj-cyan/15 rounded p-2 mt-4 font-mono text-[11px] text-bj-cyan">
                             <div class="ticker-content space-x-8">
                                 <span class="font-bold">INDEX BENZJAMES CO. [BJX] <span class="text-emerald-400">▲ +12.4%</span></span>
@@ -360,64 +369,55 @@
                         </div>
                     </div>
 
-                    <!-- Main Grid split: Exchange Terminal / Marketplace Trades -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                        
-                        <!-- Left Panel: Authentication & Dynamic Valuation Engine -->
+                        <!-- Left Panel: Valuation Engine -->
                         <div class="lg:col-span-5 bg-bj-dark border border-bj-cyan/20 rounded-2xl p-6 space-y-6 shadow-[0_0_25px_rgba(6,182,212,0.1)]">
                             <div class="border-b border-bj-border pb-3">
-                                <span onclick="editPageText('txt-eval-tag')" class="edit-highlight text-[9px] font-mono text-bj-cyan uppercase tracking-widest" id="txt-eval-tag">// CORE PROTOCOL ENGINE</span>
+                                <span onclick="editPageText('txt-eval-tag')" class="edit-highlight text-[9px] font-mono text-bj-cyan uppercase tracking-widest font-bold block" id="txt-eval-tag">// CORE PROTOCOL ENGINE</span>
                                 <h3 onclick="editPageText('txt-eval-title')" class="edit-highlight text-lg font-bold text-white mt-1" id="txt-eval-title">Évaluer sa Pièce Unique</h3>
                             </div>
-
                             <div class="space-y-4 text-xs font-mono">
                                 <div>
-                                    <label class="block text-bj-textMuted mb-1 font-bold">MODELE UNIQUE</label>
-                                    <select id="eval-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white">
-                                        <!-- Populated from product list -->
-                                    </select>
+                                    <label class="block text-bj-textMuted mb-1 font-bold">MODÈLE UNIQUE</label>
+                                    <select id="eval-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white"></select>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-bj-textMuted mb-1 font-bold">N° DE SERIE (1-1000)</label>
+                                        <label class="block text-bj-textMuted mb-1 font-bold">N° DE SÉRIE (1-1000)</label>
                                         <input type="number" id="eval-serial" value="42" min="1" max="1000" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-bj-cyan font-bold">
                                     </div>
                                     <div>
-                                        <label class="block text-bj-textMuted mb-1 font-bold">CLE SECRET INTERIEUR</label>
+                                        <label class="block text-bj-textMuted mb-1 font-bold">CLÉ SECRÈTE INTÉRIEURE</label>
                                         <input type="text" id="eval-secret" placeholder="BJ-XXX-XXXX" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold uppercase">
                                     </div>
                                 </div>
-
                                 <button onclick="calculateCote()" class="w-full bg-bj-gold hover:bg-white hover:text-black text-black font-extrabold py-3 rounded text-xs uppercase tracking-widest transition-all shadow-[0_0_12px_rgba(212,175,55,0.2)]">
                                     Estimer la valeur & Authentifier
                                 </button>
                             </div>
 
-                            <!-- Live Valuation Result Screen -->
                             <div id="eval-screen" class="hidden border border-dashed border-bj-gold/40 rounded-xl p-5 bg-black/60 text-center space-y-3">
                                 <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest block">Certificat d'Authenticité Estimatif</span>
                                 <div class="space-y-1">
                                     <p class="text-[10px] font-mono text-bj-cyan" id="eval-res-id">BJ-042-42DF</p>
                                     <p class="text-3xl font-black text-white" id="eval-res-cote">340 €</p>
-                                    <p class="text-[9px] font-mono text-emerald-400" id="eval-res-delta">▲ +41.6% vs Prix Neuf</p>
+                                    <p class="text-[9px] font-mono text-emerald-400 font-bold" id="eval-res-delta">▲ +41.6% vs Prix Neuf</p>
                                 </div>
-                                <div class="text-[8px] text-bj-textMuted leading-relaxed border-t border-bj-border/30 pt-2">
-                                    Authentification Blockchain cryptographique validée. Prêt pour listing.
+                                <div class="text-[8px] text-bj-textMuted leading-relaxed border-t border-bj-border/30 pt-2 font-mono">
+                                    Authentification Blockchain cryptographique validée. Prêt pour listing de revente officiel.
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Panel: The Interactive Official Marketplace Feed -->
+                        <!-- Right Panel: Marketplace -->
                         <div class="lg:col-span-7 space-y-6">
-                            
-                            <!-- Filter Tabs & User Identification Status -->
                             <div class="flex justify-between items-center bg-bj-dark border border-bj-cyan/15 rounded-xl p-4 font-mono text-xs">
                                 <div class="flex items-center gap-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
                                     <span class="font-bold text-white uppercase" id="market-user-status">Consul: Visiteur</span>
                                 </div>
                                 <div class="flex gap-2">
-                                    <button onclick="openUnifiedPortalModal()" id="btn-user-auth" class="bg-bj-cyan/10 hover:bg-bj-cyan text-bj-cyan hover:text-black border border-bj-cyan/30 px-3 py-1.5 rounded uppercase tracking-wider font-bold transition-all">
+                                    <button onclick="openUnifiedPortalModal('client-tab')" id="btn-user-auth" class="bg-bj-cyan/10 hover:bg-bj-cyan text-bj-cyan hover:text-black border border-bj-cyan/30 px-3 py-1.5 rounded uppercase tracking-wider font-bold transition-all">
                                         S'identifier
                                     </button>
                                     <button onclick="openPostListingModal()" class="bg-bj-gold text-black px-3 py-1.5 rounded uppercase tracking-wider font-bold hover:bg-white transition-all">
@@ -426,64 +426,57 @@
                                 </div>
                             </div>
 
-                            <!-- Active Offers Dashboard -->
                             <div class="space-y-4">
-                                <h4 onclick="editPageText('txt-live-feed')" class="edit-highlight text-sm font-mono text-bj-gold uppercase tracking-widest" id="txt-live-feed">// TRANSACTIONS & ENCHÈRES EN DIRECT</h4>
-                                
-                                <div id="listings-feed" class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
-                                    <!-- Populated dynamically via JS -->
-                                </div>
+                                <h4 onclick="editPageText('txt-live-feed')" class="edit-highlight text-sm font-mono text-bj-gold uppercase tracking-widest font-bold" id="txt-live-feed">// TRANSACTIONS & ENCHÈRES EN DIRECT</h4>
+                                <div id="listings-feed" class="space-y-4 max-h-[380px] overflow-y-auto pr-2"></div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
 
-            <!-- PAGE 4: VOGUE LOOKBOOK (EDITORIAL DE CAROUSEL) -->
+            <!-- PAGE 4: VOGUE LOOKBOOK -->
             <section id="page-vogue" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-4 p-4 rounded">
-                        <span onclick="editPageText('txt-vogue-tag')" class="edit-highlight text-xs font-mono text-bj-cyan uppercase tracking-widest" id="txt-vogue-tag">// VIRTUAL GRID CHIC</span>
-                        <h2 onclick="editPageText('txt-vogue-title')" id="txt-vogue-title" class="edit-highlight text-4xl font-bold uppercase tracking-tight text-white">Le Style en Mouvement</h2>
+                        <span onclick="editPageText('txt-vogue-tag')" class="edit-highlight text-xs font-mono text-bj-cyan uppercase tracking-widest font-bold block" id="txt-vogue-tag">// VIRTUAL GRID CHIC</span>
+                        <h2 onclick="editPageText('txt-vogue-title')" id="txt-vogue-title" class="edit-highlight text-4xl font-bold uppercase tracking-tight text-white font-sans">Le Style en Mouvement</h2>
                         <p onclick="editPageText('txt-vogue-desc', 'textarea')" id="txt-vogue-desc" class="edit-highlight text-bj-textMuted text-sm">Le minimalisme esthétique rencontre la puissance mécanique. Photographies d'art et attitude asymétrique.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                        <!-- Vogue block 1 -->
+                        <!-- Vogue Block 1 -->
                         <div class="md:col-span-8 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[16/9] relative overflow-hidden flex items-end tron-glow-border">
                             <div class="absolute inset-0 bg-neutral-900 flex items-center justify-center">
-                                <img id="vogue-img-1" src="watermarked_img_17316994393276431109.png" alt="Benzjames premium lookbook model" class="w-full h-full object-cover">
+                                <img id="vogue-img-1" src="https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=1000&auto=format&fit=crop" alt="Benzjames premium lookbook model" class="w-full h-full object-cover">
                             </div>
                             <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                             
-                            <!-- Master Image File Selector 1 -->
                             <label class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white px-3 py-1.5 rounded text-[10px] font-mono font-bold tracking-wider cursor-pointer z-30 transition-all uppercase shadow-md">
-                                ✏️ Charger Image Left
+                                ✏ Charger Image Gauche 
                                 <input type="file" accept="image/*" class="hidden" onchange="handleVogueImageSelect(event, 'bj_vogue_img1')">
                             </label>
 
-                            <div class="z-20 cursor-pointer text-left">
-                                <span onclick="editPageText('txt-vogue-card1-tag')" id="txt-vogue-card1-tag" class="edit-highlight text-xs font-mono text-bj-cyan tracking-wider block">// Série Monaco Grid GP</span>
+                            <div class="z-20 cursor-pointer text-left font-mono">
+                                <span onclick="editPageText('txt-vogue-card1-tag')" id="txt-vogue-card1-tag" class="edit-highlight text-xs font-mono text-bj-cyan tracking-wider block font-bold">// Série Monaco Grid GP</span>
                                 <h3 onclick="editPageText('txt-vogue-card1-title')" id="txt-vogue-card1-title" class="edit-highlight text-2xl font-bold mt-1 text-white uppercase font-mono tracking-wider">L'élégance asymétrique sur la grille de départ</h3>
                             </div>
                         </div>
 
-                        <!-- Vogue block 2 -->
+                        <!-- Vogue Block 2 -->
                         <div class="md:col-span-4 bg-bj-dark border border-bj-cyan/20 rounded-xl p-8 aspect-[3/4] relative overflow-hidden flex items-end tron-glow-border">
                             <div class="absolute inset-0 bg-neutral-950 flex items-center justify-center">
-                                <img id="vogue-img-2" src="watermarked_img_2777806938911924353.png" alt="Benzjames sportswear active profile" class="w-full h-full object-cover">
+                                <img id="vogue-img-2" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" alt="Benzjames sportswear active profile" class="w-full h-full object-cover">
                             </div>
                             <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
-
-                            <!-- Master Image File Selector 2 -->
+                            
                             <label class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white px-3 py-1.5 rounded text-[10px] font-mono font-bold tracking-wider cursor-pointer z-30 transition-all uppercase shadow-md">
-                                ✏️ Charger Image Right
+                                ✏ Charger Image Droite 
                                 <input type="file" accept="image/*" class="hidden" onchange="handleVogueImageSelect(event, 'bj_vogue_img2')">
                             </label>
 
-                            <div class="z-20 cursor-pointer text-left">
-                                <span onclick="editPageText('txt-vogue-card2-tag')" id="txt-vogue-card2-tag" class="edit-highlight text-xs font-mono text-bj-red tracking-widest block">SÉRIE LIMITÉE 1/1000</span>
+                            <div class="z-20 cursor-pointer text-left font-mono">
+                                <span onclick="editPageText('txt-vogue-card2-tag')" id="txt-vogue-card2-tag" class="edit-highlight text-xs font-mono text-bj-red tracking-widest block font-bold">SÉRIE LIMITÉE 1/1000</span>
                                 <h3 onclick="editPageText('txt-vogue-card2-title')" id="txt-vogue-card2-title" class="edit-highlight text-xl font-bold mt-1 text-white uppercase font-mono">La casquette sport redéfinie pour elle</h3>
                             </div>
                         </div>
@@ -491,41 +484,35 @@
                 </div>
             </section>
 
-            <!-- PAGE 5: CONFIGURATION & PRE-ORDER (CYBER PACKAGING PREVIEW) -->
+            <!-- PAGE 5: CONFIGURATION & PRE-ORDER -->
             <section id="page-preorder" class="page-slide tron-grid py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
                     <div class="bg-bj-dark border border-bj-cyan/20 rounded-2xl p-8 space-y-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
                         <div>
-                            <span onclick="editPageText('txt-preorder-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest" id="txt-preorder-subtitle">// ATELIER BENZJAMES VIRTUAL</span>
-                            <h2 onclick="editPageText('txt-preorder-title')" class="edit-highlight text-3xl font-bold mt-1 text-white" id="txt-preorder-title">Configurez votre Numéro Unique</h2>
+                            <span onclick="editPageText('txt-preorder-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest font-bold block" id="txt-preorder-subtitle">// ATELIER BENZJAMES VIRTUAL</span>
+                            <h2 onclick="editPageText('txt-preorder-title')" class="edit-highlight text-3xl font-bold mt-1 text-white font-sans" id="txt-preorder-title">Configurez votre Numéro Unique</h2>
                         </div>
-
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Sélectionnez le Modèle</label>
-                                <select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-semibold text-sm">
-                                    <!-- Options de modèles synchronisées par JS -->
-                                </select>
+                                <select id="config-model" onchange="updatePreorderPrice()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-semibold text-sm font-mono"></select>
                             </div>
-
                             <div>
                                 <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Votre Numéro de Série Privilégié (de 1 à 1000)</label>
-                                <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-mono text-lg text-bj-cyan">
+                                <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-bj-black border border-bj-cyan/20 rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan transition-all font-mono text-lg text-bj-cyan font-bold">
                                 <p onclick="editPageText('txt-preorder-desc')" id="txt-preorder-desc" class="edit-highlight text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
                             </div>
                         </div>
 
-                        <!-- Live Simulation Certificate -->
                         <div class="border border-dashed border-bj-cyan/30 p-6 rounded bg-black/60 text-center space-y-4 shadow-inner">
                             <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest block">Génération du certificat d'authenticité de l'étiquette</span>
                             <div class="space-y-1">
-                                <p class="text-xl font-mono text-bj-cyan drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]" id="config-display-code">BJ-042-42DF</p>
+                                <p class="text-xl font-mono text-bj-cyan drop-shadow-[0_0_8px_rgba(6,182,212,0.4)] font-bold" id="config-display-code">BJ-042-42DF</p>
                                 <p class="text-[10px] text-bj-textMuted font-mono">Certificat d'empreinte généré à la volée</p>
                             </div>
                         </div>
 
-                        <!-- Client Info Form to capture leads -->
                         <div class="space-y-4 pt-4 border-t border-bj-cyan/10">
                             <div class="grid grid-cols-2 gap-4 font-mono">
                                 <input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs transition-all">
@@ -537,22 +524,20 @@
                         </div>
                     </div>
 
-                    <!-- Live Preview of the selected cap -->
-                    <div class="border border-bj-cyan/20 rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.05)]">
+                    <div class="border border-bj-cyan/20 rounded-2xl p-8 flex flex-col justify-between bg-bj-dark/30 relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.05)] h-full">
                         <div>
                             <span class="text-xs font-mono text-bj-textMuted uppercase tracking-widest">Rendu du Packaging Final Vectoriel</span>
-                            
                             <div id="box-visual-container" class="aspect-square bg-black rounded-xl border border-bj-cyan/30 mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-300 shadow-[inset_0_0_30px_rgba(6,182,212,0.2)]">
                                 <div class="absolute inset-0 bg-black/85 z-0"></div>
                                 <div class="absolute inset-4 border border-bj-cyan/20 rounded flex flex-col justify-between p-6 z-10 bg-black/10">
                                     <div class="flex justify-between items-start font-mono">
-                                        <span class="text-[8px] text-bj-cyan">BENZJAMES LABS_</span>
-                                        <span class="text-[8px] text-bj-red" id="box-weight">WEIGHT: 42G</span>
+                                        <span class="text-[8px] text-bj-cyan font-bold">BENZJAMES LABS_</span>
+                                        <span class="text-[8px] text-bj-red font-bold" id="box-weight">WEIGHT: 42G</span>
                                     </div>
                                     <div class="text-center space-y-2">
-                                        <span class="text-xs uppercase tracking-[0.3em] text-bj-textMuted" id="box-slogan">L'APPUI AÉRODYNAMIQUE ULTIME</span>
+                                        <span class="text-xs uppercase tracking-[0.3em] text-bj-textMuted font-bold" id="box-slogan">L'APPUI AÉRODYNAMIQUE ULTIME</span>
                                         <h3 class="text-3xl font-bold uppercase tracking-widest text-white font-mono drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" id="box-title">MONZA</h3>
-                                        <div class="inline-block px-3 py-1 bg-bj-dark border border-bj-cyan/30 text-bj-gold font-mono text-sm shadow-[0_0_10px_rgba(212,175,55,0.1)]" id="box-serial">
+                                        <div class="inline-block px-3 py-1 bg-bj-dark border border-bj-cyan/30 text-bj-gold font-mono text-sm shadow-[0_0_10px_rgba(212,175,55,0.1)] font-bold" id="box-serial">
                                             N° 042 / 1000
                                         </div>
                                     </div>
@@ -563,13 +548,13 @@
                             </div>
                         </div>
 
-                        <div class="pt-6 flex justify-between items-center font-mono">
+                        <div class="pt-6 flex justify-between items-center font-mono border-t border-bj-cyan/10 mt-6">
                             <div>
-                                <span class="text-xs text-bj-textMuted block">MÉTHODE D'AUTHENTIFICATION</span>
+                                <span class="text-[10px] text-bj-textMuted block uppercase">MÉTHODE D'AUTHENTIFICATION</span>
                                 <span class="text-sm font-bold text-white">NFC + Code d'Empreinte (Vérifié)</span>
                             </div>
                             <div class="text-right">
-                                <span class="text-xs text-bj-textMuted block">PRIX DE RÉSERVATION</span>
+                                <span class="text-[10px] text-bj-textMuted block uppercase">PRIX DE RÉSERVATION</span>
                                 <span class="text-lg text-bj-gold font-bold" id="box-price">240 €</span>
                             </div>
                         </div>
@@ -579,13 +564,11 @@
             </section>
 
         </div>
-
     </main>
 
     <!-- FIXED PREMIUM TACHOMETER GAUGE -->
-    <div class="fixed bottom-14 right-4 z-50 bg-bj-black/95 border border-bj-cyan/30 p-1.5 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Navigation" onclick="cyclePages()">
+    <div class="fixed bottom-14 right-4 z-50 bg-bj-black/95 border border-bj-cyan/30 p-1.5 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center cursor-pointer hover:border-bj-gold/60 transition-all group" title="Passer à la page suivante" onclick="cyclePages()">
         <div class="relative w-10 h-10">
-            <!-- SVG Tachometer face -->
             <svg class="w-full h-full" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="34" fill="none" stroke="#151515" stroke-width="4"></circle>
                 <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(6, 182, 212, 0.15)" stroke-width="6" class="animate-pulse"></circle>
@@ -599,12 +582,9 @@
                 <circle cx="40" cy="6" r="1.5" fill="#fff" id="tick-2"></circle>
                 <circle cx="64" cy="23" r="1.5" fill="#fff" id="tick-3"></circle>
                 <circle cx="64" cy="40" r="1.5" fill="#fff" id="tick-4"></circle>
-
                 <circle cx="40" cy="40" r="4" fill="#fff"></circle>
                 <line x1="40" y1="40" x2="40" y2="12" stroke="#E10600" stroke-width="2.5" class="tacho-needle" id="tacho-needle" transform="rotate(-110)"></line>
             </svg>
-
-            <!-- Digital Inner Display scaled to fit micro size -->
             <div class="absolute inset-0 flex flex-col items-center justify-center pt-4">
                 <span class="text-[7px] font-mono font-bold text-white leading-none" id="tacho-digit">P1</span>
                 <span class="text-[4px] font-mono uppercase tracking-widest text-bj-red font-bold">GEAR</span>
@@ -612,10 +592,9 @@
         </div>
     </div>
 
-    <!-- UNIFIED CLIENT & MASTER CONNECTION PORTAL MODAL -->
+    <!-- UNIFIED PORTAL MODAL -->
     <div id="modal-unified-portal" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl">
-            <!-- Modal Tabs Header -->
             <div class="flex border-b border-bj-cyan/10 bg-black font-mono text-xs uppercase">
                 <button onclick="switchUnifiedTab('client-tab')" id="tab-btn-client" class="flex-1 py-4 text-center border-b-2 border-bj-gold text-bj-gold font-bold transition-all focus:outline-none">
                     Mon Espace & Panier
@@ -626,9 +605,8 @@
             </div>
 
             <div class="p-6 sm:p-8 space-y-6">
-                <!-- TAB 1: CLIENT CART & ACCOUNT -->
+                <!-- TAB 1: CLIENT TAB -->
                 <div id="portal-tab-client" class="space-y-6">
-                    <!-- Client Profile Information -->
                     <div id="client-not-registered" class="space-y-4">
                         <div class="text-center font-mono">
                             <span class="text-[10px] text-bj-cyan uppercase tracking-widest">// CONNECTIQUE CLIENT</span>
@@ -637,12 +615,12 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
                             <div>
-                                <label class="block text-bj-textMuted mb-1 uppercase font-semibold">Votre Pseudonyme</label>
+                                <label class="block text-bj-textMuted mb-1 uppercase font-semibold">Pseudonyme</label>
                                 <input type="text" id="client-portal-pseudo" placeholder="Ex: Denis_911" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white focus:outline-none focus:border-bj-cyan">
                             </div>
                             <div>
                                 <label class="block text-bj-textMuted mb-1 uppercase font-semibold">Identifiant de Remboursement</label>
-                                <input type="text" id="client-portal-wallet" placeholder="Ex: IBAN, PayPal, etc." class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white focus:outline-none focus:border-bj-cyan">
+                                <input type="text" id="client-portal-wallet" placeholder="Ex: IBAN, PayPal..." class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white focus:outline-none focus:border-bj-cyan">
                             </div>
                         </div>
                         <button onclick="registerClientAccount()" class="w-full bg-bj-cyan text-black py-3 rounded text-xs uppercase tracking-widest font-bold font-mono hover:bg-white transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]">
@@ -650,34 +628,27 @@
                         </button>
                     </div>
 
-                    <!-- Active Client Profile info -->
                     <div id="client-registered-info" class="hidden flex justify-between items-center bg-black/60 border border-bj-cyan/25 p-4 rounded-xl font-mono text-xs">
                         <div>
-                            <span class="text-[8px] text-bj-gold uppercase tracking-widest block">// SESSION CLIENT ACTIVE</span>
+                            <span class="text-[8px] text-bj-gold uppercase tracking-widest block font-bold">// SESSION CLIENT ACTIVE</span>
                             <span class="text-white font-bold" id="client-display-name">Pseudo: @Denis_911</span>
                         </div>
-                        <button onclick="logoutClient()" class="border border-bj-red/30 hover:bg-bj-red text-bj-red hover:text-white px-3 py-1.5 rounded uppercase tracking-wider text-[9px] font-bold transition-all">
+                        <button onclick="logoutClient()" class="border border-bj-red/30 hover:bg-bj-red text-bj-red hover:text-white px-3 py-1.5 rounded uppercase tracking-wider text-[9px] font-bold transition-all font-mono">
                             Déconnexion
                         </button>
                     </div>
 
-                    <!-- Interactive Shopping Cart Section -->
                     <div class="border-t border-bj-cyan/10 pt-4 space-y-4">
                         <h4 class="text-xs font-mono text-bj-gold uppercase tracking-widest font-bold flex justify-between items-center">
-                            <span>🛒 Mon Panier d'Achat</span>
+                            🛒 <span>Mon Panier d'Achat</span>
                             <span id="cart-items-count" class="bg-bj-cyan text-black rounded-full px-2 py-0.5 text-[9px] font-bold">0 Article</span>
                         </h4>
-
-                        <!-- Cart items list container -->
-                        <div id="cart-items-container" class="space-y-3 max-h-[180px] overflow-y-auto pr-1">
-                            <!-- Populated dynamically via JS -->
-                        </div>
-
-                        <!-- Cart summary -->
+                        <div id="cart-items-container" class="space-y-3 max-h-[180px] overflow-y-auto pr-1"></div>
+                        
                         <div class="flex justify-between items-center border-t border-bj-cyan/10 pt-4 font-mono text-xs">
                             <div>
-                                <span class="text-bj-textMuted uppercase block">Montant Total :</span>
-                                <span class="text-xl font-black text-white" id="cart-total-price">0 €</span>
+                                <span class="text-bj-textMuted uppercase block text-[9px]">Montant Total :</span>
+                                <span class="text-xl font-black text-white font-bold" id="cart-total-price">0 €</span>
                             </div>
                             <button onclick="checkoutCart()" class="bg-bj-gold text-black hover:bg-white font-extrabold px-6 py-3 rounded text-xs uppercase tracking-widest transition-all shadow-[0_0_12px_rgba(212,175,55,0.2)]">
                                 Valider et Commander
@@ -686,15 +657,13 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: MASTER / ADMINISTRATOR PORTAL -->
+                <!-- TAB 2: MASTER / ADMINISTRATOR TAB -->
                 <div id="portal-tab-master" class="hidden space-y-6">
-                    
-                    <!-- Login Segment -->
                     <div id="master-login-fields" class="space-y-4">
                         <div class="text-center font-mono">
-                            <span class="text-[10px] text-bj-red uppercase tracking-widest">// CONTRÔLE D'ÉCURIE</span>
+                            <span class="text-[10px] text-bj-gold uppercase tracking-widest">// CONTRÔLE D'ÉCURIE</span>
                             <h3 class="text-lg font-bold text-white uppercase mt-1">Authentification Administrative</h3>
-                            <p class="text-[11px] text-bj-textMuted mt-1">L'accès Master déverrouille l'édition directe de toutes les zones de textes et images.</p>
+                            <p class="text-[11px] text-bj-textMuted mt-1">Saisissez l'étiquette code d'accès par défaut : <strong class="text-bj-gold font-bold">Master2026</strong> pour activer l'éditeur direct de toutes les pages.</p>
                         </div>
                         <div class="space-y-3 font-mono text-xs">
                             <div>
@@ -706,7 +675,7 @@
                                     <label class="block text-bj-textMuted font-bold">CODE SECRET MASTER</label>
                                     <button onclick="switchMasterLoginMode('forgot')" class="text-bj-cyan hover:text-white transition-all text-[9px] uppercase tracking-wider">// Code oublié ?</button>
                                 </div>
-                                <input type="password" id="login-password" placeholder="Saisir code d'accès (Standard: MASTER2026)" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold">
+                                <input type="password" id="login-password" placeholder="Saisir code d'accès (Standard: Master2026)" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold font-bold">
                             </div>
                         </div>
                         <button onclick="submitLogin()" class="w-full bg-bj-gold hover:bg-white hover:text-black text-black font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)]">
@@ -714,38 +683,34 @@
                         </button>
                     </div>
 
-                    <!-- Forgot Password Segment (Secured Mail-out dispatcher) -->
+                    <!-- Recovery Segment -->
                     <div id="master-forgot-fields" class="hidden space-y-4">
                         <div class="text-center font-mono">
                             <span class="text-[10px] text-bj-cyan uppercase tracking-widest">// PROTOCOLE DE RECOUVREMENT ZERO-TRUST</span>
                             <h3 class="text-lg font-bold text-white uppercase mt-1">Renvoyer le Code Secret</h3>
-                            <p class="text-[11px] text-bj-textMuted mt-1">Saisissez l'adresse mail enregistrée. Le système préparera un paquet de recouvrement encrypté directement par votre messagerie locale.</p>
+                            <p class="text-[11px] text-bj-textMuted mt-1">Saisissez l'adresse mail du propriétaire master pour recevoir le jeton d'accès d'usine.</p>
                         </div>
                         <div class="space-y-3 font-mono text-xs">
                             <div>
                                 <label class="block text-bj-textMuted mb-1 font-bold">ADRESSE MAIL DU PROPRIÉTAIRE MASTER</label>
-                                <input type="email" id="forgot-email" placeholder="Saisir l'adresse mail (ex: d.bonot@gmail.com)" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan">
+                                <input type="email" id="forgot-email" placeholder="Saisir l'adresse mail (ex: d.bonot@gmail.com)" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan font-bold">
                             </div>
                         </div>
 
-                        <!-- Routing telemetry animation block -->
                         <div id="forgot-telemetry-box" class="hidden border border-bj-cyan/30 bg-black/60 rounded-xl p-4 font-mono text-[9px] text-bj-cyan space-y-1 max-h-[140px] overflow-y-auto">
                             <div class="flex justify-between text-[10px] border-b border-bj-cyan/15 pb-1 font-bold">
                                 <span>STATUS: ROUTAGE DES PAQUETS</span>
                                 <span class="animate-ping" id="forgot-telemetry-ping">⬤</span>
                             </div>
-                            <div id="forgot-telemetry-logs" class="space-y-0.5">
-                                <!-- Populated dynamically by SMTP simulation -->
-                            </div>
+                            <div id="forgot-telemetry-logs" class="space-y-0.5"></div>
                         </div>
 
-                        <!-- Mail Recovery Action CTAs -->
                         <div class="space-y-2">
                             <button onclick="triggerSecureSMTPRelay()" id="btn-forgot-relay" class="w-full bg-bj-cyan hover:bg-white hover:text-black text-black font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-                                Lancer le Relais de Routage Securisé
+                                Lancer le Relais de Routage Sécurisé
                             </button>
-                            <a id="forgot-mailto-anchor" href="#" class="hidden w-full bg-bj-gold text-black hover:bg-white text-center block font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_12px_rgba(212,175,55,0.2)]">
-                                ✉ Ouvrir ma Messagerie Mail
+                            <a id="forgot-mailto-anchor" href="#" class="hidden w-full bg-bj-gold text-black hover:bg-white text-center font-extrabold py-3.5 rounded text-xs uppercase tracking-widest font-mono transition-all shadow-[0_0_12px_rgba(212,175,55,0.2)]">
+                                ✉ Ouvrir ma Messagerie Mail 
                             </a>
                             <button onclick="switchMasterLoginMode('login')" class="w-full border border-bj-border hover:border-white text-bj-textMuted hover:text-white py-2 rounded text-[10px] uppercase tracking-wider font-mono transition-all">
                                 Retour au Panneau de Connexion
@@ -753,33 +718,29 @@
                         </div>
                     </div>
 
-                    <!-- Master Admin Control Dashboard once authenticated -->
+                    <!-- Dashboard once logged in -->
                     <div id="master-admin-dashboard" class="hidden space-y-6">
                         <div class="bg-black/60 border border-bj-gold/30 p-4 rounded-xl font-mono text-xs space-y-2">
                             <span class="text-[9px] text-bj-gold uppercase tracking-widest block font-bold">👑 SESSION MASTER ACTIVÉE</span>
-                            <p class="text-bj-textMuted leading-relaxed">Vous êtes connecté en tant que Chef d'écurie. Vous pouvez cliquer sur n'importe quelle zone de texte ou de visuel de lookbook pour éditer les contenus en direct.</p>
+                            <p class="text-bj-textMuted leading-relaxed">Vous êtes connecté en tant que Chef d'écurie. Vous pouvez fermer ce portail et modifier n'importe quel élément de texte ou média en cliquant dessus directement.</p>
                         </div>
 
-                        <!-- Master Password Hardening widget & Recovery config -->
+                        <!-- Security Configuration -->
                         <div class="border border-bj-cyan/20 rounded-xl p-4 bg-bj-black/40 space-y-4 font-mono text-xs">
                             <span class="text-[10px] text-bj-cyan uppercase block tracking-widest font-bold">// CONFIGURATION SÉCURITÉ ACCÈS</span>
-                            
-                            <!-- Master Code change -->
                             <div class="space-y-2 border-b border-bj-cyan/10 pb-4">
-                                <p class="text-bj-textMuted text-[10px]">Remplacez le code d'accès d'usine standard "MASTER2026" par une clé de votre choix.</p>
+                                <p class="text-bj-textMuted text-[10px]">Remplacez le code d'accès actuel "Master2026" par une nouvelle clé.</p>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <input type="password" id="harden-new-pwd" placeholder="Nouveau code fort" class="bg-black border border-bj-cyan/20 rounded px-3 py-2 text-white focus:outline-none text-xs">
                                     <button onclick="hardenMasterPassword()" class="bg-bj-gold text-black hover:bg-white font-bold py-2 px-3 rounded text-[10px] uppercase tracking-wider transition-all">
-                                        Appliquer Code Fort
+                                        Appliquer Code
                                     </button>
                                 </div>
                             </div>
-
-                            <!-- Recovery Email setting -->
                             <div class="space-y-2">
-                                <p class="text-bj-textMuted text-[10px]">Définissez l'adresse de recouvrement par défaut pour la réinitialisation de votre code.</p>
+                                <p class="text-bj-textMuted text-[10px]">Définissez l'adresse de recouvrement par défaut.</p>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <input type="email" id="harden-recovery-email" placeholder="d.bonot@gmail.com" class="bg-black border border-bj-cyan/20 rounded px-3 py-2 text-white focus:outline-none text-xs">
+                                    <input type="email" id="harden-recovery-email" placeholder="d.bonot@gmail.com" class="bg-black border border-bj-cyan/20 rounded px-3 py-2 text-white focus:outline-none text-xs font-bold">
                                     <button onclick="saveMasterRecoveryEmail()" class="bg-bj-cyan text-black hover:bg-white font-bold py-2 px-3 rounded text-[10px] uppercase tracking-wider transition-all">
                                         Enregistrer l'Email
                                     </button>
@@ -790,6 +751,7 @@
                 </div>
             </div>
 
+            <!-- Footer modal -->
             <div class="bg-bj-black/80 border-t border-bj-cyan/10 p-4 flex justify-end">
                 <button onclick="closeUnifiedPortalModal()" class="border border-bj-border hover:border-white text-white font-mono text-xs uppercase tracking-widest font-bold py-2.5 px-6 rounded transition-all">
                     Fermer le Portail
@@ -798,7 +760,7 @@
         </div>
     </div>
 
-    <!-- Marketplace New Listing Modal -->
+    <!-- MARKETPLACE NEW LISTING MODAL -->
     <div id="modal-post-listing" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-md space-y-4">
             <div class="font-mono text-center">
@@ -808,14 +770,12 @@
             <div class="space-y-3 font-mono text-xs">
                 <div>
                     <label class="block text-bj-textMuted mb-1">Modèle de casquette</label>
-                    <select id="listing-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white">
-                        <!-- Populated by JS -->
-                    </select>
+                    <select id="listing-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold"></select>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-bj-textMuted mb-1">N° Série (1-1000)</label>
-                        <input type="number" id="listing-serial" value="100" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white">
+                        <input type="number" id="listing-serial" value="100" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold">
                     </div>
                     <div>
                         <label class="block text-bj-textMuted mb-1">Clé de Sécurité</label>
@@ -825,7 +785,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-bj-textMuted mb-1">Mode de vente</label>
-                        <select id="listing-mode" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white">
+                        <select id="listing-mode" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold">
                             <option value="fixed">Prix Fixe</option>
                             <option value="auction">Enchère</option>
                         </select>
@@ -843,7 +803,7 @@
         </div>
     </div>
 
-    <!-- Product Creation/Edition Modal -->
+    <!-- PRODUCT CREATION/EDITION MODAL -->
     <div id="modal-product" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-xl space-y-6 my-8">
             <div class="flex justify-between items-center border-b border-bj-cyan/15 pb-4">
@@ -859,10 +819,10 @@
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Prix de vente (€)</label>
-                    <input type="number" id="prod-price" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
+                    <input type="number" id="prod-price" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-bold">
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Slogan de l'article (ex: Vitesse et élégance pure)</label>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Slogan de l'article</label>
                     <input type="text" id="prod-slogan" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-semibold">
                 </div>
                 <div class="md:col-span-2">
@@ -885,17 +845,15 @@
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Badge Catégorie</label>
                     <input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Poids simulé de l'article (g)</label>
-                    <input type="number" id="prod-weight" value="42" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
+                    <input type="number" id="prod-weight" value="42" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-bold">
                 </div>
             </div>
-
             <div class="flex gap-3 pt-4 border-t border-bj-cyan/15 font-mono">
                 <button onclick="closeProductModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
                 <button onclick="saveProduct()" class="w-1/2 bg-bj-cyan hover:bg-white hover:text-black text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
@@ -903,7 +861,7 @@
         </div>
     </div>
 
-    <!-- Video Stream Configuration Modal -->
+    <!-- VIDEO STREAM CONFIGURATION MODAL -->
     <div id="modal-video-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
@@ -913,18 +871,16 @@
             
             <div class="space-y-4 font-mono text-xs text-bj-textMuted">
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// option A : coller un lien MP4 en ligne</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A : coller un lien MP4 en ligne</label>
                     <input type="text" id="video-url-input" placeholder="https://example.com/video.mp4" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
                 </div>
-                
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-bj-cyan/15"></div>
                     <span class="flex-shrink mx-4 text-[9px] uppercase tracking-widest">OU</span>
                     <div class="flex-grow border-t border-bj-cyan/15"></div>
                 </div>
-
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// option B : Importer depuis votre photothèque</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B : Importer depuis votre photothèque</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -934,7 +890,6 @@
                     </label>
                 </div>
             </div>
-
             <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeVideoEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
                 <button onclick="saveVideoEdit()" class="w-1/2 bg-bj-cyan hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
@@ -942,7 +897,7 @@
         </div>
     </div>
 
-    <!-- Right Side Custom Media Configuration Modal -->
+    <!-- RIGHT SIDE CUSTOM MEDIA CONFIGURATION MODAL -->
     <div id="modal-right-media" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
@@ -953,20 +908,18 @@
             <div class="space-y-4 font-mono text-xs text-bj-textMuted">
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Type de Visuel</label>
-                    <select id="right-media-type-select" onchange="toggleRightMediaInputFields()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan font-mono">
+                    <select id="right-media-type-select" onchange="toggleRightMediaInputFields()" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan font-mono font-bold">
                         <option value="default">Rings de Compétition (Défaut)</option>
                         <option value="image">Image</option>
                         <option value="video">Vidéo</option>
                     </select>
                 </div>
-
-                <!-- URL input fields -->
+                <!-- URL inputs -->
                 <div id="right-media-url-container" class="hidden">
                     <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A : Lien URL Direct (Image ou Vidéo MP4)</label>
                     <input type="text" id="right-media-url" placeholder="https://example.com/media.jpg" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
                 </div>
-
-                <!-- File picker upload field -->
+                <!-- File Picker -->
                 <div id="right-media-file-container" class="hidden">
                     <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B : Importer un fichier depuis l'appareil</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
@@ -978,7 +931,6 @@
                     </label>
                 </div>
             </div>
-
             <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeRightMediaModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
                 <button onclick="saveRightMedia()" class="w-1/2 bg-bj-cyan hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
@@ -986,7 +938,7 @@
         </div>
     </div>
 
-    <!-- Dynamic Generic Text Editing Modal -->
+    <!-- DYNAMIC GENERIC TEXT EDITING MODAL -->
     <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
@@ -1008,59 +960,44 @@
     <!-- Footer -->
     <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-cyan/10 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2 font-mono">
         <div class="flex items-center gap-4">
-            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER-SLIDER V2.2 // TRON_SOFT</span>
+            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER SLIDER V2.5 // MASTER_SOFT</span>
             <span id="slide-progress" class="text-bj-red font-bold">PAGE : 1 / 5</span>
         </div>
-        <p class="text-[9px] cursor-pointer select-none" ondblclick="openUnifiedPortalModal('master-tab')" title="Double-cliquez ici pour ouvrir l'Espace Master">
-            © 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.
-        </p>
+        
+        <div class="flex items-center gap-4">
+            <button onclick="openUnifiedPortalModal('master-tab')" class="text-[9px] text-bj-gold uppercase tracking-wider border border-bj-gold/20 hover:border-bj-gold/80 px-2 py-0.5 rounded transition-all">
+                🔑 Accès Master (Standard: Master2026)
+            </button>
+            <p class="text-[9px] cursor-pointer select-none" ondblclick="openUnifiedPortalModal('master-tab')" title="Double-cliquez ici pour ouvrir l'Espace Master">
+                © 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.
+            </p>
+        </div>
     </footer>
 
     <!-- INTERACTIVE APP SCRIPT -->
     <script>
-        // Protection contre le blocage du localStorage sur Mac (Safari / Mode Privé)
-        const safeStorage = {
-            getItem(key) {
-                try {
-                    return localStorage.getItem(key);
-                } catch (e) {
-                    return window[`_fallback_${key}`] || null;
-                }
-            },
-            setItem(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                } catch (e) {
-                    window[`_fallback_${key}`] = value;
-                }
-            },
-            removeItem(key) {
-                try {
-                    localStorage.removeItem(key);
-                } catch (e) {
-                    delete window[`_fallback_${key}`];
-                }
-            }
-        };
-
         const dbName = "BenzjamesDB";
         const storeName = "videos";
 
         function getDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open(dbName, 1);
-                request.onupgradeneeded = function(e) {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(storeName)) {
-                        db.createObjectStore(storeName);
-                    }
-                };
-                request.onsuccess = function(e) {
-                    resolve(e.target.result);
-                };
-                request.onerror = function(e) {
-                    reject(e.target.error);
-                };
+                try {
+                    const request = indexedDB.open(dbName, 1);
+                    request.onupgradeneeded = function(e) {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(storeName)) {
+                            db.createObjectStore(storeName);
+                        }
+                    };
+                    request.onsuccess = function(e) {
+                        resolve(e.target.result);
+                    };
+                    request.onerror = function(e) {
+                        reject(new Error("IndexedDB bloqué par la Sandbox de l'aperçu."));
+                    };
+                } catch(err) {
+                    reject(new Error("Accès IndexedDB interdit dans ce mode d'affichage."));
+                }
             });
         }
 
@@ -1072,7 +1009,7 @@
                 store.put(val, key);
                 return new Promise((resolve) => tx.oncomplete = resolve);
             } catch (e) {
-                console.error("IndexedDB Save Error:", e);
+                console.warn("IndexedDB indisponible pour écriture. Les données seront temporaires pour cette session.");
             }
         }
 
@@ -1084,10 +1021,23 @@
                 return new Promise((resolve) => {
                     const req = store.get(key);
                     req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => resolve(null);
                 });
             } catch (e) {
-                console.error("IndexedDB Load Error:", e);
+                console.warn("Impossible de récupérer la vidéo depuis IndexedDB (Sécurité d'aperçu).");
                 return null;
+            }
+        }
+
+        // Débloque l'autoplay de secours au premier clic sur l'écran
+        function unlockVideoAutoplay() {
+            const mainVideo = document.getElementById('hud-video-player');
+            const rightVideo = document.getElementById('right-custom-video');
+            if (mainVideo) {
+                mainVideo.play().catch(() => {});
+            }
+            if (rightVideo && !rightVideo.classList.contains('hidden')) {
+                rightVideo.play().catch(() => {});
             }
         }
 
@@ -1205,7 +1155,6 @@
         let tempRightMediaFile = null;
         let currentUser = null; 
         let activeCart = [];
-
         let currentPage = 0;
         const totalPages = 5;
         const pageIds = ['page-home', 'page-collection', 'page-exchange', 'page-vogue', 'page-preorder'];
@@ -1244,11 +1193,13 @@
                 iconColor = 'text-bj-cyan';
                 borderStyle = 'border-bj-cyan/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]';
             }
-
+            
             toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm z-50 font-mono text-xs`;
             toast.innerHTML = `
                 <div class="p-1 rounded-md bg-black/40 ${iconColor}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <div class="flex-grow space-y-0.5">
                     <strong class="text-xs text-white block uppercase tracking-wider font-bold">${title}</strong>
@@ -1256,74 +1207,70 @@
                 </div>
                 <button onclick="this.parentElement.remove()" class="text-bj-textMuted hover:text-white font-mono text-xs">&times;</button>
             `;
-
             container.appendChild(toast);
             
             setTimeout(() => {
                 toast.classList.remove('opacity-0', 'translate-y-2');
             }, 10);
-
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => { toast.remove(); }, 300);
             }, 5000);
         }
 
-        /* Secret Master Code Activation through clicking logo 5 times */
         let logoClicks = 0;
         function handleLogoClick() {
             logoClicks++;
             if (logoClicks >= 5) {
                 logoClicks = 0;
                 openUnifiedPortalModal('master-tab');
-                showToast("Accès Écurie", "Demande de connexion administrative sécurisée initiée.");
+                showToast("Accès Écurie", "Protocole de contournement sécurisé master initié.");
             }
             setTimeout(() => { logoClicks = 0; }, 3000);
         }
 
         async function initApp() {
-            isMaster = safeStorage.getItem('bj_master_logged') === 'true';
+            isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
-
-            const savedProducts = safeStorage.getItem('bj_products');
+            
+            const savedProducts = localStorage.getItem('bj_products');
             if (savedProducts) {
                 products = JSON.parse(savedProducts);
             } else {
                 products = [...DEFAULT_PRODUCTS];
-                safeStorage.setItem('bj_products', JSON.stringify(products));
+                localStorage.setItem('bj_products', JSON.stringify(products));
             }
 
-            const savedCart = safeStorage.getItem('bj_cart');
+            const savedCart = localStorage.getItem('bj_cart');
             if (savedCart) {
                 activeCart = JSON.parse(savedCart);
             }
             updateCartBadge();
 
-            currentUser = JSON.parse(safeStorage.getItem('bj_user'));
+            currentUser = JSON.parse(localStorage.getItem('bj_user'));
             updateUserUI();
 
-            const savedListings = safeStorage.getItem('bj_listings');
+            const savedListings = localStorage.getItem('bj_listings');
             if (savedListings) {
                 exchangeListings = JSON.parse(savedListings);
             } else {
                 exchangeListings = [...DEFAULT_EXCHANGE_LISTINGS];
-                safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+                localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             }
 
-            // Load Recovery Configuration
-            const savedRecoveryEmail = safeStorage.getItem('bj_master_recovery_email');
+            const savedRecoveryEmail = localStorage.getItem('bj_master_recovery_email');
             if (savedRecoveryEmail) {
                 const inputRecovery = document.getElementById('harden-recovery-email');
                 if (inputRecovery) inputRecovery.value = savedRecoveryEmail;
             }
 
-            const savedTexts = safeStorage.getItem('bj_page_texts');
+            const savedTexts = localStorage.getItem('bj_page_texts');
             if (savedTexts) {
                 pageTexts = JSON.parse(savedTexts);
             } else {
                 pageTexts = {
-                    'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE : 1000 PIÈCES UNIQUES',
-                    'txt-home-scroller': '⚡ L\'aérodynamique de la F1 :: L\'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 🚀 Vitesse et Singularité Pure',
+                    'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES UNIQUES',
+                    'txt-home-scroller': 'F1 :: L\'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 Pure',
                     'txt-col-tag': '// LA GAMME SPORT CYBER',
                     'txt-col-title': 'Les Pièces Maîtresses',
                     'txt-exchange-subtitle': '// CO-EXISTENCE & INDICE DE RARETÉ',
@@ -1342,43 +1289,46 @@
                     'txt-preorder-title': 'Configurez votre Numéro Unique',
                     'txt-preorder-desc': 'Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.'
                 };
-                safeStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+                localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             }
 
-            const savedVogue1 = safeStorage.getItem('bj_vogue_img1');
+            const savedVogue1 = localStorage.getItem('bj_vogue_img1');
             if (savedVogue1) {
                 document.getElementById('vogue-img-1').src = savedVogue1;
             }
-            const savedVogue2 = safeStorage.getItem('bj_vogue_img2');
+            const savedVogue2 = localStorage.getItem('bj_vogue_img2');
             if (savedVogue2) {
                 document.getElementById('vogue-img-2').src = savedVogue2;
             }
 
-            const savedVideo = await getVideoFromDB('home_video');
-            const player = document.getElementById('hud-video-player');
-            if (savedVideo && player) {
-                let videoUrl = "";
-                if (savedVideo instanceof Blob) {
-                    videoUrl = URL.createObjectURL(savedVideo);
-                } else {
-                    videoUrl = savedVideo; 
+            // Tentative de chargement sécurisé de la vidéo locale
+            try {
+                const savedVideo = await getVideoFromDB('home_video');
+                const player = document.getElementById('hud-video-player');
+                if (savedVideo && player) {
+                    let videoUrl = "";
+                    if (savedVideo instanceof Blob) {
+                        videoUrl = URL.createObjectURL(savedVideo);
+                    } else {
+                        videoUrl = savedVideo; 
+                    }
+                    document.getElementById('hud-video-src').src = videoUrl;
+                    player.load();
+                    player.play().catch(e => console.log("L'Autoplay attend un clic utilisateur."));
                 }
-                document.getElementById('hud-video-src').src = videoUrl;
-                player.load();
-                player.play().catch(e => console.log("Auto-play gesture lock"));
+            } catch(e) {
+                console.warn("Échec d'initialisation de la vidéo personnalisée.");
             }
 
             await loadRightMedia();
-
             renderApp();
             slideToPage(0);
         }
 
         async function loadRightMedia() {
-            const type = safeStorage.getItem('bj_right_media_type') || 'default';
+            const type = localStorage.getItem('bj_right_media_type') || 'default';
             const typeSelect = document.getElementById('right-media-type-select');
             if (typeSelect) typeSelect.value = type;
-
             const imgEl = document.getElementById('right-custom-img');
             const videoEl = document.getElementById('right-custom-video');
             const decors = document.querySelectorAll('.right-default-decor');
@@ -1390,33 +1340,39 @@
                 return;
             }
 
-            const savedData = await getVideoFromDB('right_media_data');
-            if (!savedData) {
+            try {
+                const savedData = await getVideoFromDB('right_media_data');
+                if (!savedData) {
+                    imgEl.classList.add('hidden');
+                    videoEl.classList.add('hidden');
+                    decors.forEach(d => d.classList.remove('hidden'));
+                    return;
+                }
+                let mediaUrl = "";
+                if (savedData instanceof Blob) {
+                    mediaUrl = URL.createObjectURL(savedData);
+                } else {
+                    mediaUrl = savedData; 
+                }
+
+                if (type === 'image') {
+                    imgEl.src = mediaUrl;
+                    imgEl.classList.remove('hidden');
+                    videoEl.classList.add('hidden');
+                    decors.forEach(d => d.classList.add('hidden'));
+                } else if (type === 'video') {
+                    videoEl.src = mediaUrl;
+                    videoEl.classList.remove('hidden');
+                    imgEl.classList.add('hidden');
+                    decors.forEach(d => d.classList.add('hidden'));
+                    videoEl.load();
+                    videoEl.play().catch(e => console.log("L'autoplay attend un clic utilisateur."));
+                }
+            } catch(e) {
+                console.warn("Échec d'accès au média de droite.");
                 imgEl.classList.add('hidden');
                 videoEl.classList.add('hidden');
                 decors.forEach(d => d.classList.remove('hidden'));
-                return;
-            }
-
-            let mediaUrl = "";
-            if (savedData instanceof Blob) {
-                mediaUrl = URL.createObjectURL(savedData);
-            } else {
-                mediaUrl = savedData; 
-            }
-
-            if (type === 'image') {
-                imgEl.src = mediaUrl;
-                imgEl.classList.remove('hidden');
-                videoEl.classList.add('hidden');
-                decors.forEach(d => d.classList.add('hidden'));
-            } else if (type === 'video') {
-                videoEl.src = mediaUrl;
-                videoEl.classList.remove('hidden');
-                imgEl.classList.add('hidden');
-                decors.forEach(d => d.classList.add('hidden'));
-                videoEl.load();
-                videoEl.play().catch(e => console.log("Playback wait right column"));
             }
         }
 
@@ -1441,7 +1397,6 @@
             const type = document.getElementById('right-media-type-select').value;
             const urlContainer = document.getElementById('right-media-url-container');
             const fileContainer = document.getElementById('right-media-file-container');
-
             if (type === 'default') {
                 urlContainer.classList.add('hidden');
                 fileContainer.classList.add('hidden');
@@ -1454,43 +1409,39 @@
         function handleRightMediaFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             if (file.size > 120 * 1024 * 1024) {
                 showToast("Fichier trop lourd", "Veuillez choisir un fichier de moins de 120 Mo.", "error");
                 e.target.value = "";
                 return;
             }
-
             tempRightMediaFile = file;
             document.getElementById('right-media-upload-label').innerText = file.name + " (" + (file.size / (1024 * 1024)).toFixed(1) + " Mo)";
-            showToast("Visuel importé", "Votre fichier est prêt pour intégration !", "success");
+            showToast("Média chargé", "Fichier prêt à être enregistré !", "success");
         }
 
         async function saveRightMedia() {
             const type = document.getElementById('right-media-type-select').value;
             const urlInput = document.getElementById('right-media-url').value.trim();
-
-            safeStorage.setItem('bj_right_media_type', type);
+            localStorage.setItem('bj_right_media_type', type);
 
             if (type === 'default') {
-                showToast("Restauration", "Cinématique néon d'origine réactivée.");
+                showToast("Réinitialisation", "Animation géométrique d'écurie réactivée.");
                 await loadRightMedia();
                 closeRightMediaModal();
                 return;
             }
 
             if (tempRightMediaFile) {
-                showToast("Enregistrement...", "Stockage sécurisé local...", "info");
+                showToast("Enregistrement...", "Stockage local haute fidélité...", "info");
                 await saveVideoToDB('right_media_data', tempRightMediaFile);
-                showToast("Visuel Configuré", "L'import a été enregistré avec succès.", "success");
+                showToast("Visuel Configuré", "Le fichier a été enregistré localement.", "success");
             } else if (urlInput) {
                 showToast("Enregistrement...", "Liaison par adresse web...", "info");
                 await saveVideoToDB('right_media_data', urlInput);
-                showToast("Visuel Configuré", "Le lien réseau a été validé de manière permanente.", "success");
+                showToast("Visuel Configuré", "L'adresse réseau a été validée avec succès.", "success");
             } else {
-                showToast("Paramètre conservé", "Type changé sans nouveau fichier.", "info");
+                showToast("Configuration préservée", "Type de visuel mis à jour.", "info");
             }
-
             await loadRightMedia();
             closeRightMediaModal();
         }
@@ -1505,7 +1456,7 @@
             if (grid) {
                 grid.innerHTML = '';
                 document.getElementById('txt-col-count').innerText = `Affichage : ${products.length} Modèles Exclusifs`;
-
+                
                 products.forEach((product, idx) => {
                     const card = document.createElement('div');
                     card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-6 flex flex-col justify-between group hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all duration-300 relative tron-glow-border";
@@ -1516,16 +1467,16 @@
                             <div class="absolute w-24 h-24 rounded-full border border-dashed border-bj-red/20 group-hover:rotate-45 transition-all duration-700"></div>
                         </div>
                     `;
-
+                    
                     if (product.image && product.image.trim() !== "") {
                         imageHTML = `
-                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null; this.outerHTML='<div class=\\'text-center text-xs text-bj-red font-mono\\'>Erreur de chargement de l\\'image</div>'">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null; this.outerHTML='<div class=\'text-center text-xs text-bj-red font-mono\'>Erreur de chargement</div>'">
                         `;
                     }
 
                     card.innerHTML = `
-                        <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10" title="Éditer le produit">
-                            ✏️
+                        <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10 shadow-lg font-mono" title="Éditer le produit">
+                            ✏ Edit
                         </button>
                         <div class="space-y-4">
                             <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-cyan/15">
@@ -1537,12 +1488,12 @@
                                     <h3 class="text-lg font-bold text-white group-hover:text-bj-cyan transition-all leading-tight uppercase font-mono tracking-wider">${product.name}</h3>
                                     <span class="text-sm font-mono text-bj-gold font-bold whitespace-nowrap">${product.price} €</span>
                                 </div>
-                                <p class="text-[10px] uppercase font-mono text-bj-red tracking-wider" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
+                                <p class="text-[10px] uppercase font-mono text-bj-red tracking-wider font-semibold" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
                             </div>
                             <p class="text-xs text-bj-textMuted leading-relaxed">${product.desc}</p>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mt-6">
-                            <button onclick="selectProductForPreorder('${product.id}')" class="py-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-[10px] uppercase tracking-wider font-bold transition-all rounded font-mono text-bj-cyan">Configurateur</button>
+                            <button onclick="selectProductForPreorder('${product.id}')" class="py-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-[10px] uppercase tracking-wider font-bold transition-all rounded font-mono text-bj-cyan bg-bj-cyan/5">Configurateur</button>
                             <button onclick="addProductToCart('${product.id}')" class="py-3 bg-bj-gold hover:bg-white text-black text-[10px] uppercase tracking-wider font-bold transition-all rounded font-mono">Ajouter Panier</button>
                         </div>
                     `;
@@ -1558,13 +1509,13 @@
                 select.innerHTML = '';
                 if (evalSelect) evalSelect.innerHTML = '';
                 if (listSelect) listSelect.innerHTML = '';
-
+                
                 products.forEach(p => {
                     const opt = document.createElement('option');
                     opt.value = p.id;
                     opt.innerText = `${p.name} (${p.price} €)`;
                     select.appendChild(opt);
-
+                    
                     if (evalSelect) {
                         const opt2 = opt.cloneNode(true);
                         evalSelect.appendChild(opt2);
@@ -1584,13 +1535,11 @@
         function addProductToCart(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
-
             activeCart.push({
                 cartId: 'item_' + Date.now(),
                 ...product
             });
-
-            safeStorage.setItem('bj_cart', JSON.stringify(activeCart));
+            localStorage.setItem('bj_cart', JSON.stringify(activeCart));
             updateCartBadge();
             showToast("Panier Mis à Jour", `La pièce "${product.name}" a été ajoutée à votre panier d'achat.`);
         }
@@ -1616,10 +1565,9 @@
             const container = document.getElementById('cart-items-container');
             const totalLabel = document.getElementById('cart-total-price');
             if (!container) return;
-
             container.innerHTML = '';
             let total = 0;
-
+            
             if (activeCart.length === 0) {
                 container.innerHTML = `<p class="text-center font-mono text-[11px] text-bj-textMuted py-4">// PANIER ACTUELLEMENT VIDE</p>`;
                 if (totalLabel) totalLabel.innerText = "0 €";
@@ -1633,22 +1581,21 @@
                 div.innerHTML = `
                     <div>
                         <strong class="text-white block truncate max-w-[150px] uppercase">${item.name}</strong>
-                        <span class="text-[9px] text-bj-gold">${item.badge}</span>
+                        <span class="text-[9px] text-bj-gold font-bold">${item.badge}</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <span class="font-bold text-bj-cyan">${item.price} €</span>
-                        <button onclick="removeCartItem('${item.cartId}')" class="text-bj-red hover:text-white transition-all font-bold">&times;</button>
+                        <button onclick="removeCartItem('${item.cartId}')" class="text-bj-red hover:text-white transition-all font-bold text-base">&times;</button>
                     </div>
                 `;
                 container.appendChild(div);
             });
-
             if (totalLabel) totalLabel.innerText = `${total} €`;
         }
 
         function removeCartItem(cartId) {
             activeCart = activeCart.filter(item => item.cartId !== cartId);
-            safeStorage.setItem('bj_cart', JSON.stringify(activeCart));
+            localStorage.setItem('bj_cart', JSON.stringify(activeCart));
             updateCartBadge();
         }
 
@@ -1661,12 +1608,11 @@
                 showToast("Panier Vide", "Votre panier d'achat est vide.", "error");
                 return;
             }
-
             showToast("Commande Initiée", "Sécurisation de la liaison de paiement en cours...");
             setTimeout(() => {
                 showToast("Félicitations !", `La commande d'une valeur de ${activeCart.reduce((acc, curr) => acc + curr.price, 0)} € a été validée pour @${currentUser.pseudonym}.`);
                 activeCart = [];
-                try { localStorage.removeItem('bj_cart'); } catch(e) {}
+                localStorage.removeItem('bj_cart');
                 updateCartBadge();
                 closeUnifiedPortalModal();
             }, 1800);
@@ -1675,21 +1621,19 @@
         function registerClientAccount() {
             const pseudo = document.getElementById('client-portal-pseudo').value.trim();
             const wallet = document.getElementById('client-portal-wallet').value.trim();
-
             if (!pseudo || !wallet) {
                 showToast("Champs manquants", "Veuillez remplir votre Pseudo et votre ID de paiement pour finaliser.", "error");
                 return;
             }
-
             currentUser = { pseudonym: pseudo, wallet: wallet };
-            safeStorage.setItem('bj_user', JSON.stringify(currentUser));
+            localStorage.setItem('bj_user', JSON.stringify(currentUser));
             updateUserUI();
             showToast("Compte Créé !", `Bienvenue dans le cercle privé Benzjames, @${pseudo} !`);
         }
 
         function logoutClient() {
             currentUser = null;
-            safeStorage.removeItem('bj_user');
+            localStorage.removeItem('bj_user');
             updateUserUI();
             showToast("Déconnexion", "Votre session client a été déconnectée.");
         }
@@ -1702,7 +1646,7 @@
             const nameDisp = document.getElementById('client-display-name');
             const exchangeUserStatus = document.getElementById('market-user-status');
             const exchangeBtnAuth = document.getElementById('btn-user-auth');
-
+            
             if (currentUser) {
                 if (notRegSec) notRegSec.classList.add('hidden');
                 if (regSec) regSec.classList.remove('hidden');
@@ -1724,7 +1668,7 @@
         function openUnifiedPortalModal(activeTab = 'client-tab') {
             document.getElementById('modal-unified-portal').classList.remove('hidden');
             switchUnifiedTab(activeTab);
-            switchMasterLoginMode('login'); // Reset master mode to standard login by default
+            switchMasterLoginMode('login');
         }
 
         function closeUnifiedPortalModal() {
@@ -1736,7 +1680,7 @@
             const masterBtn = document.getElementById('tab-btn-master');
             const clientTab = document.getElementById('portal-tab-client');
             const masterTab = document.getElementById('portal-tab-master');
-
+            
             if (tabId === 'client-tab') {
                 clientBtn.className = "flex-1 py-4 text-center border-b-2 border-bj-gold text-bj-gold font-bold transition-all focus:outline-none";
                 masterBtn.className = "flex-1 py-4 text-center border-b-2 border-transparent text-bj-textMuted transition-all focus:outline-none";
@@ -1754,7 +1698,7 @@
             const feed = document.getElementById('listings-feed');
             if (!feed) return;
             feed.innerHTML = '';
-
+            
             if (exchangeListings.length === 0) {
                 feed.innerHTML = `<div class="text-center font-mono text-xs text-bj-textMuted p-8">Aucun article n'est listé pour le moment. Soyez le premier à inscrire votre pièce !</div>`;
                 return;
@@ -1768,28 +1712,26 @@
                 div.innerHTML = `
                     <div class="space-y-1 text-center md:text-left w-full">
                         <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                            <span class="px-2 py-0.5 bg-black text-[9px] border border-bj-cyan/40 text-bj-cyan font-bold rounded">N° ${item.serial}</span>
+                            <span class="px-2 py-0.5 bg-black text-[9px] border border-bj-cyan/40 text-bj-cyan font-bold rounded font-mono">N° ${item.serial}</span>
                             <span class="text-[9px] text-bj-textMuted">${item.secretKey}</span>
-                            <span class="text-[9px] text-bj-gold">Propriétaire: @${item.seller}</span>
+                            <span class="text-[9px] text-bj-gold font-bold">Propriétaire: @${item.seller}</span>
                         </div>
                         <h4 class="text-sm font-black text-white uppercase tracking-wider">${item.modelName}</h4>
                         <p class="text-[10px] text-bj-textMuted">Régime de vente: <span class="text-white">${isAuction ? 'Enchère interactive' : 'Prix Fixe immédiat'}</span></p>
                     </div>
-
                     <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-end">
                         <div class="text-center sm:text-right min-w-[100px]">
-                            <span class="text-[9px] text-bj-textMuted uppercase block">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
+                            <span class="text-[9px] text-bj-textMuted uppercase block text-[8px]">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
                             <span class="text-lg font-black text-bj-gold">${item.currentPrice} €</span>
                             ${item.highestBidder ? `<span class="text-[8px] text-bj-cyan block">Offre par @${item.highestBidder}</span>` : ''}
                         </div>
-                        
                         <div class="w-full sm:w-auto">
                             ${isAuction ? `
-                                <button onclick="bidOnListing('${item.id}')" class="w-full sm:w-auto bg-bj-cyan text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all">
+                                <button onclick="bidOnListing('${item.id}')" class="w-full sm:w-auto bg-bj-cyan text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all font-mono">
                                     Enchérir (+20€)
                                 </button>
                             ` : `
-                                <button onclick="buyFixedListing('${item.id}')" class="w-full sm:w-auto bg-bj-gold text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all">
+                                <button onclick="buyFixedListing('${item.id}')" class="w-full sm:w-auto bg-bj-gold text-black font-extrabold px-4 py-2 rounded uppercase tracking-wider text-[10px] hover:bg-white transition-all font-mono">
                                     Acheter
                                 </button>
                             `}
@@ -1804,12 +1746,11 @@
             const modelId = document.getElementById('eval-model').value;
             const serialVal = parseInt(document.getElementById('eval-serial').value) || 1;
             const secretVal = document.getElementById('eval-secret').value.trim();
-
             const product = products.find(p => p.id === modelId) || products[0];
             if (!product) return;
-
+            
             if (secretVal.length < 5) {
-                showToast("Code invalide", "Veuillez entrer une clé d'authenticité correcte à l'intérieur de votre étiquette.", "error");
+                showToast("Code invalide", "Veuillez entrer une clé d'authenticité correcte.", "error");
                 return;
             }
 
@@ -1823,25 +1764,23 @@
                 hashVal += secretVal.charCodeAt(i);
             }
             const luxuryFluctuation = 1 + ((hashVal % 30) / 100); 
-
             const computedCote = Math.round(product.price * serialBonus * luxuryFluctuation);
             const deltaPercent = Math.round(((computedCote - product.price) / product.price) * 100);
-
             const code = generateLiveCertificate(serialVal);
+
             document.getElementById('eval-res-id').innerText = `${code}`;
             document.getElementById('eval-res-cote').innerText = `${computedCote} €`;
             
             const deltaEl = document.getElementById('eval-res-delta');
             if (deltaPercent >= 0) {
-                deltaEl.className = "text-[9px] font-mono text-emerald-400";
+                deltaEl.className = "text-[9px] font-mono text-emerald-400 font-bold";
                 deltaEl.innerText = `▲ +${deltaPercent}% d'appréciation (Cote Certifiée)`;
             } else {
-                deltaEl.className = "text-[9px] font-mono text-bj-red";
+                deltaEl.className = "text-[9px] font-mono text-bj-red font-bold";
                 deltaEl.innerText = `▼ ${deltaPercent}% (Cote Certifiée)`;
             }
-
             document.getElementById('eval-screen').classList.remove('hidden');
-            showToast("Authentification Terminée", "La rareté du modèle a été scrupuleusement vérifiée sur les registres.");
+            showToast("Authentification Terminée", "La rareté du modèle a été validée avec succès sur les registres.");
         }
 
         function bidOnListing(listingId) {
@@ -1850,12 +1789,11 @@
                 openUnifiedPortalModal('client-tab');
                 return;
             }
-
             const listing = exchangeListings.find(l => l.id === listingId);
             if (listing) {
                 listing.currentPrice += 20;
                 listing.highestBidder = currentUser.pseudonym;
-                safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+                localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                 renderListings();
                 showToast("Offre Enregistrée", `Vous êtes le meilleur enchérisseur à ${listing.currentPrice} € !`);
             }
@@ -1867,7 +1805,6 @@
                 openUnifiedPortalModal('client-tab');
                 return;
             }
-
             const listingIdx = exchangeListings.findIndex(l => l.id === listingId);
             if (listingIdx !== -1) {
                 const item = exchangeListings[listingIdx];
@@ -1876,7 +1813,7 @@
                 setTimeout(() => {
                     showToast("Félicitations !", `Vous êtes le nouveau propriétaire de la casquette N°${item.serial} !`);
                     exchangeListings.splice(listingIdx, 1);
-                    safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+                    localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                     renderListings();
                 }, 1500);
             }
@@ -1901,11 +1838,10 @@
             const secretVal = document.getElementById('listing-secret').value.trim().toUpperCase();
             const modeVal = document.getElementById('listing-mode').value;
             const priceVal = parseInt(document.getElementById('listing-price').value) || 250;
-
             const product = products.find(p => p.id === modelId) || products[0];
 
             if (!serialVal || secretVal.length < 5) {
-                showToast("Authenticité Invalide", "Impossible de valider la revente : numéro de série ou clé secrète manquant.", "error");
+                showToast("Authenticité Invalide", "Impossible de valider : numéro de série ou clé secrète manquant.", "error");
                 return;
             }
 
@@ -1924,7 +1860,7 @@
             };
 
             exchangeListings.unshift(newListing);
-            safeStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
+            localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             renderListings();
             closePostListingModal();
             showToast("Fiche mise en bourse", `Votre ${product.name} N°${serialVal} est en ligne !`);
@@ -1933,18 +1869,17 @@
         function slideToPage(pageIndex) {
             if (pageIndex < 0 || pageIndex >= totalPages) return;
             currentPage = pageIndex;
-
             const slider = document.getElementById('main-slider');
             if (slider) slider.style.transform = `translateX(-${currentPage * 20}%)`;
-
+            
             const needle = document.getElementById('tacho-needle');
             const digit = document.getElementById('tacho-digit');
             const progress = document.getElementById('slide-progress');
-
+            
             if (needle) needle.style.transform = `rotate(${angles[currentPage]}deg)`;
             if (digit) digit.innerText = `P${currentPage + 1}`;
             if (progress) progress.innerText = `PAGE : ${currentPage + 1} / 5`;
-
+            
             pageIds.forEach((id, i) => {
                 const navBtn = document.getElementById(`nav-${id}`);
                 if (navBtn) {
@@ -2001,7 +1936,6 @@
             
             const padSerial = String(serialInput).padStart(3, '0');
             const code = generateLiveCertificate(serialInput);
-
             const dispCode = document.getElementById('config-display-code');
             const boxSerial = document.getElementById('box-serial');
             if (dispCode) dispCode.innerText = code;
@@ -2013,14 +1947,13 @@
             if (!modelSelect) return;
             const modelId = modelSelect.value;
             const product = products.find(p => p.id === modelId) || products[0];
-
             if (!product) return;
 
             document.getElementById('box-price').innerText = `${product.price} €`;
             document.getElementById('box-title').innerText = product.name.split(' ')[0].toUpperCase();
             document.getElementById('box-weight').innerText = `WEIGHT: ${product.weight}G`;
-            document.getElementById('box-slogan').innerText = (product.slogan || "Aero-Couture").toUpperCase();
-
+            document.getElementById('box-slogan').innerText = (product.slogan || "Aero Couture").toUpperCase();
+            
             const container = document.getElementById('box-visual-container');
             if (product.image && product.image.trim() !== "") {
                 container.style.backgroundImage = `url('${product.image}')`;
@@ -2042,18 +1975,14 @@
             const serial = document.getElementById('config-serial').value;
             const selectEl = document.getElementById('config-model');
             const modelName = selectEl.options[selectEl.selectedIndex]?.text || "Modèle";
-
+            
             if (!name || !email) {
                 showToast("Fiches incomplètes", "Veuillez remplir votre Nom et votre Email pour soumettre la demande.", "error");
                 return;
             }
-
             showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
         }
 
-        /**
-         * Switches the Master login UI state (Login vs Forgot Password Recovery form)
-         */
         function switchMasterLoginMode(mode) {
             const loginSection = document.getElementById('master-login-fields');
             const forgotSection = document.getElementById('master-forgot-fields');
@@ -2064,7 +1993,6 @@
             if (mode === 'forgot') {
                 loginSection.classList.add('hidden');
                 forgotSection.classList.remove('hidden');
-                // Reset recovery outputs
                 telemetryBox.classList.add('hidden');
                 mailtoAnchor.classList.add('hidden');
                 relayButton.classList.remove('hidden');
@@ -2075,31 +2003,27 @@
             }
         }
 
-        /**
-         * Trigger cybernetic simulation logs & prepare the native Mailto Dispatch Link
-         */
         function triggerSecureSMTPRelay() {
             const emailInput = document.getElementById('forgot-email').value.trim();
             if (!emailInput || !emailInput.includes('@')) {
-                showToast("Email invalide", "Veuillez saisir une adresse email de recouvrement correcte.", "error");
+                showToast("Email invalide", "Veuillez saisir une adresse email correcte.", "error");
                 return;
             }
-
+            
             const telemetryBox = document.getElementById('forgot-telemetry-box');
             const logsContainer = document.getElementById('forgot-telemetry-logs');
             const relayButton = document.getElementById('btn-forgot-relay');
             const mailtoAnchor = document.getElementById('forgot-mailto-anchor');
-
-            // Set up visuals
+            
             telemetryBox.classList.remove('hidden');
             relayButton.classList.add('hidden');
             logsContainer.innerHTML = '';
-
+            
             const logs = [
                 "SYSTEM: Initialisation de l'enveloppe cryptographique...",
                 "SECURE_GATEWAY: Connexion SMTP au relais d'écurie en cours...",
                 "SECURE_GATEWAY: Handshake SSL/TLS 1.3 réussi avec AES-GCM-256.",
-                "SMTP_RELAY: Résolution DNS pour l'hote propriétaire...",
+                "SMTP_RELAY: Résolution DNS pour l'hôte propriétaire...",
                 "ENCRYPT: Récupération du jeton Master temporaire...",
                 "SMTP_RELAY: Payload de recouvrement prêt pour envoi.",
                 "SMTP_RELAY: Génération finale du draft mail Zero-Trust."
@@ -2115,83 +2039,71 @@
                     index++;
                 } else {
                     clearInterval(logInterval);
-                    
-                    // Finalize routing
                     const successDiv = document.createElement('div');
                     successDiv.className = "text-emerald-400 font-bold mt-1";
                     successDiv.innerText = "⚡ SUCCÈS: ROUTAGE PRÊT. CLIQUEZ SUR LE BOUTON OR POUR DISPATCHER.";
                     logsContainer.appendChild(successDiv);
                     
-                    // Retrieve actual stored password to inject dynamically inside the mailto link!
-                    const currentPwd = safeStorage.getItem('bj_master_password') || 'MASTER2026';
-                    
-                    // Setup mailto hyperlink attributes
-                    const subject = encodeURIComponent("🚨 Benzjames Écurie - Recouvrement du Code Master");
+                    const currentPwd = localStorage.getItem('bj_master_password') || 'Master2026';
+                    const subject = encodeURIComponent("Benzjames Écurie - Recouvrement du Code Master");
                     const body = encodeURIComponent(
                         "=== PROTOCOLE BENZJAMES SECURE RECOVERY ===\n\n" +
                         "Bonjour Chef d'écurie,\n\n" +
-                        "Une requête de recouvrement pour votre Code Secret Master a été initiée depuis votre terminal.\n\n" +
-                        "Voici vos accès actifs :\n" +
+                        "Voici vos accès actuels :\n" +
                         "• Identifiant : DENIS_MASTER\n" +
                         "• Code Secret d'accès : " + currentPwd + "\n\n" +
-                        "Conseil de sécurité : Une fois connecté, vous pouvez à tout moment modifier ou renforcer ce code d'accès depuis votre panneau de contrôle Master.\n\n" +
                         "Fidèlement,\n" +
                         "L'équipe Benzjames Tech Support Team."
                     );
                     
                     mailtoAnchor.href = `mailto:${emailInput}?subject=${subject}&body=${body}`;
                     mailtoAnchor.classList.remove('hidden');
-                    
                     showToast("Routage SMTP Réussi", "Cliquez sur 'Ouvrir ma Messagerie Mail' pour valider l'envoi de votre code.", "info");
                 }
             }, 550);
         }
 
-        /**
-         * Save master's fallback email to LocalStorage
-         */
         function saveMasterRecoveryEmail() {
             const email = document.getElementById('harden-recovery-email').value.trim();
             if (!email || !email.includes('@')) {
-                showToast("Email invalide", "Format d'adresse de messagerie non supporté.", "error");
+                showToast("Email invalide", "Format d'adresse non supporté.", "error");
                 return;
             }
-            safeStorage.setItem('bj_master_recovery_email', email);
+            localStorage.setItem('bj_master_recovery_email', email);
             showToast("Recouvrement mis à jour", `L'adresse '${email}' a été associée comme relais principal.`);
         }
 
         function submitLogin() {
-            const pass = document.getElementById('login-password').value;
-            const expectedPwd = safeStorage.getItem('bj_master_password') || 'MASTER2026';
-
-            if (pass === expectedPwd) {
+            const pass = document.getElementById('login-password').value.trim();
+            const expectedPwd = localStorage.getItem('bj_master_password') || 'Master2026';
+            
+            if (pass.toLowerCase() === expectedPwd.toLowerCase()) {
                 isMaster = true;
-                safeStorage.setItem('bj_master_logged', 'true');
+                localStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
                 closeUnifiedPortalModal();
-                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Cliquez directement sur n'importe quel bloc de texte pour le modifier !", "success");
+                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Cliquez directement sur n'importe quel bloc de texte ou image pour modifier !", "success");
             } else {
-                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejoette l'identifiant.", "error");
+                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejette l'identifiant.", "error");
             }
         }
 
         function logoutMaster() {
             isMaster = false;
-            safeStorage.setItem('bj_master_logged', 'false');
+            localStorage.setItem('bj_master_logged', 'false');
             updateMasterModeUI();
-            showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.", "success");
+            showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.");
         }
 
         function hardenMasterPassword() {
             const newPwd = document.getElementById('harden-new-pwd').value.trim();
-            if (newPwd.length < 6) {
-                showToast("Code trop simple", "Le nouveau mot de passe doit contenir au moins 6 caractères.", "error");
+            if (newPwd.length < 4) {
+                showToast("Code trop simple", "Le mot de passe doit contenir au moins 4 caractères.", "error");
                 return;
             }
-
-            safeStorage.setItem('bj_master_password', newPwd);
+            localStorage.setItem('bj_master_password', newPwd);
             document.getElementById('harden-new-pwd').value = "";
-            showToast("Sécurité Renforcée", "Le nouveau code fort d'écurie a été configuré avec succès.", "success");
+            showToast("Sécurité Renforcée", "Le nouveau code d'accès d'écurie a été configuré avec succès.", "success");
         }
 
         function updateMasterModeUI() {
@@ -2218,16 +2130,14 @@
         function handleVogueImageSelect(e, imgKey) {
             const file = e.target.files[0];
             if (!file) return;
-
-            if (file.size > 1.5 * 1024 * 1024) {
-                showToast("Fichier lourd", "Veuillez choisir une image de moins de 1.5 Mo.", "error");
+            if (file.size > 2.5 * 1024 * 1024) {
+                showToast("Fichier lourd", "Veuillez choisir une image de moins de 2.5 Mo.", "error");
                 return;
             }
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 const b64 = event.target.result;
-                safeStorage.setItem(imgKey, b64);
+                localStorage.setItem(imgKey, b64);
                 
                 if (imgKey === 'bj_vogue_img1') {
                     document.getElementById('vogue-img-1').src = b64;
@@ -2242,18 +2152,15 @@
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            if (file.size > 1.5 * 1024 * 1024) {
-                showToast("Fichier trop lourd", "Veuillez choisir une image de moins de 1.5 Mo.", "error");
+            if (file.size > 2.5 * 1024 * 1024) {
+                showToast("Fichier trop lourd", "Veuillez choisir une image de moins de 2.5 Mo.", "error");
                 e.target.value = "";
                 return;
             }
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 tempImageData = event.target.result;
                 document.getElementById('file-upload-label').innerText = file.name;
-                
                 const preview = document.getElementById('modal-image-preview');
                 preview.innerHTML = `<img src="${tempImageData}" class="w-full h-full object-cover">`;
             };
@@ -2264,7 +2171,7 @@
             tempVideoFile = null;
             document.getElementById('video-url-input').value = "";
             document.getElementById('video-file-picker').value = "";
-            document.getElementById('video-upload-label').innerText = "Sélectionner une vidéo (Max 100 Mo)";
+            document.getElementById('video-upload-label').innerText = "Sélectionner une vidéo (Max 120 Mo)";
             document.getElementById('modal-video-edit').classList.remove('hidden');
         }
 
@@ -2275,13 +2182,11 @@
         function handleVideoFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             if (file.size > 120 * 1024 * 1024) {
                 showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'appareil.", "error");
                 e.target.value = "";
                 return;
             }
-
             tempVideoFile = file;
             document.getElementById('video-upload-label').innerText = file.name + " (" + (file.size / (1024 * 1024)).toFixed(1) + " Mo)";
             showToast("Vidéo chargée", "Le fichier vidéo est prêt à être appliqué.", "success");
@@ -2298,16 +2203,15 @@
                 const videoUrl = URL.createObjectURL(tempVideoFile);
                 source.src = videoUrl;
                 player.load();
-                player.play().catch(e => console.log("Playback wait"));
-                showToast("Écran configuré", "La vidéo haute définition a été enregistrée de manière permanente.", "success");
+                player.play().catch(e => console.log("Playback delay"));
+                showToast("Écran configuré", "La vidéo haute définition a été enregistrée.", "success");
             } else if (urlInput) {
                 await saveVideoToDB('home_video', urlInput);
                 source.src = urlInput;
                 player.load();
-                player.play().catch(e => console.log("Playback failed"));
+                player.play().catch(e => console.log("Playback delay link"));
                 showToast("Écran configuré", "Le lien vidéo externe a été mis à jour.", "success");
             }
-
             closeVideoEditModal();
         }
 
@@ -2326,10 +2230,9 @@
             document.getElementById('prod-weight').value = '42';
             
             tempImageData = ""; 
-            
             const preview = document.getElementById('modal-image-preview');
             preview.innerHTML = `<span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>`;
-
+            
             if (productId) {
                 titleEl.innerText = "Modifier l'Article Benzjames";
                 const p = products.find(prod => prod.id === productId);
@@ -2350,7 +2253,6 @@
             } else {
                 titleEl.innerText = "Ajouter une Pièce de Collection";
             }
-
             modal.classList.remove('hidden');
         }
 
@@ -2399,10 +2301,10 @@
                     badge, 
                     weight 
                 });
-                showToast("Nouvel Article", `Le modèle ${name} est disponible.`);
+                showToast("Nouvel Article", `Le modèle ${name} est désormais disponible.`);
             }
 
-            safeStorage.setItem('bj_products', JSON.stringify(products));
+            localStorage.setItem('bj_products', JSON.stringify(products));
             renderApp();
             closeProductModal();
         }
@@ -2414,7 +2316,7 @@
             document.getElementById('edit-target-id').value = targetId;
             const container = document.getElementById('text-edit-input-container');
             container.innerHTML = '';
-
+            
             if (type === 'textarea') {
                 container.innerHTML = `
                     <textarea id="edit-text-value" rows="5" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm leading-relaxed">${currentText}</textarea>
@@ -2424,7 +2326,6 @@
                     <input type="text" id="edit-text-value" value="${currentText}" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
                 `;
             }
-
             document.getElementById('modal-text-edit').classList.remove('hidden');
         }
 
@@ -2436,11 +2337,10 @@
             const targetId = document.getElementById('edit-target-id').value;
             const newVal = document.getElementById('edit-text-value').value;
             pageTexts[targetId] = newVal;
-
-            safeStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+            localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             renderApp();
             closeTextEditModal();
-            showToast("Texte Mis à Jour", "Le texte a été appliqué de manière permanente.");
+            showToast("Texte Mis à Jour", "La modification de texte a été enregistrée.");
         }
 
         let touchStartX = 0;
@@ -2462,7 +2362,6 @@
         function analyzeSwipe() {
             const xDiff = touchStartX - touchEndX;
             const yDiff = touchStartY - touchEndY;
-
             if (Math.abs(xDiff) > Math.abs(yDiff)) {
                 if (Math.abs(xDiff) > 60) { 
                     if (xDiff > 0 && currentPage < totalPages - 1) {
