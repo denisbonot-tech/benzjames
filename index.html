@@ -50,7 +50,7 @@
                 linear-gradient(to right, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
                 linear-gradient(90deg, transparent 18%, rgba(6, 182, 212, 0.18) 18.5%, rgba(6, 182, 212, 0.18) 19%, transparent 19.5%, transparent 46%, rgba(212, 175, 55, 0.15) 46.5%, rgba(212, 175, 55, 0.15) 47%, transparent 47.5%, transparent 59%, rgba(212, 175, 55, 0.15) 59.5%, rgba(212, 175, 55, 0.15) 60%, transparent 60.5%, transparent 71%, rgba(6, 182, 212, 0.22) 71.5%, rgba(6, 182, 212, 0.22) 72%, transparent 72.5%, transparent 84%, rgba(6, 182, 212, 0.22) 84.5%, rgba(6, 182, 212, 0.22) 85%, transparent 85.5%);
-            background-size: 55px 55px, 55px 55px, 100% 100%, 100% 100__;
+            background-size: 55px 55px, 55px 55px, 100% 100%, 100% 100%;
         }
 
         /* Damier de course en fondu soutenu */
@@ -457,13 +457,14 @@
                             </h2>
                         </div>
                         <div class="text-right text-xs font-mono text-bj-textMuted">
-                            <span>INSÉREZ DES VIDÉOS OU SONS AVEC LE SON EN DIRECT</span>
+                            <span class="block text-bj-gold">★ TRIÉ DIRECTEMENT PAR POPULARITÉ DES LIKES ★</span>
+                            <span>Cliquez sur l'épreuve (Mode Master) pour ajuster chronos & écritures</span>
                         </div>
                     </div>
 
-                    <!-- Courses Grid -->
+                    <!-- Courses Grid ordered dynamically by sum of likes -->
                     <div id="races-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Dynamic Course Cards populated via JS -->
+                        <!-- Dynamic Course Cards populated & sorted via JS -->
                     </div>
 
                     <!-- RACING CHAT ENCART -->
@@ -950,13 +951,46 @@
         </div>
     </div>
 
+    <!-- DYNAMIC RACE EDITING MODAL (NEW) -->
+    <div id="modal-race-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+        <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-xl space-y-6 my-8">
+            <div class="flex justify-between items-center border-b border-bj-cyan/15 pb-4">
+                <h3 class="text-xl font-bold text-white uppercase font-mono">Modifier l'Épreuve Mythique</h3>
+                <button onclick="closeRaceEditModal()" class="text-bj-textMuted hover:text-white text-xl font-mono">&times;</button>
+            </div>
+            <input type="hidden" id="edit-race-id">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Nom de la Course</label>
+                    <input type="text" id="race-edit-name" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-semibold">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Chrono / Record (Couleur Or/Jaune)</label>
+                    <input type="text" id="race-edit-record" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-bj-gold focus:outline-none focus:border-bj-cyan font-bold">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Localisation géographique</label>
+                    <input type="text" id="race-edit-location" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-semibold">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Description courte</label>
+                    <textarea id="race-edit-desc" rows="3" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan leading-relaxed"></textarea>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-4 border-t border-bj-cyan/15 font-mono">
+                <button onclick="closeRaceEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
+                <button onclick="saveRaceEdit()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Enregistrer l'Épreuve</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast System -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
 
     <!-- Footer -->
     <footer class="fixed bottom-0 left-0 right-0 z-40 border-t border-bj-cyan/10 py-4 px-6 sm:px-12 bg-bj-black text-center text-[10px] text-bj-textMuted flex flex-col sm:flex-row justify-between items-center gap-2 font-mono">
         <div class="flex items-center gap-4">
-            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER SLIDER V2.5 // MASTER_SOFT</span>
+            <span class="text-[9px] tracking-widest text-bj-cyan uppercase">BENZJAMES HYPER SLIDER V2.6 // MASTER_SOFT</span>
             <span id="slide-progress" class="text-bj-red font-bold">PAGE: 1/5</span>
         </div>
         <div class="flex items-center gap-4">
@@ -2125,8 +2159,9 @@
                 isMaster = true;
                 localStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
+                renderRaces(); // update race elements with master triggers
                 closeUnifiedPortalModal();
-                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Cliquez directement sur n'importe quel bloc de texte ou image pour modifier !", "success");
+                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Vous pouvez éditer les courses du Top Speed (chronos, descriptions, noms) !", "success");
             } else {
                 showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejette l'identifiant.", "error");
             }
@@ -2136,6 +2171,7 @@
             isMaster = false;
             localStorage.setItem('bj_master_logged', 'false');
             updateMasterModeUI();
+            renderRaces(); // update race elements to lock master triggers
             showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.");
         }
 
@@ -2369,21 +2405,63 @@
             showToast("Texte Mis à Jour", "La modification de texte a été enregistrée.");
         }
 
-        // Populate and Render Races inside top-speed section
+        function openRaceEditModal(raceId) {
+            const race = racesData.find(r => r.id === raceId);
+            if (!race) return;
+
+            document.getElementById('edit-race-id').value = raceId;
+            document.getElementById('race-edit-name').value = race.name;
+            document.getElementById('race-edit-record').value = race.record;
+            document.getElementById('race-edit-location').value = race.location;
+            document.getElementById('race-edit-desc').value = race.desc;
+
+            document.getElementById('modal-race-edit').classList.remove('hidden');
+        }
+
+        function closeRaceEditModal() {
+            document.getElementById('modal-race-edit').classList.add('hidden');
+        }
+
+        function saveRaceEdit() {
+            const id = document.getElementById('edit-race-id').value;
+            const name = document.getElementById('race-edit-name').value.trim();
+            const record = document.getElementById('race-edit-record').value.trim();
+            const location = document.getElementById('race-edit-location').value.trim();
+            const desc = document.getElementById('race-edit-desc').value.trim();
+
+            if (!name || !record || !location) {
+                showToast("Formulaire Incomplet", "Veuillez remplir le nom, le record (jaune) et la localisation.", "error");
+                return;
+            }
+
+            const idx = racesData.findIndex(r => r.id === id);
+            if (idx !== -1) {
+                racesData[idx].name = name;
+                racesData[idx].record = record;
+                racesData[idx].location = location;
+                racesData[idx].desc = desc;
+
+                localStorage.setItem('bj_races_data', JSON.stringify(racesData));
+                renderRaces();
+                closeRaceEditModal();
+                showToast("Épreuve mise à jour", `Les données pour "${name}" ont été sauvegardées.`, "success");
+            }
+        }
+
         function renderRaces() {
             const container = document.getElementById('races-container');
             if (!container) return;
             container.innerHTML = "";
 
-            racesData.forEach(race => {
+            // Dynamic Sorting by likes sum (descending order)
+            const sortedRaces = [...racesData].sort((a, b) => b.likes - a.likes);
+
+            sortedRaces.forEach((race, index) => {
                 const card = document.createElement('div');
-                card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden";
+                card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.1)]";
                 
-                // Card header section
-                let mediaSlotHTML = "";
-                
-                // Let's get persistent media for this race if uploaded
-                mediaSlotHTML = `
+                // Card media slots
+                let mediaSlotHTML = `
                     <div id="media-container-${race.id}" class="aspect-video bg-neutral-950 border border-white/5 rounded-xl relative overflow-hidden flex flex-col items-center justify-center p-2 mb-4">
                         <div id="visualizer-wrapper-${race.id}" class="hidden absolute inset-0 bg-neutral-950 flex flex-col items-center justify-center z-10">
                             <!-- Visualizer Audio frequency simulated bar wave -->
@@ -2423,16 +2501,35 @@
                     `;
                 });
 
+                // Rendering the card body
+                // Added click interactions to texts if master is active, plus an Edit button
                 card.innerHTML = `
                     <div>
-                        <div class="flex justify-between items-start gap-2 mb-2 border-b border-bj-border pb-2">
-                            <div>
-                                <h3 class="text-sm font-extrabold text-white uppercase tracking-wider italic">${race.name}</h3>
-                                <p class="text-[9px] text-bj-cyan uppercase">${race.location}</p>
-                            </div>
-                            <span class="text-[9px] text-bj-gold border border-bj-gold/20 bg-bj-gold/5 px-2 py-0.5 rounded font-bold">${race.record}</span>
+                        <!-- POSITION BADGE (Based on likes ranking) -->
+                        <div class="absolute top-0 left-0 bg-bj-cyan/10 border-b border-r border-bj-cyan/30 px-2.5 py-1 text-[9px] font-bold text-bj-cyan tracking-widest font-mono select-none z-20">
+                            RANK #${index + 1}
                         </div>
-                        <p class="text-[10px] text-bj-textMuted mb-4">${race.desc}</p>
+
+                        <!-- MASTER EDITION BUTTON -->
+                        ${isMaster ? `
+                            <button onclick="openRaceEditModal('${race.id}')" class="absolute top-2 right-2 bg-bj-gold text-black hover:bg-white px-2 py-1 rounded text-[9px] font-bold tracking-wider uppercase shadow-md transition-all z-30 font-mono">
+                                EDIT
+                            </button>
+                        ` : ''}
+
+                        <!-- CLICKABLE CONTENT SECTION FOR MASTER -->
+                        <div class="pt-5 pb-2 border-b border-bj-border mb-2 relative ${isMaster ? 'hover:outline hover:outline-dashed hover:outline-bj-gold/40 cursor-pointer rounded px-1' : ''}" onclick="${isMaster ? `openRaceEditModal('${race.id}')` : ''}">
+                            <div class="flex justify-between items-start gap-2">
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-white uppercase tracking-wider italic leading-tight">${race.name}</h3>
+                                    <p class="text-[9px] text-bj-cyan uppercase mt-0.5">${race.location}</p>
+                                </div>
+                                <span class="text-[9px] text-bj-gold border border-bj-gold/20 bg-bj-gold/5 px-2 py-0.5 rounded font-bold whitespace-nowrap" title="Record de course (Jaune)">
+                                    ${race.record}
+                                </span>
+                            </div>
+                            <p class="text-[10px] text-bj-textMuted mt-3 leading-relaxed">${race.desc}</p>
+                        </div>
                         
                         ${mediaSlotHTML}
 
@@ -2446,11 +2543,11 @@
 
                         <!-- Interaction controls -->
                         <div class="flex justify-between items-center text-xs pt-2 border-t border-bj-border/30 mb-4">
-                            <button onclick="likeRace('${race.id}')" class="flex items-center gap-1 hover:text-bj-red text-bj-textMuted transition-all">
-                                <span class="text-base text-bj-red">♥</span> 
+                            <button onclick="likeRace('${race.id}')" class="flex items-center gap-1 hover:text-bj-red text-bj-textMuted transition-all bg-black/30 border border-white/5 px-3 py-1.5 rounded-lg">
+                                <span class="text-base text-bj-red animate-pulse">♥</span> 
                                 <span id="likes-count-${race.id}" class="font-bold text-white">${race.likes} Likes</span>
                             </button>
-                            <span class="text-[8px] text-bj-textMuted uppercase">// CANAL PUBLIC</span>
+                            <span class="text-[8px] text-bj-textMuted uppercase font-mono tracking-widest">// GLOBAL RECORD</span>
                         </div>
 
                         <!-- Comments Board -->
@@ -2582,15 +2679,18 @@
             }
         }
 
-        // Like handling
+        // Like handling with dynamic real-time sorting
         function likeRace(raceId) {
             const race = racesData.find(r => r.id === raceId);
             if (!race) return;
 
             race.likes++;
             localStorage.setItem('bj_races_data', JSON.stringify(racesData));
-            document.getElementById(`likes-count-${raceId}`).innerText = `${race.likes} Likes`;
-            showToast("Soutien d'Écurie", "Vote de performance enregistré !", "success");
+            
+            // Recalculating order and rendering elements again dynamically
+            renderRaces();
+            
+            showToast("Soutien d'Écurie", `Vote de performance enregistré ! Le classement Top Speed a été mis à jour en temps réel.`, "success");
         }
 
         // Add Comment
