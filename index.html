@@ -244,11 +244,16 @@
             <!-- Contenu de l'Intro -->
             <div class="relative z-10 flex flex-col justify-between h-full text-center">
                 <!-- En-tête -->
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center gap-2">
                     <span class="text-[8px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.6]</span>
-                    <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-3 py-1.5 rounded font-mono text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
-                        🛠 Configurer l'Intro
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2.5 py-1.5 rounded font-mono text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
+                            <span id="intro-sound-icon">🔈 Activer le Son</span>
+                        </button>
+                        <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-3 py-1.5 rounded font-mono text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
+                            🛠 Configurer l'Intro
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Message central en grand (Configurable) -->
@@ -1259,11 +1264,15 @@
         function unlockVideoAutoplay() {
             const mainVideo = document.getElementById('hud-video-player');
             const rightVideo = document.getElementById('right-custom-video');
+            const introVideo = document.getElementById('intro-video-player');
             if (mainVideo) {
                 mainVideo.play().catch(() => {});
             }
             if (rightVideo && !rightVideo.classList.contains('hidden')) {
                 rightVideo.play().catch(() => {});
+            }
+            if (introVideo) {
+                introVideo.play().catch(() => {});
             }
             
             // Unmute Top Speed videos playing
@@ -1271,6 +1280,27 @@
             activeVideos.forEach(v => {
                 if(!v.paused) v.play().catch(() => {});
             });
+        }
+
+        /**
+         * Permet d'activer/couper le son de la vidéo de présentation d'introduction
+         */
+        function toggleIntroMute() {
+            const introPlayer = document.getElementById('intro-video-player');
+            const icon = document.getElementById('intro-sound-icon');
+            if (!introPlayer) return;
+
+            if (introPlayer.muted) {
+                introPlayer.muted = false;
+                introPlayer.volume = 1.0;
+                introPlayer.play().catch(() => {});
+                if (icon) icon.innerText = "🔊 Son Actif";
+                showToast("Son Intro Activé", "Le flux audio de la présentation d'introduction a été activé.", "success");
+            } else {
+                introPlayer.muted = true;
+                if (icon) icon.innerText = "🔈 Activer le Son";
+                showToast("Son Intro Coupé", "Le flux audio de l'introduction a été mis en sourdine.", "info");
+            }
         }
 
         // Cache-cache de l'intro et déploiement du site
