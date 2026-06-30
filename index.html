@@ -166,9 +166,112 @@
             display: inline-block;
             animation: tickerEffect 30s linear infinite;
         }
+
+        /* --- EFFETS ET ANIMATIONS DE L'INTRODUCTION --- */
+        #intro-overlay {
+            perspective: 1500px;
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Effet "Feuille pliée en 3D se dépliant" */
+        #intro-sheet {
+            transform-style: preserve-3d;
+            transform: rotateX(85deg) rotateY(15deg) scale(0.1);
+            transform-origin: center center;
+            opacity: 0;
+            transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-in-out;
+        }
+        #intro-sheet.unfolded {
+            transform: rotateX(0deg) rotateY(0deg) scale(1);
+            opacity: 1;
+        }
+
+        /* Animation de balayage des Lasers */
+        @keyframes laserSweepHorizontal {
+            0% { transform: translateX(-120%) rotate(-35deg); opacity: 0; }
+            8% { opacity: 0.8; }
+            50% { opacity: 1; }
+            92% { opacity: 0.8; }
+            100% { transform: translateX(180%) rotate(-35deg); opacity: 0; }
+        }
+        @keyframes laserSweepVertical {
+            0% { transform: translateY(-120%) rotate(55deg); opacity: 0; }
+            12% { opacity: 0.9; }
+            50% { opacity: 1; }
+            88% { opacity: 0.9; }
+            100% { transform: translateY(180%) rotate(55deg); opacity: 0; }
+        }
+
+        .laser-beam-blue {
+            position: absolute;
+            background: linear-gradient(to right, transparent, rgba(6, 182, 212, 0.85), transparent);
+            width: 8px;
+            height: 250%;
+            filter: blur(4px) drop-shadow(0 0 12px #06b6d4);
+            animation: laserSweepHorizontal 5.5s infinite ease-in-out;
+        }
+        .laser-beam-white {
+            position: absolute;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.95), transparent);
+            width: 5px;
+            height: 250%;
+            filter: blur(3px) drop-shadow(0 0 10px #ffffff);
+            animation: laserSweepVertical 4.2s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade" onclick="unlockVideoAutoplay()">
+
+    <!-- INTRO DE PRÉSENTATION CINÉMATIQUE -->
+    <div id="intro-overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
+        <!-- Balayeurs de Lasers Bleu et Blanc -->
+        <div id="laser-container" class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+            <div class="laser-beam-blue absolute left-[-20%] top-[-75%]"></div>
+            <div class="laser-beam-white absolute left-[20%] top-[-75%]" style="animation-delay: 1.5s; animation-duration: 4.8s;"></div>
+            <div class="laser-beam-blue absolute left-[50%] top-[-75%]" style="animation-delay: 2.8s; animation-duration: 6.2s;"></div>
+            <div class="laser-beam-white absolute left-[85%] top-[-75%]" style="animation-delay: 0.7s; animation-duration: 3.8s;"></div>
+        </div>
+
+        <!-- Feuille se dépliant en 3D -->
+        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-6 sm:p-8">
+            <!-- Vidéo de fond de l'Intro -->
+            <div class="absolute inset-0 z-0 bg-neutral-950">
+                <video id="intro-video-player" class="w-full h-full object-cover opacity-50" autoplay loop muted playsinline>
+                    <source id="intro-video-src" src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            </div>
+
+            <!-- Contenu de l'Intro -->
+            <div class="relative z-10 flex flex-col justify-between h-full text-center">
+                <!-- En-tête -->
+                <div class="flex justify-between items-center">
+                    <span class="text-[8px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.6]</span>
+                    <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-3 py-1.5 rounded font-mono text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
+                        🛠 Configurer l'Intro
+                    </button>
+                </div>
+
+                <!-- Message central en grand (Configurable) -->
+                <div class="my-auto space-y-4 px-2 sm:px-6">
+                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight text-4xl sm:text-7xl font-black uppercase tracking-[0.25em] text-white drop-shadow-[0_0_25px_rgba(6,182,212,0.7)] font-mono leading-none">
+                        BENZJAMES
+                    </h1>
+                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.4em] font-semibold">
+                        L'ÉCURIE HIGH-TECH EN MOUVEMENT
+                    </p>
+                </div>
+
+                <!-- Actions de validation et de démarrage -->
+                <div class="flex flex-col items-center gap-2">
+                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-12 py-4 rounded-xl text-xs uppercase tracking-[0.4em] transition-all shadow-[0_0_35px_rgba(6,182,212,0.6)] transform hover:scale-102">
+                        ENTRER DANS L'ÉCURIE
+                    </button>
+                    <span class="text-[8px] font-mono text-bj-textMuted tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
@@ -895,6 +998,44 @@
         </div>
     </div>
 
+    <!-- CONFIGURATION INTRO VIDEO MODAL (NEW) -->
+    <div id="modal-intro-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
+            <div class="font-mono flex justify-between items-center border-b border-bj-cyan/15 pb-4">
+                <div>
+                    <span class="text-xs text-bj-gold uppercase tracking-widest">// SECURE_CONFIG</span>
+                    <h3 class="text-lg font-bold text-white uppercase">Configurer la Vidéo de Présentation</h3>
+                </div>
+                <button onclick="closeIntroConfigModal()" class="text-bj-textMuted hover:text-white text-xl font-mono">&times;</button>
+            </div>
+            <div class="space-y-4 font-mono text-xs text-bj-textMuted">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A: Coller un lien MP4 en ligne</label>
+                    <input type="text" id="intro-video-url-input" placeholder="https://example.com/intro.mp4" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
+                </div>
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-bj-cyan/15"></div>
+                    <span class="flex-shrink mx-4 text-[9px] uppercase tracking-widest">OU</span>
+                    <div class="flex-grow border-t border-bj-cyan/15"></div>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer un fichier vidéo local (sauvegardé sur l'appareil)</label>
+                    <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
+                        <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-[9px] text-white font-mono uppercase tracking-widest text-center" id="intro-video-upload-label">Sélectionner une vidéo d'intro</span>
+                        <input type="file" id="intro-video-file-picker" accept="video/*" class="hidden" onchange="handleIntroVideoFileSelect(event)">
+                    </label>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2 font-mono">
+                <button onclick="closeIntroConfigModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
+                <button onclick="saveIntroVideoEdit()" class="w-1/2 bg-bj-cyan hover:bg-white text-black py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
     <!-- RIGHT SIDE CUSTOM MEDIA CONFIGURATION MODAL -->
     <div id="modal-right-media" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
@@ -951,7 +1092,7 @@
         </div>
     </div>
 
-    <!-- DYNAMIC RACE EDITING MODAL (NEW) -->
+    <!-- DYNAMIC RACE EDITING MODAL -->
     <div id="modal-race-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-xl space-y-6 my-8">
             <div class="flex justify-between items-center border-b border-bj-cyan/15 pb-4">
@@ -1058,7 +1199,7 @@
             }
         }
 
-        // Débloque l'autoplay de secours au premier clic sur l'écran
+        // Débloque l'autoplay de secours au premier clic sur l'écran ou à l'ouverture du site
         function unlockVideoAutoplay() {
             const mainVideo = document.getElementById('hud-video-player');
             const rightVideo = document.getElementById('right-custom-video');
@@ -1074,6 +1215,25 @@
             activeVideos.forEach(v => {
                 if(!v.paused) v.play().catch(() => {});
             });
+        }
+
+        // Cache-cache de l'intro et déploiement du site
+        function dismissIntro() {
+            const introOverlay = document.getElementById('intro-overlay');
+            const introPlayer = document.getElementById('intro-video-player');
+            
+            if (introOverlay) {
+                introOverlay.style.opacity = '0';
+                introOverlay.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    introOverlay.classList.add('hidden');
+                    if (introPlayer) introPlayer.pause();
+                }, 1000);
+            }
+            
+            // On lance l'autoplaying et le son global
+            unlockVideoAutoplay();
+            showToast("Système Initialisé", "Bienvenue sur Benzjames. Télémétrie connectée.", "success");
         }
 
         const DEFAULT_PRODUCTS = [
@@ -1203,6 +1363,7 @@
         let isMaster = false;
         let tempImageData = "";
         let tempVideoFile = null;
+        let tempIntroVideoFile = null;
         let tempRightMediaFile = null;
         let currentUser = null;
         let activeCart = [];
@@ -1211,75 +1372,26 @@
         const pageIds = ['page-home', 'page-collection', 'page-exchange', 'page-topspeed', 'page-preorder'];
         const angles = [-110, -55, 0, 55, 110];
 
-        // System state for sound visualizers
-        let audioContexts = {};
-        let audioAnalyzers = {};
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu-overlay');
-            const isHidden = menu.classList.contains('pointer-events-none');
-            if (isHidden) {
-                menu.classList.remove('pointer-events-none');
-                menu.classList.remove('translate-x-full', 'opacity-0');
-                document.body.style.overflow = 'hidden';
-            } else {
-                menu.classList.add('translate-x-full', 'opacity-0');
-                menu.classList.add('pointer-events-none');
-                document.body.style.overflow = "";
-            }
-        }
-
-        function navigateToMobile(pageId) {
-            navigateTo(pageId);
-            toggleMobileMenu();
-        }
-
-        function showToast(title, message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            let iconColor = 'text-bj-gold';
-            let borderStyle = 'border-bj-cyan/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]';
-            
-            if (type === 'error') {
-                iconColor = 'text-bj-red';
-                borderStyle = 'border-bj-red/30 shadow-[0_0_15px_rgba(225,6,0,0.15)]';
-            } else if (type === 'info') {
-                iconColor = 'text-bj-cyan';
-                borderStyle = 'border-bj-cyan/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]';
-            }
-            
-            toast.className = `bg-bj-dark border ${borderStyle} p-4 rounded-xl flex items-start gap-3 shadow-2xl transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto max-w-sm z-50 font-mono text-xs`;
-            toast.innerHTML = `
-                <div class="p-1 rounded-md bg-black/40 ${iconColor}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div class="flex-grow space-y-0.5">
-                    <strong class="text-xs text-white block uppercase tracking-wider font-bold">${title}</strong>
-                    <p class="text-[11px] text-bj-textMuted leading-normal">${message}</p>
-                </div>
-                <button onclick="this.parentElement.remove()" class="text-bj-textMuted hover:text-white font-mono text-xs">&times;</button>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.remove('opacity-0', 'translate-y-2');
-            }, 10);
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => { toast.remove(); }, 300);
-            }, 5000);
-        }
-
-        let logoClicks = 0;
-        function handleLogoClick() {
-            logoClicks++;
-            if (logoClicks >= 5) {
-                logoClicks = 0;
-                openUnifiedPortalModal('master-tab');
-                showToast("Accès Écurie", "Protocole de contournement sécurisé master initié.");
-            }
-            setTimeout(() => { logoClicks = 0; }, 3000);
+        function getDB() {
+            return new Promise((resolve, reject) => {
+                try {
+                    const request = indexedDB.open(dbName, 1);
+                    request.onupgradeneeded = function(e) {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(storeName)) {
+                            db.createObjectStore(storeName);
+                        }
+                    };
+                    request.onsuccess = function(e) {
+                        resolve(e.target.result);
+                    };
+                    request.onerror = function(e) {
+                        reject(new Error("IndexedDB bloqué"));
+                    };
+                } catch(err) {
+                    reject(new Error("IndexedDB indisponible"));
+                }
+            });
         }
 
         async function initApp() {
@@ -1342,9 +1454,36 @@
                     'txt-live-feed': '// TRANSACTIONS & ENCHÈRES EN DIRECT',
                     'txt-preorder-subtitle': '// ATELIER BENZJAMES VIRTUAL',
                     'txt-preorder-title': 'Configurez votre Numéro Unique',
-                    'txt-preorder-desc': 'Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.'
+                    'txt-preorder-desc': 'Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.',
+                    'intro-custom-title': 'BENZJAMES',
+                    'intro-custom-subtitle': 'L\'ÉCURIE HIGH-TECH EN MOUVEMENT'
                 };
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+            }
+
+            // Déploiement 3D de l'intro
+            setTimeout(() => {
+                const introSheet = document.getElementById('intro-sheet');
+                if (introSheet) introSheet.classList.add('unfolded');
+            }, 300);
+
+            // Chargement de la vidéo de l'intro
+            try {
+                const savedIntroVid = await getVideoFromDB('intro_video');
+                const introPlayer = document.getElementById('intro-video-player');
+                if (savedIntroVid && introPlayer) {
+                    let videoUrl = "";
+                    if (savedIntroVid instanceof Blob) {
+                        videoUrl = URL.createObjectURL(savedIntroVid);
+                    } else {
+                        videoUrl = savedIntroVid;
+                    }
+                    document.getElementById('intro-video-src').src = videoUrl;
+                    introPlayer.load();
+                    introPlayer.play().catch(() => {});
+                }
+            } catch(e) {
+                console.warn("Échec d'initialisation de la vidéo d'intro.");
             }
 
             // Tentative de chargement de la vidéo locale d'accueil
@@ -1360,10 +1499,10 @@
                     }
                     document.getElementById('hud-video-src').src = videoUrl;
                     player.load();
-                    player.play().catch(e => console.log("L'Autoplay attend un clic utilisateur."));
+                    player.play().catch(() => {});
                 }
             } catch(e) {
-                console.warn("Échec d'initialisation de la vidéo d'accueil personnalisée.");
+                console.warn("Échec d'initialisation de la vidéo d'accueil.");
             }
 
             await loadRightMedia();
@@ -1438,7 +1577,7 @@
                     soundBtn.classList.remove('hidden');
                     decors.forEach(d => d.classList.add('hidden'));
                     videoEl.load();
-                    videoEl.play().catch(e => console.log("L'autoplay attend un clic."));
+                    videoEl.play().catch(() => {});
                 }
             } catch(e) {
                 console.warn("Échec d'accès au média de droite.");
@@ -1519,6 +1658,59 @@
 
             await loadRightMedia();
             closeRightMediaModal();
+        }
+
+        function openIntroConfigModal() {
+            tempIntroVideoFile = null;
+            document.getElementById('intro-video-url-input').value = "";
+            document.getElementById('intro-video-file-picker').value = "";
+            document.getElementById('intro-video-upload-label').innerText = "Sélectionner une vidéo d'intro (Max 120 Mo)";
+            document.getElementById('modal-intro-edit').classList.remove('hidden');
+        }
+
+        function closeIntroConfigModal() {
+            document.getElementById('modal-intro-edit').classList.add('hidden');
+        }
+
+        function handleIntroVideoFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 120 * 1024 * 1024) {
+                showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'appareil.", "error");
+                e.target.value = "";
+                return;
+            }
+            tempIntroVideoFile = file;
+            document.getElementById('intro-video-upload-label').innerText = file.name + " (" + (file.size / (1024*1024)).toFixed(1) + " Mo)";
+            showToast("Vidéo d'Intro chargée", "Le fichier vidéo est prêt à être appliqué.", "success");
+        }
+
+        async function saveIntroVideoEdit() {
+            const urlInput = document.getElementById('intro-video-url-input').value.trim();
+            const player = document.getElementById('intro-video-player');
+            const source = document.getElementById('intro-video-src');
+
+            if (tempIntroVideoFile) {
+                showToast("Enregistrement...", "Écriture dans la base de données sécurisée...", "info");
+                await saveVideoToDB('intro_video', tempIntroVideoFile);
+                const videoUrl = URL.createObjectURL(tempIntroVideoFile);
+                if (source && player) {
+                    source.src = videoUrl;
+                    player.load();
+                    player.play().catch(() => {});
+                }
+                showToast("Intro configurée", "La vidéo d'intro a été enregistrée.", "success");
+            } else if (urlInput) {
+                await saveVideoToDB('intro_video', urlInput);
+                if (source && player) {
+                    source.src = urlInput;
+                    player.load();
+                    player.play().catch(() => {});
+                }
+                showToast("Intro configurée", "Le lien vidéo externe de l'intro a été mis à jour.", "success");
+            }
+            closeIntroConfigModal();
         }
 
         function renderApp() {
@@ -2163,7 +2355,7 @@
                 closeUnifiedPortalModal();
                 showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Vous pouvez éditer les courses du Top Speed (chronos, descriptions, noms) !", "success");
             } else {
-                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité rejette l'identifiant.", "error");
+                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité de l'écurie rejette l'identifiant.", "error");
             }
         }
 
@@ -2689,7 +2881,6 @@
             
             // Recalculating order and rendering elements again dynamically
             renderRaces();
-            
             showToast("Soutien d'Écurie", `Vote de performance enregistré ! Le classement Top Speed a été mis à jour en temps réel.`, "success");
         }
 
