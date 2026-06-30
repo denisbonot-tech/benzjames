@@ -234,10 +234,9 @@
 
         <!-- Feuille se dépliant en 3D -->
         <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-6 sm:p-8">
-            <!-- Vidéo de fond de l'Intro -->
+            <!-- Vidéo de fond de l'Intro (Sans balises source imbriquées pour éviter le bug de chargement) -->
             <div class="absolute inset-0 z-0 bg-neutral-950">
-                <video id="intro-video-player" class="w-full h-full object-cover opacity-50" autoplay loop muted playsinline>
-                    <source id="intro-video-src" src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4" type="video/mp4">
+                <video id="intro-video-player" class="w-full h-full object-cover opacity-50" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
                 </video>
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             </div>
@@ -368,7 +367,7 @@
                             </div>
                         </div>
                         
-                        <!-- ÉCRAN DE DIFFUSION VIDÉO HUD -->
+                        <!-- ÉCRAN DE DIFFUSION VIDÉO HUD (Sans source imbriquée pour éliminer les bugs mobiles/desktop) -->
                         <div class="border border-bj-cyan/30 bg-black/90 p-1.5 rounded-xl relative overflow-hidden shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                             <div class="absolute top-3 left-4 text-[7px] font-mono text-bj-cyan/60 tracking-widest z-10 select-none">// SYSTEM_FEED_01 // SECURE_STREAM</div>
                             <div class="absolute top-3 right-4 flex items-center gap-1.5 z-10 select-none">
@@ -385,8 +384,7 @@
                                 Configurer Écran Vidéo
                             </button>
                             <div class="aspect-[16/9] w-full rounded-lg bg-neutral-950 overflow-hidden relative flex items-center justify-center">
-                                <video id="hud-video-player" class="w-full h-full object-cover" autoplay loop muted playsinline>
-                                    <source id="hud-video-src" src="https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-loop-41851-large.mp4" type="video/mp4">
+                                <video id="hud-video-player" class="w-full h-full object-cover" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-loop-41851-large.mp4">
                                 </video>
                             </div>
                         </div>
@@ -1372,28 +1370,6 @@
         const pageIds = ['page-home', 'page-collection', 'page-exchange', 'page-topspeed', 'page-preorder'];
         const angles = [-110, -55, 0, 55, 110];
 
-        function getDB() {
-            return new Promise((resolve, reject) => {
-                try {
-                    const request = indexedDB.open(dbName, 1);
-                    request.onupgradeneeded = function(e) {
-                        const db = e.target.result;
-                        if (!db.objectStoreNames.contains(storeName)) {
-                            db.createObjectStore(storeName);
-                        }
-                    };
-                    request.onsuccess = function(e) {
-                        resolve(e.target.result);
-                    };
-                    request.onerror = function(e) {
-                        reject(new Error("IndexedDB bloqué"));
-                    };
-                } catch(err) {
-                    reject(new Error("IndexedDB indisponible"));
-                }
-            });
-        }
-
         async function initApp() {
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
@@ -1467,7 +1443,7 @@
                 if (introSheet) introSheet.classList.add('unfolded');
             }, 300);
 
-            // Chargement de la vidéo de l'intro
+            // Chargement de la vidéo de l'intro (Liaison directe sur l'élément vidéo principal)
             try {
                 const savedIntroVid = await getVideoFromDB('intro_video');
                 const introPlayer = document.getElementById('intro-video-player');
@@ -1478,7 +1454,7 @@
                     } else {
                         videoUrl = savedIntroVid;
                     }
-                    document.getElementById('intro-video-src').src = videoUrl;
+                    introPlayer.src = videoUrl;
                     introPlayer.load();
                     introPlayer.play().catch(() => {});
                 }
@@ -1486,7 +1462,7 @@
                 console.warn("Échec d'initialisation de la vidéo d'intro.");
             }
 
-            // Tentative de chargement de la vidéo locale d'accueil
+            // Tentative de chargement de la vidéo d'accueil
             try {
                 const savedVideo = await getVideoFromDB('home_video');
                 const player = document.getElementById('hud-video-player');
@@ -1497,7 +1473,7 @@
                     } else {
                         videoUrl = savedVideo;
                     }
-                    document.getElementById('hud-video-src').src = videoUrl;
+                    player.src = videoUrl;
                     player.load();
                     player.play().catch(() => {});
                 }
@@ -1689,22 +1665,21 @@
         async function saveIntroVideoEdit() {
             const urlInput = document.getElementById('intro-video-url-input').value.trim();
             const player = document.getElementById('intro-video-player');
-            const source = document.getElementById('intro-video-src');
 
             if (tempIntroVideoFile) {
                 showToast("Enregistrement...", "Écriture dans la base de données sécurisée...", "info");
                 await saveVideoToDB('intro_video', tempIntroVideoFile);
                 const videoUrl = URL.createObjectURL(tempIntroVideoFile);
-                if (source && player) {
-                    source.src = videoUrl;
+                if (player) {
+                    player.src = videoUrl; // Liaison directe sur l'élément vidéo
                     player.load();
                     player.play().catch(() => {});
                 }
                 showToast("Intro configurée", "La vidéo d'intro a été enregistrée.", "success");
             } else if (urlInput) {
                 await saveVideoToDB('intro_video', urlInput);
-                if (source && player) {
-                    source.src = urlInput;
+                if (player) {
+                    player.src = urlInput; // Liaison directe sur l'élément vidéo
                     player.load();
                     player.play().catch(() => {});
                 }
@@ -2320,7 +2295,7 @@
                     const body = encodeURIComponent(
                         "=== PROTOCOLE BENZJAMES SECURE RECOVERY ===\n\n" +
                         "Bonjour Chef d'écurie,\n\n" +
-                        "Voici vos accès actuels :\n" +
+                        "Voici vos accès actifs :\n" +
                         ". Identifiant: DENIS_MASTER\n" +
                         ". Code Secret d'accès: " + currentPwd + "\n\n" +
                         "Fidèlement,\n" +
@@ -2448,21 +2423,24 @@
         async function saveVideoEdit() {
             const urlInput = document.getElementById('video-url-input').value.trim();
             const player = document.getElementById('hud-video-player');
-            const source = document.getElementById('hud-video-src');
 
             if (tempVideoFile) {
                 showToast("Enregistrement...", "Écriture dans la base de données sécurisée...", "info");
                 await saveVideoToDB('home_video', tempVideoFile);
                 const videoUrl = URL.createObjectURL(tempVideoFile);
-                source.src = videoUrl;
-                player.load();
-                player.play().catch(e => console.log("Playback delay"));
+                if (player) {
+                    player.src = videoUrl; // Liaison directe sur l'élément vidéo
+                    player.load();
+                    player.play().catch(e => console.log("Playback delay"));
+                }
                 showToast("Écran configuré", "La vidéo haute définition a été enregistrée.", "success");
             } else if (urlInput) {
                 await saveVideoToDB('home_video', urlInput);
-                source.src = urlInput;
-                player.load();
-                player.play().catch(e => console.log("Playback delay link"));
+                if (player) {
+                    player.src = urlInput; // Liaison directe sur l'élément vidéo
+                    player.load();
+                    player.play().catch(e => console.log("Playback delay link"));
+                }
                 showToast("Écran configuré", "Le lien vidéo externe a été mis à jour.", "success");
             }
             closeVideoEditModal();
@@ -2652,7 +2630,7 @@
                 const card = document.createElement('div');
                 card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.1)]";
                 
-                // Card media slots
+                // Card media slots (Liaison directe pour vidéos dynamiques)
                 let mediaSlotHTML = `
                     <div id="media-container-${race.id}" class="aspect-video bg-neutral-950 border border-white/5 rounded-xl relative overflow-hidden flex flex-col items-center justify-center p-2 mb-4">
                         <div id="visualizer-wrapper-${race.id}" class="hidden absolute inset-0 bg-neutral-950 flex flex-col items-center justify-center z-10">
@@ -2694,7 +2672,6 @@
                 });
 
                 // Rendering the card body
-                // Added click interactions to texts if master is active, plus an Edit button
                 card.innerHTML = `
                     <div>
                         <!-- POSITION BADGE (Based on likes ranking) -->
