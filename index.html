@@ -229,6 +229,15 @@
             border-radius: 2px;
             transition: height 0.1s ease-in-out;
         }
+
+        /* Scrollbar styling for category subfolders horizontal layout */
+        .category-scroll::-webkit-scrollbar {
+            height: 3px;
+        }
+        .category-scroll::-webkit-scrollbar-thumb {
+            background: #06B6D4;
+            border-radius: 9px;
+        }
     </style>
 </head>
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade" onclick="unlockVideoAutoplay()">
@@ -290,7 +299,7 @@
 
     <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2 px-6 text-center text-xs font-mono uppercase tracking-widest font-extrabold flex justify-between items-center z-50 animate-pulse">
-        <span>&gt; MODE CONFIGURATEUR MASTER ACTIF - CLIQUEZ SUR LES TEXTES & IMAGES POUR MODIFIER</span>
+        <span>&gt; MODE CONFIGURATEUR MASTER ACTIF - MODIFIEZ LES TEXTES, IMAGES OU NOMMEZ LES SOUS-DOSSIERS EN CLIQUANT DESSUS</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[10px] hover:bg-bj-red hover:text-white transition-all">Quitter</button>
     </div>
 
@@ -298,7 +307,7 @@
     <header id="main-header" class="fixed top-0 left-0 right-0 border-b border-bj-cyan/20 bg-bj-black/95 backdrop-blur-md z-40 py-4 px-4 sm:px-12 transition-all">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <!-- Brand Logo -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogoClick()">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="slideToPage(0)">
                 <span class="text-xl font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
                 <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold font-mono">Cyber-Couture</span>
             </div>
@@ -452,22 +461,34 @@
 
             <!-- PAGE 2: LA COLLECTION -->
             <section id="page-collection" class="page-slide tron-grid py-16 px-6 sm:px-12">
-                <div class="max-w-7xl mx-auto space-y-12">
-                    <div class="border-b border-bj-cyan/20 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                <div class="max-w-7xl mx-auto space-y-8">
+                    <div class="border-b border-bj-cyan/20 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                         <div>
                             <span onclick="editPageText('txt-col-tag')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest font-bold block" id="txt-col-tag">// LA GAMME SPORT CYBER</span>
                             <div class="flex items-center gap-3">
-                                <h2 onclick="editPageText('txt-col-title')" id="txt-col-title" class="edit-highlight text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">Les Pièces Maîtresses</h2>
+                                <h2 onclick="editPageText('txt-col-title')" id="txt-col-title" class="edit-highlight text-3xl sm:text-4xl font-bold uppercase tracking-tight mt-1">La Collection exclusive</h2>
                             </div>
                         </div>
                         <div class="flex items-center gap-4 w-full sm:w-auto">
                             <button onclick="openProductModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black text-xs font-extrabold px-4 py-2 rounded uppercase tracking-widest transition-all font-mono">
                                 + Ajouter un produit
                             </button>
-                            <span class="text-xs text-bj-cyan font-mono whitespace-nowrap" id="txt-col-count">Affichage: 6 Modèles Exclusifs</span>
+                            <span class="text-xs text-bj-cyan font-mono whitespace-nowrap" id="txt-col-count">Modèles Exclusifs</span>
                         </div>
                     </div>
-                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+                    <!-- SUBFOLDERS / CATEGORY NAVIGATION (10 Articles customizable) -->
+                    <div class="bg-black/40 border border-bj-cyan/15 rounded-xl p-3 shadow-inner">
+                        <span class="text-[9px] font-mono text-bj-gold uppercase tracking-widest block mb-2">// DIRECTORY_INDEX (CLIQUEZ POUR FILTRER / MASTER PEUT RENOMMER)</span>
+                        <div id="category-subfolders" class="flex gap-2 overflow-x-auto pb-1 category-scroll scrollbar-thin">
+                            <!-- Populated dynamically with 10 customizable category folders -->
+                        </div>
+                    </div>
+
+                    <!-- RESTRUCTURED VERTICAL PRODUCTS LIST (Photo Left, Text Right) -->
+                    <div id="products-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Populated dynamically via javascript -->
+                    </div>
                 </div>
             </section>
 
@@ -770,7 +791,7 @@
                         <div class="flex justify-between items-center border-t border-bj-cyan/10 pt-4 font-mono text-xs">
                             <div>
                                 <span class="text-bj-textMuted uppercase block text-[9px]">Montant Total :</span>
-                                <span class="text-xl font-black text-white font-bold" id="cart-total-price">0 €</span>
+                                <span class="text-xl font-black text-white" id="cart-total-price">0 €</span>
                             </div>
                             <button onclick="checkoutCart()" class="bg-bj-gold text-black hover:bg-white font-extrabold px-6 py-3 rounded text-xs uppercase tracking-widest transition-all shadow-[0_0_12px_rgba(212,175,55,0.2)]">
                                 Valider et Commander
@@ -887,7 +908,7 @@
             </div>
             <div class="space-y-3 font-mono text-xs">
                 <div>
-                    <label class="block text-bj-textMuted mb-1">Modèle de casquette</label>
+                    <label class="block text-bj-textMuted mb-1">Modèle de produit</label>
                     <select id="listing-model" class="w-full bg-black border border-bj-cyan/25 rounded px-3 py-2 text-white font-bold"></select>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -938,6 +959,14 @@
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Prix de vente (€)</label>
                     <input type="number" id="prod-price" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-bold">
                 </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Catégorie Associée</label>
+                    <select id="prod-category-id" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-mono"></select>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Badge Catégorie (ex: F1 Aero)</label>
+                    <input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
+                </div>
                 <div class="md:col-span-2">
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Slogan de l'article</label>
                     <input type="text" id="prod-slogan" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan font-semibold">
@@ -960,10 +989,6 @@
                             <span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Badge Catégorie</label>
-                    <input type="text" id="prod-badge" value="F1 Aero" class="w-full bg-bj-black border border-bj-border rounded px-4 py-2.5 text-white focus:outline-none focus:border-bj-cyan">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold">Poids simulé de l'article (g)</label>
@@ -1095,9 +1120,10 @@
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono">
                 <span class="text-xs text-bj-gold uppercase tracking-widest">Éditeur de Contenu direct (Master)</span>
-                <h3 class="text-lg font-bold text-white mt-1 uppercase">Modifier le texte sélectionné</h3>
+                <h3 class="text-lg font-bold text-white mt-1 uppercase" id="text-edit-title-h3">Modifier le texte sélectionné</h3>
             </div>
             <input type="hidden" id="edit-target-id">
+            <input type="hidden" id="edit-type" value="text"> <!-- text, category -->
             <div id="text-edit-input-container" class="font-mono text-xs"></div>
             <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeTextEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
@@ -1333,109 +1359,37 @@
             showToast("Système Initialisé", "Bienvenue sur Benzjames. Télémétrie connectée.", "success");
         }
 
+        const DEFAULT_CATEGORIES = [
+            { id: "cat1", name: "Casquette" },
+            { id: "cat2", name: "Basket" },
+            { id: "cat3", name: "T-shirt" },
+            { id: "cat4", name: "Techwear" },
+            { id: "cat5", name: "Lunettes HUD" },
+            { id: "cat6", name: "Pantalons Cargo" },
+            { id: "cat7", name: "Sacs à Dos" },
+            { id: "cat8", name: "Gants Aero" },
+            { id: "cat9", name: "Montre Chrono" },
+            { id: "cat10", name: "Sweats Cyber" }
+        ];
+
         const DEFAULT_PRODUCTS = [
-            {
-                id: "p1",
-                name: "Monza Carbon Hybrid",
-                price: 240,
-                slogan: "L'appui aérodynamique ultime",
-                desc: "Intègre une structure arrière en composite carbone flexible et un textile micro-perforé ultra-respirant.",
-                image: "",
-                badge: "F1 Aero",
-                weight: 42
-            },
-            {
-                id: "p2",
-                name: "Monaco Active Thermal",
-                price: 310,
-                slogan: "Régulation thermique absolue",
-                desc: "Équipée d'une cellule de régulation de température active par conduction. Technologie issue de l'aérospatiale.",
-                image: "",
-                badge: "Peltier Tech",
-                weight: 51
-            },
-            {
-                id: "p3",
-                name: "Silverstone Track Femme",
-                price: 220,
-                slogan: "Le chic asymétrique sur grille",
-                desc: "Design épuré ajusté, détails en fil d'or 18 carats brodé à la main et visière anti-reflets.",
-                image: "",
-                badge: "Vogue Edit",
-                weight: 39
-            },
-            {
-                id: "p4",
-                name: "Suzuka Wind-Tunnel",
-                price: 265,
-                slogan: "Zéro traînée, pure performance",
-                desc: "Profil hydrodynamique optimisé en soufflerie avec canaux de guidage d'air internes réduisant les frottements.",
-                image: "",
-                badge: "Wind Optimized",
-                weight: 45
-            },
-            {
-                id: "p5",
-                name: "Singapore Night Run",
-                price: 280,
-                slogan: "Fibre optique active & haute couture",
-                desc: "Comprend des micro-liserés luminescents alimentés par batterie ultra-fine, ajustables par télécommande tactile.",
-                image: "",
-                badge: "Lum Tech",
-                weight: 48
-            },
-            {
-                id: "p6",
-                name: "Spa Rain Shield",
-                price: 295,
-                slogan: "Membrane hydrophobe d'écurie",
-                desc: "Tissu technique à base de Gore-Tex® renforcé avec traitement imperméabilisant issu de la compétition F1.",
-                image: "",
-                badge: "Weatherproof",
-                weight: 44
-            }
+            // Casquettes (cat1)
+            { id: "p1", categoryId: "cat1", name: "Monza Carbon Hybrid", price: 240, slogan: "L'appui aérodynamique ultime", desc: "Intègre une structure arrière en composite carbone flexible et un textile micro-perforé ultra-respirant.", image: "", badge: "F1 Aero", weight: 42 },
+            { id: "p2", categoryId: "cat1", name: "Monaco Active Thermal", price: 310, slogan: "Régulation thermique absolue", desc: "Équipée d'une cellule de régulation de température active par conduction. Technologie issue de l'aérospatiale.", image: "", badge: "Peltier Tech", weight: 51 },
+            // Baskets (cat2)
+            { id: "p3", categoryId: "cat2", name: "Daytona High-Step V1", price: 420, slogan: "Semelle magnétique auto-guidée", desc: "Intègre un noyau de suspension cybernétique ultra-réactif et des inserts en nano-fibre de kevlar.", image: "", badge: "Daytona Tech", weight: 320 },
+            { id: "p4", categoryId: "cat2", name: "Nürburg Grip Pro", price: 480, slogan: "Grip adaptatif bitume / pluie", desc: "Dotée d'un profil de semelle thermique intelligent qui s'adapte à la température du sol.", image: "", badge: "Track Certified", weight: 290 },
+            // T-shirts (cat3)
+            { id: "p5", categoryId: "cat3", name: "Silverstone Aero-Knit", price: 180, slogan: "Coupe ergonomique wind-tunnel", desc: "Micro-canaux d'aération optimisés pour l'évacuation immédiate de la chaleur corporelle en effort intense.", image: "", badge: "Aero Knit", weight: 95 },
+            { id: "p6", categoryId: "cat3", name: "Suzuka Base Layer", price: 195, slogan: "Protection G-Force active", desc: "Textile technique compressif à mémoire de forme, réduisant les vibrations musculaires.", image: "", badge: "G-Membrane", weight: 110 },
+            // Other Categories Default placeholders
+            { id: "p7", categoryId: "cat4", name: "Veste Kyoto Techwear", price: 590, slogan: "Imperméabilité électromagnétique", desc: "Traitement polymère hydrophobe avec membrane auto-chauffante par micro-faisceaux intégrés.", image: "", badge: "Kyoto Lab", weight: 450 },
+            { id: "p8", categoryId: "cat5", name: "Lunettes HUD Spectrum-X", price: 720, slogan: "Affichage télémétrique oculaire", desc: "Verres photochromiques avec superposition de données de vitesse et navigation GPS autonome.", image: "", badge: "HUD Spec", weight: 38 }
         ];
 
         const DEFAULT_EXCHANGE_LISTINGS = [
-            {
-                id: "ex1",
-                modelName: "Monza Carbon Hybrid",
-                serial: "042",
-                secretKey: "BJ-042-42DF",
-                seller: "Vettel_Club",
-                mode: "auction",
-                currentPrice: 340,
-                startingPrice: 240,
-                highestBidder: "Aero_Lover",
-                endTime: "2h 14m",
-                status: "active"
-            },
-            {
-                id: "ex2",
-                modelName: "Silverstone Track Femme",
-                serial: "003",
-                secretKey: "BJ-003-88BB",
-                seller: "Monaco_Chic",
-                mode: "fixed",
-                currentPrice: 950,
-                startingPrice: 220,
-                highestBidder: null,
-                endTime: "Direct",
-                status: "active"
-            },
-            {
-                id: "ex3",
-                modelName: "Singapore Night Run",
-                serial: "500",
-                secretKey: "BJ-500-12CX",
-                seller: "Denis Tech",
-                mode: "auction",
-                currentPrice: 410,
-                startingPrice: 280,
-                highestBidder: "Cyber_Stalker",
-                endTime: "5h 44m",
-                status: "active"
-            }
+            { id: "ex1", modelName: "Monza Carbon Hybrid", serial: "042", secretKey: "BJ-042-42DF", seller: "Vettel_Club", mode: "auction", currentPrice: 340, startingPrice: 240, highestBidder: "Aero_Lover", endTime: "2h 14m", status: "active" },
+            { id: "ex2", modelName: "Silverstone Aero-Knit", serial: "003", secretKey: "BJ-003-88BB", seller: "Monaco_Chic", mode: "fixed", currentPrice: 950, startingPrice: 180, highestBidder: null, endTime: "Direct", status: "active" }
         ];
 
         const DEFAULT_RACES = [
@@ -1454,6 +1408,8 @@
         ];
 
         let products = [];
+        let categories = [];
+        let activeCategoryId = "cat1";
         let exchangeListings = [];
         let racesData = [];
         let pageTexts = {};
@@ -1473,7 +1429,6 @@
          * Synthétise des sons de moteurs en fonction de la course sélectionnée
          */
         async function playRaceSoundSynth(raceId) {
-            // Démarrer Tone.js (requis par les politiques de sécurité des navigateurs)
             await Tone.start();
 
             const race = racesData.find(r => r.id === raceId);
@@ -1482,7 +1437,6 @@
             const name = race.name.toLowerCase();
             showToast("Télémétrie Sonore", `Génération analogique du moteur pour ${race.name}...`, "warning");
 
-            // Arrêter tout synthétiseur précédemment actif pour éviter les chevauchements
             if (window.activeRaceSynth) {
                 try {
                     window.activeRaceSynth.triggerRelease();
@@ -1490,13 +1444,10 @@
                 } catch(e) {}
             }
 
-            // Déclencher l'animation visuelle de l'égaliseur
             animateEqVisualizer(raceId, 2500);
-
             const now = Tone.now();
 
             if (name.includes("pikes peak") || name.includes("monaco") || name.includes("nürburgring") || name.includes("macao") || name.includes("tt")) {
-                // SYNTHÈSE MOTEUR DE F1 / MOTO HYPER-SPORTIVE (Sifflement aigu monté à haut régime)
                 const synth = new Tone.MonoSynth({
                     oscillator: { type: "sawtooth" },
                     filter: { Q: 1.5, type: "lowpass", frequency: 300 },
@@ -1505,48 +1456,32 @@
                 }).toDestination();
                 
                 window.activeRaceSynth = synth;
-
-                // Séquence d'accélération
                 synth.triggerAttack("F#1", now);
-                synth.frequency.rampTo("C#4", 0.6, now); // Premier rapport
-                
-                // Passage de rapport 1
+                synth.frequency.rampTo("C#4", 0.6, now); 
                 synth.frequency.setValueAtTime("C#3", now + 0.65);
-                synth.frequency.rampTo("E4", 0.5, now + 0.7); // Second rapport
-                
-                // Passage de rapport 2
+                synth.frequency.rampTo("E4", 0.5, now + 0.7); 
                 synth.frequency.setValueAtTime("A3", now + 1.25);
-                synth.frequency.rampTo("F#5", 0.8, now + 1.3); // Troisième rapport en fond de ligne droite
-                
+                synth.frequency.rampTo("F#5", 0.8, now + 1.3); 
                 synth.triggerRelease(now + 2.3);
 
             } else if (name.includes("mans") || name.includes("gt3") || name.includes("bathurst")) {
-                // SYNTHÈSE V8 / GT3 RUGISSANT (Rumble sourd, agressif et lourd)
                 const synth = new Tone.Synth({
                     oscillator: { type: "square" },
                     envelope: { attack: 0.15, decay: 0.4, sustain: 0.8, release: 0.9 }
                 }).toDestination();
 
-                // Ajout d'un filtre vibrato pour simuler les pistons du moteur V8
                 const filter = new Tone.Filter({ type: "lowpass", frequency: 350 }).toDestination();
                 synth.connect(filter);
-
                 window.activeRaceSynth = synth;
 
                 synth.triggerAttack("E1", now);
                 synth.frequency.rampTo("B2", 0.8, now);
-                
-                // Passage de vitesse
                 synth.frequency.setValueAtTime("D2", now + 0.85);
                 synth.frequency.rampTo("C#3", 0.7, now + 0.9);
-                
-                // Flyby Doppler effect simulation (baisse de pitch rapide à la fin)
                 synth.frequency.rampTo("G1", 0.4, now + 1.8);
-                
                 synth.triggerRelease(now + 2.2);
 
             } else if (name.includes("indianapolis") || name.includes("dragster")) {
-                // SYNTHÈSE DRAGSTER NITRO / INDYCAR (Screamer pur, distorsion aiguë et foudroyante)
                 const synth = new Tone.MonoSynth({
                     oscillator: { type: "sawtooth" },
                     filter: { Q: 3, type: "lowpass", frequency: 600 },
@@ -1554,18 +1489,15 @@
                 }).toDestination();
                 
                 window.activeRaceSynth = synth;
-
                 synth.triggerAttack("C1", now);
-                synth.frequency.rampTo("C5", 0.5, now); // Accélération foudroyante (0 à 400km/h)
+                synth.frequency.rampTo("C5", 0.5, now); 
                 synth.frequency.setValueAtTime("A4", now + 0.55);
                 synth.frequency.rampTo("G#5", 0.6, now + 0.6);
                 synth.frequency.setValueAtTime("F#4", now + 1.25);
                 synth.frequency.rampTo("B5", 0.6, now + 1.3);
-
                 synth.triggerRelease(now + 2.2);
 
             } else if (name.includes("bonneville")) {
-                // SYNTHÈSE TURBINE D'AVION / THRUST SSC (Bruit de souffle d'air blanc + sifflement métallique)
                 const noise = new Tone.Noise("pink").start();
                 const noiseFilter = new Tone.Filter({ type: "bandpass", Q: 4, frequency: 120 }).toDestination();
                 noise.connect(noiseFilter);
@@ -1574,13 +1506,10 @@
                 osc.volume.setValueAtTime(-60, now);
                 osc.volume.rampTo(-10, 1.0, now);
 
-                // Simulation de la montée de la turbine
                 noiseFilter.frequency.setValueAtTime(100, now);
                 noiseFilter.frequency.rampTo(2500, 1.5, now);
                 osc.frequency.setValueAtTime(120, now);
                 osc.frequency.rampTo(1800, 1.5, now);
-
-                // Décélération
                 noiseFilter.frequency.rampTo(80, 1.0, now + 1.6);
                 osc.frequency.rampTo(100, 1.0, now + 1.6);
                 osc.volume.rampTo(-60, 1.0, now + 1.6);
@@ -1594,7 +1523,6 @@
                 }, 3000);
 
             } else if (name.includes("dakar")) {
-                // RUGISSEMENT DIRT BIKE / RALLY RAID (Gritty, vibrations instables)
                 const synth = new Tone.MonoSynth({
                     oscillator: { type: "sawtooth" },
                     filter: { Q: 0.8, type: "lowpass", frequency: 250 },
@@ -1602,31 +1530,23 @@
                 }).toDestination();
                 
                 window.activeRaceSynth = synth;
-
                 synth.triggerAttack("D1", now);
                 synth.frequency.rampTo("G1", 0.7, now);
                 synth.frequency.setValueAtTime("F1", now + 0.75);
                 synth.frequency.rampTo("A#2", 0.8, now + 0.8);
-
                 synth.triggerRelease(now + 2.0);
 
             } else {
-                // SON PAR DÉFAUT CYBER-COUTURE (Effet de passage spatial futuriste)
                 const synth = new Tone.FMSynth().toDestination();
                 window.activeRaceSynth = synth;
-                
                 synth.triggerAttack("G2", now);
                 synth.harmonicity.rampTo(4.5, 1.5, now);
                 synth.modulationIndex.rampTo(15, 1.5, now);
                 synth.frequency.rampTo("C1", 1.5, now);
-                
                 synth.triggerRelease(now + 1.8);
             }
         }
 
-        /**
-         * Anime un égaliseur graphique au moment du lancement d'un son de moteur
-         */
         function animateEqVisualizer(raceId, duration) {
             const visualizer = document.getElementById(`eq-visualizer-${raceId}`);
             if (!visualizer) return;
@@ -1636,7 +1556,7 @@
             
             const interval = setInterval(() => {
                 bars.forEach(bar => {
-                    const randomHeight = Math.floor(Math.random() * 28) + 4; // Entre 4px et 32px
+                    const randomHeight = Math.floor(Math.random() * 28) + 4; 
                     bar.style.height = `${randomHeight}px`;
                 });
             }, 80);
@@ -1652,6 +1572,16 @@
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
 
+            // Load Categories (10 Articles customizable)
+            const savedCategories = localStorage.getItem('bj_categories');
+            if (savedCategories) {
+                categories = JSON.parse(savedCategories);
+            } else {
+                categories = [...DEFAULT_CATEGORIES];
+                localStorage.setItem('bj_categories', JSON.stringify(categories));
+            }
+
+            // Load Products
             const savedProducts = localStorage.getItem('bj_products');
             if (savedProducts) {
                 products = JSON.parse(savedProducts);
@@ -1677,7 +1607,6 @@
                 localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             }
 
-            // Top Speed Races initializing
             const savedRaces = localStorage.getItem('bj_races_data');
             if (savedRaces) {
                 racesData = JSON.parse(savedRaces);
@@ -1715,23 +1644,16 @@
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             }
 
-            // Déploiement 3D de l'intro
             setTimeout(() => {
                 const introSheet = document.getElementById('intro-sheet');
                 if (introSheet) introSheet.classList.add('unfolded');
             }, 300);
 
-            // Chargement de la vidéo de l'intro
             try {
                 const savedIntroVid = await getVideoFromDB('intro_video');
                 const introPlayer = document.getElementById('intro-video-player');
                 if (savedIntroVid && introPlayer) {
-                    let videoUrl = "";
-                    if (savedIntroVid instanceof Blob) {
-                        videoUrl = URL.createObjectURL(savedIntroVid);
-                    } else {
-                        videoUrl = savedIntroVid;
-                    }
+                    let videoUrl = (savedIntroVid instanceof Blob) ? URL.createObjectURL(savedIntroVid) : savedIntroVid;
                     introPlayer.src = videoUrl;
                     introPlayer.load();
                     introPlayer.play().catch(() => {});
@@ -1740,17 +1662,11 @@
                 console.warn("Échec d'initialisation de la vidéo d'intro.");
             }
 
-            // Tentative de chargement de la vidéo d'accueil
             try {
                 const savedVideo = await getVideoFromDB('home_video');
                 const player = document.getElementById('hud-video-player');
                 if (savedVideo && player) {
-                    let videoUrl = "";
-                    if (savedVideo instanceof Blob) {
-                        videoUrl = URL.createObjectURL(savedVideo);
-                    } else {
-                        videoUrl = savedVideo;
-                    }
+                    let videoUrl = (savedVideo instanceof Blob) ? URL.createObjectURL(savedVideo) : savedVideo;
                     player.src = videoUrl;
                     player.load();
                     player.play().catch(() => {});
@@ -1811,12 +1727,7 @@
                     return;
                 }
 
-                let mediaUrl = "";
-                if (savedData instanceof Blob) {
-                    mediaUrl = URL.createObjectURL(savedData);
-                } else {
-                    mediaUrl = savedData;
-                }
+                let mediaUrl = (savedData instanceof Blob) ? URL.createObjectURL(savedData) : savedData;
 
                 if (type === 'image') {
                     imgEl.src = mediaUrl;
@@ -1966,59 +1877,125 @@
             closeIntroConfigModal();
         }
 
+        function changeActiveCategory(catId) {
+            activeCategoryId = catId;
+            renderApp();
+        }
+
+        function editCategoryName(catId) {
+            if (!isMaster) return;
+            const category = categories.find(c => c.id === catId);
+            if (!category) return;
+
+            document.getElementById('edit-target-id').value = catId;
+            document.getElementById('edit-type').value = "category";
+            document.getElementById('text-edit-title-h3').innerText = "Renommer le sous-dossier de la gamme";
+
+            const container = document.getElementById('text-edit-input-container');
+            container.innerHTML = `
+                <input type="text" id="edit-text-value" value="${category.name}" class="w-full bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
+            `;
+            document.getElementById('modal-text-edit').classList.remove('hidden');
+        }
+
         function renderApp() {
+            // Render Generic Page Texts
             for (const [id, text] of Object.entries(pageTexts)) {
                 const el = document.getElementById(id);
                 if (el) el.innerText = text;
             }
 
+            // Render Subfolders Categories Tab
+            const subfoldersContainer = document.getElementById('category-subfolders');
+            if (subfoldersContainer) {
+                subfoldersContainer.innerHTML = "";
+                categories.forEach(cat => {
+                    const isActive = cat.id === activeCategoryId;
+                    const folder = document.createElement('div');
+                    folder.className = "flex items-center shrink-0 relative group";
+                    
+                    // Folder tab styling
+                    folder.innerHTML = `
+                        <button onclick="changeActiveCategory('${cat.id}')" class="px-5 py-2.5 rounded-lg border font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${isActive ? 'bg-bj-cyan/15 border-bj-cyan text-bj-cyan shadow-[0_0_12px_rgba(6,182,212,0.3)]' : 'bg-bj-dark/80 border-bj-border hover:border-bj-cyan/50 text-white'}">
+                            <span>📁 ${cat.name}</span>
+                            ${isMaster ? `
+                                <span onclick="event.stopPropagation(); editCategoryName('${cat.id}')" class="text-[10px] text-bj-gold hover:text-white transition-all ml-1 cursor-pointer" title="Renommer">✏️</span>
+                            ` : ''}
+                        </button>
+                    `;
+                    subfoldersContainer.appendChild(folder);
+                });
+            }
+
+            // Filter Products by Active Category
+            const filteredProducts = products.filter(p => p.categoryId === activeCategoryId);
+
             const grid = document.getElementById('products-grid');
             if (grid) {
                 grid.innerHTML = "";
-                document.getElementById('txt-col-count').innerText = `Affichage: ${products.length} Modèles Exclusifs`;
+                document.getElementById('txt-col-count').innerText = `Affichage: ${filteredProducts.length} Modèles Exclusifs`;
 
-                products.forEach((product, idx) => {
+                if (filteredProducts.length === 0) {
+                    grid.innerHTML = `
+                        <div class="col-span-full border border-dashed border-bj-cyan/20 rounded-xl p-12 text-center bg-bj-dark/40">
+                            <span class="text-3xl block mb-2">📦</span>
+                            <span class="font-mono text-xs text-bj-textMuted uppercase tracking-wider">// AUCUN MODÈLE SUR CE DOSSIER DE SÉRIE</span>
+                            ${isMaster ? `<button onclick="openProductModal()" class="mt-4 px-4 py-2 bg-bj-gold text-black rounded text-[11px] font-mono font-bold uppercase tracking-wider hover:bg-white transition-all">+ AJOUTER PREMIER PRODUIT</button>` : ''}
+                        </div>
+                    `;
+                }
+
+                filteredProducts.forEach((product, idx) => {
                     const card = document.createElement('div');
-                    card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-6 flex flex-col justify-between group hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all duration-300 relative tron-glow-border";
+                    // FLEX HORIZONTAL LAYOUT - Left: Photo, Right: Tech Information + Actions
+                    card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-5 flex flex-col sm:flex-row gap-6 hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300 relative tron-glow-border";
                     
                     let imageHTML = `
-                        <div class="w-48 h-48 rounded-full border-[1.5px] border-bj-cyan/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
-                            <span class="text-7xl font-extrabold text-bj-cyan/10 font-mono group-hover:text-bj-cyan/35 transition-all select-none">${String(idx + 1).padStart(2, '0')}</span>
-                            <div class="absolute w-24 h-24 rounded-full border border-dashed border-bj-red/20 group-hover:rotate-45 transition-all duration-700"></div>
+                        <div class="w-full h-full rounded-full border-[1.5px] border-bj-cyan/20 flex items-center justify-center group-hover:scale-105 transition-all duration-500 relative">
+                            <span class="text-5xl font-extrabold text-bj-cyan/10 font-mono select-none">${String(idx + 1).padStart(2, '0')}</span>
+                            <div class="absolute w-16 h-16 rounded-full border border-dashed border-bj-red/20"></div>
                         </div>
                     `;
 
                     if (product.image && product.image.trim() !== "") {
-                        imageHTML = `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null; this.outerHTML='<div class=\'text-center text-xs text-bj-red font-mono\'>Erreur de chargement</div>'">`;
+                        imageHTML = `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null; this.outerHTML='<div class=\'text-center text-xs text-bj-red font-mono\'>Erreur de chargement</div>'">`;
                     }
 
                     card.innerHTML = `
-                        <button onclick="openProductModal('${product.id}')" class="master-only hidden absolute top-4 right-4 bg-bj-gold text-black hover:bg-white p-2 rounded-full text-xs font-bold transition-all z-10 shadow-lg font-mono" title="Éditer le produit">
-                            Edit
-                        </button>
-                        <div class="space-y-4">
-                            <div class="aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-4 border border-bj-cyan/15">
-                                <div class="absolute top-3 left-3 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md">${product.badge}</div>
-                                ${imageHTML}
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex justify-between items-start gap-2">
-                                    <h3 class="text-lg font-bold text-white group-hover:text-bj-cyan transition-all leading-tight uppercase font-mono tracking-wider">${product.name}</h3>
-                                    <span class="text-sm font-mono text-bj-gold font-bold whitespace-nowrap">${product.price} €</span>
-                                </div>
-                                <p class="text-[10px] uppercase font-mono text-bj-red tracking-wider font-semibold" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
-                            </div>
-                            <p class="text-xs text-bj-textMuted leading-relaxed">${product.desc}</p>
+                        <!-- Left Panel: Picture vertically centered -->
+                        <div class="w-full sm:w-2/5 aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-3 border border-bj-cyan/15 shrink-0 select-none">
+                            <div class="absolute top-2 left-2 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md z-10">${product.badge}</div>
+                            ${imageHTML}
+                            ${isMaster ? `
+                                <button onclick="openProductModal('${product.id}')" class="absolute bottom-2 right-2 bg-bj-gold text-black hover:bg-white p-1.5 rounded text-[10px] font-bold transition-all z-20 shadow-lg font-mono">
+                                    Edit
+                                </button>
+                            ` : ''}
                         </div>
-                        <div class="grid grid-cols-2 gap-2 mt-6">
-                            <button onclick="selectProductForPreorder('${product.id}')" class="py-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-[10px] uppercase tracking-wider font-bold transition-all rounded font-mono text-bj-cyan bg-bj-cyan/5">Configurateur</button>
-                            <button onclick="addProductToCart('${product.id}')" class="py-3 bg-bj-gold hover:bg-white text-black text-[10px] uppercase tracking-wider font-bold transition-all rounded font-mono">Ajouter Panier</button>
+
+                        <!-- Right Panel: Description and action CTAs -->
+                        <div class="flex-grow flex flex-col justify-between space-y-4">
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-start gap-2">
+                                    <h3 class="text-base font-bold text-white uppercase font-mono tracking-wider leading-tight">${product.name}</h3>
+                                    <span class="text-xs font-mono text-bj-gold font-bold bg-bj-gold/5 px-2 py-0.5 border border-bj-gold/20 rounded">${product.price} €</span>
+                                </div>
+                                <p class="text-[9px] uppercase font-mono text-bj-red tracking-wider font-semibold" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
+                                <p class="text-[11px] text-bj-textMuted leading-relaxed pt-1 border-t border-bj-border/30">${product.desc}</p>
+                            </div>
+
+                            <!-- Buttons: Config and Basket aligned vertically inside the card -->
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="selectProductForPreorder('${product.id}')" class="py-2 px-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-[9px] uppercase tracking-wider font-bold transition-all rounded font-mono text-bj-cyan bg-bj-cyan/5">Configurateur</button>
+                                <button onclick="addProductToCart('${product.id}')" class="py-2 px-3 bg-bj-gold hover:bg-white text-black text-[9px] uppercase tracking-wider font-bold transition-all rounded font-mono">Ajouter Panier</button>
+                            </div>
                         </div>
                     `;
                     grid.appendChild(card);
                 });
             }
 
+            // Fill Preorder and evaluation selection fields
             const select = document.getElementById('config-model');
             const evalSelect = document.getElementById('eval-model');
             const listSelect = document.getElementById('listing-model');
@@ -2604,6 +2581,7 @@
                 isMaster = true;
                 localStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
+                renderApp();
                 renderRaces();
                 closeUnifiedPortalModal();
                 showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Vous pouvez éditer les courses du Top Speed !", "success");
@@ -2616,6 +2594,7 @@
             isMaster = false;
             localStorage.setItem('bj_master_logged', 'false');
             updateMasterModeUI();
+            renderApp();
             renderRaces();
             showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.");
         }
@@ -2728,6 +2707,18 @@
             const modal = document.getElementById('modal-product');
             const titleEl = document.getElementById('product-modal-title');
 
+            // Populate category select dropdown inside product creation modal
+            const catSelect = document.getElementById('prod-category-id');
+            if (catSelect) {
+                catSelect.innerHTML = "";
+                categories.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.innerText = c.name;
+                    catSelect.appendChild(opt);
+                });
+            }
+
             document.getElementById('edit-product-id').value = productId;
             document.getElementById('prod-name').value = "";
             document.getElementById('prod-price').value = "";
@@ -2752,6 +2743,7 @@
                     document.getElementById('prod-desc').value = p.desc;
                     document.getElementById('prod-badge').value = p.badge || 'F1 Aero';
                     document.getElementById('prod-weight').value = p.weight || '42';
+                    if (catSelect) catSelect.value = p.categoryId || "cat1";
 
                     if (p.image && p.image.trim() !== "") {
                         tempImageData = p.image;
@@ -2761,6 +2753,7 @@
                 }
             } else {
                 titleEl.innerText = "Ajouter une Pièce de Collection";
+                if (catSelect) catSelect.value = activeCategoryId;
             }
             modal.classList.remove('hidden');
         }
@@ -2777,6 +2770,7 @@
             const desc = document.getElementById('prod-desc').value.trim();
             const badge = document.getElementById('prod-badge').value.trim();
             const weight = parseInt(document.getElementById('prod-weight').value) || 42;
+            const categoryId = document.getElementById('prod-category-id').value;
 
             if (!name || !desc) {
                 showToast("Formulaire Incomplet", "Les champs Nom et Description sont obligatoires.", "error");
@@ -2794,7 +2788,8 @@
                         desc,
                         image: tempImageData,
                         badge,
-                        weight
+                        weight,
+                        categoryId
                     };
                     showToast("Article Modifié", `Le modèle ${name} a été reconfiguré.`);
                 }
@@ -2802,6 +2797,7 @@
                 const newId = 'p' + (Date.now());
                 products.push({
                     id: newId,
+                    categoryId,
                     name,
                     price,
                     slogan,
@@ -2822,6 +2818,8 @@
             if (!isMaster) return;
             const currentText = pageTexts[targetId] || document.getElementById(targetId).innerText;
             document.getElementById('edit-target-id').value = targetId;
+            document.getElementById('edit-type').value = "text";
+            document.getElementById('text-edit-title-h3').innerText = "Modifier le texte sélectionné";
 
             const container = document.getElementById('text-edit-input-container');
             container.innerHTML = "";
@@ -2844,13 +2842,24 @@
 
         function saveTextEdit() {
             const targetId = document.getElementById('edit-target-id').value;
-            const newVal = document.getElementById('edit-text-value').value;
+            const editType = document.getElementById('edit-type').value;
+            const newVal = document.getElementById('edit-text-value').value.trim();
 
-            pageTexts[targetId] = newVal;
-            localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+            if (editType === "category") {
+                const category = categories.find(c => c.id === targetId);
+                if (category) {
+                    category.name = newVal;
+                    localStorage.setItem('bj_categories', JSON.stringify(categories));
+                    showToast("Catégorie renommée", `Le sous-dossier s'appelle désormais "${newVal}".`, "success");
+                }
+            } else {
+                pageTexts[targetId] = newVal;
+                localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
+                showToast("Texte Mis à Jour", "La modification de texte a été enregistrée.");
+            }
+
             renderApp();
             closeTextEditModal();
-            showToast("Texte Mis à Jour", "La modification de texte a été enregistrée.");
         }
 
         function openRaceEditModal(raceId) {
@@ -2901,20 +2910,15 @@
             if (!container) return;
             container.innerHTML = "";
 
-            // Tri dynamique décroissant basé sur les "likes"
             const sortedRaces = [...racesData].sort((a, b) => b.likes - a.likes);
 
             sortedRaces.forEach((race, index) => {
                 const card = document.createElement('div');
                 card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] cursor-pointer";
-                
-                // Au clic sur la carte, on lance la synthèse du son du moteur !
                 card.setAttribute("onclick", `playRaceSoundSynth('${race.id}'); event.stopPropagation();`);
 
                 let mediaSlotHTML = `
                     <div id="media-container-${race.id}" class="aspect-video bg-neutral-950 border border-white/5 rounded-xl relative overflow-hidden flex flex-col items-center justify-center p-2 mb-4">
-                        
-                        <!-- Visualiseur d'égaliseur graphique au déclenchement -->
                         <div id="eq-visualizer-${race.id}" class="hidden absolute inset-0 bg-black/90 flex items-center justify-center gap-1.5 z-20">
                             <div class="eq-bar"></div>
                             <div class="eq-bar" style="transition-delay: 0.05s"></div>
@@ -2927,7 +2931,6 @@
                         <video id="video-${race.id}" class="race-video w-full h-full object-cover rounded-lg hidden" loop muted playsinline></video>
                         <audio id="audio-${race.id}" class="hidden" loop></audio>
 
-                        <!-- État par défaut de l'écran radar -->
                         <div id="placeholder-${race.id}" class="text-center text-bj-textMuted flex flex-col items-center gap-1 select-none">
                             <div class="w-12 h-12 rounded-full border border-bj-cyan/20 flex items-center justify-center relative animate-pulse mb-1">
                                 <span class="text-xs text-bj-cyan">▶</span>
@@ -2936,7 +2939,6 @@
                             <span class="text-[8px]">Symphonie Moteur de Synthèse</span>
                         </div>
 
-                        <!-- sound overlays -->
                         <button id="unmute-btn-${race.id}" onclick="toggleRaceSound('${race.id}'); event.stopPropagation();" class="hidden absolute bottom-2 right-2 bg-black/80 border border-bj-cyan/30 text-bj-cyan p-1.5 rounded text-[8px] uppercase font-bold tracking-wider z-20 transition-all">
                            🔊 Unmute
                         </button>
@@ -2954,19 +2956,16 @@
 
                 card.innerHTML = `
                     <div>
-                        <!-- POSITION BADGE -->
                         <div class="absolute top-0 left-0 bg-bj-cyan/10 border-b border-r border-bj-cyan/30 px-2.5 py-1 text-[9px] font-bold text-bj-cyan tracking-widest font-mono select-none z-20">
                             RANK #${index + 1}
                         </div>
 
-                        <!-- MASTER EDITION BUTTON -->
                         ${isMaster ? `
                             <button onclick="openRaceEditModal('${race.id}'); event.stopPropagation();" class="absolute top-2 right-2 bg-bj-gold text-black hover:bg-white px-2 py-1 rounded text-[9px] font-bold tracking-wider uppercase shadow-md transition-all z-30 font-mono">
                                 EDIT
                             </button>
                         ` : ''}
 
-                        <!-- CONTENT SECTION -->
                         <div class="pt-5 pb-2 border-b border-bj-border mb-2 relative ${isMaster ? 'hover:outline hover:outline-dashed hover:outline-bj-gold/40 cursor-pointer rounded px-1' : ''}" onclick="${isMaster ? `openRaceEditModal('${race.id}'); event.stopPropagation();` : ''}">
                             <div class="flex justify-between items-start gap-2">
                                 <div>
@@ -2982,7 +2981,6 @@
                         
                         ${mediaSlotHTML}
 
-                        <!-- Subscriber Upload Action button -->
                         <div class="flex items-center gap-2 mb-4">
                             <label class="flex-grow flex items-center justify-center border border-dashed border-bj-cyan/30 hover:border-bj-cyan rounded-lg p-2 bg-black/40 cursor-pointer text-center font-mono text-[9px] text-white uppercase transition-all" onclick="event.stopPropagation();">
                                 <span>⚡ Remplacer Média (Vidéo/Son)</span>
@@ -2990,19 +2988,16 @@
                             </label>
                         </div>
 
-                        <!-- Interaction controls -->
                         <div class="flex justify-between items-center text-xs pt-2 border-t border-bj-border/30 mb-4">
                             <button onclick="likeRace('${race.id}'); event.stopPropagation();" class="flex items-center gap-1 hover:text-bj-red text-bj-textMuted transition-all bg-black/30 border border-white/5 px-3 py-1.5 rounded-lg">
                                 <span class="text-base text-bj-red animate-pulse">♥</span> 
                                 <span id="likes-count-${race.id}" class="font-bold text-white">${race.likes} Likes</span>
                             </button>
-                            <!-- Bouton Moteur dédié -->
                             <button onclick="playRaceSoundSynth('${race.id}'); event.stopPropagation();" class="flex items-center gap-1 bg-bj-gold/10 border border-bj-gold/35 text-bj-gold hover:bg-bj-gold hover:text-black px-2.5 py-1.5 rounded-lg transition-all text-[9px] uppercase font-bold">
                                 🔊 Moteur
                             </button>
                         </div>
 
-                        <!-- Comments Board -->
                         <div class="space-y-2 max-h-[80px] overflow-y-auto pr-1 bg-black/30 rounded-lg p-2 mb-4" onclick="event.stopPropagation();">
                             <div class="space-y-1.5" id="comments-box-${race.id}">
                                 ${commentsHTML || '<p class="text-[8px] text-bj-textMuted italic">// Aucun commentaire d\'écurie</p>'}
@@ -3010,7 +3005,6 @@
                         </div>
                     </div>
 
-                    <!-- Add Comment input -->
                     <div class="flex gap-2" onclick="event.stopPropagation();">
                         <input type="text" id="comment-input-${race.id}" placeholder="Inscrire un avis..." class="flex-grow bg-black border border-white/10 rounded-md px-3 py-1.5 text-[9px] outline-none focus:border-bj-cyan text-white">
                         <button onclick="addRaceComment('${race.id}'); event.stopPropagation();" class="bg-bj-cyan/10 hover:bg-bj-cyan border border-bj-cyan/20 hover:text-black text-bj-cyan px-3 py-1 text-[9px] rounded font-bold transition-all uppercase font-mono">OK</button>
