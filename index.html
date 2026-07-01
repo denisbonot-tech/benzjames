@@ -6,6 +6,8 @@
     <title>Benzjames - L'Écurie High-Tech & Bourse Officielle</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js pour la synthèse sonore d'écurie autonome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -218,6 +220,15 @@
             filter: blur(3px) drop-shadow(0 0 10px #ffffff);
             animation: laserSweepVertical 4.2s infinite ease-in-out;
         }
+
+        /* Égaliseur visuel simulé pour l'écoute du moteur */
+        .eq-bar {
+            width: 4px;
+            height: 4px;
+            background-color: #06B6D4;
+            border-radius: 2px;
+            transition: height 0.1s ease-in-out;
+        }
     </style>
 </head>
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade" onclick="unlockVideoAutoplay()">
@@ -234,7 +245,7 @@
 
         <!-- Feuille se dépliant en 3D -->
         <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-6 sm:p-8">
-            <!-- Vidéo de fond de l'Intro (Sans balises source imbriquées pour éviter le bug de chargement) -->
+            <!-- Vidéo de fond de l'Intro -->
             <div class="absolute inset-0 z-0 bg-neutral-950">
                 <video id="intro-video-player" class="w-full h-full object-cover opacity-50" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
                 </video>
@@ -256,7 +267,7 @@
                     </div>
                 </div>
 
-                <!-- Message central en grand (Configurable) -->
+                <!-- Message central en grand -->
                 <div class="my-auto space-y-4 px-2 sm:px-6">
                     <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight text-4xl sm:text-7xl font-black uppercase tracking-[0.25em] text-white drop-shadow-[0_0_25px_rgba(6,182,212,0.7)] font-mono leading-none">
                         BENZJAMES
@@ -372,7 +383,7 @@
                             </div>
                         </div>
                         
-                        <!-- ÉCRAN DE DIFFUSION VIDÉO HUD (Sans source imbriquée pour éliminer les bugs mobiles/desktop) -->
+                        <!-- ÉCRAN DE DIFFUSION VIDÉO HUD -->
                         <div class="border border-bj-cyan/30 bg-black/90 p-1.5 rounded-xl relative overflow-hidden shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                             <div class="absolute top-3 left-4 text-[7px] font-mono text-bj-cyan/60 tracking-widest z-10 select-none">// SYSTEM_FEED_01 // SECURE_STREAM</div>
                             <div class="absolute top-3 right-4 flex items-center gap-1.5 z-10 select-none">
@@ -551,7 +562,7 @@
                     <div class="relative w-full h-8 rounded-lg overflow-hidden border border-white/20 shadow-md">
                         <div class="racing-checkers absolute inset-0 opacity-40"></div>
                         <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80 flex items-center justify-center">
-                            <span class="font-mono text-xs text-bj-gold uppercase tracking-[0.5em] font-extrabold">// RACING ZONE // CHRONO & SOUND PROTOCOL</span>
+                            <span class="font-mono text-[10px] text-bj-gold uppercase tracking-[0.5em] font-extrabold">// RACING ZONE // CHRONO & SOUND PROTOCOL // CLIQUEZ POUR ÉCOUTER</span>
                         </div>
                     </div>
 
@@ -564,7 +575,7 @@
                         </div>
                         <div class="text-right text-xs font-mono text-bj-textMuted">
                             <span class="block text-bj-gold">★ TRIÉ DIRECTEMENT PAR POPULARITÉ DES LIKES ★</span>
-                            <span>Cliquez sur l'épreuve (Mode Master) pour ajuster chronos & écritures</span>
+                            <span>Cliquez sur une course ou sur le bouton "🔊 Moteur" pour lancer le son de synthèse.</span>
                         </div>
                     </div>
 
@@ -1001,7 +1012,7 @@
         </div>
     </div>
 
-    <!-- CONFIGURATION INTRO VIDEO MODAL (NEW) -->
+    <!-- CONFIGURATION INTRO VIDEO MODAL -->
     <div id="modal-intro-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
             <div class="font-mono flex justify-between items-center border-b border-bj-cyan/15 pb-4">
@@ -1428,18 +1439,18 @@
         ];
 
         const DEFAULT_RACES = [
-            { id: "race1", name: "Pikes Peak Hill Climb", location: "Colorado, USA", record: "07:57.148", desc: "La course vers les nuages. Altitude extrême et précipices.", likes: 142, comments: [{author: "ChronoMax", text: "Effrayant sans barrières !"}] },
-            { id: "race2", name: "24 Heures du Mans", location: "Sarthe, France", record: "3:17.297 (Monza)", desc: "L'épreuve d'endurance reine. La ligne droite des Hunaudières.", likes: 325, comments: [{author: "LeMansFans", text: "La nuit du Mans est magique."}] },
-            { id: "race3", name: "Indianapolis 500", location: "Indiana, USA", record: "00:37.616", desc: "Le mythique anneau de vitesse. Le temple de l'IndyCar.", likes: 98, comments: [{author: "OvaleKing", text: "Mettez du son !"}] },
-            { id: "race4", name: "Nürburgring Nordschleife", location: "Eifel, Allemagne", record: "05:19.546", desc: "L'Enfer Vert. Plus de 20 kilomètres de courbes redoutables.", likes: 450, comments: [{author: "RingMaster", text: "La Porsche 919 Evo y est imbattable."}] },
-            { id: "race5", name: "Rallye Dakar", location: "Désert absolu", record: "44h Endurance", desc: "L'aventure hors-piste ultime. dunes, sable et navigation.", likes: 189, comments: [{author: "DesertRider", text: "La dureté mécanique à l'état pur."}] },
-            { id: "race6", name: "Grand Prix de Monaco", location: "Principauté de Monaco", record: "1:10.166", desc: "Un couloir d'acier en milieu urbain. Pas le droit à l'erreur.", likes: 278, comments: [{author: "SennasSpirit", text: "Le virage de l'hôtel de gare est ultra lent !"}] },
-            { id: "race7", name: "Bonneville Utah", location: "Salt Flats, USA", record: "1227.98 km/h", desc: "La plaine de sel infinie. Conçu uniquement pour la vitesse pure.", likes: 83, comments: [{author: "SaltSpeed", text: "On dirait une autre planète."}] },
-            { id: "race8", name: "Courses Dragster (NHRA)", location: "Pomona, USA", record: "3.631s (1/4 Mile)", desc: "4 G d'accélération brute. Des moteurs de 11 000 chevaux.", likes: 154, comments: [{author: "NitroAero", text: "Le sol tremble à chaque départ !"}] },
-            { id: "race9", name: "Championnat GT3 World", location: "Spa, Monza, Silverstone", record: "Multi-Circuit", desc: "L'élite des voitures de sport dérivées de la série.", likes: 211, comments: [{author: "GT3Lover", text: "Le son de l'Audi R8 V10 !"}] },
-            { id: "race10", name: "Isle of Man TT", location: "Île de Man", record: "16:42.778", desc: "La course routière la plus rapide et dangereuse du globe.", likes: 512, comments: [{author: "MotoGP_Guy", text: "Ces pilotes n'ont pas de cerveau !"}] },
-            { id: "race11", name: "Bathurst Mount Panorama", location: "Australie", record: "1:58.694", desc: "Le toboggan mythique. Descente vertigineuse entre les murs.", likes: 137, comments: [{author: "AussieV8", text: "The Mountain is legendary !"}] },
-            { id: "race12", name: "Grand Prix de Macao", location: "Macao, Chine", record: "2:05.145 (F3)", desc: "Le circuit de Guia. Un tracé urbain d'une technicité effroyable.", likes: 122, comments: [{author: "CityDriver", text: "La courbe Lisboa est toujours un carnage."}] }
+            { id: "race1", name: "Pikes Peak Hill Climb", location: "Colorado, USA", record: "07:57.148", desc: "La course vers les nuages. Altitude extrême, sifflement strident de moteur électrique hybride et de turbo.", likes: 142, comments: [{author: "ChronoMax", text: "Effrayant sans barrières !"}] },
+            { id: "race2", name: "24 Heures du Mans", location: "Sarthe, France", record: "3:17.297 (Monza)", desc: "L'épreuve d'endurance reine. Un passage de V8 hurlant dans la ligne droite des Hunaudières.", likes: 325, comments: [{author: "LeMansFans", text: "La nuit du Mans est magique."}] },
+            { id: "race3", name: "Indianapolis 500", location: "Indiana, USA", record: "00:37.616", desc: "Le mythique anneau de vitesse. Le sillage d'un moteur Indy hurlant à 12 000 tr/min.", likes: 98, comments: [{author: "OvaleKing", text: "Mettez du son !"}] },
+            { id: "race4", name: "Nürburgring Nordschleife", location: "Eifel, Allemagne", record: "05:19.546", desc: "L'Enfer Vert. Plus de 20 kilomètres d'asphalte éprouvant les suspensions et les échappements de GT3.", likes: 450, comments: [{author: "RingMaster", text: "La Porsche 919 Evo y est imbattable."}] },
+            { id: "race5", name: "Rallye Dakar", location: "Désert absolu", record: "44h Endurance", desc: "L'aventure hors-piste ultime. Un moteur diesel biturbo rugissant sur les dunes.", likes: 189, comments: [{author: "DesertRider", text: "La dureté mécanique à l'état pur."}] },
+            { id: "race6", name: "Grand Prix de Monaco", location: "Principauté de Monaco", record: "1:10.166", desc: "Un couloir d'acier en milieu urbain. Les échos de F1 résonnant sous le tunnel.", likes: 278, comments: [{author: "SennasSpirit", text: "Le virage de l'hôtel de gare est ultra lent !"}] },
+            { id: "race7", name: "Bonneville Utah", location: "Salt Flats, USA", record: "1227.98 km/h", desc: "La plaine de sel infinie. Sifflement suraigu de turbine aérodynamique fendant le vent.", likes: 83, comments: [{author: "SaltSpeed", text: "On dirait une autre planète."}] },
+            { id: "race8", name: "Courses Dragster (NHRA)", location: "Pomona, USA", record: "3.631s (1/4 Mile)", desc: "4 G d'accélération brute. Des moteurs V8 nitrométhane de 11 000 chevaux.", likes: 154, comments: [{author: "NitroAero", text: "Le sol tremble à chaque départ !"}] },
+            { id: "race9", name: "Championnat GT3 World", location: "Spa, Monza, Silverstone", record: "Multi-Circuit", desc: "L'élite des voitures de sport dérivées de la série. Le chant lyrique des moteurs atmosphériques.", likes: 211, comments: [{author: "GT3Lover", text: "Le son de l'Audi R8 V10 !"}] },
+            { id: "race10", name: "Isle of Man TT", location: "Île de Man", record: "16:42.778", desc: "La course routière la plus rapide et dangereuse du globe. Le hululement d'une moto à 300 km/h.", likes: 512, comments: [{author: "MotoGP_Guy", text: "Ces pilotes n'ont pas de cerveau !"}] },
+            { id: "race11", name: "Bathurst Mount Panorama", location: "Australie", record: "1:58.694", desc: "Le toboggan mythique. Descente vertigineuse entre les murs avec un bloc V8 rageur.", likes: 137, comments: [{author: "AussieV8", text: "The Mountain is legendary !"}] },
+            { id: "race12", name: "Grand Prix de Macao", location: "Macao, Chine", record: "2:05.145 (F3)", desc: "Le circuit de Guia. Un tracé urbain d'une technicité effroyable avec les cris des moteurs F3.", likes: 122, comments: [{author: "CityDriver", text: "La courbe Lisboa est toujours un carnage."}] }
         ];
 
         let products = [];
@@ -1457,6 +1468,185 @@
         const totalPages = 5;
         const pageIds = ['page-home', 'page-collection', 'page-exchange', 'page-topspeed', 'page-preorder'];
         const angles = [-110, -55, 0, 55, 110];
+
+        /**
+         * Synthétise des sons de moteurs en fonction de la course sélectionnée
+         */
+        async function playRaceSoundSynth(raceId) {
+            // Démarrer Tone.js (requis par les politiques de sécurité des navigateurs)
+            await Tone.start();
+
+            const race = racesData.find(r => r.id === raceId);
+            if (!race) return;
+
+            const name = race.name.toLowerCase();
+            showToast("Télémétrie Sonore", `Génération analogique du moteur pour ${race.name}...`, "warning");
+
+            // Arrêter tout synthétiseur précédemment actif pour éviter les chevauchements
+            if (window.activeRaceSynth) {
+                try {
+                    window.activeRaceSynth.triggerRelease();
+                    window.activeRaceSynth.dispose();
+                } catch(e) {}
+            }
+
+            // Déclencher l'animation visuelle de l'égaliseur
+            animateEqVisualizer(raceId, 2500);
+
+            const now = Tone.now();
+
+            if (name.includes("pikes peak") || name.includes("monaco") || name.includes("nürburgring") || name.includes("macao") || name.includes("tt")) {
+                // SYNTHÈSE MOTEUR DE F1 / MOTO HYPER-SPORTIVE (Sifflement aigu monté à haut régime)
+                const synth = new Tone.MonoSynth({
+                    oscillator: { type: "sawtooth" },
+                    filter: { Q: 1.5, type: "lowpass", frequency: 300 },
+                    envelope: { attack: 0.1, decay: 0.3, sustain: 0.8, release: 0.8 },
+                    filterEnvelope: { attack: 0.1, decay: 0.5, sustain: 0.7, baseFrequency: 300, octaves: 3.5 }
+                }).toDestination();
+                
+                window.activeRaceSynth = synth;
+
+                // Séquence d'accélération
+                synth.triggerAttack("F#1", now);
+                synth.frequency.rampTo("C#4", 0.6, now); // Premier rapport
+                
+                // Passage de rapport 1
+                synth.frequency.setValueAtTime("C#3", now + 0.65);
+                synth.frequency.rampTo("E4", 0.5, now + 0.7); // Second rapport
+                
+                // Passage de rapport 2
+                synth.frequency.setValueAtTime("A3", now + 1.25);
+                synth.frequency.rampTo("F#5", 0.8, now + 1.3); // Troisième rapport en fond de ligne droite
+                
+                synth.triggerRelease(now + 2.3);
+
+            } else if (name.includes("mans") || name.includes("gt3") || name.includes("bathurst")) {
+                // SYNTHÈSE V8 / GT3 RUGISSANT (Rumble sourd, agressif et lourd)
+                const synth = new Tone.Synth({
+                    oscillator: { type: "square" },
+                    envelope: { attack: 0.15, decay: 0.4, sustain: 0.8, release: 0.9 }
+                }).toDestination();
+
+                // Ajout d'un filtre vibrato pour simuler les pistons du moteur V8
+                const filter = new Tone.Filter({ type: "lowpass", frequency: 350 }).toDestination();
+                synth.connect(filter);
+
+                window.activeRaceSynth = synth;
+
+                synth.triggerAttack("E1", now);
+                synth.frequency.rampTo("B2", 0.8, now);
+                
+                // Passage de vitesse
+                synth.frequency.setValueAtTime("D2", now + 0.85);
+                synth.frequency.rampTo("C#3", 0.7, now + 0.9);
+                
+                // Flyby Doppler effect simulation (baisse de pitch rapide à la fin)
+                synth.frequency.rampTo("G1", 0.4, now + 1.8);
+                
+                synth.triggerRelease(now + 2.2);
+
+            } else if (name.includes("indianapolis") || name.includes("dragster")) {
+                // SYNTHÈSE DRAGSTER NITRO / INDYCAR (Screamer pur, distorsion aiguë et foudroyante)
+                const synth = new Tone.MonoSynth({
+                    oscillator: { type: "sawtooth" },
+                    filter: { Q: 3, type: "lowpass", frequency: 600 },
+                    envelope: { attack: 0.05, decay: 0.1, sustain: 1.0, release: 0.4 }
+                }).toDestination();
+                
+                window.activeRaceSynth = synth;
+
+                synth.triggerAttack("C1", now);
+                synth.frequency.rampTo("C5", 0.5, now); // Accélération foudroyante (0 à 400km/h)
+                synth.frequency.setValueAtTime("A4", now + 0.55);
+                synth.frequency.rampTo("G#5", 0.6, now + 0.6);
+                synth.frequency.setValueAtTime("F#4", now + 1.25);
+                synth.frequency.rampTo("B5", 0.6, now + 1.3);
+
+                synth.triggerRelease(now + 2.2);
+
+            } else if (name.includes("bonneville")) {
+                // SYNTHÈSE TURBINE D'AVION / THRUST SSC (Bruit de souffle d'air blanc + sifflement métallique)
+                const noise = new Tone.Noise("pink").start();
+                const noiseFilter = new Tone.Filter({ type: "bandpass", Q: 4, frequency: 120 }).toDestination();
+                noise.connect(noiseFilter);
+
+                const osc = new Tone.Oscillator("sine").toDestination().start();
+                osc.volume.setValueAtTime(-60, now);
+                osc.volume.rampTo(-10, 1.0, now);
+
+                // Simulation de la montée de la turbine
+                noiseFilter.frequency.setValueAtTime(100, now);
+                noiseFilter.frequency.rampTo(2500, 1.5, now);
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.rampTo(1800, 1.5, now);
+
+                // Décélération
+                noiseFilter.frequency.rampTo(80, 1.0, now + 1.6);
+                osc.frequency.rampTo(100, 1.0, now + 1.6);
+                osc.volume.rampTo(-60, 1.0, now + 1.6);
+
+                setTimeout(() => {
+                    noise.stop();
+                    osc.stop();
+                    noise.dispose();
+                    noiseFilter.dispose();
+                    osc.dispose();
+                }, 3000);
+
+            } else if (name.includes("dakar")) {
+                // RUGISSEMENT DIRT BIKE / RALLY RAID (Gritty, vibrations instables)
+                const synth = new Tone.MonoSynth({
+                    oscillator: { type: "sawtooth" },
+                    filter: { Q: 0.8, type: "lowpass", frequency: 250 },
+                    envelope: { attack: 0.2, decay: 0.4, sustain: 0.6, release: 0.8 }
+                }).toDestination();
+                
+                window.activeRaceSynth = synth;
+
+                synth.triggerAttack("D1", now);
+                synth.frequency.rampTo("G1", 0.7, now);
+                synth.frequency.setValueAtTime("F1", now + 0.75);
+                synth.frequency.rampTo("A#2", 0.8, now + 0.8);
+
+                synth.triggerRelease(now + 2.0);
+
+            } else {
+                // SON PAR DÉFAUT CYBER-COUTURE (Effet de passage spatial futuriste)
+                const synth = new Tone.FMSynth().toDestination();
+                window.activeRaceSynth = synth;
+                
+                synth.triggerAttack("G2", now);
+                synth.harmonicity.rampTo(4.5, 1.5, now);
+                synth.modulationIndex.rampTo(15, 1.5, now);
+                synth.frequency.rampTo("C1", 1.5, now);
+                
+                synth.triggerRelease(now + 1.8);
+            }
+        }
+
+        /**
+         * Anime un égaliseur graphique au moment du lancement d'un son de moteur
+         */
+        function animateEqVisualizer(raceId, duration) {
+            const visualizer = document.getElementById(`eq-visualizer-${raceId}`);
+            if (!visualizer) return;
+
+            visualizer.classList.remove('hidden');
+            const bars = visualizer.querySelectorAll('.eq-bar');
+            
+            const interval = setInterval(() => {
+                bars.forEach(bar => {
+                    const randomHeight = Math.floor(Math.random() * 28) + 4; // Entre 4px et 32px
+                    bar.style.height = `${randomHeight}px`;
+                });
+            }, 80);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                visualizer.classList.add('hidden');
+                bars.forEach(bar => bar.style.height = '4px');
+            }, duration);
+        }
 
         async function initApp() {
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
@@ -1531,7 +1721,7 @@
                 if (introSheet) introSheet.classList.add('unfolded');
             }, 300);
 
-            // Chargement de la vidéo de l'intro (Liaison directe sur l'élément vidéo principal)
+            // Chargement de la vidéo de l'intro
             try {
                 const savedIntroVid = await getVideoFromDB('intro_video');
                 const introPlayer = document.getElementById('intro-video-player');
@@ -1759,7 +1949,7 @@
                 await saveVideoToDB('intro_video', tempIntroVideoFile);
                 const videoUrl = URL.createObjectURL(tempIntroVideoFile);
                 if (player) {
-                    player.src = videoUrl; // Liaison directe sur l'élément vidéo
+                    player.src = videoUrl;
                     player.load();
                     player.play().catch(() => {});
                 }
@@ -1767,7 +1957,7 @@
             } else if (urlInput) {
                 await saveVideoToDB('intro_video', urlInput);
                 if (player) {
-                    player.src = urlInput; // Liaison directe sur l'élément vidéo
+                    player.src = urlInput;
                     player.load();
                     player.play().catch(() => {});
                 }
@@ -2414,9 +2604,9 @@
                 isMaster = true;
                 localStorage.setItem('bj_master_logged', 'true');
                 updateMasterModeUI();
-                renderRaces(); // update race elements with master triggers
+                renderRaces();
                 closeUnifiedPortalModal();
-                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Vous pouvez éditer les courses du Top Speed (chronos, descriptions, noms) !", "success");
+                showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Vous pouvez éditer les courses du Top Speed !", "success");
             } else {
                 showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité de l'écurie rejette l'identifiant.", "error");
             }
@@ -2426,7 +2616,7 @@
             isMaster = false;
             localStorage.setItem('bj_master_logged', 'false');
             updateMasterModeUI();
-            renderRaces(); // update race elements to lock master triggers
+            renderRaces();
             showToast("Déconnexion active", "Mode Master désactivé. Verrouillage du Canvas.");
         }
 
@@ -2517,7 +2707,7 @@
                 await saveVideoToDB('home_video', tempVideoFile);
                 const videoUrl = URL.createObjectURL(tempVideoFile);
                 if (player) {
-                    player.src = videoUrl; // Liaison directe sur l'élément vidéo
+                    player.src = videoUrl;
                     player.load();
                     player.play().catch(e => console.log("Playback delay"));
                 }
@@ -2525,7 +2715,7 @@
             } else if (urlInput) {
                 await saveVideoToDB('home_video', urlInput);
                 if (player) {
-                    player.src = urlInput; // Liaison directe sur l'élément vidéo
+                    player.src = urlInput;
                     player.load();
                     player.play().catch(e => console.log("Playback delay link"));
                 }
@@ -2711,45 +2901,48 @@
             if (!container) return;
             container.innerHTML = "";
 
-            // Dynamic Sorting by likes sum (descending order)
+            // Tri dynamique décroissant basé sur les "likes"
             const sortedRaces = [...racesData].sort((a, b) => b.likes - a.likes);
 
             sortedRaces.forEach((race, index) => {
                 const card = document.createElement('div');
-                card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.1)]";
+                card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] cursor-pointer";
                 
-                // Card media slots (Liaison directe pour vidéos dynamiques)
+                // Au clic sur la carte, on lance la synthèse du son du moteur !
+                card.setAttribute("onclick", `playRaceSoundSynth('${race.id}'); event.stopPropagation();`);
+
                 let mediaSlotHTML = `
                     <div id="media-container-${race.id}" class="aspect-video bg-neutral-950 border border-white/5 rounded-xl relative overflow-hidden flex flex-col items-center justify-center p-2 mb-4">
-                        <div id="visualizer-wrapper-${race.id}" class="hidden absolute inset-0 bg-neutral-950 flex flex-col items-center justify-center z-10">
-                            <!-- Visualizer Audio frequency simulated bar wave -->
-                            <div class="flex items-end gap-1 h-12 mb-2" id="bars-${race.id}">
-                                <div class="w-1.5 bg-bj-cyan rounded-t animate-pulse h-6"></div>
-                                <div class="w-1.5 bg-bj-gold rounded-t animate-pulse h-10" style="animation-delay: 0.2s"></div>
-                                <div class="w-1.5 bg-bj-cyan rounded-t animate-pulse h-8" style="animation-delay: 0.4s"></div>
-                                <div class="w-1.5 bg-bj-red rounded-t animate-pulse h-12" style="animation-delay: 0.1s"></div>
-                                <div class="w-1.5 bg-bj-gold rounded-t animate-pulse h-7" style="animation-delay: 0.3s"></div>
-                            </div>
-                            <span class="text-[8px] text-bj-gold uppercase tracking-widest">// FLUX AUDIO EN COURS //</span>
+                        
+                        <!-- Visualiseur d'égaliseur graphique au déclenchement -->
+                        <div id="eq-visualizer-${race.id}" class="hidden absolute inset-0 bg-black/90 flex items-center justify-center gap-1.5 z-20">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar" style="transition-delay: 0.05s"></div>
+                            <div class="eq-bar" style="transition-delay: 0.1s"></div>
+                            <div class="eq-bar" style="transition-delay: 0.15s"></div>
+                            <div class="eq-bar" style="transition-delay: 0.2s"></div>
+                            <span class="text-[9px] text-bj-cyan font-bold uppercase ml-2 select-none tracking-widest animate-pulse">TELEMETRY AUDIO</span>
                         </div>
 
                         <video id="video-${race.id}" class="race-video w-full h-full object-cover rounded-lg hidden" loop muted playsinline></video>
                         <audio id="audio-${race.id}" class="hidden" loop></audio>
 
-                        <!-- Unloaded state placeholder -->
-                        <div id="placeholder-${race.id}" class="text-center text-bj-textMuted flex flex-col items-center gap-1">
-                            <span class="text-[10px] text-white font-bold tracking-widest uppercase">// [FLUX VIDÉO / AUDIO]</span>
-                            <span class="text-[8px]">Média d'usine par défaut actif</span>
+                        <!-- État par défaut de l'écran radar -->
+                        <div id="placeholder-${race.id}" class="text-center text-bj-textMuted flex flex-col items-center gap-1 select-none">
+                            <div class="w-12 h-12 rounded-full border border-bj-cyan/20 flex items-center justify-center relative animate-pulse mb-1">
+                                <span class="text-xs text-bj-cyan">▶</span>
+                            </div>
+                            <span class="text-[10px] text-white font-bold tracking-widest uppercase">// CLIQUER POUR ÉCOUTER</span>
+                            <span class="text-[8px]">Symphonie Moteur de Synthèse</span>
                         </div>
 
                         <!-- sound overlays -->
-                        <button id="unmute-btn-${race.id}" onclick="toggleRaceSound('${race.id}')" class="hidden absolute bottom-2 right-2 bg-black/80 border border-bj-cyan/30 text-bj-cyan p-1.5 rounded text-[8px] uppercase font-bold tracking-wider z-20 transition-all">
+                        <button id="unmute-btn-${race.id}" onclick="toggleRaceSound('${race.id}'); event.stopPropagation();" class="hidden absolute bottom-2 right-2 bg-black/80 border border-bj-cyan/30 text-bj-cyan p-1.5 rounded text-[8px] uppercase font-bold tracking-wider z-20 transition-all">
                            🔊 Unmute
                         </button>
                     </div>
                 `;
 
-                // Comment section preview
                 let commentsHTML = "";
                 race.comments.forEach(c => {
                     commentsHTML += `
@@ -2759,29 +2952,28 @@
                     `;
                 });
 
-                // Rendering the card body
                 card.innerHTML = `
                     <div>
-                        <!-- POSITION BADGE (Based on likes ranking) -->
+                        <!-- POSITION BADGE -->
                         <div class="absolute top-0 left-0 bg-bj-cyan/10 border-b border-r border-bj-cyan/30 px-2.5 py-1 text-[9px] font-bold text-bj-cyan tracking-widest font-mono select-none z-20">
                             RANK #${index + 1}
                         </div>
 
                         <!-- MASTER EDITION BUTTON -->
                         ${isMaster ? `
-                            <button onclick="openRaceEditModal('${race.id}')" class="absolute top-2 right-2 bg-bj-gold text-black hover:bg-white px-2 py-1 rounded text-[9px] font-bold tracking-wider uppercase shadow-md transition-all z-30 font-mono">
+                            <button onclick="openRaceEditModal('${race.id}'); event.stopPropagation();" class="absolute top-2 right-2 bg-bj-gold text-black hover:bg-white px-2 py-1 rounded text-[9px] font-bold tracking-wider uppercase shadow-md transition-all z-30 font-mono">
                                 EDIT
                             </button>
                         ` : ''}
 
-                        <!-- CLICKABLE CONTENT SECTION FOR MASTER -->
-                        <div class="pt-5 pb-2 border-b border-bj-border mb-2 relative ${isMaster ? 'hover:outline hover:outline-dashed hover:outline-bj-gold/40 cursor-pointer rounded px-1' : ''}" onclick="${isMaster ? `openRaceEditModal('${race.id}')` : ''}">
+                        <!-- CONTENT SECTION -->
+                        <div class="pt-5 pb-2 border-b border-bj-border mb-2 relative ${isMaster ? 'hover:outline hover:outline-dashed hover:outline-bj-gold/40 cursor-pointer rounded px-1' : ''}" onclick="${isMaster ? `openRaceEditModal('${race.id}'); event.stopPropagation();` : ''}">
                             <div class="flex justify-between items-start gap-2">
                                 <div>
-                                    <h3 class="text-sm font-extrabold text-white uppercase tracking-wider italic leading-tight">${race.name}</h3>
+                                    <h3 class="text-sm font-extrabold text-white uppercase tracking-wider italic leading-tight group-hover:text-bj-cyan transition-colors">${race.name}</h3>
                                     <p class="text-[9px] text-bj-cyan uppercase mt-0.5">${race.location}</p>
                                 </div>
-                                <span class="text-[9px] text-bj-gold border border-bj-gold/20 bg-bj-gold/5 px-2 py-0.5 rounded font-bold whitespace-nowrap" title="Record de course (Jaune)">
+                                <span class="text-[9px] text-bj-gold border border-bj-gold/20 bg-bj-gold/5 px-2 py-0.5 rounded font-bold whitespace-nowrap">
                                     ${race.record}
                                 </span>
                             </div>
@@ -2792,23 +2984,26 @@
 
                         <!-- Subscriber Upload Action button -->
                         <div class="flex items-center gap-2 mb-4">
-                            <label class="flex-grow flex items-center justify-center border border-dashed border-bj-cyan/30 hover:border-bj-cyan rounded-lg p-2 bg-black/40 cursor-pointer text-center font-mono text-[9px] text-white uppercase transition-all">
-                                <span>⚡ Ajouter Média (Vidéo/Son)</span>
+                            <label class="flex-grow flex items-center justify-center border border-dashed border-bj-cyan/30 hover:border-bj-cyan rounded-lg p-2 bg-black/40 cursor-pointer text-center font-mono text-[9px] text-white uppercase transition-all" onclick="event.stopPropagation();">
+                                <span>⚡ Remplacer Média (Vidéo/Son)</span>
                                 <input type="file" accept="video/*, audio/*" class="hidden" onchange="uploadRaceMedia(event, '${race.id}')">
                             </label>
                         </div>
 
                         <!-- Interaction controls -->
                         <div class="flex justify-between items-center text-xs pt-2 border-t border-bj-border/30 mb-4">
-                            <button onclick="likeRace('${race.id}')" class="flex items-center gap-1 hover:text-bj-red text-bj-textMuted transition-all bg-black/30 border border-white/5 px-3 py-1.5 rounded-lg">
+                            <button onclick="likeRace('${race.id}'); event.stopPropagation();" class="flex items-center gap-1 hover:text-bj-red text-bj-textMuted transition-all bg-black/30 border border-white/5 px-3 py-1.5 rounded-lg">
                                 <span class="text-base text-bj-red animate-pulse">♥</span> 
                                 <span id="likes-count-${race.id}" class="font-bold text-white">${race.likes} Likes</span>
                             </button>
-                            <span class="text-[8px] text-bj-textMuted uppercase font-mono tracking-widest">// GLOBAL RECORD</span>
+                            <!-- Bouton Moteur dédié -->
+                            <button onclick="playRaceSoundSynth('${race.id}'); event.stopPropagation();" class="flex items-center gap-1 bg-bj-gold/10 border border-bj-gold/35 text-bj-gold hover:bg-bj-gold hover:text-black px-2.5 py-1.5 rounded-lg transition-all text-[9px] uppercase font-bold">
+                                🔊 Moteur
+                            </button>
                         </div>
 
                         <!-- Comments Board -->
-                        <div class="space-y-2 max-h-[80px] overflow-y-auto pr-1 bg-black/30 rounded-lg p-2 mb-4">
+                        <div class="space-y-2 max-h-[80px] overflow-y-auto pr-1 bg-black/30 rounded-lg p-2 mb-4" onclick="event.stopPropagation();">
                             <div class="space-y-1.5" id="comments-box-${race.id}">
                                 ${commentsHTML || '<p class="text-[8px] text-bj-textMuted italic">// Aucun commentaire d\'écurie</p>'}
                             </div>
@@ -2816,15 +3011,13 @@
                     </div>
 
                     <!-- Add Comment input -->
-                    <div class="flex gap-2">
+                    <div class="flex gap-2" onclick="event.stopPropagation();">
                         <input type="text" id="comment-input-${race.id}" placeholder="Inscrire un avis..." class="flex-grow bg-black border border-white/10 rounded-md px-3 py-1.5 text-[9px] outline-none focus:border-bj-cyan text-white">
-                        <button onclick="addRaceComment('${race.id}')" class="bg-bj-cyan/10 hover:bg-bj-cyan border border-bj-cyan/20 hover:text-black text-bj-cyan px-3 py-1 text-[9px] rounded font-bold transition-all uppercase font-mono">OK</button>
+                        <button onclick="addRaceComment('${race.id}'); event.stopPropagation();" class="bg-bj-cyan/10 hover:bg-bj-cyan border border-bj-cyan/20 hover:text-black text-bj-cyan px-3 py-1 text-[9px] rounded font-bold transition-all uppercase font-mono">OK</button>
                     </div>
                 `;
 
                 container.appendChild(card);
-                
-                // Immediately check if there is custom saved media for this card
                 loadRaceMedia(race.id);
             });
         }
@@ -2836,7 +3029,6 @@
 
                 const videoPlayer = document.getElementById(`video-${raceId}`);
                 const audioPlayer = document.getElementById(`audio-${raceId}`);
-                const visualizer = document.getElementById(`visualizer-wrapper-${raceId}`);
                 const placeholder = document.getElementById(`placeholder-${raceId}`);
                 const unmuteBtn = document.getElementById(`unmute-btn-${raceId}`);
 
@@ -2844,26 +3036,19 @@
 
                 const fileUrl = URL.createObjectURL(file);
 
-                // Check if the mimeType indicates audio or video
                 if (file.type.startsWith('audio/')) {
-                    // It is an Audio file
                     audioPlayer.src = fileUrl;
                     audioPlayer.load();
-                    
                     videoPlayer.classList.add('hidden');
-                    visualizer.classList.remove('hidden');
                     placeholder.classList.add('hidden');
                     unmuteBtn.classList.remove('hidden');
-                    unmuteBtn.innerText = "🔈 Lire Son";
+                    unmuteBtn.innerText = "🔈 Lire Son Fichier";
 
                 } else if (file.type.startsWith('video/')) {
-                    // It is a Video file
                     videoPlayer.src = fileUrl;
                     videoPlayer.load();
                     videoPlayer.play().catch(e => console.log("Silent autoplay restricted"));
-                    
                     videoPlayer.classList.remove('hidden');
-                    visualizer.classList.add('hidden');
                     placeholder.classList.add('hidden');
                     unmuteBtn.classList.remove('hidden');
                     unmuteBtn.innerText = "🔈 Son Muet";
@@ -2877,30 +3062,23 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            // Enforce size safety boundary (120 Mo max)
             if (file.size > 120 * 1024 * 1024) {
-                showToast("Fichier trop volumineux", "Choisissez un fichier audio ou vidéo de moins de 120 Mo.", "error");
+                showToast("Fichier trop volumineux", "Choisissez un fichier de moins de 120 Mo.", "error");
                 return;
             }
 
             showToast("Indexation...", "Enregistrement sécurisé du média...", "info");
-            
-            // Save file into indexedDB for persistent caching!
             await saveVideoToDB(`race_media_${raceId}`, file);
-            
-            // Re-render and trigger play on this specific slot
             await loadRaceMedia(raceId);
-            showToast("Média Lié", "Fichier vidéo ou son enregistré avec succès sur l'épreuve !", "success");
+            showToast("Média Lié", "Fichier enregistré avec succès sur l'épreuve !", "success");
         }
 
         function toggleRaceSound(raceId) {
             const video = document.getElementById(`video-${raceId}`);
             const audio = document.getElementById(`audio-${raceId}`);
             const btn = document.getElementById(`unmute-btn-${raceId}`);
-            const bars = document.getElementById(`bars-${raceId}`);
 
             if (video && !video.classList.contains('hidden')) {
-                // Video sound handling
                 if (video.muted) {
                     video.muted = false;
                     video.volume = 1.0;
@@ -2912,44 +3090,27 @@
                     showToast("Son coupé", `Vidéo de l'épreuve mise en sourdine.`);
                 }
             } else if (audio && audio.src) {
-                // Audio file handling (Play/Pause)
                 if (audio.paused) {
                     audio.play().catch(e => console.warn(e));
                     btn.innerText = "🔊 Suspendre";
-                    
-                    // Activate simulated wave equalizer animation
-                    if(bars) {
-                        const divs = bars.querySelectorAll('div');
-                        divs.forEach(div => div.classList.add('animate-pulse'));
-                    }
                     showToast("Audio Actif", `Écoute du son d'écurie en cours...`);
                 } else {
                     audio.pause();
                     btn.innerText = "🔈 Lire Son";
-                    
-                    // Disable equalizer animation
-                    if(bars) {
-                        const divs = bars.querySelectorAll('div');
-                        divs.forEach(div => div.classList.remove('animate-pulse'));
-                    }
                 }
             }
         }
 
-        // Like handling with dynamic real-time sorting
         function likeRace(raceId) {
             const race = racesData.find(r => r.id === raceId);
             if (!race) return;
 
             race.likes++;
             localStorage.setItem('bj_races_data', JSON.stringify(racesData));
-            
-            // Recalculating order and rendering elements again dynamically
             renderRaces();
-            showToast("Soutien d'Écurie", `Vote de performance enregistré ! Le classement Top Speed a été mis à jour en temps réel.`, "success");
+            showToast("Soutien d'Écurie", `Vote de performance enregistré ! Le classement Top Speed a été mis à jour.`, "success");
         }
 
-        // Add Comment
         function addRaceComment(raceId) {
             const input = document.getElementById(`comment-input-${raceId}`);
             if (!input || !input.value.trim()) return;
@@ -2965,7 +3126,6 @@
 
             localStorage.setItem('bj_races_data', JSON.stringify(racesData));
             
-            // Re-render comments box content
             const commentsBox = document.getElementById(`comments-box-${raceId}`);
             let commentsHTML = "";
             race.comments.forEach(c => {
@@ -3005,8 +3165,6 @@
             if (!input || !input.value.trim()) return;
 
             const author = currentUser ? currentUser.pseudonym : "Abonné_" + Math.floor(Math.random() * 900 + 100);
-            
-            // Inject message to feed
             box.innerHTML += `
                 <p><span class="text-bj-gold font-bold">@${author}:</span> ${input.value.trim()}</p>
             `;
@@ -3016,7 +3174,6 @@
             showToast("Signal Envoyé", "Message dispatché sur le canal d'écurie.", "success");
         }
 
-        // Dynamic keypress handling for chat inputs
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const activeEl = document.activeElement;
