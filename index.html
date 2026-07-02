@@ -255,7 +255,7 @@
 
     <!-- INTRO DE PRÉSENTATION CINÉMATIQUE -->
     <div id="intro-overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
-        <!-- Balayeurs de Lasers Bleu et Blanc -->
+        <!-- Balayeurs de Lasers Bleu et Blanc d'arrière-plan (z-10 pour être derrière le cadre d'intro z-20) -->
         <div id="laser-container" class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
             <div class="laser-beam-blue absolute left-[-20%] top-[-75%]"></div>
             <div class="laser-beam-white absolute left-[20%] top-[-75%]" style="animation-delay: 1.5s; animation-duration: 4.8s;"></div>
@@ -263,9 +263,9 @@
             <div class="laser-beam-white absolute left-[85%] top-[-75%]" style="animation-delay: 0.7s; animation-duration: 3.8s;"></div>
         </div>
 
-        <!-- Feuille se dépliant en 3D -->
-        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-6 sm:p-8">
-            <!-- Vidéo de fond de l'Intro (Transparence diminuée de 25% : opacity passe de 0.50 à 0.75) -->
+        <!-- Feuille se dépliant en 3D (z-20 pour surmonter proprement les lasers et préserver la clarté du titre) -->
+        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[52vh] min-h-[350px] sm:h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-4 sm:p-8 z-20">
+            <!-- Vidéo de fond de l'Intro (Transparence diminuée de 25% : opacity à 0.75) -->
             <div class="absolute inset-0 z-0 bg-neutral-950">
                 <video id="intro-video-player" class="w-full h-full object-cover opacity-75" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
                 </video>
@@ -276,33 +276,33 @@
             <div class="relative z-10 flex flex-col justify-between h-full text-center">
                 <!-- En-tête -->
                 <div class="flex justify-between items-center gap-2">
-                    <span class="text-[8px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.7]</span>
+                    <span class="text-[7px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.2em] sm:tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.7]</span>
                     <div class="flex items-center gap-2">
-                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2.5 py-1.5 rounded font-mono text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
+                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2 py-1 sm:px-2.5 sm:py-1.5 rounded font-mono text-[8px] sm:text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
                             <span id="intro-sound-icon">🔈 Activer le Son</span>
                         </button>
-                        <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-3 py-1.5 rounded font-mono text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
+                        <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-2.5 py-1 sm:px-3 sm:py-1.5 rounded font-mono text-[8px] sm:text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
                             🛠 Configurer l'Intro
                         </button>
                     </div>
                 </div>
 
-                <!-- Message central avec police d'écriture Dodger émulée -->
-                <div class="my-auto space-y-4 px-2 sm:px-6">
-                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight font-dodger-style text-5xl sm:text-8xl font-black uppercase tracking-tight text-white leading-none">
+                <!-- Message central avec police d'écriture Dodger émulée et taille adaptative pour mobile -->
+                <div class="my-auto space-y-2 sm:space-y-4 px-1 sm:px-6">
+                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight font-dodger-style text-3xl min--[380px]:text-4xl sm:text-7xl md:text-8xl font-black uppercase tracking-tight text-white leading-none">
                         BENZJAMES
                     </h1>
-                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.4em] font-semibold">
+                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[8px] min-[380px]:text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.2em] sm:tracking-[0.4em] font-semibold">
                         L'ÉCURIE HIGH-TECH EN MOUVEMENT
                     </p>
                 </div>
 
                 <!-- Actions de validation (Bouton d'accès réduit de 60% avec le texte demandé) -->
-                <div class="flex flex-col items-center gap-2">
-                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-5 py-2 rounded-lg text-[10px] uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(6,182,212,0.5)] transform hover:scale-102">
+                <div class="flex flex-col items-center gap-1.5">
+                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(6,182,212,0.5)] transform hover:scale-102">
                         Carte du club privé
                     </button>
-                    <span class="text-[8px] font-mono text-bj-textMuted tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
+                    <span class="text-[7px] sm:text-[8px] font-mono text-bj-textMuted tracking-wider sm:tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
                 </div>
             </div>
         </div>
@@ -1908,7 +1908,7 @@
                     grid.innerHTML = `
                         <div class="col-span-full border border-dashed border-bj-cyan/20 rounded-xl p-12 text-center bg-bj-dark/40">
                             <span class="text-3xl block mb-2">📦</span>
-                            <span class="font-mono text-xs text-bj-textMuted uppercase tracking-wider">// AUCUN MODÈLE DANS CETTE CATÉGORIE</span>
+                            <span class="font-mono text-xs text-bj-textMuted uppercase tracking-wider">// AUCUN MODÈLE DANS CETTE CATÉRICORIE</span>
                             ${isMaster ? `<button onclick="openProductModal()" class="mt-4 px-4 py-2 bg-bj-gold text-black rounded text-[11px] font-mono font-bold uppercase tracking-wider hover:bg-white transition-all">+ AJOUTER PREMIER PRODUIT</button>` : ''}
                         </div>
                     `;
