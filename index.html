@@ -25,15 +25,14 @@
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                        dodger: ['Orbitron', 'sans-serif']
+                        mono: ['JetBrains Mono', 'monospace']
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Orbitron:wght@900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
         body, html {
             background-color: #050505;
@@ -189,16 +188,6 @@
             opacity: 1;
         }
 
-        /* Dodger Font styling (Importée d'Orbitron 900 Italic pour une esthétique super speed) */
-        .font-dodger-style {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: -0.02em;
-            transform: skewX(-4deg);
-            text-shadow: 0 0 15px rgba(6, 182, 212, 0.4), 0 0 35px rgba(6, 182, 212, 0.2);
-        }
-
         /* Animation de balayage des Lasers */
         @keyframes laserSweepHorizontal {
             0% { transform: translateX(-120%) rotate(-35deg); opacity: 0; }
@@ -255,7 +244,7 @@
 
     <!-- INTRO DE PRÉSENTATION CINÉMATIQUE -->
     <div id="intro-overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
-        <!-- Balayeurs de Lasers Bleu et Blanc d'arrière-plan (z-10 pour être derrière le cadre d'intro z-20) -->
+        <!-- Balayeurs de Lasers Bleu et Blanc -->
         <div id="laser-container" class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
             <div class="laser-beam-blue absolute left-[-20%] top-[-75%]"></div>
             <div class="laser-beam-white absolute left-[20%] top-[-75%]" style="animation-delay: 1.5s; animation-duration: 4.8s;"></div>
@@ -263,11 +252,11 @@
             <div class="laser-beam-white absolute left-[85%] top-[-75%]" style="animation-delay: 0.7s; animation-duration: 3.8s;"></div>
         </div>
 
-        <!-- Feuille se dépliant en 3D (z-20 pour surmonter proprement les lasers et préserver la clarté du titre) -->
-        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[52vh] min-h-[350px] sm:h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-4 sm:p-8 z-20">
-            <!-- Vidéo de fond de l'Intro (Transparence diminuée de 25% : opacity à 0.75) -->
+        <!-- Feuille se dépliant en 3D -->
+        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-6 sm:p-8">
+            <!-- Vidéo de fond de l'Intro -->
             <div class="absolute inset-0 z-0 bg-neutral-950">
-                <video id="intro-video-player" class="w-full h-full object-cover opacity-75" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
+                <video id="intro-video-player" class="w-full h-full object-cover opacity-50" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
                 </video>
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             </div>
@@ -276,33 +265,33 @@
             <div class="relative z-10 flex flex-col justify-between h-full text-center">
                 <!-- En-tête -->
                 <div class="flex justify-between items-center gap-2">
-                    <span class="text-[7px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.2em] sm:tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.7]</span>
+                    <span class="text-[8px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.7]</span>
                     <div class="flex items-center gap-2">
-                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2 py-1 sm:px-2.5 sm:py-1.5 rounded font-mono text-[8px] sm:text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
+                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2.5 py-1.5 rounded font-mono text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
                             <span id="intro-sound-icon">🔈 Activer le Son</span>
                         </button>
-                        <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-2.5 py-1 sm:px-3 sm:py-1.5 rounded font-mono text-[8px] sm:text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
+                        <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-3 py-1.5 rounded font-mono text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
                             🛠 Configurer l'Intro
                         </button>
                     </div>
                 </div>
 
-                <!-- Message central avec police d'écriture Dodger émulée et taille adaptative pour mobile -->
-                <div class="my-auto space-y-2 sm:space-y-4 px-1 sm:px-6">
-                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight font-dodger-style text-3xl min--[380px]:text-4xl sm:text-7xl md:text-8xl font-black uppercase tracking-tight text-white leading-none">
+                <!-- Message central en grand -->
+                <div class="my-auto space-y-4 px-2 sm:px-6">
+                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight text-4xl sm:text-7xl font-black uppercase tracking-[0.25em] text-white drop-shadow-[0_0_25px_rgba(6,182,212,0.7)] font-mono leading-none">
                         BENZJAMES
                     </h1>
-                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[8px] min-[380px]:text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.2em] sm:tracking-[0.4em] font-semibold">
+                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.4em] font-semibold">
                         L'ÉCURIE HIGH-TECH EN MOUVEMENT
                     </p>
                 </div>
 
-                <!-- Actions de validation (Bouton d'accès réduit de 60% avec le texte demandé) -->
-                <div class="flex flex-col items-center gap-1.5">
-                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(6,182,212,0.5)] transform hover:scale-102">
-                        Carte du club privé
+                <!-- Actions de validation et de démarrage -->
+                <div class="flex flex-col items-center gap-2">
+                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-12 py-4 rounded-xl text-xs uppercase tracking-[0.4em] transition-all shadow-[0_0_35px_rgba(6,182,212,0.6)] transform hover:scale-102">
+                        ENTRER DANS L'ÉCURIE
                     </button>
-                    <span class="text-[7px] sm:text-[8px] font-mono text-bj-textMuted tracking-wider sm:tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
+                    <span class="text-[8px] font-mono text-bj-textMuted tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
                 </div>
             </div>
         </div>
@@ -323,7 +312,7 @@
                 <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold font-mono">Cyber-Couture</span>
             </div>
             
-            <!-- 5 Pages Navigation -->
+            <!-- 5 Pages Navigation (Desktop Only) -->
             <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-bj-textMuted font-mono">
                 <button onclick="navigateTo('page-home')" id="nav-page-home" class="hover:text-white transition-all text-white border-b border-bj-gold pb-1">L'Écurie</button>
                 <button onclick="navigateTo('page-collection')" id="nav-page-collection" class="hover:text-white transition-all pb-1">La Collection</button>
@@ -332,8 +321,9 @@
                 <button onclick="navigateTo('page-preorder')" id="nav-page-preorder" class="hover:text-white transition-all pb-1">Configuration</button>
             </nav>
 
-            <!-- Actions CTA & Client Account portal icon -->
+            <!-- Actions CTA & Client Account portal icon (Unified master switch integrated inside) -->
             <div class="flex items-center gap-3">
+                <!-- Espace Client & Panier (Accès Unique Master masqué à l'intérieur) -->
                 <button onclick="openUnifiedPortalModal('client-tab')" class="p-3 border border-bj-cyan/20 hover:border-bj-gold rounded-xl bg-bj-dark hover:bg-black text-bj-cyan hover:text-bj-gold transition-all relative flex items-center justify-center shadow-lg" title="Espace Client, Panier & Connexion Master">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -369,6 +359,7 @@
             <button onclick="navigateToMobile('page-topspeed')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">Top Speed</button>
             <button onclick="navigateToMobile('page-preorder')" class="text-xl font-semibold uppercase tracking-widest text-white hover:text-bj-cyan transition-all">Configuration</button>
             <div class="border-t border-bj-cyan/10 pt-6 mt-4">
+                <!-- Direct mobile connection links directly target unified client portal now -->
                 <button onclick="toggleMobileMenu(); openUnifiedPortalModal('client-tab')" class="w-full py-3 bg-bj-cyan/15 border border-bj-cyan text-bj-cyan rounded font-mono text-xs uppercase font-bold tracking-wider">
                     Espace Connexion Client & Écurie
                 </button>
@@ -405,6 +396,7 @@
                                 <span class="text-[7px] font-mono text-bj-red tracking-wider font-bold">LIVE</span>
                             </div>
                             
+                            <!-- Unmute/Mute Toggle overlay -->
                             <button id="home-sound-btn" onclick="toggleMute('hud-video-player', 'home-sound-icon')" class="absolute bottom-4 right-4 z-20 bg-black/80 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan p-2 rounded-lg text-xs flex items-center gap-1 font-mono transition-all">
                                 <span id="home-sound-icon">🔈 Activer le Son</span>
                             </button>
@@ -435,6 +427,7 @@
                                 Configurer Visuel Droite
                             </button>
                             
+                            <!-- Stream Sound overlay for right side media -->
                             <button id="right-sound-btn" onclick="toggleMute('right-custom-video', 'right-sound-icon')" class="hidden absolute bottom-6 right-6 z-20 bg-black/80 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan p-2 rounded-lg text-[10px] flex items-center gap-1 font-mono transition-all">
                                 <span id="right-sound-icon">🔈 Son</span>
                             </button>
@@ -482,7 +475,7 @@
 
                     <!-- SUBFOLDERS / CATEGORY NAVIGATION (10 Articles customizable) -->
                     <div class="bg-black/40 border border-bj-cyan/15 rounded-xl p-3 shadow-inner">
-                        <span class="text-[9px] font-mono text-bj-gold uppercase tracking-widest block mb-2">// DIRECTORY_INDEX (CLIQUEZ POUR FILTRER / MASTER PEUT RENOMMER LES DOSSIERS)</span>
+                        <span class="text-[9px] font-mono text-bj-gold uppercase tracking-widest block mb-2">// DIRECTORY_INDEX (CLIQUEZ POUR FILTRER / MASTER PEUT RENOMMER DÉTAILS)</span>
                         <div id="category-subfolders" class="flex gap-2 overflow-x-auto pb-1 category-scroll scrollbar-thin">
                             <!-- Populated dynamically with 10 customizable category folders -->
                         </div>
@@ -610,6 +603,7 @@
 
                     <!-- RACING CHAT ENCART -->
                     <div class="mt-12 bg-bj-dark border border-bj-cyan/20 rounded-2xl p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden">
+                        <!-- Corner Accent Checkerboard Decor -->
                         <div class="absolute top-0 right-0 w-32 h-6 racing-checkers opacity-20"></div>
                         
                         <div class="border-b border-bj-border pb-4 mb-4 flex justify-between items-center">
@@ -625,7 +619,7 @@
                         </div>
 
                         <div class="flex gap-3 mt-4">
-                            <input type="text" id="racing-chat-input" placeholder="Message d'écurie..." class="flex-grow bg-black border border-bj-cyan/20 focus:border-bj-cyan rounded-lg px-4 py-3 text-xs font-mono outline-none text-white transition-all">
+                            <input type="text" id="racing-chat-input" placeholder="Message d'écurie ou conseil mécanique..." class="flex-grow bg-black border border-bj-cyan/20 focus:border-bj-cyan rounded-lg px-4 py-3 text-xs font-mono outline-none text-white transition-all">
                             <button onclick="sendRacingChatMessage()" class="bg-bj-gold hover:bg-white text-black font-extrabold px-6 py-3 rounded-lg text-xs uppercase tracking-wider font-mono transition-all">
                                 Transmettre
                             </button>
@@ -802,7 +796,7 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: MASTER/ADMINISTRATOR TAB -->
+                <!-- TAB 2: MASTER/ADMINISTRATOR TAB (Invisible public pathways, embedded cleanly inside) -->
                 <div id="portal-tab-master" class="hidden space-y-6">
                     <div id="master-login-fields" class="space-y-4">
                         <div class="text-center font-mono">
@@ -1022,7 +1016,7 @@
                     <div class="flex-grow border-t border-bj-cyan/15"></div>
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer depuis votre photothèque</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer depuis votre photothèque (avec ou sans Son)</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -1060,7 +1054,7 @@
                     <div class="flex-grow border-t border-bj-cyan/15"></div>
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer un fichier vidéo local</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer un fichier vidéo local (sauvegardé sur l'appareil)</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -1093,12 +1087,14 @@
                         <option value="video">Vidéo</option>
                     </select>
                 </div>
+                <!-- URL inputs -->
                 <div id="right-media-url-container" class="hidden">
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A: Lien URL Direct</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A: Lien URL Direct (Image ou Vidéo MP4)</label>
                     <input type="text" id="right-media-url" placeholder="https://example.com/media.jpg" class="w-full bg-bj-black border border-bj-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
                 </div>
+                <!-- File Picker -->
                 <div id="right-media-file-container" class="hidden">
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer un fichier</label>
+                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer un fichier depuis l'appareil</label>
                     <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
                         <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -1123,7 +1119,7 @@
                 <h3 class="text-lg font-bold text-white mt-1 uppercase" id="text-edit-title-h3">Modifier le texte sélectionné</h3>
             </div>
             <input type="hidden" id="edit-target-id">
-            <input type="hidden" id="edit-type" value="text">
+            <input type="hidden" id="edit-type" value="text"> <!-- text, category -->
             <div id="text-edit-input-container" class="font-mono text-xs"></div>
             <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeTextEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
@@ -1183,6 +1179,10 @@
 
     <!-- INTERACTIVE APP SCRIPT -->
     <script>
+        /**
+         * Dynamic Cyberpunk Toast Notifications
+         * Displays status, success, and error overlays in real-time.
+         */
         function showToast(title, message, type = 'info') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -1223,10 +1223,12 @@
 
             container.appendChild(toast);
 
+            // Animate transition-in
             setTimeout(() => {
                 toast.classList.remove('translate-y-4', 'opacity-0');
             }, 10);
 
+            // Self-dismiss after delay
             setTimeout(() => {
                 toast.classList.add('translate-y-4', 'opacity-0');
                 setTimeout(() => {
@@ -1252,10 +1254,10 @@
                         resolve(e.target.result);
                     };
                     request.onerror = function(e) {
-                        reject(new Error("IndexedDB bloqué par la Sandbox."));
+                        reject(new Error("IndexedDB bloqué par la Sandbox de l'aperçu."));
                     };
                 } catch(err) {
-                    reject(new Error("Accès IndexedDB interdit."));
+                    reject(new Error("Accès IndexedDB interdit dans ce mode d'affichage."));
                 }
             });
         }
@@ -1268,7 +1270,7 @@
                 store.put(val, key);
                 return new Promise((resolve) => tx.oncomplete = resolve);
             } catch (e) {
-                console.warn("IndexedDB indisponible. Sauvegarde temporaire.");
+                console.warn("IndexedDB indisponible pour écriture. Les données seront temporaires pour cette session.");
             }
         }
 
@@ -1288,6 +1290,7 @@
             }
         }
 
+        // Débloque l'autoplay de secours au premier clic sur l'écran ou à l'ouverture du site
         function unlockVideoAutoplay() {
             const mainVideo = document.getElementById('hud-video-player');
             const rightVideo = document.getElementById('right-custom-video');
@@ -1302,12 +1305,16 @@
                 introVideo.play().catch(() => {});
             }
             
+            // Unmute Top Speed videos playing
             const activeVideos = document.querySelectorAll('.race-video');
             activeVideos.forEach(v => {
                 if(!v.paused) v.play().catch(() => {});
             });
         }
 
+        /**
+         * Permet d'activer/couper le son de la vidéo de présentation d'introduction
+         */
         function toggleIntroMute() {
             const introPlayer = document.getElementById('intro-video-player');
             const icon = document.getElementById('intro-sound-icon');
@@ -1326,6 +1333,7 @@
             }
         }
 
+        // Cache-cache de l'intro et déploiement du site
         function dismissIntro() {
             const introOverlay = document.getElementById('intro-overlay');
             const introPlayer = document.getElementById('intro-video-player');
@@ -1339,6 +1347,7 @@
                 }, 1000);
             }
             
+            // On lance l'autoplaying et le son global
             unlockVideoAutoplay();
             showToast("Système Initialisé", "Bienvenue sur Benzjames. Télémétrie connectée.", "success");
         }
@@ -1357,12 +1366,16 @@
         ];
 
         const DEFAULT_PRODUCTS = [
+            // Casquettes (cat1)
             { id: "p1", categoryId: "cat1", name: "Monza Carbon Hybrid", price: 240, slogan: "L'appui aérodynamique ultime", desc: "Intègre une structure arrière en composite carbone flexible et un textile micro-perforé ultra-respirant.", image: "", badge: "F1 Aero", weight: 42 },
             { id: "p2", categoryId: "cat1", name: "Monaco Active Thermal", price: 310, slogan: "Régulation thermique absolue", desc: "Équipée d'une cellule de régulation de température active par conduction. Technologie issue de l'aérospatiale.", image: "", badge: "Peltier Tech", weight: 51 },
+            // Baskets (cat2)
             { id: "p3", categoryId: "cat2", name: "Daytona High-Step V1", price: 420, slogan: "Semelle magnétique auto-guidée", desc: "Intègre un noyau de suspension cybernétique ultra-réactif et des inserts en nano-fibre de kevlar.", image: "", badge: "Daytona Tech", weight: 320 },
             { id: "p4", categoryId: "cat2", name: "Nürburg Grip Pro", price: 480, slogan: "Grip adaptatif bitume / pluie", desc: "Dotée d'un profil de semelle thermique intelligent qui s'adapte à la température du sol.", image: "", badge: "Track Certified", weight: 290 },
+            // T-shirts (cat3)
             { id: "p5", categoryId: "cat3", name: "Silverstone Aero-Knit", price: 180, slogan: "Coupe ergonomique wind-tunnel", desc: "Micro-canaux d'aération optimisés pour l'évacuation immédiate de la chaleur corporelle en effort intense.", image: "", badge: "Aero Knit", weight: 95 },
             { id: "p6", categoryId: "cat3", name: "Suzuka Base Layer", price: 195, slogan: "Protection G-Force active", desc: "Textile technique compressif à mémoire de forme, réduisant les vibrations musculaires.", image: "", badge: "G-Membrane", weight: 110 },
+            // Other Categories Default placeholders
             { id: "p7", categoryId: "cat4", name: "Veste Kyoto Techwear", price: 590, slogan: "Imperméabilité électromagnétique", desc: "Traitement polymère hydrophobe avec membrane auto-chauffante par micro-faisceaux intégrés.", image: "", badge: "Kyoto Lab", weight: 450 },
             { id: "p8", categoryId: "cat5", name: "Lunettes HUD Spectrum-X", price: 720, slogan: "Affichage télémétrique oculaire", desc: "Verres photochromiques avec superposition de données de vitesse et navigation GPS autonome.", image: "", badge: "HUD Spec", weight: 38 }
         ];
@@ -1384,7 +1397,7 @@
             { id: "race9", name: "Championnat GT3 World", location: "Spa, Monza, Silverstone", record: "Multi-Circuit", desc: "L'élite des voitures de sport dérivées de la série. Le chant lyrique des moteurs atmosphériques.", likes: 211, comments: [{author: "GT3Lover", text: "Le son de l'Audi R8 V10 !"}] },
             { id: "race10", name: "Isle of Man TT", location: "Île de Man", record: "16:42.778", desc: "La course routière la plus rapide et dangereuse du globe. Le hululement d'une moto à 300 km/h.", likes: 512, comments: [{author: "MotoGP_Guy", text: "Ces pilotes n'ont pas de cerveau !"}] },
             { id: "race11", name: "Bathurst Mount Panorama", location: "Australie", record: "1:58.694", desc: "Le toboggan mythique. Descente vertigineuse entre les murs avec un bloc V8 rageur.", likes: 137, comments: [{author: "AussieV8", text: "The Mountain is legendary !"}] },
-            { id: "race12", name: "Grand Prix de Macao", location: "Macao, Chine", record: "2:05.145 (F3)", desc: "Le circuit de Guia. Un tracé urbain d'une technicité effroyable.", likes: 122, comments: [{author: "CityDriver", text: "La courbe Lisboa est toujours un carnage."}] }
+            { id: "race12", name: "Grand Prix de Macao", location: "Macao, Chine", record: "2:05.145 (F3)", desc: "Le circuit de Guia. Un tracé urbain d'une technicité effroyable avec les cris des moteurs F3.", likes: 122, comments: [{author: "CityDriver", text: "La courbe Lisboa est toujours un carnage."}] }
         ];
 
         let products = [];
@@ -1405,6 +1418,9 @@
         const pageIds = ['page-home', 'page-collection', 'page-exchange', 'page-topspeed', 'page-preorder'];
         const angles = [-110, -55, 0, 55, 110];
 
+        /**
+         * Synthétise des sons de moteurs en fonction de la course sélectionnée
+         */
         async function playRaceSoundSynth(raceId) {
             await Tone.start();
 
@@ -1549,6 +1565,7 @@
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
 
+            // Load Categories (10 Articles customizable)
             const savedCategories = localStorage.getItem('bj_categories');
             if (savedCategories) {
                 categories = JSON.parse(savedCategories);
@@ -1557,6 +1574,7 @@
                 localStorage.setItem('bj_categories', JSON.stringify(categories));
             }
 
+            // Load Products
             const savedProducts = localStorage.getItem('bj_products');
             if (savedProducts) {
                 products = JSON.parse(savedProducts);
@@ -1732,7 +1750,7 @@
             tempRightMediaFile = null;
             document.getElementById('right-media-url').value = "";
             document.getElementById('right-media-file-picker').value = "";
-            document.getElementById('right-media-upload-label').innerText = "Sélectionner Photo ou Vidéo";
+            document.getElementById('right-media-upload-label').innerText = "Sélectionner Photo ou Vidéo (Max 120 Mo)";
             
             const type = localStorage.getItem('bj_right_media_type') || 'default';
             document.getElementById('right-media-type-select').value = type;
@@ -1785,13 +1803,15 @@
             }
 
             if (tempRightMediaFile) {
-                showToast("Enregistrement...", "Stockage local...", "info");
+                showToast("Enregistrement...", "Stockage local haute fidélité...", "info");
                 await saveVideoToDB('right_media_data', tempRightMediaFile);
                 showToast("Visuel Configuré", "Le fichier a été enregistré localement.", "success");
             } else if (urlInput) {
                 showToast("Enregistrement...", "Liaison par adresse web...", "info");
                 await saveVideoToDB('right_media_data', urlInput);
                 showToast("Visuel Configuré", "L'adresse réseau a été validée avec succès.", "success");
+            } else {
+                showToast("Configuration préservée", "Type de visuel mis à jour.", "info");
             }
 
             await loadRightMedia();
@@ -1802,7 +1822,7 @@
             tempIntroVideoFile = null;
             document.getElementById('intro-video-url-input').value = "";
             document.getElementById('intro-video-file-picker').value = "";
-            document.getElementById('intro-video-upload-label').innerText = "Sélectionner une vidéo d'intro";
+            document.getElementById('intro-video-upload-label').innerText = "Sélectionner une vidéo d'intro (Max 120 Mo)";
             document.getElementById('modal-intro-edit').classList.remove('hidden');
         }
 
@@ -1815,7 +1835,7 @@
             if (!file) return;
 
             if (file.size > 120 * 1024 * 1024) {
-                showToast("Fichier lourd", "Une vidéo de moins de 120 Mo est conseillée.", "error");
+                showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'appareil.", "error");
                 e.target.value = "";
                 return;
             }
@@ -1829,7 +1849,7 @@
             const player = document.getElementById('intro-video-player');
 
             if (tempIntroVideoFile) {
-                showToast("Enregistrement...", "Stockage sécurisé...", "info");
+                showToast("Enregistrement...", "Écriture dans la base de données sécurisée...", "info");
                 await saveVideoToDB('intro_video', tempIntroVideoFile);
                 const videoUrl = URL.createObjectURL(tempIntroVideoFile);
                 if (player) {
@@ -1845,7 +1865,7 @@
                     player.load();
                     player.play().catch(() => {});
                 }
-                showToast("Intro configurée", "Le lien vidéo externe a été mis à jour.", "success");
+                showToast("Intro configurée", "Le lien vidéo externe de l'intro a été mis à jour.", "success");
             }
             closeIntroConfigModal();
         }
@@ -1872,11 +1892,13 @@
         }
 
         function renderApp() {
+            // Render Generic Page Texts
             for (const [id, text] of Object.entries(pageTexts)) {
                 const el = document.getElementById(id);
                 if (el) el.innerText = text;
             }
 
+            // Render Subfolders Categories Tab
             const subfoldersContainer = document.getElementById('category-subfolders');
             if (subfoldersContainer) {
                 subfoldersContainer.innerHTML = "";
@@ -1885,6 +1907,7 @@
                     const folder = document.createElement('div');
                     folder.className = "flex items-center shrink-0 relative group";
                     
+                    // Folder tab styling
                     folder.innerHTML = `
                         <button onclick="changeActiveCategory('${cat.id}')" class="px-5 py-2.5 rounded-xl border font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${isActive ? 'bg-bj-cyan/15 border-bj-cyan text-bj-cyan shadow-[0_0_12px_rgba(6,182,212,0.3)]' : 'bg-bj-dark/80 border-bj-border hover:border-bj-cyan/50 text-white'}">
                             <span>📁 ${cat.name}</span>
@@ -1897,6 +1920,7 @@
                 });
             }
 
+            // Filter Products by Active Category
             const filteredProducts = products.filter(p => p.categoryId === activeCategoryId);
 
             const grid = document.getElementById('products-grid');
@@ -1908,7 +1932,7 @@
                     grid.innerHTML = `
                         <div class="col-span-full border border-dashed border-bj-cyan/20 rounded-xl p-12 text-center bg-bj-dark/40">
                             <span class="text-3xl block mb-2">📦</span>
-                            <span class="font-mono text-xs text-bj-textMuted uppercase tracking-wider">// AUCUN MODÈLE DANS CETTE CATÉRICORIE</span>
+                            <span class="font-mono text-xs text-bj-textMuted uppercase tracking-wider">// AUCUN MODÈLE SUR CE DOSSIER DE SÉRIE</span>
                             ${isMaster ? `<button onclick="openProductModal()" class="mt-4 px-4 py-2 bg-bj-gold text-black rounded text-[11px] font-mono font-bold uppercase tracking-wider hover:bg-white transition-all">+ AJOUTER PREMIER PRODUIT</button>` : ''}
                         </div>
                     `;
@@ -1916,6 +1940,7 @@
 
                 filteredProducts.forEach((product, idx) => {
                     const card = document.createElement('div');
+                    // FLEX HORIZONTAL LAYOUT - Left: Photo, Right: Tech Information + Actions
                     card.className = "bg-bj-dark border border-bj-cyan/15 rounded-xl p-5 flex flex-col sm:flex-row gap-6 hover:border-bj-cyan/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300 relative tron-glow-border";
                     
                     let imageHTML = `
@@ -1930,6 +1955,7 @@
                     }
 
                     card.innerHTML = `
+                        <!-- Left Panel: Picture vertically centered -->
                         <div class="w-full sm:w-2/5 aspect-square bg-neutral-950 rounded-lg relative overflow-hidden flex items-center justify-center p-3 border border-bj-cyan/15 shrink-0 select-none">
                             <div class="absolute top-2 left-2 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md z-10">${product.badge}</div>
                             ${imageHTML}
@@ -1940,6 +1966,7 @@
                             ` : ''}
                         </div>
 
+                        <!-- Right Panel: Description and action CTAs -->
                         <div class="flex-grow flex flex-col justify-between space-y-4">
                             <div class="space-y-1.5">
                                 <div class="flex justify-between items-start gap-2">
@@ -1950,6 +1977,7 @@
                                 <p class="text-[11px] text-bj-textMuted leading-relaxed pt-1 border-t border-bj-border/30">${product.desc}</p>
                             </div>
 
+                            <!-- Buttons: Config and Basket aligned vertically inside the card -->
                             <div class="grid grid-cols-2 gap-2 pt-2">
                                 <button onclick="selectProductForPreorder('${product.id}')" class="py-2 px-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-[9px] uppercase tracking-wider font-bold transition-all rounded-lg font-mono text-bj-cyan bg-bj-cyan/5">Configurateur</button>
                                 <button onclick="addProductToCart('${product.id}')" class="py-2 px-3 bg-bj-gold hover:bg-white text-black text-[9px] uppercase tracking-wider font-bold transition-all rounded-lg font-mono">Ajouter Panier</button>
@@ -1960,6 +1988,7 @@
                 });
             }
 
+            // Fill Preorder and evaluation selection fields
             const select = document.getElementById('config-model');
             const evalSelect = document.getElementById('eval-model');
             const listSelect = document.getElementById('listing-model');
@@ -2160,7 +2189,7 @@
             feed.innerHTML = "";
 
             if (exchangeListings.length === 0) {
-                feed.innerHTML = `<div class="text-center font-mono text-xs text-bj-textMuted p-8">Aucun article n'est listé pour le moment.</div>`;
+                feed.innerHTML = `<div class="text-center font-mono text-xs text-bj-textMuted p-8">Aucun article n'est listé pour le moment. Soyez le premier à inscrire votre pièce !</div>`;
                 return;
             }
 
@@ -2176,11 +2205,11 @@
                             <span class="text-[9px] text-bj-gold font-bold">Propriétaire: @${item.seller}</span>
                         </div>
                         <h4 class="text-sm font-black text-white uppercase tracking-wider">${item.modelName}</h4>
-                        <p class="text-[10px] text-bj-textMuted">Régime de vente: <span class="text-white">${isAuction ? 'Enchère' : 'Prix Fixe'}</span></p>
+                        <p class="text-[10px] text-bj-textMuted">Régime de vente: <span class="text-white">${isAuction ? 'Enchère interactive' : 'Prix Fixe immédiat'}</span></p>
                     </div>
                     <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-end">
                         <div class="text-center sm:text-right min-w-[100px]">
-                            <span class="text-[9px] text-bj-textMuted block text-[8px]">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
+                            <span class="text-[9px] text-bj-textMuted uppercase block text-[8px]">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
                             <span class="text-lg font-black text-bj-gold">${item.currentPrice} €</span>
                             ${item.highestBidder ? `<span class="text-[8px] text-bj-cyan block">Offre par @${item.highestBidder}</span>` : ''}
                         </div>
@@ -2240,12 +2269,12 @@
             }
 
             document.getElementById('eval-screen').classList.remove('hidden');
-            showToast("Authentification Terminée", "La rareté du modèle a été validée avec succès.");
+            showToast("Authentification Terminée", "La rareté du modèle a été validée avec succès sur les registres.");
         }
 
         function bidOnListing(listingId) {
             if (!currentUser) {
-                showToast("Authentification Requise", "Veuillez vous identifier pour poser une offre.", "error");
+                showToast("Authentification Requise", "Veuillez vous identifier pour poser une offre sur ce lot.", "error");
                 openUnifiedPortalModal('client-tab');
                 return;
             }
@@ -2272,7 +2301,7 @@
                 const item = exchangeListings[listingIdx];
                 showToast("Transaction En Cours", `Validation des fonds vers @${item.seller}...`);
                 setTimeout(() => {
-                    showToast("Félicitations !", `Vous êtes le nouveau propriétaire de la pièce N°${item.serial} !`);
+                    showToast("Félicitations !", `Vous êtes le nouveau propriétaire de la casquette N°${item.serial} !`);
                     exchangeListings.splice(listingIdx, 1);
                     localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                     renderListings();
@@ -2282,7 +2311,7 @@
 
         function openPostListingModal() {
             if (!currentUser) {
-                showToast("Connexion Requise", "Renseignez votre profil de vendeur avant d'inscrire une pièce.", "error");
+                showToast("Connexion Requise", "Renseignez votre profil de vendeur avant d'inscrire une casquette.", "error");
                 openUnifiedPortalModal('client-tab');
                 return;
             }
@@ -2303,7 +2332,7 @@
             const product = products.find(p => p.id === modelId) || products[0];
 
             if (!serialVal || secretVal.length < 5) {
-                showToast("Authenticité Invalide", "Données incomplètes.", "error");
+                showToast("Authenticité Invalide", "Impossible de valider: numéro de série ou clé secrète manquant.", "error");
                 return;
             }
 
@@ -2325,7 +2354,7 @@
             localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             renderListings();
             closePostListingModal();
-            showToast("Mise en bourse", `Votre ${product.name} N°${serialVal} est en ligne !`);
+            showToast("Fiche mise en bourse", `Votre ${product.name} N°${serialVal} est en ligne !`);
         }
 
         function slideToPage(pageIndex) {
@@ -2442,7 +2471,7 @@
             const modelName = selectEl.options[selectEl.selectedIndex]?.text || "Modèle";
 
             if (!name || !email) {
-                showToast("Fiches incomplètes", "Veuillez remplir votre Nom et votre Email.", "error");
+                showToast("Fiches incomplètes", "Veuillez remplir votre Nom et votre Email pour soumettre la demande.", "error");
                 return;
             }
             showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
@@ -2471,7 +2500,7 @@
         function triggerSecureSMTPRelay() {
             const emailInput = document.getElementById('forgot-email').value.trim();
             if (!emailInput || !emailInput.includes('@')) {
-                showToast("Email invalide", "Veuillez saisir une adresse correcte.", "error");
+                showToast("Email invalide", "Veuillez saisir une adresse email correcte.", "error");
                 return;
             }
 
@@ -2485,13 +2514,13 @@
             logsContainer.innerHTML = "";
 
             const logs = [
-                "SYSTEM: Initialisation de l'enveloppe...",
-                "SECURE_GATEWAY: Connexion SMTP...",
-                "SECURE_GATEWAY: Handshake SSL/TLS 1.3 réussi.",
-                "SMTP_RELAY: Résolution DNS...",
-                "ENCRYPT: Récupération du jeton Master...",
-                "SMTP_RELAY: Payload prêt.",
-                "SMTP_RELAY: Génération du mail."
+                "SYSTEM: Initialisation de l'enveloppe cryptographique...",
+                "SECURE_GATEWAY: Connexion SMTP au relais d'écurie en cours...",
+                "SECURE_GATEWAY: Handshake SSL/TLS 1.3 réussi avec AES-GCM-256.",
+                "SMTP_RELAY: Résolution DNS pour l'hôte propriétaire...",
+                "ENCRYPT: Récupération du jeton Master temporaire...",
+                "SMTP_RELAY: Payload de recouvrement prêt pour envoi.",
+                "SMTP_RELAY: Génération finale du draft mail Zero-Trust."
             ];
 
             let index = 0;
@@ -2506,23 +2535,25 @@
                     clearInterval(logInterval);
                     const successDiv = document.createElement('div');
                     successDiv.className = "text-emerald-400 font-bold mt-1";
-                    successDiv.innerText = "SUCCÈS: CLIQUEZ POUR ENVOYER LE MAIL.";
+                    successDiv.innerText = "SUCCÈS: ROUTAGE PRÊT. CLIQUEZ SUR LE BOUTON OR POUR DISPATCHER.";
                     logsContainer.appendChild(successDiv);
 
                     const currentPwd = localStorage.getItem('bj_master_password') || 'Master2026';
-                    const subject = encodeURIComponent("Benzjames Écurie - Recouvrement");
+                    const subject = encodeURIComponent("Benzjames Écurie - Recouvrement du Code Master");
                     const body = encodeURIComponent(
-                        "=== PROTOCOLE BENZJAMES ===\n\n" +
-                        "Voici vos accès :\n" +
+                        "=== PROTOCOLE BENZJAMES SECURE RECOVERY ===\n\n" +
+                        "Bonjour Chef d'écurie,\n\n" +
+                        "Voici vos accès actifs :\n" +
                         ". Identifiant: DENIS_MASTER\n" +
-                        ". Code Secret: " + currentPwd + "\n" +
-                        "Support Team."
+                        ". Code Secret d'accès: " + currentPwd + "\n\n" +
+                        "Fidèlement,\n" +
+                        "L'équipe Benzjames Tech Support Team."
                     );
                     mailtoAnchor.href = `mailto:${emailInput}?subject=${subject}&body=${body}`;
                     mailtoAnchor.classList.remove('hidden');
-                    showToast("SMTP Réussi", "Cliquez sur 'Ouvrir ma Messagerie Mail' pour valider l'envoi.", "info");
+                    showToast("Routage SMTP Réussi", "Cliquez sur 'Ouvrir ma Messagerie Mail' pour valider l'envoi de votre code.", "info");
                 }
-            }, 300);
+            }, 550);
         }
 
         function saveMasterRecoveryEmail() {
@@ -2532,7 +2563,7 @@
                 return;
             }
             localStorage.setItem('bj_master_recovery_email', email);
-            showToast("Recouvrement mis à jour", `L'adresse '${email}' est enregistrée.`);
+            showToast("Recouvrement mis à jour", `L'adresse '${email}' a été associée comme relais principal.`);
         }
 
         function submitLogin() {
@@ -2548,7 +2579,7 @@
                 closeUnifiedPortalModal();
                 showToast("Portail Déverrouillé", "Bienvenue Chef d'écurie. Vous pouvez éditer les pages !", "success");
             } else {
-                showToast("Accès Refusé", "Code secret invalide.", "error");
+                showToast("Accès Refusé", "Code secret invalide. La télémétrie de sécurité de l'écurie rejette l'identifiant.", "error");
             }
         }
 
@@ -2558,7 +2589,7 @@
             updateMasterModeUI();
             renderApp();
             renderRaces();
-            showToast("Déconnexion active", "Mode Master désactivé.");
+            showToast("Déconnexion active", "Mode Master désactivé. Verrouillage des outils d'édition.");
         }
 
         function hardenMasterPassword() {
@@ -2569,7 +2600,7 @@
             }
             localStorage.setItem('bj_master_password', newPwd);
             document.getElementById('harden-new-pwd').value = "";
-            showToast("Sécurité Renforcée", "Le nouveau code d'accès a été configuré.", "success");
+            showToast("Sécurité Renforcée", "Le nouveau code d'accès d'écurie a été configuré avec succès.", "success");
         }
 
         function updateMasterModeUI() {
@@ -2617,7 +2648,7 @@
             tempVideoFile = null;
             document.getElementById('video-url-input').value = "";
             document.getElementById('video-file-picker').value = "";
-            document.getElementById('video-upload-label').innerText = "Sélectionner une vidéo";
+            document.getElementById('video-upload-label').innerText = "Sélectionner une vidéo (Max 120 Mo)";
             document.getElementById('modal-video-edit').classList.remove('hidden');
         }
 
@@ -2630,7 +2661,7 @@
             if (!file) return;
 
             if (file.size > 120 * 1024 * 1024) {
-                showToast("Fichier lourd", "Une vidéo de moins de 120 Mo est conseillée.", "error");
+                showToast("Fichier lourd", "Une vidéo de plus de 120 Mo peut saturer l'appareil.", "error");
                 e.target.value = "";
                 return;
             }
@@ -2644,7 +2675,7 @@
             const player = document.getElementById('hud-video-player');
 
             if (tempVideoFile) {
-                showToast("Enregistrement...", "Stockage...", "info");
+                showToast("Enregistrement...", "Écriture dans la base de données sécurisée...", "info");
                 await saveVideoToDB('home_video', tempVideoFile);
                 const videoUrl = URL.createObjectURL(tempVideoFile);
                 if (player) {
@@ -2669,6 +2700,7 @@
             const modal = document.getElementById('modal-product');
             const titleEl = document.getElementById('product-modal-title');
 
+            // Populate category select dropdown inside product creation modal
             const catSelect = document.getElementById('prod-category-id');
             if (catSelect) {
                 catSelect.innerHTML = "";
@@ -2695,7 +2727,7 @@
             preview.innerHTML = `<span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>`;
 
             if (productId) {
-                titleEl.innerText = "Modifier l'Article";
+                titleEl.innerText = "Modifier l'Article Benzjames";
                 const p = products.find(prod => prod.id === productId);
                 if (p) {
                     document.getElementById('prod-name').value = p.name;
@@ -2816,7 +2848,7 @@
             } else {
                 pageTexts[targetId] = newVal;
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
-                showToast("Texte Mis à Jour", "La modification a été enregistrée.");
+                showToast("Texte Mis à Jour", "La modification de texte a été enregistrée.");
             }
 
             renderApp();
@@ -2848,7 +2880,7 @@
             const desc = document.getElementById('race-edit-desc').value.trim();
 
             if (!name || !record || !location) {
-                showToast("Formulaire Incomplet", "Données manquantes.", "error");
+                showToast("Formulaire Incomplet", "Veuillez remplir le nom, le record (jaune) et la localisation.", "error");
                 return;
             }
 
@@ -2862,7 +2894,7 @@
                 localStorage.setItem('bj_races_data', JSON.stringify(racesData));
                 renderRaces();
                 closeRaceEditModal();
-                showToast("Épreuve mise à jour", `Les données ont été sauvegardées.`, "success");
+                showToast("Épreuve mise à jour", `Les données pour "${name}" ont été sauvegardées.`, "success");
             }
         }
 
@@ -2897,7 +2929,7 @@
                                 <span class="text-xs text-bj-cyan">▶</span>
                             </div>
                             <span class="text-[10px] text-white font-bold tracking-widest uppercase">// CLIQUER POUR ÉCOUTER</span>
-                            <span class="text-[8px]">Moteur Analogique de Synthèse</span>
+                            <span class="text-[8px]">Symphonie Moteur de Synthèse</span>
                         </div>
 
                         <button id="unmute-btn-${race.id}" onclick="toggleRaceSound('${race.id}'); event.stopPropagation();" class="hidden absolute bottom-2 right-2 bg-black/80 border border-bj-cyan/30 text-bj-cyan p-1.5 rounded-lg text-[8px] uppercase font-bold tracking-wider z-20 transition-all">
@@ -3009,7 +3041,7 @@
                     unmuteBtn.innerText = "🔈 Son Muet";
                 }
             } catch(e) {
-                console.warn(`Impossible de charger le média pour ${raceId}`, e);
+                console.warn(`Impossible de charger le média de course pour ${raceId}`, e);
             }
         }
 
@@ -3022,10 +3054,10 @@
                 return;
             }
 
-            showToast("Indexation...", "Enregistrement du média...", "info");
+            showToast("Indexation...", "Enregistrement sécurisé du média...", "info");
             await saveVideoToDB(`race_media_${raceId}`, file);
             await loadRaceMedia(raceId);
-            showToast("Média Lié", "Fichier enregistré avec succès !", "success");
+            showToast("Média Lié", "Fichier enregistré avec succès sur l'épreuve !", "success");
         }
 
         function toggleRaceSound(raceId) {
@@ -3042,13 +3074,13 @@
                 } else {
                     video.muted = true;
                     btn.innerText = "🔈 Son Muet";
-                    showToast("Son coupé", `Vidéo mise en sourdine.`);
+                    showToast("Son coupé", `Vidéo de l'épreuve mise en sourdine.`);
                 }
             } else if (audio && audio.src) {
                 if (audio.paused) {
                     audio.play().catch(e => console.warn(e));
                     btn.innerText = "🔊 Suspendre";
-                    showToast("Audio Actif", `Écoute du son d'écurie...`);
+                    showToast("Audio Actif", `Écoute du son d'écurie en cours...`);
                 } else {
                     audio.pause();
                     btn.innerText = "🔈 Lire Son";
@@ -3063,7 +3095,7 @@
             race.likes++;
             localStorage.setItem('bj_races_data', JSON.stringify(racesData));
             renderRaces();
-            showToast("Soutien d'Écurie", `Vote de performance enregistré !`, "success");
+            showToast("Soutien d'Écurie", `Vote de performance enregistré ! Le classement Top Speed a été mis à jour.`, "success");
         }
 
         function addRaceComment(raceId) {
@@ -3097,7 +3129,7 @@
 
         const INITIAL_CHAT_MESSAGES = [
             { author: "ProDriver_8", text: "Le virage de l'Eau Rouge à Spa se passe à fond !" },
-            { author: "Telemetry_AI", text: "Vent arrière de 12 nœuds enregistré." },
+            { author: "Telemetry_AI", text: "Vent arrière de 12 nœuds enregistré sur la plaine de sel." },
             { author: "Paddock_Chef", text: "Moteur Monza configuré pour l'épreuve." }
         ];
 
@@ -3126,7 +3158,7 @@
             
             input.value = "";
             box.scrollTop = box.scrollHeight;
-            showToast("Signal Envoyé", "Message dispatché sur le canal.", "success");
+            showToast("Signal Envoyé", "Message dispatché sur le canal d'écurie.", "success");
         }
 
         document.addEventListener('keydown', function(e) {
