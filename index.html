@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Benzjames - L'Écurie High-Tech & Bourse Officielle</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tone.js pour la synthèse sonore d'écurie autonome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -20,7 +22,8 @@
                             dark: '#0e0e0e',
                             black: '#050505',
                             border: '#1b1b1b',
-                            textMuted: '#8E8E93'
+                            textMuted: '#8E8E93',
+                            anthracite: '#2F2F2F'
                         }
                     },
                     fontFamily: {
@@ -32,9 +35,10 @@
             }
         }
     </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Orbitron:wght@900&display=swap');
-        
+
         body, html {
             background-color: #050505;
             color: #ffffff;
@@ -45,11 +49,11 @@
             width: 100%;
             height: 100%;
         }
-        
+
         /* Grille néon style TRON asymétrique et soutenue */
         .tron-grid {
             background-color: #050505;
-            background-image: 
+            background-image:
                 linear-gradient(to right, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
                 linear-gradient(90deg, transparent 18%, rgba(6, 182, 212, 0.18) 18.5%, rgba(6, 182, 212, 0.18) 19%, transparent 19.5%, transparent 46%, rgba(212, 175, 55, 0.15) 46.5%, rgba(212, 175, 55, 0.15) 47%, transparent 47.5%, transparent 59%, rgba(212, 175, 55, 0.15) 59.5%, rgba(212, 175, 55, 0.15) 60%, transparent 60.5%, transparent 71%, rgba(6, 182, 212, 0.22) 71.5%, rgba(6, 182, 212, 0.22) 72%, transparent 72.5%, transparent 84%, rgba(6, 182, 212, 0.22) 84.5%, rgba(6, 182, 212, 0.22) 85%, transparent 85.5%);
@@ -58,7 +62,7 @@
 
         /* Damier de course en fondu soutenu */
         .checkered-fade {
-            background-image: 
+            background-image:
                 linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
                 linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
                 linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
@@ -69,8 +73,8 @@
 
         /* Bandeau damier de course continu */
         .racing-checkers {
-            background-image: 
-                linear-gradient(45deg, #000 25%, transparent 25%), 
+            background-image:
+                linear-gradient(45deg, #000 25%, transparent 25%),
                 linear-gradient(-45deg, #000 25%, transparent 25%),
                 linear-gradient(45deg, transparent 75%, #000 75%),
                 linear-gradient(-45deg, transparent 75%, #000 75%);
@@ -105,7 +109,7 @@
             height: 100%;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         .page-slide {
             width: 20%;
             height: 100%;
@@ -170,7 +174,7 @@
             animation: tickerEffect 30s linear infinite;
         }
 
-        /* --- EFFETS ET ANIMATIONS DE L'INTRODUCTION --- */
+        /* EFFETS ET ANIMATIONS DE L'INTRODUCTION */
         #intro-overlay {
             perspective: 1500px;
             transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
@@ -189,7 +193,7 @@
             opacity: 1;
         }
 
-        /* Dodger Font styling (Importée d'Orbitron 900 Italic pour une esthétique super speed) */
+        /* Dodger Font styling */
         .font-dodger-style {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
@@ -207,6 +211,7 @@
             92% { opacity: 0.8; }
             100% { transform: translateX(180%) rotate(-35deg); opacity: 0; }
         }
+
         @keyframes laserSweepVertical {
             0% { transform: translateY(-120%) rotate(55deg); opacity: 0; }
             12% { opacity: 0.9; }
@@ -251,11 +256,13 @@
         }
     </style>
 </head>
+
 <body class="selection:bg-bj-gold selection:text-black flex flex-col justify-between checkered-fade" onclick="unlockVideoAutoplay()">
 
-    <!-- INTRO DE PRÉSENTATION CINÉMATIQUE -->
+    <!-- INTRO DE PRÉSENTATION CINÉMATIQUE (FOND NOIR PUR) -->
     <div id="intro-overlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
-        <!-- Balayeurs de Lasers Bleu et Blanc -->
+        
+        <!-- Balayeurs de Lasers d'arrière-plan -->
         <div id="laser-container" class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
             <div class="laser-beam-blue absolute left-[-20%] top-[-75%]"></div>
             <div class="laser-beam-white absolute left-[20%] top-[-75%]" style="animation-delay: 1.5s; animation-duration: 4.8s;"></div>
@@ -263,46 +270,40 @@
             <div class="laser-beam-white absolute left-[85%] top-[-75%]" style="animation-delay: 0.7s; animation-duration: 3.8s;"></div>
         </div>
 
-        <!-- Feuille se dépliant en 3D -->
-        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[65vh] bg-bj-dark border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-6 sm:p-8">
-            <!-- Vidéo de fond de l'Intro (Transparence diminuée de 25% : opacity passe de 0.50 à 0.75) -->
-            <div class="absolute inset-0 z-0 bg-neutral-950">
-                <video id="intro-video-player" class="w-full h-full object-cover opacity-75" autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-            </div>
+        <!-- Feuille se dépliant en 3D (Fond Noir pur et bande anthracite) -->
+        <div id="intro-sheet" class="relative w-11/12 max-w-4xl h-[52vh] min-h-[350px] sm:h-[65vh] bg-black border border-bj-cyan/30 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-between p-4 sm:p-8 z-20">
+            
+            <!-- BANDEAU ANTHRACITE EN ARRIÈRE-PLAN DU TITRE (Positionné exactement derrière le texte) -->
+            <div class="absolute left-0 right-0 w-full h-[32%] sm:h-[35%] bg-bj-anthracite top-1/2 -translate-y-1/2 z-0 border-y border-bj-cyan/15 flex items-center justify-center shadow-inner opacity-95"></div>
 
             <!-- Contenu de l'Intro -->
             <div class="relative z-10 flex flex-col justify-between h-full text-center">
                 <!-- En-tête -->
                 <div class="flex justify-between items-center gap-2">
-                    <span class="text-[8px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.7]</span>
+                    <span class="text-[7px] sm:text-[9px] font-mono text-bj-cyan tracking-[0.2em] sm:tracking-[0.3em] font-bold">// SECURE_SYSTEM_INITIALIZE [V2.7]</span>
                     <div class="flex items-center gap-2">
-                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2.5 py-1.5 rounded font-mono text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
+                        <button id="intro-sound-btn" onclick="toggleIntroMute(); event.stopPropagation();" class="bg-black/60 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan px-2 py-1 sm:px-2.5 sm:py-1.5 rounded font-mono text-[8px] sm:text-[9px] font-bold uppercase transition-all shadow-md flex items-center gap-1">
                             <span id="intro-sound-icon">🔈 Activer le Son</span>
-                        </button>
-                        <button onclick="openIntroConfigModal()" class="master-only hidden bg-bj-gold hover:bg-white text-black px-3 py-1.5 rounded font-mono text-[9px] font-bold tracking-wider transition-all uppercase shadow-md">
-                            🛠 Configurer l'Intro
                         </button>
                     </div>
                 </div>
 
-                <!-- Message central avec police d'écriture Dodger émulée -->
-                <div class="my-auto space-y-4 px-2 sm:px-6">
-                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight font-dodger-style text-5xl sm:text-8xl font-black uppercase tracking-tight text-white leading-none">
-                        BENZJAMES
+                <!-- Message central adapté aux formats Mac (lg) et iPhone (min/sm) -->
+                <div class="my-auto space-y-2 sm:space-y-4 px-1 sm:px-6 relative z-10 py-6">
+                    <h1 id="intro-custom-title" onclick="editPageText('intro-custom-title')" class="edit-highlight font-dodger-style text-4xl min-[380px]:text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white leading-none">
+                        Benzjames sport
                     </h1>
-                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.4em] font-semibold">
+                    <p id="intro-custom-subtitle" onclick="editPageText('intro-custom-subtitle')" class="edit-highlight text-[8px] min-[380px]:text-[10px] sm:text-xs font-mono text-bj-gold uppercase tracking-[0.2em] sm:tracking-[0.4em] font-semibold">
                         L'ÉCURIE HIGH-TECH EN MOUVEMENT
                     </p>
                 </div>
 
-                <!-- Actions de validation (Bouton d'accès réduit de 60% avec le texte demandé) -->
-                <div class="flex flex-col items-center gap-2">
-                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-5 py-2 rounded-lg text-[10px] uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(6,182,212,0.5)] transform hover:scale-102">
+                <!-- Actions de validation -->
+                <div class="flex flex-col items-center gap-1.5">
+                    <button onclick="dismissIntro()" class="bg-bj-cyan hover:bg-white text-black font-extrabold px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(6,182,212,0.5)] transform hover:scale-102">
                         Carte du club privé
                     </button>
-                    <span class="text-[8px] font-mono text-bj-textMuted tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
+                    <span class="text-[7px] sm:text-[8px] font-mono text-bj-textMuted tracking-wider sm:tracking-widest uppercase">// CLIQUEZ ICI POUR ACTIVER LE FLUX MOTEUR SATELLITE</span>
                 </div>
             </div>
         </div>
@@ -322,7 +323,7 @@
                 <span class="text-xl font-extrabold tracking-[0.3em] text-white font-mono">BENZJAMES</span>
                 <span class="hidden sm:inline-block px-2 py-0.5 border border-bj-cyan/30 text-[9px] text-bj-cyan uppercase tracking-widest font-bold font-mono">Cyber-Couture</span>
             </div>
-            
+
             <!-- 5 Pages Navigation -->
             <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-bj-textMuted font-mono">
                 <button onclick="navigateTo('page-home')" id="nav-page-home" class="hover:text-white transition-all text-white border-b border-bj-gold pb-1">L'Écurie</button>
@@ -332,7 +333,7 @@
                 <button onclick="navigateTo('page-preorder')" id="nav-page-preorder" class="hover:text-white transition-all pb-1">Configuration</button>
             </nav>
 
-            <!-- Actions CTA & Client Account portal icon -->
+            <!-- Actions CTA -->
             <div class="flex items-center gap-3">
                 <button onclick="openUnifiedPortalModal('client-tab')" class="p-3 border border-bj-cyan/20 hover:border-bj-gold rounded-xl bg-bj-dark hover:bg-black text-bj-cyan hover:text-bj-gold transition-all relative flex items-center justify-center shadow-lg" title="Espace Client, Panier & Connexion Master">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -340,7 +341,7 @@
                     </svg>
                     <span id="header-cart-badge" class="hidden absolute -top-1 -right-1 bg-bj-red text-white text-[8px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center px-1">0</span>
                 </button>
-                
+
                 <!-- Hamburger Trigger (Mobile) -->
                 <button onclick="toggleMobileMenu()" class="md:hidden text-white focus:outline-none p-2 rounded border border-bj-cyan/20 bg-bj-dark hover:border-bj-cyan transition-all" aria-label="Menu principal">
                     <svg class="w-5 h-5 text-bj-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,6 +390,7 @@
                             <span class="w-1.5 h-1.5 rounded-full bg-bj-cyan"></span>
                             <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES UNIQUES</span>
                         </div>
+
                         <div onclick="editPageText('txt-home-scroller')" class="edit-highlight h-16 relative overflow-hidden border border-bj-cyan/15 bg-black/70 rounded-xl p-3 font-mono shadow-[inset_0_0_15px_rgba(6,182,212,0.1)] flex items-center">
                             <div class="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none"></div>
                             <div class="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none"></div>
@@ -396,7 +398,7 @@
                                 <span id="txt-home-scroller" class="text-white">F1 :: L'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 Pure</span>
                             </div>
                         </div>
-                        
+
                         <!-- ÉCRAN DE DIFFUSION VIDÉO HUD -->
                         <div class="border border-bj-cyan/30 bg-black/90 p-1.5 rounded-xl relative overflow-hidden shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                             <div class="absolute top-3 left-4 text-[7px] font-mono text-bj-cyan/60 tracking-widest z-10 select-none">// SYSTEM_FEED_01 // SECURE_STREAM</div>
@@ -404,11 +406,9 @@
                                 <span class="w-1.5 h-1.5 bg-bj-red rounded-full animate-ping"></span>
                                 <span class="text-[7px] font-mono text-bj-red tracking-wider font-bold">LIVE</span>
                             </div>
-                            
                             <button id="home-sound-btn" onclick="toggleMute('hud-video-player', 'home-sound-icon')" class="absolute bottom-4 right-4 z-20 bg-black/80 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan p-2 rounded-lg text-xs flex items-center gap-1 font-mono transition-all">
                                 <span id="home-sound-icon">🔈 Activer le Son</span>
                             </button>
-
                             <button onclick="openVideoEditModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold/90 text-black px-4 py-2 rounded font-mono text-[11px] font-bold shadow-lg hover:bg-white transition-all uppercase tracking-wider">
                                 Configurer Écran Vidéo
                             </button>
@@ -417,7 +417,7 @@
                                 </video>
                             </div>
                         </div>
-                        
+
                         <div class="flex flex-wrap gap-4 pt-2">
                             <button onclick="navigateTo('page-collection')" class="bg-bj-gold hover:bg-white text-black font-extrabold px-6 py-3 rounded text-xs uppercase tracking-widest transition-all shadow-[0_0_10px_rgba(212,175,55,0.2)]">
                                 Découvrir le Showroom
@@ -427,18 +427,16 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Visual Column -->
                     <div class="lg:col-span-5 relative">
                         <div class="border border-bj-cyan/20 bg-bj-dark/50 p-4 rounded-2xl relative overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.1)]">
                             <button onclick="openRightMediaModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold/90 text-black px-4 py-2 rounded font-mono text-[11px] font-bold shadow-lg hover:bg-white transition-all uppercase tracking-wider">
                                 Configurer Visuel Droite
                             </button>
-                            
                             <button id="right-sound-btn" onclick="toggleMute('right-custom-video', 'right-sound-icon')" class="hidden absolute bottom-6 right-6 z-20 bg-black/80 border border-bj-cyan/40 hover:border-bj-cyan text-bj-cyan p-2 rounded-lg text-[10px] flex items-center gap-1 font-mono transition-all">
-                                <span id="right-sound-icon">🔈 Son</span>
+                                <span id="right-sound-icon"> Son</span>
                             </button>
-
                             <div class="aspect-[4/5] bg-neutral-950 rounded-xl relative overflow-hidden flex items-center justify-center border border-bj-cyan/15">
                                 <img id="right-custom-img" class="absolute inset-0 w-full h-full object-cover hidden z-0" src="" alt="Carbon Aero Custom Model">
                                 <video id="right-custom-video" class="absolute inset-0 w-full h-full object-cover hidden z-0" autoplay loop muted playsinline src=""></video>
@@ -480,11 +478,11 @@
                         </div>
                     </div>
 
-                    <!-- SUBFOLDERS / CATEGORY NAVIGATION (10 Articles customizable) -->
+                    <!-- SUBFOLDERS/CATEGORY NAVIGATION (10 Articles customizable) -->
                     <div class="bg-black/40 border border-bj-cyan/15 rounded-xl p-3 shadow-inner">
-                        <span class="text-[9px] font-mono text-bj-gold uppercase tracking-widest block mb-2">// DIRECTORY_INDEX (CLIQUEZ POUR FILTRER / MASTER PEUT RENOMMER LES DOSSIERS)</span>
+                        <span class="text-[9px] font-mono text-bj-gold uppercase tracking-widest block mb-2">// DIRECTORY_INDEX (CLIQUEZ POUR FILTRER/MASTER PEUT RENOMMER LES DOSSIERS)</span>
                         <div id="category-subfolders" class="flex gap-2 overflow-x-auto pb-1 category-scroll scrollbar-thin">
-                            <!-- Populated dynamically with 10 customizable category folders -->
+                            <!-- Populated dynamically -->
                         </div>
                     </div>
 
@@ -501,6 +499,7 @@
                     <div class="border-b border-bj-cyan/20 pb-4">
                         <span onclick="editPageText('txt-exchange-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest font-bold block" id="txt-exchange-subtitle">// CO-EXISTENCE & INDICE DE RARETÉ</span>
                         <h2 onclick="editPageText('txt-exchange-title')" class="edit-highlight text-3xl sm:text-4xl font-black uppercase tracking-tight mt-1" id="txt-exchange-title">Bourse & Marché d'Échange Officiel</h2>
+                        
                         <div class="ticker-wrap bg-bj-dark border border-bj-cyan/15 rounded p-2 mt-4 font-mono text-[11px] text-bj-cyan">
                             <div class="ticker-content space-x-8">
                                 <span class="font-bold">INDEX BENZJAMES CO. [BJX] <span class="text-emerald-400">▲ +12.4%</span></span>
@@ -521,6 +520,7 @@
                                 <span onclick="editPageText('txt-eval-tag')" class="edit-highlight text-[9px] font-mono text-bj-cyan uppercase tracking-widest font-bold block" id="txt-eval-tag">// CORE PROTOCOL ENGINE</span>
                                 <h3 onclick="editPageText('txt-eval-title')" class="edit-highlight text-lg font-bold text-white mt-1" id="txt-eval-title">Évaluer sa Pièce Unique</h3>
                             </div>
+
                             <div class="space-y-4 text-xs font-mono">
                                 <div>
                                     <label class="block text-bj-textMuted mb-1 font-bold">MODÈLE UNIQUE</label>
@@ -540,6 +540,7 @@
                                     Estimer la valeur & Authentifier
                                 </button>
                             </div>
+
                             <div id="eval-screen" class="hidden border border-dashed border-bj-gold/40 rounded-xl p-5 bg-black/60 text-center space-y-3">
                                 <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest block">Certificat d'Authenticité Estimatif</span>
                                 <div class="space-y-1">
@@ -569,6 +570,7 @@
                                     </button>
                                 </div>
                             </div>
+
                             <div class="space-y-4">
                                 <h4 onclick="editPageText('txt-live-feed')" class="edit-highlight text-sm font-mono text-bj-gold uppercase tracking-widest font-bold" id="txt-live-feed">// TRANSACTIONS & ENCHÈRES EN DIRECT</h4>
                                 <div id="listings-feed" class="space-y-4 max-h-[380px] overflow-y-auto pr-2"></div>
@@ -581,7 +583,6 @@
             <!-- PAGE 4: TOP SPEED -->
             <section id="page-topspeed" class="page-slide bg-black relative py-16 px-6 sm:px-12">
                 <div class="max-w-7xl mx-auto space-y-12">
-                    
                     <!-- Decorative Racing Ribbon (Checkerboard) -->
                     <div class="relative w-full h-8 rounded-lg overflow-hidden border border-white/20 shadow-md">
                         <div class="racing-checkers absolute inset-0 opacity-40"></div>
@@ -598,8 +599,8 @@
                             </h2>
                         </div>
                         <div class="text-right text-xs font-mono text-bj-textMuted">
-                            <span class="block text-bj-gold">★ TRIÉ DIRECTEMENT PAR POPULARITÉ DES LIKES ★</span>
-                            <span>Cliquez sur une course ou sur le bouton "🔊 Moteur" pour lancer le son de synthèse.</span>
+                            <span class="block text-bj-gold"> TRIÉ DIRECTEMENT PAR POPULARITÉ DES LIKES ★</span>
+                            <span>Cliquez sur une course ou sur le bouton "Moteur" pour lancer le son de synthèse.</span>
                         </div>
                     </div>
 
@@ -611,7 +612,6 @@
                     <!-- RACING CHAT ENCART -->
                     <div class="mt-12 bg-bj-dark border border-bj-cyan/20 rounded-2xl p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-6 racing-checkers opacity-20"></div>
-                        
                         <div class="border-b border-bj-border pb-4 mb-4 flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 bg-bj-red rounded-full animate-pulse"></span>
@@ -619,11 +619,9 @@
                             </div>
                             <span class="text-[9px] font-mono text-bj-textMuted uppercase">EN DIRECT // MULTI_CHANNEL</span>
                         </div>
-
                         <div id="racing-chat-messages" class="h-44 overflow-y-auto bg-black/50 border border-bj-cyan/10 rounded-xl p-4 font-mono text-xs space-y-3 scroll-smooth">
                             <p class="text-bj-textMuted italic">// Connexion au flux satellite de l'écurie...</p>
                         </div>
-
                         <div class="flex gap-3 mt-4">
                             <input type="text" id="racing-chat-input" placeholder="Message d'écurie..." class="flex-grow bg-black border border-bj-cyan/20 focus:border-bj-cyan rounded-lg px-4 py-3 text-xs font-mono outline-none text-white transition-all">
                             <button onclick="sendRacingChatMessage()" class="bg-bj-gold hover:bg-white text-black font-extrabold px-6 py-3 rounded-lg text-xs uppercase tracking-wider font-mono transition-all">
@@ -631,7 +629,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </section>
 
@@ -643,6 +640,7 @@
                             <span onclick="editPageText('txt-preorder-subtitle')" class="edit-highlight text-xs font-mono text-bj-gold uppercase tracking-widest font-bold block" id="txt-preorder-subtitle">// ATELIER BENZJAMES VIRTUAL</span>
                             <h2 onclick="editPageText('txt-preorder-title')" class="edit-highlight text-3xl font-bold mt-1 text-white font-sans" id="txt-preorder-title">Configurez votre Numéro Unique</h2>
                         </div>
+
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-wider text-bj-textMuted mb-2 font-semibold font-mono">Sélectionnez le Modèle</label>
@@ -654,6 +652,7 @@
                                 <p onclick="editPageText('txt-preorder-desc')" id="txt-preorder-desc" class="edit-highlight text-[10px] text-bj-textMuted mt-1">Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.</p>
                             </div>
                         </div>
+
                         <div class="border border-dashed border-bj-cyan/30 p-6 rounded bg-black/60 text-center space-y-4 shadow-inner">
                             <span class="text-[9px] font-mono text-bj-textMuted uppercase tracking-widest block">Génération du certificat d'authenticité de l'étiquette</span>
                             <div class="space-y-1">
@@ -661,6 +660,7 @@
                                 <p class="text-[10px] text-bj-textMuted font-mono">Certificat d'empreinte généré à la volée</p>
                             </div>
                         </div>
+
                         <div class="space-y-4 pt-4 border-t border-bj-cyan/10">
                             <div class="grid grid-cols-2 gap-4 font-mono">
                                 <input type="text" id="client-name" placeholder="Nom complet" class="bg-bj-black border border-bj-border rounded px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs transition-all">
@@ -696,6 +696,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="pt-6 flex justify-between items-center font-mono border-t border-bj-cyan/10 mt-6">
                             <div>
                                 <span class="text-[10px] text-bj-textMuted block uppercase">MÉTHODE D'AUTHENTIFICATION</span>
@@ -709,7 +710,6 @@
                     </div>
                 </div>
             </section>
-
         </div>
     </main>
 
@@ -789,7 +789,6 @@
                             <span id="cart-items-count" class="bg-bj-cyan text-black rounded-full px-2 py-0.5 text-[9px] font-bold">0 Article</span>
                         </h4>
                         <div id="cart-items-container" class="space-y-3 max-h-[180px] overflow-y-auto pr-1"></div>
-                        
                         <div class="flex justify-between items-center border-t border-bj-cyan/10 pt-4 font-mono text-xs">
                             <div>
                                 <span class="text-bj-textMuted uppercase block text-[9px]">Montant Total :</span>
@@ -844,7 +843,7 @@
                         <div id="forgot-telemetry-box" class="hidden border border-bj-cyan/30 bg-black/60 rounded-xl p-4 font-mono text-[9px] text-bj-cyan space-y-1 max-h-[140px] overflow-y-auto">
                             <div class="flex justify-between text-[10px] border-b border-bj-cyan/15 pb-1 font-bold">
                                 <span>STATUS: ROUTAGE DES PAQUETS</span>
-                                <span class="animate-ping" id="forgot-telemetry-ping">●</span>
+                                <span class="animate-ping" id="forgot-telemetry-ping"></span>
                             </div>
                             <div id="forgot-telemetry-logs" class="space-y-0.5"></div>
                         </div>
@@ -864,9 +863,10 @@
                     <!-- Dashboard once logged in -->
                     <div id="master-admin-dashboard" class="hidden space-y-6">
                         <div class="bg-black/60 border border-bj-gold/30 p-4 rounded-xl font-mono text-xs space-y-2">
-                            <span class="text-[9px] text-bj-gold uppercase tracking-widest block font-bold">● SESSION MASTER ACTIVÉE</span>
+                            <span class="text-[9px] text-bj-gold uppercase tracking-widest block font-bold">SESSION MASTER ACTIVÉE</span>
                             <p class="text-bj-textMuted leading-relaxed">Vous êtes connecté en tant que Chef d'écurie. Vous pouvez fermer ce portail et modifier n'importe quel élément de texte ou média en cliquant dessus directement.</p>
                         </div>
+                        
                         <!-- Security Configuration -->
                         <div class="border border-bj-cyan/20 rounded-xl p-4 bg-bj-black/40 space-y-4 font-mono text-xs">
                             <span class="text-[10px] text-bj-cyan uppercase block tracking-widest font-bold">// CONFIGURATION SÉCURITÉ ACCÈS</span>
@@ -892,7 +892,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-bj-black/80 border-t border-bj-cyan/10 p-4 flex justify-end">
                 <button onclick="closeUnifiedPortalModal()" class="border border-bj-border hover:border-white text-white font-mono text-xs uppercase tracking-widest font-bold py-2.5 px-6 rounded-lg transition-all">
                     Fermer le Portail
@@ -998,8 +998,8 @@
                 </div>
             </div>
             <div class="flex gap-3 pt-4 border-t border-bj-cyan/15 font-mono">
-                <button onclick="closeProductModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
-                <button onclick="saveProduct()" class="w-1/2 bg-bj-cyan hover:bg-white hover:text-black text-black py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
+                <button onclick="closeProductModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all font-mono">Annuler</button>
+                <button onclick="saveProduct()" class="w-1/2 bg-bj-cyan hover:bg-white hover:text-black text-black py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all font-mono">Enregistrer</button>
             </div>
         </div>
     </div>
@@ -1035,44 +1035,6 @@
             <div class="flex gap-3 pt-2 font-mono">
                 <button onclick="closeVideoEditModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
                 <button onclick="saveVideoEdit()" class="w-1/2 bg-bj-cyan hover:bg-white text-black py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Appliquer</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CONFIGURATION INTRO VIDEO MODAL -->
-    <div id="modal-intro-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-bj-dark border border-bj-cyan/20 p-6 rounded-2xl w-full max-w-lg space-y-6">
-            <div class="font-mono flex justify-between items-center border-b border-bj-cyan/15 pb-4">
-                <div>
-                    <span class="text-xs text-bj-gold uppercase tracking-widest">// SECURE_CONFIG</span>
-                    <h3 class="text-lg font-bold text-white uppercase">Configurer la Vidéo de Présentation</h3>
-                </div>
-                <button onclick="closeIntroConfigModal()" class="text-bj-textMuted hover:text-white text-xl font-mono">&times;</button>
-            </div>
-            <div class="space-y-4 font-mono text-xs text-bj-textMuted">
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option A: Coller un lien MP4 en ligne</label>
-                    <input type="text" id="intro-video-url-input" placeholder="https://example.com/intro.mp4" class="w-full bg-bj-black border border-bj-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-bj-cyan text-xs font-mono">
-                </div>
-                <div class="relative flex py-2 items-center">
-                    <div class="flex-grow border-t border-bj-cyan/15"></div>
-                    <span class="flex-shrink mx-4 text-[9px] uppercase tracking-widest">OU</span>
-                    <div class="flex-grow border-t border-bj-cyan/15"></div>
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-white mb-2 font-bold">// Option B: Importer un fichier vidéo local</label>
-                    <label class="flex flex-col items-center justify-center border border-dashed border-bj-cyan/30 rounded-lg p-6 bg-bj-black hover:border-bj-cyan transition-all cursor-pointer">
-                        <svg class="w-6 h-6 text-bj-cyan mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                        <span class="text-[9px] text-white font-mono uppercase tracking-widest text-center" id="intro-video-upload-label">Sélectionner une vidéo d'intro</span>
-                        <input type="file" id="intro-video-file-picker" accept="video/*" class="hidden" onchange="handleIntroVideoFileSelect(event)">
-                    </label>
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2 font-mono">
-                <button onclick="closeIntroConfigModal()" class="w-1/2 border border-bj-border hover:border-white text-white py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Annuler</button>
-                <button onclick="saveIntroVideoEdit()" class="w-1/2 bg-bj-cyan hover:bg-white text-black py-3 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">Enregistrer</button>
             </div>
         </div>
     </div>
@@ -1176,7 +1138,7 @@
         </div>
         <div class="flex items-center gap-4">
             <p class="text-[9px] cursor-pointer select-none" ondblclick="openUnifiedPortalModal('client-tab')" title="Double-cliquez ici pour ouvrir l'Espace de Sécurité">
-                © 2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.
+                ©2026 Benzjames. SWIPE LATÉRAL POUR PILOTER.
             </p>
         </div>
     </footer>
@@ -1186,13 +1148,12 @@
         function showToast(title, message, type = 'info') {
             const container = document.getElementById('toast-container');
             if (!container) return;
-
             const toast = document.createElement('div');
             let borderColor = 'border-bj-cyan/30';
             let textColor = 'text-bj-cyan';
             let glow = 'shadow-[0_0_15px_rgba(6,182,212,0.15)]';
-            let icon = '⚡';
-
+            let icon = '';
+            
             if (type === 'success') {
                 borderColor = 'border-emerald-500/30';
                 textColor = 'text-emerald-400';
@@ -1207,9 +1168,9 @@
                 borderColor = 'border-bj-gold/30';
                 textColor = 'text-bj-gold';
                 glow = 'shadow-[0_0_15px_rgba(212,175,55,0.15)]';
-                icon = '★';
+                icon = '⚠';
             }
-
+            
             toast.className = `pointer-events-auto bg-bj-black/95 border ${borderColor} ${glow} rounded-xl p-4 min-w-[280px] max-w-sm transition-all duration-300 transform translate-y-4 opacity-0 flex flex-col gap-1 font-mono text-xs`;
             toast.innerHTML = `
                 <div class="flex items-center justify-between gap-2 border-b ${borderColor.replace('/30', '/10')} pb-1 mb-1">
@@ -1220,13 +1181,10 @@
                 </div>
                 <p class="text-white text-[11px] leading-relaxed">${message}</p>
             `;
-
             container.appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.remove('translate-y-4', 'opacity-0');
             }, 10);
-
             setTimeout(() => {
                 toast.classList.add('translate-y-4', 'opacity-0');
                 setTimeout(() => {
@@ -1237,7 +1195,6 @@
 
         const dbName = "BenzjamesDB";
         const storeName = "videos";
-
         function getDB() {
             return new Promise((resolve, reject) => {
                 try {
@@ -1284,24 +1241,19 @@
                 });
             } catch (e) {
                 console.warn("Impossible de récupérer le média depuis IndexedDB.");
-                return null;
             }
+            return null;
         }
 
         function unlockVideoAutoplay() {
             const mainVideo = document.getElementById('hud-video-player');
             const rightVideo = document.getElementById('right-custom-video');
-            const introVideo = document.getElementById('intro-video-player');
             if (mainVideo) {
                 mainVideo.play().catch(() => {});
             }
             if (rightVideo && !rightVideo.classList.contains('hidden')) {
                 rightVideo.play().catch(() => {});
             }
-            if (introVideo) {
-                introVideo.play().catch(() => {});
-            }
-            
             const activeVideos = document.querySelectorAll('.race-video');
             activeVideos.forEach(v => {
                 if(!v.paused) v.play().catch(() => {});
@@ -1309,38 +1261,29 @@
         }
 
         function toggleIntroMute() {
-            const introPlayer = document.getElementById('intro-video-player');
-            const icon = document.getElementById('intro-sound-icon');
-            if (!introPlayer) return;
-
-            if (introPlayer.muted) {
-                introPlayer.muted = false;
-                introPlayer.volume = 1.0;
-                introPlayer.play().catch(() => {});
+            // Puisque la vidéo d'intro a été supprimée, nous jouons une tonalité système
+            showToast("Système Audio Connecté", "Le flux audio d'ambiance de l'écurie est actif.", "success");
+            try {
+                Tone.start();
+                const now = Tone.now();
+                const synth = new Tone.Synth().toDestination();
+                synth.triggerAttackRelease("A4", "8n", now);
+                const icon = document.getElementById('intro-sound-icon');
                 if (icon) icon.innerText = "🔊 Son Actif";
-                showToast("Son Intro Activé", "Le flux audio de la présentation d'introduction a été activé.", "success");
-            } else {
-                introPlayer.muted = true;
-                if (icon) icon.innerText = "🔈 Activer le Son";
-                showToast("Son Intro Coupé", "Le flux audio de l'introduction a été mis en sourdine.", "info");
-            }
+            } catch(e) {}
         }
 
         function dismissIntro() {
             const introOverlay = document.getElementById('intro-overlay');
-            const introPlayer = document.getElementById('intro-video-player');
-            
             if (introOverlay) {
                 introOverlay.style.opacity = '0';
                 introOverlay.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     introOverlay.classList.add('hidden');
-                    if (introPlayer) introPlayer.pause();
                 }, 1000);
+                unlockVideoAutoplay();
+                showToast("Système Initialisé", "Bienvenue sur Benzjames. Télémétrie connectée.", "success");
             }
-            
-            unlockVideoAutoplay();
-            showToast("Système Initialisé", "Bienvenue sur Benzjames. Télémétrie connectée.", "success");
         }
 
         const DEFAULT_CATEGORIES = [
@@ -1362,7 +1305,7 @@
             { id: "p3", categoryId: "cat2", name: "Daytona High-Step V1", price: 420, slogan: "Semelle magnétique auto-guidée", desc: "Intègre un noyau de suspension cybernétique ultra-réactif et des inserts en nano-fibre de kevlar.", image: "", badge: "Daytona Tech", weight: 320 },
             { id: "p4", categoryId: "cat2", name: "Nürburg Grip Pro", price: 480, slogan: "Grip adaptatif bitume / pluie", desc: "Dotée d'un profil de semelle thermique intelligent qui s'adapte à la température du sol.", image: "", badge: "Track Certified", weight: 290 },
             { id: "p5", categoryId: "cat3", name: "Silverstone Aero-Knit", price: 180, slogan: "Coupe ergonomique wind-tunnel", desc: "Micro-canaux d'aération optimisés pour l'évacuation immédiate de la chaleur corporelle en effort intense.", image: "", badge: "Aero Knit", weight: 95 },
-            { id: "p6", categoryId: "cat3", name: "Suzuka Base Layer", price: 195, slogan: "Protection G-Force active", desc: "Textile technique compressif à mémoire de forme, réduisant les vibrations musculaires.", image: "", badge: "G-Membrane", weight: 110 },
+            { id: "p6", categoryId: "cat3", name: "Suzuka Base Layer", price: 195, slogan: "Protection G-Force active", desc: "Textile technique compressif à mémoire de forme, réduisant les vibrations musculaires.", image: "", badge: "G-Membrane", weight: 110},
             { id: "p7", categoryId: "cat4", name: "Veste Kyoto Techwear", price: 590, slogan: "Imperméabilité électromagnétique", desc: "Traitement polymère hydrophobe avec membrane auto-chauffante par micro-faisceaux intégrés.", image: "", badge: "Kyoto Lab", weight: 450 },
             { id: "p8", categoryId: "cat5", name: "Lunettes HUD Spectrum-X", price: 720, slogan: "Affichage télémétrique oculaire", desc: "Verres photochromiques avec superposition de données de vitesse et navigation GPS autonome.", image: "", badge: "HUD Spec", weight: 38 }
         ];
@@ -1373,18 +1316,18 @@
         ];
 
         const DEFAULT_RACES = [
-            { id: "race1", name: "Pikes Peak Hill Climb", location: "Colorado, USA", record: "07:57.148", desc: "La course vers les nuages. Altitude extrême, sifflement strident de moteur électrique hybride et de turbo.", likes: 142, comments: [{author: "ChronoMax", text: "Effrayant sans barrières !"}] },
-            { id: "race2", name: "24 Heures du Mans", location: "Sarthe, France", record: "3:17.297 (Monza)", desc: "L'épreuve d'endurance reine. Un passage de V8 hurlant dans la ligne droite des Hunaudières.", likes: 325, comments: [{author: "LeMansFans", text: "La nuit du Mans est magique."}] },
+            { id: "race1", name: "Pikes Peak Hill Climb", location: "Colorado, USA", record: "07:57.148", desc: "La course vers les nuages. Altitude extrême, sifflement strident de moteur électrique hybride et de turbo.", likes: 142, comments: [{author: "ChronoMax", text: "Effrayant sans barrières !"}]},
+            { id: "race2", name: "24 Heures du Mans", location: "Sarthe, France", record: "3:17.297 (Monza)", desc: "L'épreuve d'endurance reine. Un passage de V8 hurlant dans la ligne droite des Hunaudières.", likes: 325, comments: [{author: "LeMansFans", text: "La nuit du Mans est magique."}]},
             { id: "race3", name: "Indianapolis 500", location: "Indiana, USA", record: "00:37.616", desc: "Le mythique anneau de vitesse. Le sillage d'un moteur Indy hurlant à 12 000 tr/min.", likes: 98, comments: [{author: "OvaleKing", text: "Mettez du son !"}] },
             { id: "race4", name: "Nürburgring Nordschleife", location: "Eifel, Allemagne", record: "05:19.546", desc: "L'Enfer Vert. Plus de 20 kilomètres d'asphalte éprouvant les suspensions et les échappements de GT3.", likes: 450, comments: [{author: "RingMaster", text: "La Porsche 919 Evo y est imbattable."}] },
-            { id: "race5", name: "Rallye Dakar", location: "Désert absolu", record: "44h Endurance", desc: "L'aventure hors-piste ultime. Un moteur diesel biturbo rugissant sur les dunes.", likes: 189, comments: [{author: "DesertRider", text: "La dureté mécanique à l'état pur."}] },
-            { id: "race6", name: "Grand Prix de Monaco", location: "Principauté de Monaco", record: "1:10.166", desc: "Un couloir d'acier en milieu urbain. Les échos de F1 résonnant sous le tunnel.", likes: 278, comments: [{author: "SennasSpirit", text: "Le virage de l'hôtel de gare est ultra lent !"}] },
+            { id: "race5", name: "Rallye Dakar", location: "Désert absolu", record: "44h Endurance", desc: "L'aventure hors-piste ultime. Un moteur diesel biturbo rugissant sur les dunes.", likes: 189, comments: [{author: "DesertRider", text: "La dureté mécanique à l'état pur."}]},
+            { id: "race6", name: "Grand Prix de Monaco", location: "Principauté de Monaco", record: "1:10.166", desc: "Un couloir d'acier en milieu urbain. Les échos de F1 résonnant sous le tunnel.", likes: 278, comments: [{author: "SennasSpirit", text: "Le virage de l'hôtel de gare est ultra lent !"}]},
             { id: "race7", name: "Bonneville Utah", location: "Salt Flats, USA", record: "1227.98 km/h", desc: "La plaine de sel infinie. Sifflement suraigu de turbine aérodynamique fendant le vent.", likes: 83, comments: [{author: "SaltSpeed", text: "On dirait une autre planète."}] },
-            { id: "race8", name: "Courses Dragster (NHRA)", location: "Pomona, USA", record: "3.631s (1/4 Mile)", desc: "4 G d'accélération brute. Des moteurs V8 nitrométhane de 11 000 chevaux.", likes: 154, comments: [{author: "NitroAero", text: "Le sol tremble à chaque départ !"}] },
-            { id: "race9", name: "Championnat GT3 World", location: "Spa, Monza, Silverstone", record: "Multi-Circuit", desc: "L'élite des voitures de sport dérivées de la série. Le chant lyrique des moteurs atmosphériques.", likes: 211, comments: [{author: "GT3Lover", text: "Le son de l'Audi R8 V10 !"}] },
+            { id: "race8", name: "Courses Dragster (NHRA)", location: "Pomona, USA", record: "3.631s (1/4 Mile)", desc: "4 G d'accélération brute. Des moteurs V8 nitrométhane de 11 000 chevaux.", likes: 154, comments: [{author: "NitroAero", text: "Le sol tremble à chaque départ !"}]},
+            { id: "race9", name: "Championnat GT3 World", location: "Spa, Monza, Silverstone", record: "Multi-Circuit", desc: "L'élite des voitures de sport dérivées de la série. Le chant lyrique des moteurs atmosphériques.", likes: 211, comments: [{author: "GT3Lover", text: "Le son de l'Audi R8 V10!"}]},
             { id: "race10", name: "Isle of Man TT", location: "Île de Man", record: "16:42.778", desc: "La course routière la plus rapide et dangereuse du globe. Le hululement d'une moto à 300 km/h.", likes: 512, comments: [{author: "MotoGP_Guy", text: "Ces pilotes n'ont pas de cerveau !"}] },
-            { id: "race11", name: "Bathurst Mount Panorama", location: "Australie", record: "1:58.694", desc: "Le toboggan mythique. Descente vertigineuse entre les murs avec un bloc V8 rageur.", likes: 137, comments: [{author: "AussieV8", text: "The Mountain is legendary !"}] },
-            { id: "race12", name: "Grand Prix de Macao", location: "Macao, Chine", record: "2:05.145 (F3)", desc: "Le circuit de Guia. Un tracé urbain d'une technicité effroyable.", likes: 122, comments: [{author: "CityDriver", text: "La courbe Lisboa est toujours un carnage."}] }
+            { id: "race11", name: "Bathurst Mount Panorama", location: "Australie", record: "1:58.694", desc: "Le toboggan mythique. Descente vertigineuse entre les murs avec un bloc V8 rageur.", likes: 137, comments: [{author: "AussieV8", text: "The Mountain is legendary !"}]},
+            { id: "race12", name: "Grand Prix de Macao", location: "Macao, Chine", record: "2:05.145 (F3)", desc: "Le circuit de Guia. Un tracé urbain d'une technicité effroyable.", likes: 122, comments: [{author: "CityDriver", text: "La courbe Lisboa est toujours un carnage."}]}
         ];
 
         let products = [];
@@ -1396,7 +1339,6 @@
         let isMaster = false;
         let tempImageData = "";
         let tempVideoFile = null;
-        let tempIntroVideoFile = null;
         let tempRightMediaFile = null;
         let currentUser = null;
         let activeCart = [];
@@ -1407,23 +1349,21 @@
 
         async function playRaceSoundSynth(raceId) {
             await Tone.start();
-
-            const race = racesData.find(r => r.id === raceId);
+            const race = racesData.find(r => r.id == raceId);
             if (!race) return;
-
             const name = race.name.toLowerCase();
             showToast("Télémétrie Sonore", `Génération analogique du moteur pour ${race.name}...`, "warning");
-
+            
             if (window.activeRaceSynth) {
                 try {
                     window.activeRaceSynth.triggerRelease();
                     window.activeRaceSynth.dispose();
                 } catch(e) {}
             }
-
+            
             animateEqVisualizer(raceId, 2500);
             const now = Tone.now();
-
+            
             if (name.includes("pikes peak") || name.includes("monaco") || name.includes("nürburgring") || name.includes("macao") || name.includes("tt")) {
                 const synth = new Tone.MonoSynth({
                     oscillator: { type: "sawtooth" },
@@ -1431,58 +1371,49 @@
                     envelope: { attack: 0.1, decay: 0.3, sustain: 0.8, release: 0.8 },
                     filterEnvelope: { attack: 0.1, decay: 0.5, sustain: 0.7, baseFrequency: 300, octaves: 3.5 }
                 }).toDestination();
-                
                 window.activeRaceSynth = synth;
                 synth.triggerAttack("F#1", now);
-                synth.frequency.rampTo("C#4", 0.6, now); 
+                synth.frequency.rampTo("C#4", 0.6, now);
                 synth.frequency.setValueAtTime("C#3", now + 0.65);
-                synth.frequency.rampTo("E4", 0.5, now + 0.7); 
+                synth.frequency.rampTo("E4", 0.5, now + 0.7);
                 synth.frequency.setValueAtTime("A3", now + 1.25);
-                synth.frequency.rampTo("F#5", 0.8, now + 1.3); 
+                synth.frequency.rampTo("F#5", 0.8, now + 1.3);
                 synth.triggerRelease(now + 2.3);
-
             } else if (name.includes("mans") || name.includes("gt3") || name.includes("bathurst")) {
                 const synth = new Tone.Synth({
                     oscillator: { type: "square" },
                     envelope: { attack: 0.15, decay: 0.4, sustain: 0.8, release: 0.9 }
                 }).toDestination();
-
                 const filter = new Tone.Filter({ type: "lowpass", frequency: 350 }).toDestination();
                 synth.connect(filter);
                 window.activeRaceSynth = synth;
-
                 synth.triggerAttack("E1", now);
                 synth.frequency.rampTo("B2", 0.8, now);
                 synth.frequency.setValueAtTime("D2", now + 0.85);
                 synth.frequency.rampTo("C#3", 0.7, now + 0.9);
                 synth.frequency.rampTo("G1", 0.4, now + 1.8);
                 synth.triggerRelease(now + 2.2);
-
             } else if (name.includes("indianapolis") || name.includes("dragster")) {
                 const synth = new Tone.MonoSynth({
                     oscillator: { type: "sawtooth" },
-                    filter: { Q: 3, type: "lowpass", frequency: 600 },
-                    envelope: { attack: 0.05, decay: 0.1, sustain: 1.0, release: 0.4 }
+                    filter: { Q: 3, type: "lowpass", frequency: 600},
+                    envelope: { attack: 0.05, decay: 0.1, sustain: 1.0, release: 0.4}
                 }).toDestination();
-                
                 window.activeRaceSynth = synth;
                 synth.triggerAttack("C1", now);
-                synth.frequency.rampTo("C5", 0.5, now); 
+                synth.frequency.rampTo("C5", 0.5, now);
                 synth.frequency.setValueAtTime("A4", now + 0.55);
                 synth.frequency.rampTo("G#5", 0.6, now + 0.6);
                 synth.frequency.setValueAtTime("F#4", now + 1.25);
                 synth.frequency.rampTo("B5", 0.6, now + 1.3);
                 synth.triggerRelease(now + 2.2);
-
             } else if (name.includes("bonneville")) {
                 const noise = new Tone.Noise("pink").start();
-                const noiseFilter = new Tone.Filter({ type: "bandpass", Q: 4, frequency: 120 }).toDestination();
+                const noiseFilter = new Tone.Filter({ type: "bandpass", Q: 4, frequency: 120}).toDestination();
                 noise.connect(noiseFilter);
-
                 const osc = new Tone.Oscillator("sine").toDestination().start();
                 osc.volume.setValueAtTime(-60, now);
                 osc.volume.rampTo(-10, 1.0, now);
-
                 noiseFilter.frequency.setValueAtTime(100, now);
                 noiseFilter.frequency.rampTo(2500, 1.5, now);
                 osc.frequency.setValueAtTime(120, now);
@@ -1490,7 +1421,6 @@
                 noiseFilter.frequency.rampTo(80, 1.0, now + 1.6);
                 osc.frequency.rampTo(100, 1.0, now + 1.6);
                 osc.volume.rampTo(-60, 1.0, now + 1.6);
-
                 setTimeout(() => {
                     noise.stop();
                     osc.stop();
@@ -1498,21 +1428,18 @@
                     noiseFilter.dispose();
                     osc.dispose();
                 }, 3000);
-
             } else if (name.includes("dakar")) {
                 const synth = new Tone.MonoSynth({
                     oscillator: { type: "sawtooth" },
                     filter: { Q: 0.8, type: "lowpass", frequency: 250 },
-                    envelope: { attack: 0.2, decay: 0.4, sustain: 0.6, release: 0.8 }
+                    envelope: { attack: 0.2, decay: 0.4, sustain: 0.6, release: 0.8}
                 }).toDestination();
-                
                 window.activeRaceSynth = synth;
                 synth.triggerAttack("D1", now);
                 synth.frequency.rampTo("G1", 0.7, now);
                 synth.frequency.setValueAtTime("F1", now + 0.75);
                 synth.frequency.rampTo("A#2", 0.8, now + 0.8);
                 synth.triggerRelease(now + 2.0);
-
             } else {
                 const synth = new Tone.FMSynth().toDestination();
                 window.activeRaceSynth = synth;
@@ -1527,17 +1454,14 @@
         function animateEqVisualizer(raceId, duration) {
             const visualizer = document.getElementById(`eq-visualizer-${raceId}`);
             if (!visualizer) return;
-
             visualizer.classList.remove('hidden');
             const bars = visualizer.querySelectorAll('.eq-bar');
-            
             const interval = setInterval(() => {
                 bars.forEach(bar => {
-                    const randomHeight = Math.floor(Math.random() * 28) + 4; 
+                    const randomHeight = Math.floor(Math.random() * 28) + 4;
                     bar.style.height = `${randomHeight}px`;
                 });
             }, 80);
-
             setTimeout(() => {
                 clearInterval(interval);
                 visualizer.classList.add('hidden');
@@ -1548,7 +1472,7 @@
         async function initApp() {
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
-
+            
             const savedCategories = localStorage.getItem('bj_categories');
             if (savedCategories) {
                 categories = JSON.parse(savedCategories);
@@ -1556,7 +1480,7 @@
                 categories = [...DEFAULT_CATEGORIES];
                 localStorage.setItem('bj_categories', JSON.stringify(categories));
             }
-
+            
             const savedProducts = localStorage.getItem('bj_products');
             if (savedProducts) {
                 products = JSON.parse(savedProducts);
@@ -1564,16 +1488,16 @@
                 products = [...DEFAULT_PRODUCTS];
                 localStorage.setItem('bj_products', JSON.stringify(products));
             }
-
+            
             const savedCart = localStorage.getItem('bj_cart');
             if (savedCart) {
                 activeCart = JSON.parse(savedCart);
             }
             updateCartBadge();
-
+            
             currentUser = JSON.parse(localStorage.getItem('bj_user'));
             updateUserUI();
-
+            
             const savedListings = localStorage.getItem('bj_listings');
             if (savedListings) {
                 exchangeListings = JSON.parse(savedListings);
@@ -1581,7 +1505,7 @@
                 exchangeListings = [...DEFAULT_EXCHANGE_LISTINGS];
                 localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             }
-
+            
             const savedRaces = localStorage.getItem('bj_races_data');
             if (savedRaces) {
                 racesData = JSON.parse(savedRaces);
@@ -1589,54 +1513,41 @@
                 racesData = [...DEFAULT_RACES];
                 localStorage.setItem('bj_races_data', JSON.stringify(racesData));
             }
-
+            
             const savedRecoveryEmail = localStorage.getItem('bj_master_recovery_email');
             if (savedRecoveryEmail) {
                 const inputRecovery = document.getElementById('harden-recovery-email');
                 if (inputRecovery) inputRecovery.value = savedRecoveryEmail;
             }
-
+            
             const savedTexts = localStorage.getItem('bj_page_texts');
             if (savedTexts) {
                 pageTexts = JSON.parse(savedTexts);
             } else {
                 pageTexts = {
                     'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES UNIQUES',
-                    'txt-home-scroller': 'F1 :: L\'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 Pure',
+                    'txt-home-scroller': "F1 :: L'exigence de la Haute Couture :: Benzjames Cyber-Couture V2 Pure",
                     'txt-col-tag': '// LA GAMME SPORT CYBER',
                     'txt-col-title': 'La Collection exclusive',
                     'txt-exchange-subtitle': '// CO-EXISTENCE & INDICE DE RARETÉ',
-                    'txt-exchange-title': 'Bourse & Marché d\'Échange Officiel',
+                    'txt-exchange-title': "Bourse & Marché d'Échange Officiel",
                     'txt-eval-tag': '// CORE PROTOCOL ENGINE',
                     'txt-eval-title': 'Évaluer sa Pièce Unique',
                     'txt-live-feed': '// TRANSACTIONS & ENCHÈRES EN DIRECT',
                     'txt-preorder-subtitle': '// ATELIER BENZJAMES VIRTUAL',
                     'txt-preorder-title': 'Configurez votre Numéro Unique',
                     'txt-preorder-desc': 'Si ce numéro est encore disponible, il sera gravé de manière indélébile sur votre étiquette.',
-                    'intro-custom-title': 'BENZJAMES',
-                    'intro-custom-subtitle': 'L\'ÉCURIE HIGH-TECH EN MOUVEMENT'
+                    'intro-custom-title': 'Benzjames sport',
+                    'intro-custom-subtitle': "L'ÉCURIE HIGH-TECH EN MOUVEMENT"
                 };
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
             }
-
+            
             setTimeout(() => {
                 const introSheet = document.getElementById('intro-sheet');
                 if (introSheet) introSheet.classList.add('unfolded');
             }, 300);
-
-            try {
-                const savedIntroVid = await getVideoFromDB('intro_video');
-                const introPlayer = document.getElementById('intro-video-player');
-                if (savedIntroVid && introPlayer) {
-                    let videoUrl = (savedIntroVid instanceof Blob) ? URL.createObjectURL(savedIntroVid) : savedIntroVid;
-                    introPlayer.src = videoUrl;
-                    introPlayer.load();
-                    introPlayer.play().catch(() => {});
-                }
-            } catch(e) {
-                console.warn("Échec d'initialisation de la vidéo d'intro.");
-            }
-
+            
             try {
                 const savedVideo = await getVideoFromDB('home_video');
                 const player = document.getElementById('hud-video-player');
@@ -1649,7 +1560,7 @@
             } catch(e) {
                 console.warn("Échec d'initialisation de la vidéo d'accueil.");
             }
-
+            
             await loadRightMedia();
             renderApp();
             renderRaces();
@@ -1661,15 +1572,14 @@
             const player = document.getElementById(videoId);
             const icon = document.getElementById(iconId);
             if (!player) return;
-
             if (player.muted) {
                 player.muted = false;
                 player.volume = 1.0;
-                icon.innerText = "🔊 Son Actif";
+                icon.innerText = " Son Actif";
                 showToast("Canal Audio Ouvert", "Le son du flux satellite est maintenant actif.", "info");
             } else {
                 player.muted = true;
-                icon.innerText = "🔈 Activer le Son";
+                icon.innerText = " Activer le Son";
                 showToast("Canal Mute", "Le son a été coupé.", "info");
             }
         }
@@ -1678,12 +1588,11 @@
             const type = localStorage.getItem('bj_right_media_type') || 'default';
             const typeSelect = document.getElementById('right-media-type-select');
             if (typeSelect) typeSelect.value = type;
-
             const imgEl = document.getElementById('right-custom-img');
             const videoEl = document.getElementById('right-custom-video');
             const decors = document.querySelectorAll('.right-default-decor');
             const soundBtn = document.getElementById('right-sound-btn');
-
+            
             if (type === 'default') {
                 imgEl.classList.add('hidden');
                 videoEl.classList.add('hidden');
@@ -1691,7 +1600,7 @@
                 decors.forEach(d => d.classList.remove('hidden'));
                 return;
             }
-
+            
             try {
                 const savedData = await getVideoFromDB('right_media_data');
                 if (!savedData) {
@@ -1701,9 +1610,8 @@
                     decors.forEach(d => d.classList.remove('hidden'));
                     return;
                 }
-
+                
                 let mediaUrl = (savedData instanceof Blob) ? URL.createObjectURL(savedData) : savedData;
-
                 if (type === 'image') {
                     imgEl.src = mediaUrl;
                     imgEl.classList.remove('hidden');
@@ -1733,7 +1641,6 @@
             document.getElementById('right-media-url').value = "";
             document.getElementById('right-media-file-picker').value = "";
             document.getElementById('right-media-upload-label').innerText = "Sélectionner Photo ou Vidéo";
-            
             const type = localStorage.getItem('bj_right_media_type') || 'default';
             document.getElementById('right-media-type-select').value = type;
             toggleRightMediaInputFields();
@@ -1748,7 +1655,6 @@
             const type = document.getElementById('right-media-type-select').value;
             const urlContainer = document.getElementById('right-media-url-container');
             const fileContainer = document.getElementById('right-media-file-container');
-            
             if (type === 'default') {
                 urlContainer.classList.add('hidden');
                 fileContainer.classList.add('hidden');
@@ -1761,29 +1667,28 @@
         function handleRightMediaFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            if (file.size > 120 * 1024 * 1024) {
+            if (file.size > 120*1024*1024) {
                 showToast("Fichier trop lourd", "Veuillez choisir un fichier de moins de 120 Mo.", "error");
                 e.target.value = "";
                 return;
             }
             tempRightMediaFile = file;
             document.getElementById('right-media-upload-label').innerText = file.name + " (" + (file.size / (1024*1024)).toFixed(1) + " Mo)";
-            showToast("Média chargé", "Fichier prêt à être enregistré !", "success");
+            showToast("Média chargé", "Fichier prêt à être enregistré!", "success");
         }
 
         async function saveRightMedia() {
             const type = document.getElementById('right-media-type-select').value;
             const urlInput = document.getElementById('right-media-url').value.trim();
             localStorage.setItem('bj_right_media_type', type);
-
+            
             if (type === 'default') {
                 showToast("Réinitialisation", "Animation géométrique d'écurie réactivée.");
                 await loadRightMedia();
                 closeRightMediaModal();
                 return;
             }
-
+            
             if (tempRightMediaFile) {
                 showToast("Enregistrement...", "Stockage local...", "info");
                 await saveVideoToDB('right_media_data', tempRightMediaFile);
@@ -1793,61 +1698,8 @@
                 await saveVideoToDB('right_media_data', urlInput);
                 showToast("Visuel Configuré", "L'adresse réseau a été validée avec succès.", "success");
             }
-
             await loadRightMedia();
             closeRightMediaModal();
-        }
-
-        function openIntroConfigModal() {
-            tempIntroVideoFile = null;
-            document.getElementById('intro-video-url-input').value = "";
-            document.getElementById('intro-video-file-picker').value = "";
-            document.getElementById('intro-video-upload-label').innerText = "Sélectionner une vidéo d'intro";
-            document.getElementById('modal-intro-edit').classList.remove('hidden');
-        }
-
-        function closeIntroConfigModal() {
-            document.getElementById('modal-intro-edit').classList.add('hidden');
-        }
-
-        function handleIntroVideoFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            if (file.size > 120 * 1024 * 1024) {
-                showToast("Fichier lourd", "Une vidéo de moins de 120 Mo est conseillée.", "error");
-                e.target.value = "";
-                return;
-            }
-            tempIntroVideoFile = file;
-            document.getElementById('intro-video-upload-label').innerText = file.name + " (" + (file.size / (1024*1024)).toFixed(1) + " Mo)";
-            showToast("Vidéo d'Intro chargée", "Le fichier vidéo est prêt à être appliqué.", "success");
-        }
-
-        async function saveIntroVideoEdit() {
-            const urlInput = document.getElementById('intro-video-url-input').value.trim();
-            const player = document.getElementById('intro-video-player');
-
-            if (tempIntroVideoFile) {
-                showToast("Enregistrement...", "Stockage sécurisé...", "info");
-                await saveVideoToDB('intro_video', tempIntroVideoFile);
-                const videoUrl = URL.createObjectURL(tempIntroVideoFile);
-                if (player) {
-                    player.src = videoUrl;
-                    player.load();
-                    player.play().catch(() => {});
-                }
-                showToast("Intro configurée", "La vidéo d'intro a été enregistrée.", "success");
-            } else if (urlInput) {
-                await saveVideoToDB('intro_video', urlInput);
-                if (player) {
-                    player.src = urlInput;
-                    player.load();
-                    player.play().catch(() => {});
-                }
-                showToast("Intro configurée", "Le lien vidéo externe a été mis à jour.", "success");
-            }
-            closeIntroConfigModal();
         }
 
         function changeActiveCategory(catId) {
@@ -1859,11 +1711,11 @@
             if (!isMaster) return;
             const category = categories.find(c => c.id === catId);
             if (!category) return;
-
+            
             document.getElementById('edit-target-id').value = catId;
             document.getElementById('edit-type').value = "category";
             document.getElementById('text-edit-title-h3').innerText = "Renommer le sous-dossier de la gamme";
-
+            
             const container = document.getElementById('text-edit-input-container');
             container.innerHTML = `
                 <input type="text" id="edit-text-value" value="${category.name}" class="w-full bg-bj-black border border-bj-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
@@ -1876,7 +1728,7 @@
                 const el = document.getElementById(id);
                 if (el) el.innerText = text;
             }
-
+            
             const subfoldersContainer = document.getElementById('category-subfolders');
             if (subfoldersContainer) {
                 subfoldersContainer.innerHTML = "";
@@ -1884,13 +1736,14 @@
                     const isActive = cat.id === activeCategoryId;
                     const folder = document.createElement('div');
                     folder.className = "flex items-center shrink-0 relative group";
-                    
                     folder.innerHTML = `
-                        <button onclick="changeActiveCategory('${cat.id}')" class="px-5 py-2.5 rounded-xl border font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${isActive ? 'bg-bj-cyan/15 border-bj-cyan text-bj-cyan shadow-[0_0_12px_rgba(6,182,212,0.3)]' : 'bg-bj-dark/80 border-bj-border hover:border-bj-cyan/50 text-white'}">
+                        <button onclick="changeActiveCategory('${cat.id}')" class="px-5 py-2.5 rounded-xl border font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 ${
+                            isActive ? 'bg-bj-cyan/15 border-bj-cyan text-bj-cyan shadow-[0_0_12px_rgba(6,182,212,0.3)]' : 'bg-bj-dark/80 border-bj-border hover:border-bj-cyan/50 text-white'
+                        }">
                             <span>📁 ${cat.name}</span>
                             ${isMaster ? `
-                                <span onclick="event.stopPropagation(); editCategoryName('${cat.id}')" class="text-[10px] text-bj-gold hover:text-white transition-all ml-1 cursor-pointer" title="Renommer">✏️</span>
-                            ` : ''}
+                                <span onclick="event.stopPropagation(); editCategoryName('${cat.id}')" class="text-[10px] text-bj-gold hover:text-white transition-all ml-1 cursor-pointer" title="Renommer">✍</span>
+                            ` : ""}
                         </button>
                     `;
                     subfoldersContainer.appendChild(folder);
@@ -1898,18 +1751,17 @@
             }
 
             const filteredProducts = products.filter(p => p.categoryId === activeCategoryId);
-
             const grid = document.getElementById('products-grid');
             if (grid) {
                 grid.innerHTML = "";
                 document.getElementById('txt-col-count').innerText = `Affichage: ${filteredProducts.length} Modèles Exclusifs`;
-
+                
                 if (filteredProducts.length === 0) {
                     grid.innerHTML = `
                         <div class="col-span-full border border-dashed border-bj-cyan/20 rounded-xl p-12 text-center bg-bj-dark/40">
                             <span class="text-3xl block mb-2">📦</span>
                             <span class="font-mono text-xs text-bj-textMuted uppercase tracking-wider">// AUCUN MODÈLE DANS CETTE CATÉGORIE</span>
-                            ${isMaster ? `<button onclick="openProductModal()" class="mt-4 px-4 py-2 bg-bj-gold text-black rounded text-[11px] font-mono font-bold uppercase tracking-wider hover:bg-white transition-all">+ AJOUTER PREMIER PRODUIT</button>` : ''}
+                            ${isMaster ? `<button onclick="openProductModal()" class="mt-4 px-4 py-2 bg-bj-gold text-black rounded text-[11px] font-mono font-bold uppercase tracking-wider hover:bg-white transition-all">+ AJOUTER PREMIER PRODUIT</button>` : ""}
                         </div>
                     `;
                 }
@@ -1924,9 +1776,8 @@
                             <div class="absolute w-16 h-16 rounded-full border border-dashed border-bj-red/20"></div>
                         </div>
                     `;
-
                     if (product.image && product.image.trim() !== "") {
-                        imageHTML = `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-lg" onerror="this.onerror=null; this.outerHTML='<div class=\'text-center text-xs text-bj-red font-mono\'>Erreur de chargement</div>'">`;
+                        imageHTML = `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-lg" onerror="this.onerror=null; this.outerHTML='<div class=\'text-center text-xs text-bj-red font-mono\'>Erreur</div>'">`;
                     }
 
                     card.innerHTML = `
@@ -1934,12 +1785,9 @@
                             <div class="absolute top-2 left-2 bg-bj-cyan text-black text-[8px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono shadow-md z-10">${product.badge}</div>
                             ${imageHTML}
                             ${isMaster ? `
-                                <button onclick="openProductModal('${product.id}')" class="absolute bottom-2 right-2 bg-bj-gold text-black hover:bg-white p-1.5 rounded-lg text-[10px] font-bold transition-all z-20 shadow-lg font-mono">
-                                    Edit
-                                </button>
-                            ` : ''}
+                                <button onclick="openProductModal('${product.id}')" class="absolute bottom-2 right-2 bg-bj-gold text-black hover:bg-white p-1.5 rounded-lg text-[10px] font-bold transition-all z-20 shadow-lg font-mono">Edit</button>
+                            ` : ""}
                         </div>
-
                         <div class="flex-grow flex flex-col justify-between space-y-4">
                             <div class="space-y-1.5">
                                 <div class="flex justify-between items-start gap-2">
@@ -1949,7 +1797,6 @@
                                 <p class="text-[9px] uppercase font-mono text-bj-red tracking-wider font-semibold" style="letter-spacing: 0.15em;">${product.slogan || ""}</p>
                                 <p class="text-[11px] text-bj-textMuted leading-relaxed pt-1 border-t border-bj-border/30">${product.desc}</p>
                             </div>
-
                             <div class="grid grid-cols-2 gap-2 pt-2">
                                 <button onclick="selectProductForPreorder('${product.id}')" class="py-2 px-3 border border-bj-cyan/20 hover:bg-bj-cyan hover:text-black hover:border-transparent text-[9px] uppercase tracking-wider font-bold transition-all rounded-lg font-mono text-bj-cyan bg-bj-cyan/5">Configurateur</button>
                                 <button onclick="addProductToCart('${product.id}')" class="py-2 px-3 bg-bj-gold hover:bg-white text-black text-[9px] uppercase tracking-wider font-bold transition-all rounded-lg font-mono">Ajouter Panier</button>
@@ -1967,13 +1814,11 @@
                 select.innerHTML = "";
                 if (evalSelect) evalSelect.innerHTML = "";
                 if (listSelect) listSelect.innerHTML = "";
-
                 products.forEach(p => {
                     const opt = document.createElement('option');
                     opt.value = p.id;
                     opt.innerText = `${p.name} (${p.price} €)`;
                     select.appendChild(opt);
-
                     if (evalSelect) {
                         const opt2 = opt.cloneNode(true);
                         evalSelect.appendChild(opt2);
@@ -1984,7 +1829,6 @@
                     }
                 });
             }
-
             updatePreorderPrice();
             updatePreorderVisual();
             renderListings();
@@ -2015,8 +1859,8 @@
             }
             if (countLabel) {
                 countLabel.innerText = `${activeCart.length} Article${activeCart.length > 1 ? 's' : ''}`;
+                renderCartList();
             }
-            renderCartList();
         }
 
         function renderCartList() {
@@ -2025,13 +1869,13 @@
             if (!container) return;
             container.innerHTML = "";
             let total = 0;
-
+            
             if (activeCart.length === 0) {
                 container.innerHTML = `<p class="text-center font-mono text-[11px] text-bj-textMuted py-4">// PANIER ACTUELLEMENT VIDE</p>`;
                 if (totalLabel) totalLabel.innerText = "0 €";
                 return;
             }
-
+            
             activeCart.forEach(item => {
                 total += item.price;
                 const div = document.createElement('div');
@@ -2048,7 +1892,6 @@
                 `;
                 container.appendChild(div);
             });
-
             if (totalLabel) totalLabel.innerText = `${total} €`;
         }
 
@@ -2067,10 +1910,9 @@
                 showToast("Panier Vide", "Votre panier d'achat est vide.", "error");
                 return;
             }
-
             showToast("Commande Initiée", "Sécurisation de la liaison de paiement en cours...");
             setTimeout(() => {
-                showToast("Félicitations !", `La commande d'une valeur de ${activeCart.reduce((acc, curr) => acc + curr.price, 0)} € a été validée pour @${currentUser.pseudonym}.`);
+                showToast("Félicitations!", `La commande d'une valeur de ${activeCart.reduce((acc, curr) => acc + curr.price, 0)} € a été validée pour @${currentUser.pseudonym}.`);
                 activeCart = [];
                 localStorage.removeItem('bj_cart');
                 updateCartBadge();
@@ -2088,7 +1930,7 @@
             currentUser = { pseudonym: pseudo, wallet: wallet };
             localStorage.setItem('bj_user', JSON.stringify(currentUser));
             updateUserUI();
-            showToast("Compte Créé !", `Bienvenue dans le cercle privé Benzjames, @${pseudo} !`);
+            showToast("Compte Créé!", `Bienvenue dans le cercle privé Benzjames, @${pseudo} !`);
         }
 
         function logoutClient() {
@@ -2106,7 +1948,7 @@
             const nameDisp = document.getElementById('client-display-name');
             const exchangeUserStatus = document.getElementById('market-user-status');
             const exchangeBtnAuth = document.getElementById('btn-user-auth');
-
+            
             if (currentUser) {
                 if (notRegSec) notRegSec.classList.add('hidden');
                 if (regSec) regSec.classList.remove('hidden');
@@ -2117,8 +1959,8 @@
                 if (notRegSec) {
                     notRegSec.classList.remove('hidden');
                     if (pseudoInput) pseudoInput.value = "";
-                    if (walletInput) walletInput.value = "";
                 }
+                if (walletInput) walletInput.value = "";
                 if (regSec) regSec.classList.add('hidden');
                 if (exchangeUserStatus) exchangeUserStatus.innerText = 'Consul: Visiteur';
                 if (exchangeBtnAuth) exchangeBtnAuth.innerText = "S'identifier";
@@ -2140,7 +1982,7 @@
             const masterBtn = document.getElementById('tab-btn-master');
             const clientTab = document.getElementById('portal-tab-client');
             const masterTab = document.getElementById('portal-tab-master');
-
+            
             if (tabId === 'client-tab') {
                 clientBtn.className = "flex-1 py-4 text-center border-b-2 border-bj-gold text-bj-gold font-bold transition-all focus:outline-none";
                 masterBtn.className = "flex-1 py-4 text-center border-b-2 border-transparent text-bj-textMuted transition-all focus:outline-none";
@@ -2158,12 +2000,12 @@
             const feed = document.getElementById('listings-feed');
             if (!feed) return;
             feed.innerHTML = "";
-
+            
             if (exchangeListings.length === 0) {
-                feed.innerHTML = `<div class="text-center font-mono text-xs text-bj-textMuted p-8">Aucun article n'est listé pour le moment.</div>`;
+                feed.innerHTML = '<div class="text-center font-mono text-xs text-bj-textMuted p-8">Aucun article n\'est listé pour le moment.</div>';
                 return;
             }
-
+            
             exchangeListings.forEach(item => {
                 const isAuction = item.mode === 'auction';
                 const div = document.createElement('div');
@@ -2182,7 +2024,7 @@
                         <div class="text-center sm:text-right min-w-[100px]">
                             <span class="text-[9px] text-bj-textMuted block text-[8px]">${isAuction ? 'Meilleure Offre' : 'Tarif Vente'}</span>
                             <span class="text-lg font-black text-bj-gold">${item.currentPrice} €</span>
-                            ${item.highestBidder ? `<span class="text-[8px] text-bj-cyan block">Offre par @${item.highestBidder}</span>` : ''}
+                            ${item.highestBidder ? `<span class="text-[8px] text-bj-cyan block">Offre par @${item.highestBidder}</span>` : ""}
                         </div>
                         <div class="w-full sm:w-auto">
                             ${isAuction ? `
@@ -2206,18 +2048,17 @@
             const serialVal = parseInt(document.getElementById('eval-serial').value) || 1;
             const secretVal = document.getElementById('eval-secret').value.trim();
             const product = products.find(p => p.id === modelId) || products[0];
-
             if (!product) return;
             if (secretVal.length < 5) {
                 showToast("Code invalide", "Veuillez entrer une clé d'authenticité correcte.", "error");
                 return;
             }
-
+            
             let serialBonus = 1.0;
             if (serialVal <= 10) serialBonus = 2.5;
             else if (serialVal <= 100) serialBonus = 1.6;
             else if (serialVal === 42 || serialVal === 111 || serialVal === 777) serialBonus = 1.8;
-
+            
             let hashVal = 0;
             for (let i = 0; i < secretVal.length; i++) {
                 hashVal += secretVal.charCodeAt(i);
@@ -2225,11 +2066,11 @@
             const luxuryFluctuation = 1 + ((hashVal % 30) / 100);
             const computedCote = Math.round(product.price * serialBonus * luxuryFluctuation);
             const deltaPercent = Math.round(((computedCote - product.price) / product.price) * 100);
-
             const code = generateLiveCertificate(serialVal);
+            
             document.getElementById('eval-res-id').innerText = `${code}`;
             document.getElementById('eval-res-cote').innerText = `${computedCote} €`;
-
+            
             const deltaEl = document.getElementById('eval-res-delta');
             if (deltaPercent >= 0) {
                 deltaEl.className = "text-[9px] font-mono text-emerald-400 font-bold";
@@ -2238,7 +2079,6 @@
                 deltaEl.className = "text-[9px] font-mono text-bj-red font-bold";
                 deltaEl.innerText = `${deltaPercent}% (Cote Certifiée)`;
             }
-
             document.getElementById('eval-screen').classList.remove('hidden');
             showToast("Authentification Terminée", "La rareté du modèle a été validée avec succès.");
         }
@@ -2249,14 +2089,13 @@
                 openUnifiedPortalModal('client-tab');
                 return;
             }
-
             const listing = exchangeListings.find(l => l.id === listingId);
             if (listing) {
                 listing.currentPrice += 20;
                 listing.highestBidder = currentUser.pseudonym;
                 localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                 renderListings();
-                showToast("Offre Enregistrée", `Vous êtes le meilleur enchérisseur à ${listing.currentPrice} € !`);
+                showToast("Offre Enregistrée", `Vous êtes le meilleur enchérisseur à ${listing.currentPrice} €!`);
             }
         }
 
@@ -2266,13 +2105,12 @@
                 openUnifiedPortalModal('client-tab');
                 return;
             }
-
             const listingIdx = exchangeListings.findIndex(l => l.id === listingId);
             if (listingIdx !== -1) {
                 const item = exchangeListings[listingIdx];
                 showToast("Transaction En Cours", `Validation des fonds vers @${item.seller}...`);
                 setTimeout(() => {
-                    showToast("Félicitations !", `Vous êtes le nouveau propriétaire de la pièce N°${item.serial} !`);
+                    showToast("Félicitations!", `Vous êtes le nouveau propriétaire de la pièce N°${item.serial}!`);
                     exchangeListings.splice(listingIdx, 1);
                     localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
                     renderListings();
@@ -2299,14 +2137,13 @@
             const secretVal = document.getElementById('listing-secret').value.trim().toUpperCase();
             const modeVal = document.getElementById('listing-mode').value;
             const priceVal = parseInt(document.getElementById('listing-price').value) || 250;
-
             const product = products.find(p => p.id === modelId) || products[0];
-
+            
             if (!serialVal || secretVal.length < 5) {
                 showToast("Authenticité Invalide", "Données incomplètes.", "error");
                 return;
             }
-
+            
             const newListing = {
                 id: 'ex' + Date.now(),
                 modelName: product.name,
@@ -2320,7 +2157,6 @@
                 endTime: modeVal === 'auction' ? "12h 00m" : "Direct",
                 status: "active"
             };
-
             exchangeListings.unshift(newListing);
             localStorage.setItem('bj_listings', JSON.stringify(exchangeListings));
             renderListings();
@@ -2331,18 +2167,17 @@
         function slideToPage(pageIndex) {
             if (pageIndex < 0 || pageIndex >= totalPages) return;
             currentPage = pageIndex;
-            
             const slider = document.getElementById('main-slider');
             if (slider) slider.style.transform = `translateX(-${currentPage * 20}%)`;
-
+            
             const needle = document.getElementById('tacho-needle');
             const digit = document.getElementById('tacho-digit');
             const progress = document.getElementById('slide-progress');
-
+            
             if (needle) needle.style.transform = `rotate(${angles[currentPage]}deg)`;
             if (digit) digit.innerText = `P${currentPage + 1}`;
             if (progress) progress.innerText = `PAGE: ${currentPage + 1}/${totalPages}`;
-
+            
             pageIds.forEach((id, i) => {
                 const navBtn = document.getElementById(`nav-${id}`);
                 if (navBtn) {
@@ -2353,7 +2188,6 @@
                     }
                 }
             });
-
             const targetPage = document.getElementById(pageIds[currentPage]);
             if (targetPage) targetPage.scrollTop = 0;
         }
@@ -2396,13 +2230,11 @@
             let serialInput = parseInt(document.getElementById('config-serial').value) || 1;
             if (serialInput < 1) serialInput = 1;
             if (serialInput > 1000) serialInput = 1000;
-
             const padSerial = String(serialInput).padStart(3, '0');
             const code = generateLiveCertificate(serialInput);
-
+            
             const dispCode = document.getElementById('config-display-code');
             const boxSerial = document.getElementById('box-serial');
-
             if (dispCode) dispCode.innerText = code;
             if (boxSerial) boxSerial.innerText = `N° ${padSerial} / 1000`;
         }
@@ -2412,13 +2244,13 @@
             if (!modelSelect) return;
             const modelId = modelSelect.value;
             const product = products.find(p => p.id === modelId) || products[0];
-
             if (!product) return;
+            
             document.getElementById('box-price').innerText = `${product.price} €`;
             document.getElementById('box-title').innerText = product.name.split(' ')[0].toUpperCase();
             document.getElementById('box-weight').innerText = `WEIGHT: ${product.weight}G`;
             document.getElementById('box-slogan').innerText = (product.slogan || "Aero Couture").toUpperCase();
-
+            
             const container = document.getElementById('box-visual-container');
             if (product.image && product.image.trim() !== "") {
                 container.style.backgroundImage = `url('${product.image}')`;
@@ -2440,12 +2272,12 @@
             const serial = document.getElementById('config-serial').value;
             const selectEl = document.getElementById('config-model');
             const modelName = selectEl.options[selectEl.selectedIndex]?.text || "Modèle";
-
+            
             if (!name || !email) {
                 showToast("Fiches incomplètes", "Veuillez remplir votre Nom et votre Email.", "error");
                 return;
             }
-            showToast("Réservation Enregistrée", `Félicitations ${name} ! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
+            showToast("Réservation Enregistrée", `Félicitations ${name}! Votre intérêt pour l'exemplaire N°${serial} (${modelName}) est validé.`);
         }
 
         function switchMasterLoginMode(mode) {
@@ -2454,7 +2286,7 @@
             const telemetryBox = document.getElementById('forgot-telemetry-box');
             const mailtoAnchor = document.getElementById('forgot-mailto-anchor');
             const relayButton = document.getElementById('btn-forgot-relay');
-
+            
             if (mode === 'forgot') {
                 loginSection.classList.add('hidden');
                 forgotSection.classList.remove('hidden');
@@ -2463,8 +2295,8 @@
                 relayButton.classList.remove('hidden');
                 document.getElementById('forgot-telemetry-logs').innerHTML = "";
             } else {
-                forgotSection.classList.add('hidden');
                 loginSection.classList.remove('hidden');
+                forgotSection.classList.add('hidden');
             }
         }
 
@@ -2474,16 +2306,16 @@
                 showToast("Email invalide", "Veuillez saisir une adresse correcte.", "error");
                 return;
             }
-
+            
             const telemetryBox = document.getElementById('forgot-telemetry-box');
             const logsContainer = document.getElementById('forgot-telemetry-logs');
             const relayButton = document.getElementById('btn-forgot-relay');
             const mailtoAnchor = document.getElementById('forgot-mailto-anchor');
-
+            
             telemetryBox.classList.remove('hidden');
             relayButton.classList.add('hidden');
             logsContainer.innerHTML = "";
-
+            
             const logs = [
                 "SYSTEM: Initialisation de l'enveloppe...",
                 "SECURE_GATEWAY: Connexion SMTP...",
@@ -2493,7 +2325,7 @@
                 "SMTP_RELAY: Payload prêt.",
                 "SMTP_RELAY: Génération du mail."
             ];
-
+            
             let index = 0;
             const logInterval = setInterval(() => {
                 if (index < logs.length) {
@@ -2508,7 +2340,7 @@
                     successDiv.className = "text-emerald-400 font-bold mt-1";
                     successDiv.innerText = "SUCCÈS: CLIQUEZ POUR ENVOYER LE MAIL.";
                     logsContainer.appendChild(successDiv);
-
+                    
                     const currentPwd = localStorage.getItem('bj_master_password') || 'Master2026';
                     const subject = encodeURIComponent("Benzjames Écurie - Recouvrement");
                     const body = encodeURIComponent(
@@ -2538,7 +2370,6 @@
         function submitLogin() {
             const pass = document.getElementById('login-password').value.trim();
             const expectedPwd = localStorage.getItem('bj_master_password') || 'Master2026';
-            
             if (pass.toLowerCase() === expectedPwd.toLowerCase()) {
                 isMaster = true;
                 localStorage.setItem('bj_master_logged', 'true');
@@ -2577,7 +2408,7 @@
             const masterElements = document.querySelectorAll('.master-only');
             const loginFields = document.getElementById('master-login-fields');
             const adminDash = document.getElementById('master-admin-dashboard');
-
+            
             if (isMaster) {
                 document.body.classList.add('master-active');
                 if (banner) banner.classList.remove('hidden');
@@ -2596,13 +2427,11 @@
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            if (file.size > 2.5 * 1024 * 1024) {
+            if (file.size > 2.5*1024*1024) {
                 showToast("Fichier trop lourd", "Veuillez choisir une image de moins de 2.5 Mo.", "error");
                 e.target.value = "";
                 return;
             }
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 tempImageData = event.target.result;
@@ -2628,8 +2457,7 @@
         function handleVideoFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            if (file.size > 120 * 1024 * 1024) {
+            if (file.size > 120*1024*1024) {
                 showToast("Fichier lourd", "Une vidéo de moins de 120 Mo est conseillée.", "error");
                 e.target.value = "";
                 return;
@@ -2642,7 +2470,6 @@
         async function saveVideoEdit() {
             const urlInput = document.getElementById('video-url-input').value.trim();
             const player = document.getElementById('hud-video-player');
-
             if (tempVideoFile) {
                 showToast("Enregistrement...", "Stockage...", "info");
                 await saveVideoToDB('home_video', tempVideoFile);
@@ -2668,7 +2495,6 @@
         function openProductModal(productId = "") {
             const modal = document.getElementById('modal-product');
             const titleEl = document.getElementById('product-modal-title');
-
             const catSelect = document.getElementById('prod-category-id');
             if (catSelect) {
                 catSelect.innerHTML = "";
@@ -2679,7 +2505,7 @@
                     catSelect.appendChild(opt);
                 });
             }
-
+            
             document.getElementById('edit-product-id').value = productId;
             document.getElementById('prod-name').value = "";
             document.getElementById('prod-price').value = "";
@@ -2690,10 +2516,10 @@
             document.getElementById('prod-badge').value = 'F1 Aero';
             document.getElementById('prod-weight').value = '42';
             tempImageData = "";
-
+            
             const preview = document.getElementById('modal-image-preview');
             preview.innerHTML = `<span class="text-[8px] text-bj-textMuted text-center font-mono uppercase p-1">Aucun Visuel</span>`;
-
+            
             if (productId) {
                 titleEl.innerText = "Modifier l'Article";
                 const p = products.find(prod => prod.id === productId);
@@ -2705,7 +2531,6 @@
                     document.getElementById('prod-badge').value = p.badge || 'F1 Aero';
                     document.getElementById('prod-weight').value = p.weight || '42';
                     if (catSelect) catSelect.value = p.categoryId || "cat1";
-
                     if (p.image && p.image.trim() !== "") {
                         tempImageData = p.image;
                         preview.innerHTML = `<img src="${tempImageData}" class="w-full h-full object-cover rounded-lg">`;
@@ -2732,12 +2557,12 @@
             const badge = document.getElementById('prod-badge').value.trim();
             const weight = parseInt(document.getElementById('prod-weight').value) || 42;
             const categoryId = document.getElementById('prod-category-id').value;
-
+            
             if (!name || !desc) {
                 showToast("Formulaire Incomplet", "Les champs Nom et Description sont obligatoires.", "error");
                 return;
             }
-
+            
             if (id) {
                 const idx = products.findIndex(p => p.id === id);
                 if (idx !== -1) {
@@ -2769,7 +2594,6 @@
                 });
                 showToast("Nouvel Article", `Le modèle ${name} est désormais disponible.`);
             }
-
             localStorage.setItem('bj_products', JSON.stringify(products));
             renderApp();
             closeProductModal();
@@ -2781,10 +2605,9 @@
             document.getElementById('edit-target-id').value = targetId;
             document.getElementById('edit-type').value = "text";
             document.getElementById('text-edit-title-h3').innerText = "Modifier le texte sélectionné";
-
+            
             const container = document.getElementById('text-edit-input-container');
             container.innerHTML = "";
-
             if (type === 'textarea') {
                 container.innerHTML = `
                     <textarea id="edit-text-value" rows="5" class="w-full bg-bj-black border border-bj-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm leading-relaxed">${currentText}</textarea>
@@ -2805,7 +2628,7 @@
             const targetId = document.getElementById('edit-target-id').value;
             const editType = document.getElementById('edit-type').value;
             const newVal = document.getElementById('edit-text-value').value.trim();
-
+            
             if (editType === "category") {
                 const category = categories.find(c => c.id === targetId);
                 if (category) {
@@ -2818,7 +2641,6 @@
                 localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
                 showToast("Texte Mis à Jour", "La modification a été enregistrée.");
             }
-
             renderApp();
             closeTextEditModal();
         }
@@ -2826,13 +2648,11 @@
         function openRaceEditModal(raceId) {
             const race = racesData.find(r => r.id === raceId);
             if (!race) return;
-
             document.getElementById('edit-race-id').value = raceId;
             document.getElementById('race-edit-name').value = race.name;
             document.getElementById('race-edit-record').value = race.record;
             document.getElementById('race-edit-location').value = race.location;
             document.getElementById('race-edit-desc').value = race.desc;
-
             document.getElementById('modal-race-edit').classList.remove('hidden');
         }
 
@@ -2846,23 +2666,22 @@
             const record = document.getElementById('race-edit-record').value.trim();
             const location = document.getElementById('race-edit-location').value.trim();
             const desc = document.getElementById('race-edit-desc').value.trim();
-
+            
             if (!name || !record || !location) {
                 showToast("Formulaire Incomplet", "Données manquantes.", "error");
                 return;
             }
-
+            
             const idx = racesData.findIndex(r => r.id === id);
             if (idx !== -1) {
                 racesData[idx].name = name;
                 racesData[idx].record = record;
                 racesData[idx].location = location;
                 racesData[idx].desc = desc;
-
                 localStorage.setItem('bj_races_data', JSON.stringify(racesData));
                 renderRaces();
                 closeRaceEditModal();
-                showToast("Épreuve mise à jour", `Les données ont été sauvegardées.`, "success");
+                showToast("Épreuve mise à jour", 'Les données ont été sauvegardées.', "success");
             }
         }
 
@@ -2870,14 +2689,13 @@
             const container = document.getElementById('races-container');
             if (!container) return;
             container.innerHTML = "";
-
             const sortedRaces = [...racesData].sort((a, b) => b.likes - a.likes);
-
+            
             sortedRaces.forEach((race, index) => {
                 const card = document.createElement('div');
                 card.className = "bg-bj-dark border border-bj-cyan/15 rounded-2xl p-6 flex flex-col justify-between hover:border-bj-cyan/40 transition-all font-mono relative group overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] cursor-pointer";
                 card.setAttribute("onclick", `playRaceSoundSynth('${race.id}'); event.stopPropagation();`);
-
+                
                 let mediaSlotHTML = `
                     <div id="media-container-${race.id}" class="aspect-video bg-neutral-950 border border-white/5 rounded-xl relative overflow-hidden flex flex-col items-center justify-center p-2 mb-4">
                         <div id="eq-visualizer-${race.id}" class="hidden absolute inset-0 bg-black/90 flex items-center justify-center gap-1.5 z-20">
@@ -2888,24 +2706,21 @@
                             <div class="eq-bar" style="transition-delay: 0.2s"></div>
                             <span class="text-[9px] text-bj-cyan font-bold uppercase ml-2 select-none tracking-widest animate-pulse">TELEMETRY AUDIO</span>
                         </div>
-
                         <video id="video-${race.id}" class="race-video w-full h-full object-cover rounded-lg hidden" loop muted playsinline></video>
                         <audio id="audio-${race.id}" class="hidden" loop></audio>
-
                         <div id="placeholder-${race.id}" class="text-center text-bj-textMuted flex flex-col items-center gap-1 select-none">
                             <div class="w-12 h-12 rounded-full border border-bj-cyan/20 flex items-center justify-center relative animate-pulse mb-1">
-                                <span class="text-xs text-bj-cyan">▶</span>
+                                <span class="text-xs text-bj-cyan">></span>
                             </div>
                             <span class="text-[10px] text-white font-bold tracking-widest uppercase">// CLIQUER POUR ÉCOUTER</span>
                             <span class="text-[8px]">Moteur Analogique de Synthèse</span>
                         </div>
-
                         <button id="unmute-btn-${race.id}" onclick="toggleRaceSound('${race.id}'); event.stopPropagation();" class="hidden absolute bottom-2 right-2 bg-black/80 border border-bj-cyan/30 text-bj-cyan p-1.5 rounded-lg text-[8px] uppercase font-bold tracking-wider z-20 transition-all">
-                           🔊 Unmute
+                            Unmute
                         </button>
                     </div>
                 `;
-
+                
                 let commentsHTML = "";
                 race.comments.forEach(c => {
                     commentsHTML += `
@@ -2920,14 +2735,12 @@
                         <div class="absolute top-0 left-0 bg-bj-cyan/10 border-b border-r border-bj-cyan/30 px-2.5 py-1 text-[9px] font-bold text-bj-cyan tracking-widest font-mono select-none z-20">
                             RANK #${index + 1}
                         </div>
-
                         ${isMaster ? `
                             <button onclick="openRaceEditModal('${race.id}'); event.stopPropagation();" class="absolute top-2 right-2 bg-bj-gold text-black hover:bg-white px-2 py-1 rounded-lg text-[9px] font-bold tracking-wider uppercase shadow-md transition-all z-30 font-mono">
                                 EDIT
                             </button>
-                        ` : ''}
-
-                        <div class="pt-5 pb-2 border-b border-bj-border mb-2 relative ${isMaster ? 'hover:outline hover:outline-dashed hover:outline-bj-gold/40 cursor-pointer rounded-lg px-1' : ''}" onclick="${isMaster ? `openRaceEditModal('${race.id}'); event.stopPropagation();` : ''}">
+                        ` : ""}
+                        <div class="pt-5 pb-2 border-b border-bj-border mb-2 relative ${isMaster ? 'hover:outline hover:outline-dashed hover:outline-bj-gold/40 cursor-pointer rounded-lg px-1' : ""}" onclick="${isMaster ? `openRaceEditModal('${race.id}'); event.stopPropagation();` : ""}">
                             <div class="flex justify-between items-start gap-2">
                                 <div>
                                     <h3 class="text-sm font-extrabold text-white uppercase tracking-wider italic leading-tight group-hover:text-bj-cyan transition-colors">${race.name}</h3>
@@ -2939,39 +2752,33 @@
                             </div>
                             <p class="text-[10px] text-bj-textMuted mt-3 leading-relaxed">${race.desc}</p>
                         </div>
-                        
                         ${mediaSlotHTML}
-
                         <div class="flex items-center gap-2 mb-4">
                             <label class="flex-grow flex items-center justify-center border border-dashed border-bj-cyan/30 hover:border-bj-cyan rounded-lg p-2 bg-black/40 cursor-pointer text-center font-mono text-[9px] text-white uppercase transition-all" onclick="event.stopPropagation();">
-                                <span>⚡ Remplacer Média (Vidéo/Son)</span>
+                                <span> Remplacer Média (Vidéo/Son)</span>
                                 <input type="file" accept="video/*, audio/*" class="hidden" onchange="uploadRaceMedia(event, '${race.id}')">
                             </label>
                         </div>
-
                         <div class="flex justify-between items-center text-xs pt-2 border-t border-bj-border/30 mb-4">
                             <button onclick="likeRace('${race.id}'); event.stopPropagation();" class="flex items-center gap-1 hover:text-bj-red text-bj-textMuted transition-all bg-black/30 border border-white/5 px-3 py-1.5 rounded-lg">
-                                <span class="text-base text-bj-red animate-pulse">♥</span> 
+                                <span class="text-base text-bj-red animate-pulse">♥</span>
                                 <span id="likes-count-${race.id}" class="font-bold text-white">${race.likes} Likes</span>
                             </button>
                             <button onclick="playRaceSoundSynth('${race.id}'); event.stopPropagation();" class="flex items-center gap-1 bg-bj-gold/10 border border-bj-gold/35 text-bj-gold hover:bg-bj-gold hover:text-black px-2.5 py-1.5 rounded-lg transition-all text-[9px] uppercase font-bold">
-                                🔊 Moteur
+                                Moteur
                             </button>
                         </div>
-
                         <div class="space-y-2 max-h-[80px] overflow-y-auto pr-1 bg-black/30 rounded-lg p-2 mb-4" onclick="event.stopPropagation();">
                             <div class="space-y-1.5" id="comments-box-${race.id}">
                                 ${commentsHTML || '<p class="text-[8px] text-bj-textMuted italic">// Aucun commentaire d\'écurie</p>'}
                             </div>
                         </div>
                     </div>
-
                     <div class="flex gap-2" onclick="event.stopPropagation();">
                         <input type="text" id="comment-input-${race.id}" placeholder="Inscrire un avis..." class="flex-grow bg-black border border-white/10 rounded-lg px-3 py-1.5 text-[9px] outline-none focus:border-bj-cyan text-white">
                         <button onclick="addRaceComment('${race.id}'); event.stopPropagation();" class="bg-bj-cyan/10 hover:bg-bj-cyan border border-bj-cyan/20 hover:text-black text-bj-cyan px-3 py-1 text-[9px] rounded-lg font-bold transition-all uppercase font-mono">OK</button>
                     </div>
                 `;
-
                 container.appendChild(card);
                 loadRaceMedia(race.id);
             });
@@ -2981,24 +2788,21 @@
             try {
                 const file = await getVideoFromDB(`race_media_${raceId}`);
                 if (!file) return;
-
                 const videoPlayer = document.getElementById(`video-${raceId}`);
                 const audioPlayer = document.getElementById(`audio-${raceId}`);
                 const placeholder = document.getElementById(`placeholder-${raceId}`);
                 const unmuteBtn = document.getElementById(`unmute-btn-${raceId}`);
-
+                
                 if (!videoPlayer || !audioPlayer) return;
-
                 const fileUrl = URL.createObjectURL(file);
-
+                
                 if (file.type.startsWith('audio/')) {
                     audioPlayer.src = fileUrl;
                     audioPlayer.load();
                     videoPlayer.classList.add('hidden');
                     placeholder.classList.add('hidden');
                     unmuteBtn.classList.remove('hidden');
-                    unmuteBtn.innerText = "🔈 Lire Son Fichier";
-
+                    unmuteBtn.innerText = " Lire Son Fichier";
                 } else if (file.type.startsWith('video/')) {
                     videoPlayer.src = fileUrl;
                     videoPlayer.load();
@@ -3006,7 +2810,7 @@
                     videoPlayer.classList.remove('hidden');
                     placeholder.classList.add('hidden');
                     unmuteBtn.classList.remove('hidden');
-                    unmuteBtn.innerText = "🔈 Son Muet";
+                    unmuteBtn.innerText = " Son Muet";
                 }
             } catch(e) {
                 console.warn(`Impossible de charger le média pour ${raceId}`, e);
@@ -3016,42 +2820,40 @@
         async function uploadRaceMedia(event, raceId) {
             const file = event.target.files[0];
             if (!file) return;
-
-            if (file.size > 120 * 1024 * 1024) {
+            if (file.size > 120*1024*1024) {
                 showToast("Fichier trop volumineux", "Choisissez un fichier de moins de 120 Mo.", "error");
                 return;
             }
-
             showToast("Indexation...", "Enregistrement du média...", "info");
             await saveVideoToDB(`race_media_${raceId}`, file);
             await loadRaceMedia(raceId);
-            showToast("Média Lié", "Fichier enregistré avec succès !", "success");
+            showToast("Média Lié", "Fichier enregistré avec succès!", "success");
         }
 
         function toggleRaceSound(raceId) {
             const video = document.getElementById(`video-${raceId}`);
             const audio = document.getElementById(`audio-${raceId}`);
             const btn = document.getElementById(`unmute-btn-${raceId}`);
-
+            
             if (video && !video.classList.contains('hidden')) {
                 if (video.muted) {
                     video.muted = false;
                     video.volume = 1.0;
-                    btn.innerText = "🔊 Son Actif";
+                    btn.innerText = " Son Actif";
                     showToast("Son actif", `Canal audio de l'épreuve activé !`);
                 } else {
                     video.muted = true;
-                    btn.innerText = "🔈 Son Muet";
+                    btn.innerText = " Son Muet";
                     showToast("Son coupé", `Vidéo mise en sourdine.`);
                 }
             } else if (audio && audio.src) {
                 if (audio.paused) {
                     audio.play().catch(e => console.warn(e));
-                    btn.innerText = "🔊 Suspendre";
-                    showToast("Audio Actif", `Écoute du son d'écurie...`);
+                    btn.innerText = " Suspendre";
+                    showToast("Audio Actif", "Écoute du son d'écurie...");
                 } else {
                     audio.pause();
-                    btn.innerText = "🔈 Lire Son";
+                    btn.innerText = " Lire Son";
                 }
             }
         }
@@ -3059,26 +2861,23 @@
         function likeRace(raceId) {
             const race = racesData.find(r => r.id === raceId);
             if (!race) return;
-
             race.likes++;
             localStorage.setItem('bj_races_data', JSON.stringify(racesData));
             renderRaces();
-            showToast("Soutien d'Écurie", `Vote de performance enregistré !`, "success");
+            showToast("Soutien d'Écurie", "Vote de performance enregistré !", "success");
         }
 
         function addRaceComment(raceId) {
             const input = document.getElementById(`comment-input-${raceId}`);
             if (!input || !input.value.trim()) return;
-
             const race = racesData.find(r => r.id === raceId);
             if (!race) return;
-
+            
             const author = currentUser ? currentUser.pseudonym : "Abonné";
             race.comments.push({
                 author: author,
                 text: input.value.trim()
             });
-
             localStorage.setItem('bj_races_data', JSON.stringify(racesData));
             
             const commentsBox = document.getElementById(`comments-box-${raceId}`);
@@ -3105,11 +2904,8 @@
             const box = document.getElementById('racing-chat-messages');
             if (!box) return;
             box.innerHTML = "";
-            
             INITIAL_CHAT_MESSAGES.forEach(msg => {
-                box.innerHTML += `
-                    <p><span class="text-bj-cyan font-bold">@${msg.author}:</span> ${msg.text}</p>
-                `;
+                box.innerHTML += `<p><span class="text-bj-cyan font-bold">@${msg.author}:</span> ${msg.text}</p>`;
             });
             box.scrollTop = box.scrollHeight;
         }
@@ -3118,12 +2914,9 @@
             const input = document.getElementById('racing-chat-input');
             const box = document.getElementById('racing-chat-messages');
             if (!input || !input.value.trim()) return;
-
-            const author = currentUser ? currentUser.pseudonym : "Abonné_" + Math.floor(Math.random() * 900 + 100);
-            box.innerHTML += `
-                <p><span class="text-bj-gold font-bold">@${author}:</span> ${input.value.trim()}</p>
-            `;
             
+            const author = currentUser ? currentUser.pseudonym : "Abonné_" + Math.floor(Math.random() * 900 + 100);
+            box.innerHTML += `<p><span class="text-bj-gold font-bold">@${author}:</span> ${input.value.trim()}</p>`;
             input.value = "";
             box.scrollTop = box.scrollHeight;
             showToast("Signal Envoyé", "Message dispatché sur le canal.", "success");
@@ -3157,7 +2950,6 @@
         function analyzeSwipe() {
             const xDiff = touchStartX - touchEndX;
             const yDiff = touchStartY - touchEndY;
-            
             if (Math.abs(xDiff) > Math.abs(yDiff)) {
                 if (Math.abs(xDiff) > 60) {
                     if (xDiff > 0 && currentPage < totalPages - 1) {
@@ -3167,6 +2959,22 @@
                     }
                 }
             }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu-overlay');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full', 'opacity-0', 'pointer-events-none');
+                menu.classList.add('translate-x-0', 'opacity-100');
+            } else {
+                menu.classList.add('translate-x-full', 'opacity-0', 'pointer-events-none');
+                menu.classList.remove('translate-x-0', 'opacity-100');
+            }
+        }
+
+        function navigateToMobile(pageId) {
+            toggleMobileMenu();
+            navigateTo(pageId);
         }
 
         window.onload = function() {
