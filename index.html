@@ -7,7 +7,7 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tone.js pour la synthèse sonore d'écurie autonome -->
+    <!-- Tone.js for the dynamic audio synthesis engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     
     <script>
@@ -53,7 +53,7 @@
             height: 100%;
         }
 
-        /* Armani-style minimal luxury grid */
+        /* Armani-style minimal luxury grid background */
         .armani-grid {
             background-color: #000000;
             background-image:
@@ -62,7 +62,7 @@
             background-size: 80px 80px;
         }
 
-        /* Subtle luxury grain/checkers */
+        /* Ambient luxury dark gradient background */
         .luxury-fade {
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.8) 0%, rgba(0, 0, 0, 1) 100%);
@@ -94,6 +94,8 @@
             -webkit-overflow-scrolling: touch;
             padding-top: 100px;
             padding-bottom: 120px;
+            /* Prioritize scrolling on mobile touch screens */
+            touch-action: pan-y;
         }
         .page-slide::-webkit-scrollbar {
             width: 2px;
@@ -102,7 +104,7 @@
             background: #1C1C1E;
         }
 
-        /* Tachometer transition */
+        /* Tachometer needle transition */
         .tacho-needle {
             transform-origin: 40px 40px;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -165,20 +167,58 @@
             animation: pulseSoft 2.5s infinite ease-in-out;
         }
 
-        /* Interactive configuration highlight */
+        /* Interactive Master mode editing outlines */
         .master-active .edit-highlight {
             position: relative;
             cursor: pointer;
+            outline: 1px dashed rgba(197, 160, 89, 0.4);
+            outline-offset: 2px;
+            transition: all 0.2s ease;
         }
         .master-active .edit-highlight::after {
             content: " ✎";
             color: #C5A059;
-            font-size: 0.8rem;
-            opacity: 0.5;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-weight: bold;
         }
         .master-active .edit-highlight:hover {
-            outline: 1px dashed #C5A059;
-            background-color: rgba(197, 160, 89, 0.05) !important;
+            outline: 1.5px dashed #C5A059;
+            background-color: rgba(197, 160, 89, 0.08) !important;
+            box-shadow: 0 0 8px rgba(197, 160, 89, 0.1);
+        }
+
+        /* Image modification cursor indicator in master mode */
+        .master-active .image-highlight {
+            position: relative;
+            cursor: pointer;
+            outline: 2px dashed rgba(197, 160, 89, 0.5);
+        }
+        .master-active .image-highlight:hover {
+            outline: 2px solid #C5A059;
+            filter: brightness(0.9) contrast(1.1);
+        }
+        .master-active .image-highlight::before {
+            content: "CHANGER LE VISUEL 📷";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            border: 1px solid #C5A059;
+            color: #C5A059;
+            padding: 8px 12px;
+            font-size: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.2em;
+            white-space: nowrap;
+            z-index: 30;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .master-active .image-highlight:hover::before {
+            opacity: 1;
         }
 
         /* Smooth custom transitions */
@@ -228,15 +268,14 @@
             
             <!-- Minimal Security Header -->
             <div class="flex justify-between items-center w-full">
-                <span class="text-[8px] font-mono tracking-[0.3em] text-bj-gold status-pulse uppercase">// BENZJAMES.ATELIER // SYSTEM_READY</span>
-                <span class="text-[8px] font-mono tracking-[0.3em] text-white/40 uppercase">MILANO - PARIS</span>
+                <span id="intro-security-header" class="edit-highlight text-[8px] font-mono tracking-[0.3em] text-bj-gold status-pulse uppercase">// BENZJAMES.ATELIER // SYSTEM_READY</span>
+                <span id="intro-location" class="edit-highlight text-[8px] font-mono tracking-[0.3em] text-white/40 uppercase">MILANO - PARIS</span>
             </div>
 
             <!-- Armani Brand Title Area -->
             <div class="my-auto flex flex-col items-center justify-center space-y-6">
                 <!-- Main dynamic brand title customizable by Master -->
                 <h1 id="intro-brand-title" 
-                    onclick="handleIntroTitleClick()" 
                     class="edit-highlight select-none leading-none tracking-[0.05em] uppercase transition-all duration-300"
                     style="font-family: 'Playfair Display', serif; font-size: 5.5rem; color: #FFFFFF;">
                     Benzjames
@@ -245,26 +284,25 @@
                 <div class="w-16 h-[1px] bg-bj-gold/40"></div>
                 
                 <p id="intro-brand-subtitle" 
-                   onclick="editPageText('intro-brand-subtitle')" 
                    class="edit-highlight text-[10px] tracking-[0.5em] font-sans text-bj-textMuted uppercase">
                    L'Écurie Couture & Performance
                 </p>
             </div>
 
-            <!-- Entrance Action (Elegant minimalist button instead of glowing cyber-box) -->
+            <!-- Entrance Action -->
             <div class="flex flex-col items-center space-y-4">
                 <button onclick="dismissIntro()" class="group relative px-10 py-4 bg-transparent border border-bj-gold/30 hover:border-bj-gold text-white text-[11px] tracking-[0.3em] uppercase transition-all duration-500 rounded-none overflow-hidden">
                     <span class="absolute inset-0 w-0 bg-bj-gold/5 group-hover:w-full transition-all duration-500"></span>
                     <span class="relative z-10">Entrer dans le Club Privé</span>
                 </button>
-                <span class="text-[8px] font-mono text-bj-textMuted/60 tracking-[0.2em] uppercase">// DOUBLE CLIQUER SUR LE TITRE EN MODE MASTER POUR AJUSTER LES PARAMÈTRES</span>
+                <span id="intro-instructions" class="edit-highlight text-[8px] font-mono text-bj-textMuted/60 tracking-[0.2em] uppercase">// CLIQUER DIRECTEMENT SUR LES TEXTES ET TITRES EN MODE CONFIGURATEUR MASTER</span>
             </div>
         </div>
     </div>
 
     <!-- MASTER NOTIFICATION BANNER -->
     <div id="master-banner" class="hidden fixed top-0 left-0 right-0 bg-bj-gold text-black py-2.5 px-6 text-center text-[10px] font-mono uppercase tracking-[0.25em] font-bold flex justify-between items-center z-50 shadow-xl">
-        <span>&gt; MODE CONFIGURATEUR MASTER ACTIF // CLIQUEZ SUR LES TEXTES ET MÉDIAS POUR ÉDITER L'EXPÉRIENCE DIRECTEMENT</span>
+        <span>&gt; MODE CONFIGURATEUR MASTER ACTIF // CLIQUEZ SUR LES TEXTES, TITRES ET MÉDIAS POUR PERSONNALISER LE DESIGN</span>
         <button onclick="logoutMaster()" class="bg-black text-white px-4 py-1 text-[9px] hover:bg-neutral-900 transition-all font-sans uppercase tracking-widest">Fermer la session</button>
     </div>
 
@@ -274,8 +312,8 @@
             
             <!-- Clean Centered Brand Identity -->
             <div class="flex flex-col items-start cursor-pointer" onclick="slideToPage(0)">
-                <span class="text-lg font-serif tracking-[0.35em] text-white uppercase font-bold leading-none">BENZJAMES</span>
-                <span class="text-[7px] tracking-[0.5em] text-bj-gold uppercase font-mono mt-1">CYBER-COUTURE</span>
+                <span id="header-brand" class="edit-highlight text-lg font-serif tracking-[0.35em] text-white uppercase font-bold leading-none">BENZJAMES</span>
+                <span id="header-brand-sub" class="edit-highlight text-[7px] tracking-[0.5em] text-bj-gold uppercase font-mono mt-1">CYBER-COUTURE</span>
             </div>
 
             <!-- Sleek Minimal Menu -->
@@ -289,7 +327,7 @@
 
             <!-- Actions Menu -->
             <div class="flex items-center gap-6">
-                <!-- Espace client / Profile -->
+                <!-- User Space / Cart -->
                 <button onclick="openUnifiedPortalModal('client-tab')" class="group p-2.5 border border-white/[0.08] hover:border-bj-gold/40 rounded-none bg-transparent hover:bg-bj-gold/5 text-bj-textMuted hover:text-bj-gold transition-all relative flex items-center justify-center" title="Espace Privé & Panier">
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -338,39 +376,39 @@
             
             <!-- PAGE 1: L'ÉCURIE -->
             <section id="page-home" class="page-slide armani-grid flex items-center px-6 sm:px-12 relative overflow-hidden">
-                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full relative z-10 my-auto">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full relative z-10 my-auto py-12 md:py-20">
                     
                     <!-- Editorial Text Column -->
                     <div class="lg:col-span-6 space-y-8 text-left">
-                        <div onclick="editPageText('txt-home-tag')" class="edit-highlight inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-gold/20 text-[9px] text-bj-gold tracking-[0.25em] font-sans uppercase">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-bj-dark border border-bj-gold/20 text-[9px] tracking-[0.25em] font-sans uppercase">
                             <span class="w-1 h-1 rounded-full bg-bj-gold animate-ping"></span>
-                            <span id="txt-home-tag">SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES CERTIFIÉES</span>
+                            <span id="txt-home-tag" class="edit-highlight">SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES CERTIFIÉES</span>
                         </div>
 
-                        <div onclick="editPageText('txt-home-scroller')" class="edit-highlight h-14 relative overflow-hidden border-y border-white/[0.08] bg-black/40 py-3 font-sans flex items-center">
+                        <div class="h-14 relative overflow-hidden border-y border-white/[0.08] bg-black/40 py-3 font-sans flex items-center">
                             <div class="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
                             <div class="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
                             <div class="armani-marquee text-[11px] font-light tracking-[0.3em] uppercase text-white/75 whitespace-nowrap">
-                                <span id="txt-home-scroller" class="mr-12">F1 // L'exigence de la Haute Couture // Benzjames Cyber-Couture V2 Pure //</span>
-                                <span class="mr-12">F1 // L'exigence de la Haute Couture // Benzjames Cyber-Couture V2 Pure //</span>
+                                <span id="txt-home-scroller" class="edit-highlight mr-12">F1 // L'exigence de la Haute Couture // Benzjames Cyber-Couture Pure //</span>
+                                <span id="txt-home-scroller-rep" class="mr-12">F1 // L'exigence de la Haute Couture // Benzjames Cyber-Couture Pure //</span>
                             </div>
                         </div>
 
                         <div class="space-y-4">
-                            <h2 class="text-3xl sm:text-4xl font-serif font-light text-white uppercase leading-tight tracking-[0.05em]">
+                            <h2 id="txt-home-hero-title" class="edit-highlight text-3xl sm:text-4xl font-serif font-light text-white uppercase leading-tight tracking-[0.05em]">
                                 L'Équilibre Subtil de la <span class="italic text-bj-gold">Matière</span> et de la Vitesse
                             </h2>
-                            <p class="text-[12px] font-sans font-light text-bj-textMuted leading-relaxed max-w-lg">
+                            <p id="txt-home-hero-desc" class="edit-highlight text-[12px] font-sans font-light text-bj-textMuted leading-relaxed max-w-lg">
                                 Conçu à l'intersection de la télémétrie aérodynamique de pointe et de l'art tailleur transalpin. Chaque création de l'écurie est assemblée à la main et signée d'une empreinte numérique infalsifiable.
                             </p>
                         </div>
 
                         <!-- Armani Elegant Media Frame -->
                         <div class="border border-white/[0.08] bg-bj-dark/80 p-2 relative overflow-hidden">
-                            <div class="absolute top-4 left-4 text-[7px] font-mono text-bj-gold/60 tracking-[0.25em] z-10">// HUD_LIVE_FEED // CHANNEL_ALPHA</div>
+                            <div id="hud-live-label" class="edit-highlight absolute top-4 left-4 text-[7px] font-mono text-bj-gold/60 tracking-[0.25em] z-10">// HUD_LIVE_FEED // CHANNEL_ALPHA</div>
                             <div class="absolute top-4 right-4 flex items-center gap-1.5 z-10">
                                 <span class="w-1.5 h-1.5 bg-bj-red rounded-full status-pulse"></span>
-                                <span class="text-[7px] font-mono text-white/50 tracking-widest uppercase">LIVE</span>
+                                <span id="hud-live-indicator" class="edit-highlight text-[7px] font-mono text-white/50 tracking-widest uppercase">LIVE</span>
                             </div>
                             
                             <button id="home-sound-btn" onclick="toggleMute('hud-video-player', 'home-sound-icon')" class="absolute bottom-6 right-6 z-20 bg-black/90 border border-bj-gold/30 hover:border-bj-gold text-bj-gold hover:text-white px-3 py-1.5 text-[8px] uppercase tracking-widest font-sans transition-all">
@@ -388,10 +426,10 @@
                         </div>
 
                         <div class="flex flex-wrap gap-4 pt-2">
-                            <button onclick="navigateTo('page-collection')" class="px-8 py-3.5 bg-bj-gold text-black hover:bg-white transition-all duration-300 text-[10px] uppercase tracking-[0.25em] font-sans">
+                            <button id="btn-discover-showroom" onclick="navigateTo('page-collection')" class="edit-highlight px-8 py-3.5 bg-bj-gold text-black hover:bg-white transition-all duration-300 text-[10px] uppercase tracking-[0.25em] font-sans">
                                 Découvrir le Showroom
                             </button>
-                            <button onclick="navigateTo('page-exchange')" class="px-8 py-3.5 border border-white/[0.08] hover:border-bj-gold text-white hover:text-bj-gold transition-all duration-300 text-[10px] uppercase tracking-[0.25em] font-sans">
+                            <button id="btn-view-exchange" onclick="navigateTo('page-exchange')" class="edit-highlight px-8 py-3.5 border border-white/[0.08] hover:border-bj-gold text-white hover:text-bj-gold transition-all duration-300 text-[10px] uppercase tracking-[0.25em] font-sans">
                                 Consulter la Bourse
                             </button>
                         </div>
@@ -400,7 +438,7 @@
                     <!-- Visual Editorial Column (Right Side) -->
                     <div class="lg:col-span-6 relative">
                         <div class="border border-white/[0.06] bg-bj-dark/20 p-5 relative overflow-hidden">
-                            <button onclick="openRightMediaModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold text-black px-4 py-2 text-[10px] tracking-widest uppercase shadow-lg">
+                            <button id="right-media-master-btn" onclick="openRightMediaModal()" class="master-only hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-bj-gold text-black px-4 py-2 text-[10px] tracking-widest uppercase shadow-lg">
                                 Configurer Visuel Droite
                             </button>
                             <button id="right-sound-btn" onclick="toggleMute('right-custom-video', 'right-sound-icon')" class="hidden absolute bottom-8 right-8 z-20 bg-black/90 border border-bj-gold/30 text-bj-gold p-2 text-[8px] font-sans transition-all">
@@ -408,19 +446,19 @@
                             </button>
 
                             <!-- Vertical Editorial Visual frame -->
-                            <div class="aspect-[4/5] bg-neutral-950 relative overflow-hidden flex items-center justify-center border border-white/[0.05]">
+                            <div id="right-side-media-frame" class="image-highlight aspect-[4/5] bg-neutral-950 relative overflow-hidden flex items-center justify-center border border-white/[0.05]">
                                 <img id="right-custom-img" class="absolute inset-0 w-full h-full object-cover hidden z-0" src="" alt="Carbon Aero Visual">
                                 <video id="right-custom-video" class="absolute inset-0 w-full h-full object-cover hidden z-0" autoplay loop muted playsinline src=""></video>
                                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 z-10"></div>
                                 
                                 <div class="absolute inset-0 flex flex-col justify-between p-8 z-20">
                                     <div class="flex justify-between items-start">
-                                        <span class="text-[9px] text-bj-gold font-mono tracking-[0.2em] uppercase">EDIT N°01 // CARBON AERO</span>
-                                        <span class="text-[8px] text-white/50 font-mono tracking-[0.1em]">// ALTA_SARTORIA_AUTONOMOUS</span>
+                                        <span id="right-tag-ref" class="edit-highlight text-[9px] text-bj-gold font-mono tracking-[0.2em] uppercase">EDIT N°01 // CARBON AERO</span>
+                                        <span id="right-tag-sub" class="edit-highlight text-[8px] text-white/50 font-mono tracking-[0.1em]">// ALTA_SARTORIA_AUTONOMOUS</span>
                                     </div>
                                     <div class="space-y-2 text-left">
-                                        <p class="text-[9px] text-bj-gold tracking-[0.3em] font-sans uppercase">COUTURE PERFORMATIVE</p>
-                                        <h3 class="text-3xl font-serif font-light uppercase tracking-wider text-white">Monaco GP Edition</h3>
+                                        <p id="right-desc-header" class="edit-highlight text-[9px] text-bj-gold tracking-[0.3em] font-sans uppercase">COUTURE PERFORMATIVE</p>
+                                        <h3 id="right-title-main" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wider text-white">Monaco GP Edition</h3>
                                     </div>
                                 </div>
                                 
@@ -441,9 +479,9 @@
                     <!-- Luxury Heading Area -->
                     <div class="border-b border-white/[0.08] pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
                         <div class="text-left">
-                            <span onclick="editPageText('txt-col-tag')" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1" id="txt-col-tag">// LA GAMME ATELIER CYBER</span>
+                            <span id="txt-col-tag" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1">// LA GAMME ATELIER CYBER</span>
                             <div class="flex items-center gap-3">
-                                <h2 onclick="editPageText('txt-col-title')" id="txt-col-title" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white">La Collection Exclusive</h2>
+                                <h2 id="txt-col-title" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white">La Collection Exclusive</h2>
                             </div>
                         </div>
                         <div class="flex items-center gap-4 w-full sm:w-auto justify-start sm:justify-end">
@@ -456,7 +494,7 @@
 
                     <!-- Dynamic Subfolder Directory (Bespoke Luxury category text selector) -->
                     <div class="bg-bj-dark/40 border border-white/[0.06] p-4">
-                        <span class="text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block mb-3 text-left">// CATALOGUE_DIRECTORY_INDEX</span>
+                        <span id="lbl-catalog-index" class="edit-highlight text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block mb-3 text-left">// CATALOGUE_DIRECTORY_INDEX</span>
                         <div id="category-subfolders" class="flex gap-4 overflow-x-auto pb-2 category-scroll scrollbar-thin">
                             <!-- Injected Dynamically -->
                         </div>
@@ -475,8 +513,8 @@
                     
                     <!-- Header -->
                     <div class="border-b border-white/[0.08] pb-6 text-left">
-                        <span onclick="editPageText('txt-exchange-subtitle')" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1" id="txt-exchange-subtitle">// EXCLUSIVITÉ & PROTOCOLE D'ÉCHANGE</span>
-                        <h2 onclick="editPageText('txt-exchange-title')" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white" id="txt-exchange-title">Bourse & Marché d'Échange Secondaire</h2>
+                        <span id="txt-exchange-subtitle" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1">// EXCLUSIVITÉ & PROTOCOLE D'ÉCHANGE</span>
+                        <h2 id="txt-exchange-title" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white">Bourse & Marché d'Échange Secondaire</h2>
                         
                         <!-- Premium ticker ribbon -->
                         <div class="ticker-wrap bg-bj-dark border border-white/[0.06] p-3 mt-4 text-[10px] text-bj-textMuted tracking-wider">
@@ -497,8 +535,8 @@
                         <!-- Left Panel: Authentication & Valuation -->
                         <div class="lg:col-span-5 bg-bj-dark border border-white/[0.06] p-8 space-y-6 text-left">
                             <div class="border-b border-white/[0.06] pb-4">
-                                <span onclick="editPageText('txt-eval-tag')" class="edit-highlight text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block" id="txt-eval-tag">// VALUATION_PROTOCOL_CORE</span>
-                                <h3 onclick="editPageText('txt-eval-title')" class="edit-highlight text-lg font-serif font-light text-white uppercase mt-1" id="txt-eval-title">Estimer sa Pièce Unique</h3>
+                                <span id="txt-eval-tag" class="edit-highlight text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block">// VALUATION_PROTOCOL_CORE</span>
+                                <h3 id="txt-eval-title" class="edit-highlight text-lg font-serif font-light text-white uppercase mt-1">Estimer sa Pièce Unique</h3>
                             </div>
 
                             <div class="space-y-4 text-xs font-sans">
@@ -553,7 +591,7 @@
                             </div>
 
                             <div class="space-y-4">
-                                <h4 onclick="editPageText('txt-live-feed')" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block" id="txt-live-feed">// TRANSACTIONS & OFFRES EN DIRECT</h4>
+                                <h4 id="txt-live-feed" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block">// TRANSACTIONS & OFFRES EN DIRECT</h4>
                                 <div id="listings-feed" class="space-y-4 max-h-[380px] overflow-y-auto pr-2"></div>
                             </div>
                         </div>
@@ -570,14 +608,14 @@
 
                     <div class="border-b border-white/[0.08] pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 text-left">
                         <div>
-                            <span class="text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1">// TELEMETRY PROTOCOL ZONE</span>
-                            <h2 class="text-3xl font-serif font-light uppercase tracking-wide text-white italic">
+                            <span id="lbl-telemetry-zone" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1">// TELEMETRY PROTOCOL ZONE</span>
+                            <h2 id="lbl-topspeed-header" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white italic">
                                 Top Speed // <span class="not-italic text-bj-gold">Courses Mythiques</span>
                             </h2>
                         </div>
                         <div class="text-left md:text-right text-[10px] font-sans text-bj-textMuted tracking-wider leading-relaxed">
-                            <span class="block text-bj-gold uppercase font-semibold">Trié par performance d'appréciation ★</span>
-                            <span class="font-light">Sélectionnez une piste d'écurie pour initier la télémétrie audio synthétique.</span>
+                            <span id="lbl-topspeed-sorting" class="edit-highlight block text-bj-gold uppercase font-semibold">Trié par performance d'appréciation ★</span>
+                            <span id="lbl-topspeed-instr" class="edit-highlight font-light">Sélectionnez une piste d'écurie pour initier la télémétrie audio synthétique.</span>
                         </div>
                     </div>
 
@@ -591,9 +629,9 @@
                         <div class="border-b border-white/[0.06] pb-4 mb-4 flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <span class="w-1.5 h-1.5 bg-bj-red rounded-full status-pulse"></span>
-                                <span class="font-sans text-[10px] text-bj-gold tracking-[0.25em] uppercase font-bold">// TCHAT PRIVÉ SATELLITE EN DIRECT</span>
+                                <span id="lbl-chat-live" class="edit-highlight font-sans text-[10px] text-bj-gold tracking-[0.25em] uppercase font-bold">// TCHAT PRIVÉ SATELLITE EN DIRECT</span>
                             </div>
-                            <span class="text-[8px] font-mono text-bj-textMuted tracking-[0.2em] uppercase">LINK_CH_09 // ACTIF</span>
+                            <span id="lbl-chat-status" class="edit-highlight text-[8px] font-mono text-bj-textMuted tracking-[0.2em] uppercase">LINK_CH_09 // ACTIF</span>
                         </div>
                         
                         <div id="racing-chat-messages" class="h-44 overflow-y-auto bg-black/40 border border-white/[0.04] p-4 font-mono text-[11px] space-y-3 scroll-smooth text-white/80">
@@ -617,8 +655,8 @@
                     <!-- Form Atelier panel -->
                     <div class="bg-bj-dark border border-white/[0.06] p-8 space-y-8 text-left">
                         <div>
-                            <span onclick="editPageText('txt-preorder-subtitle')" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1" id="txt-preorder-subtitle">// ATELIER BENZJAMES SARTORIAL VIRTUAL</span>
-                            <h2 onclick="editPageText('txt-preorder-title')" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white" id="txt-preorder-title">Configurez votre Modèle Unique</h2>
+                            <span id="txt-preorder-subtitle" class="edit-highlight text-[9px] font-sans text-bj-gold tracking-[0.3em] uppercase block mb-1">// ATELIER BENZJAMES SARTORIAL VIRTUAL</span>
+                            <h2 id="txt-preorder-title" class="edit-highlight text-3xl font-serif font-light uppercase tracking-wide text-white">Configurez votre Modèle Unique</h2>
                         </div>
 
                         <div class="space-y-6">
@@ -629,15 +667,15 @@
                             <div>
                                 <label class="block text-[9px] uppercase tracking-[0.25em] text-bj-textMuted mb-2 font-sans font-semibold">NUMÉRO DE SÉRIE PRIVILÉGIÉ (1 à 1000)</label>
                                 <input type="number" id="config-serial" value="42" min="1" max="1000" oninput="updatePreorderVisual()" class="w-full bg-black border border-white/[0.08] hover:border-bj-gold/40 rounded-none px-4 py-3 text-bj-gold focus:outline-none transition-all font-sans text-lg font-bold">
-                                <p onclick="editPageText('txt-preorder-desc')" id="txt-preorder-desc" class="edit-highlight text-[9px] text-bj-textMuted mt-1 leading-relaxed">Si ce numéro est encore libre dans l'écurie, il sera gravé au laser sur le boîtier.</p>
+                                <p id="txt-preorder-desc" class="edit-highlight text-[9px] text-bj-textMuted mt-1 leading-relaxed">Si ce numéro est encore libre dans l'écurie, il sera gravé au laser sur le boîtier.</p>
                             </div>
                         </div>
 
                         <div class="border border-dashed border-white/[0.08] p-6 bg-black/40 text-center space-y-3">
-                            <span class="text-[8px] font-mono text-bj-textMuted tracking-[0.2em] uppercase block">Génération du Certificat d'Empreinte Numérique</span>
+                            <span id="lbl-nfc-label" class="edit-highlight text-[8px] font-mono text-bj-textMuted tracking-[0.2em] uppercase block">Génération du Certificat d'Empreinte Numérique</span>
                             <div class="space-y-1">
                                 <p class="text-xl font-mono text-bj-gold tracking-widest font-semibold" id="config-display-code">BJ-042-42DF</p>
-                                <p class="text-[8px] text-white/40 uppercase tracking-widest font-mono">Empreinte d'origine sécurisée</p>
+                                <p id="lbl-nfc-sub" class="edit-highlight text-[8px] text-white/40 uppercase tracking-widest font-mono">Empreinte d'origine sécurisée</p>
                             </div>
                         </div>
 
@@ -655,14 +693,14 @@
                     <!-- Luxury Packaging Visual Container (Armani Aesthetic) -->
                     <div class="border border-white/[0.06] p-8 flex flex-col justify-between bg-bj-dark/20 relative overflow-hidden h-full text-left">
                         <div>
-                            <span class="text-[9px] font-sans text-bj-textMuted tracking-[0.25em] uppercase">RENDU DU PACKAGING ATELIER SARTORIAL</span>
+                            <span id="lbl-pack-title" class="edit-highlight text-[9px] font-sans text-bj-textMuted tracking-[0.25em] uppercase">RENDU DU PACKAGING ATELIER SARTORIAL</span>
                             
                             <!-- Armani Elegant minimal dark box rendering -->
-                            <div id="box-visual-container" class="aspect-square bg-neutral-950 border border-white/[0.08] mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-500">
+                            <div id="box-visual-container" class="image-highlight aspect-square bg-neutral-950 border border-white/[0.08] mt-6 flex flex-col items-center justify-center p-8 relative bg-cover bg-center transition-all duration-500">
                                 <div class="absolute inset-0 bg-black/90 z-0"></div>
                                 <div class="absolute inset-5 border border-bj-gold/15 flex flex-col justify-between p-6 z-10 bg-black/10">
                                     <div class="flex justify-between items-start font-mono text-[8px] text-white/50 tracking-widest">
-                                        <span>BENZJAMES LABS_</span>
+                                        <span id="lbl-labs">BENZJAMES LABS_</span>
                                         <span id="box-weight">WEIGHT: 42G</span>
                                     </div>
                                     
@@ -675,7 +713,7 @@
                                     </div>
                                     
                                     <div class="text-center font-mono text-[8px] text-white/30 tracking-[0.2em]">
-                                        <span>MACHINED & EMBOSSED IN ITALY</span>
+                                        <span id="lbl-milan">MACHINED & EMBOSSED IN ITALY</span>
                                     </div>
                                 </div>
                             </div>
@@ -683,11 +721,11 @@
 
                         <div class="pt-6 flex justify-between items-center font-sans border-t border-white/[0.06] mt-6">
                             <div>
-                                <span class="text-[8px] text-bj-textMuted block uppercase tracking-[0.2em]">SÉCURISATION SARTORIAL</span>
-                                <span class="text-xs font-light text-white tracking-wider">Puce NFC d'Écurie Incorporée</span>
+                                <span id="lbl-nfc-incorporate" class="edit-highlight text-[8px] text-bj-textMuted block uppercase tracking-[0.2em]">SÉCURISATION SARTORIAL</span>
+                                <span id="lbl-nfc-incorporate-sub" class="edit-highlight text-xs font-light text-white tracking-wider">Puce NFC d'Écurie Incorporée</span>
                             </div>
                             <div class="text-right">
-                                <span class="text-[8px] text-bj-textMuted block uppercase tracking-[0.2em]">ESTIMATION DE SORTIE</span>
+                                <span id="lbl-price-est-lbl" class="edit-highlight text-[8px] text-bj-textMuted block uppercase tracking-[0.2em]">ESTIMATION DE SORTIE</span>
                                 <span class="text-base text-bj-gold font-light tracking-wide" id="box-price">240 €</span>
                             </div>
                         </div>
@@ -1061,19 +1099,57 @@
         </div>
     </div>
 
-    <!-- DYNAMIC GENERIC TEXT EDITING MODAL -->
-    <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+    <!-- UNIVERSAL STYLE & TEXT CUSTOMIZATION MODAL (MASTER EDIT) -->
+    <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-bj-dark border border-white/[0.08] p-8 w-full max-w-lg space-y-6 text-left rounded-none">
             <div class="font-sans">
                 <span class="text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block">// MASTER_ATELIER_CONTENT_EDIT</span>
-                <h3 class="text-lg font-serif font-light text-white uppercase mt-1" id="text-edit-title-h3">Modifier le texte</h3>
+                <h3 class="text-lg font-serif font-light text-white uppercase mt-1">Personnaliser le Style & Texte</h3>
             </div>
+            
             <input type="hidden" id="edit-target-id">
-            <input type="hidden" id="edit-type" value="text">
-            <div id="text-edit-input-container" class="font-sans text-xs"></div>
-            <div class="flex gap-4 pt-2 font-sans">
-                <button onclick="closeTextEditModal()" class="w-1/2 border border-white/[0.1] text-white py-3.5 text-[9px] uppercase tracking-widest">Annuler</button>
-                <button onclick="saveTextEdit()" class="w-1/2 bg-bj-gold hover:bg-white text-black py-3.5 text-[9px] uppercase tracking-widest font-semibold transition-all">Appliquer</button>
+            
+            <div class="space-y-4 font-sans text-xs">
+                <!-- Text Value -->
+                <div>
+                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Contenu du Texte</label>
+                    <textarea id="edit-text-value" rows="4" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold transition-all leading-relaxed"></textarea>
+                </div>
+
+                <!-- Font Family selector -->
+                <div>
+                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Police d'écriture (Font Family)</label>
+                    <select id="edit-text-font" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold transition-all">
+                        <option value="'Playfair Display', serif">Playfair Display (Serif Classique)</option>
+                        <option value="'Cormorant Garamond', serif">Cormorant Garamond (Artisan Classique)</option>
+                        <option value="'Montserrat', sans-serif">Montserrat (Moderne Épuré)</option>
+                        <option value="'Orbitron', sans-serif">Orbitron (Cyber-Dodger)</option>
+                        <option value="'JetBrains Mono', monospace">JetBrains Mono (Télémétrie)</option>
+                    </select>
+                </div>
+
+                <!-- Size Slider -->
+                <div>
+                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Taille d'écriture (Font Size)</label>
+                    <div class="flex items-center gap-4">
+                        <input type="range" id="edit-text-size-slider" min="0.5" max="9" step="0.05" class="flex-grow accent-bj-gold">
+                        <input type="text" id="edit-text-size" class="w-16 bg-black border border-white/[0.08] text-center font-mono text-bj-gold rounded-none py-1 focus:outline-none" readonly>
+                    </div>
+                </div>
+
+                <!-- Color Picker -->
+                <div>
+                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Couleur (Font Color)</label>
+                    <div class="flex items-center gap-4">
+                        <input type="color" id="edit-text-color" class="w-12 h-12 bg-transparent border border-white/[0.08] cursor-pointer">
+                        <input type="text" id="edit-text-color-hex" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2 text-white focus:outline-none text-right font-mono" placeholder="#FFFFFF" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 pt-4 font-sans border-t border-white/[0.06]">
+                <button onclick="closeTextEditModal()" class="w-1/2 border border-white/[0.1] text-white py-3 uppercase tracking-widest text-[9px]">Annuler</button>
+                <button onclick="saveTextAndStyle()" class="w-1/2 bg-bj-gold text-black py-3 uppercase tracking-widest text-[9px] font-semibold transition-all">Appliquer le Style</button>
             </div>
         </div>
     </div>
@@ -1111,60 +1187,48 @@
         </div>
     </div>
 
-    <!-- MASTER INTRO TITLE CUSTOMIZATION CONFIG MODAL -->
-    <div id="modal-intro-title-edit" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+    <!-- UNIVERSAL MASTER MEDIA UPLOAD MODAL -->
+    <div id="modal-master-media-upload" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-bj-dark border border-white/[0.08] p-8 w-full max-w-md space-y-6 text-left rounded-none">
             <div class="text-center border-b border-white/[0.06] pb-4">
-                <span class="text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block">// MASTER_TITLE_PROPERTIES</span>
-                <h3 class="text-lg font-serif font-light text-white uppercase mt-1">Personnaliser le Titre d'Intro</h3>
+                <span class="text-[8px] font-mono text-bj-gold tracking-[0.3em] uppercase block">// MASTER_VISUAL_RESOURCE_UPLOADER</span>
+                <h3 class="text-lg font-serif font-light text-white uppercase mt-1">Modifier l'Image / Visuel</h3>
             </div>
             
+            <input type="hidden" id="edit-media-target-id">
+            
             <div class="space-y-4 font-sans text-xs">
-                <!-- Text Value -->
                 <div>
-                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Libellé du Titre</label>
-                    <input type="text" id="intro-prop-text" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold transition-all">
+                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Option A: Adresse Web (URL)</label>
+                    <input type="text" id="master-media-url" placeholder="https://example.com/armani-luxe.jpg" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold transition-all">
+                </div>
+                
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-white/[0.06]"></div>
+                    <span class="flex-shrink mx-4 text-[8px] uppercase tracking-[0.25em] text-white/30">OU</span>
+                    <div class="flex-grow border-t border-white/[0.06]"></div>
                 </div>
 
-                <!-- Font Select -->
                 <div>
-                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Police (Font Family)</label>
-                    <select id="intro-prop-font" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2.5 text-white focus:outline-none focus:border-bj-gold transition-all">
-                        <option value="'Playfair Display', serif">Playfair Display (Serif Couture)</option>
-                        <option value="'Cormorant Garamond', serif">Cormorant Garamond (Artisan Classique)</option>
-                        <option value="'Montserrat', sans-serif">Montserrat (Moderne Épuré)</option>
-                        <option value="'Orbitron', sans-serif">Orbitron (Cyber-Dodger)</option>
-                        <option value="'JetBrains Mono', monospace">JetBrains Mono (Télémétrie)</option>
-                    </select>
-                </div>
-
-                <!-- Size Slider -->
-                <div>
-                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Taille (Font Size)</label>
-                    <div class="flex items-center gap-4">
-                        <input type="range" id="intro-prop-size" min="1.5" max="8" step="0.1" class="flex-grow accent-bj-gold">
-                        <span id="intro-prop-size-val" class="font-mono text-bj-gold min-w-[50px] text-right">5.5rem</span>
-                    </div>
-                </div>
-
-                <!-- Color Picker -->
-                <div>
-                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Couleur (Font Color)</label>
-                    <div class="flex items-center gap-4">
-                        <input type="color" id="intro-prop-color" class="w-12 h-12 bg-transparent border border-white/[0.08] cursor-pointer">
-                        <input type="text" id="intro-prop-color-hex" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-2 text-white focus:outline-none text-right font-mono" readonly>
-                    </div>
+                    <label class="block text-bj-textMuted mb-2 uppercase tracking-widest text-[9px]">Option B: Fichier Local</label>
+                    <label class="flex flex-col items-center justify-center border border-dashed border-white/[0.1] rounded-none p-6 bg-black hover:border-bj-gold transition-all cursor-pointer">
+                        <svg class="w-5 h-5 text-bj-gold mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-[9px] text-white tracking-widest uppercase text-center" id="master-media-file-label">Sélectionner sur l'appareil</span>
+                        <input type="file" id="master-media-file-picker" accept="image/*" class="hidden" onchange="handleMasterMediaFileSelect(event)">
+                    </label>
                 </div>
             </div>
 
             <div class="flex gap-4 pt-4 font-sans border-t border-white/[0.06]">
-                <button onclick="closeIntroTitleModal()" class="w-1/2 border border-white/[0.1] text-white py-3 uppercase tracking-widest text-[9px]">Annuler</button>
-                <button onclick="saveIntroTitleProperties()" class="w-1/2 bg-bj-gold text-black py-3 uppercase tracking-widest text-[9px] font-semibold transition-all">Appliquer</button>
+                <button onclick="closeMasterMediaModal()" class="w-1/2 border border-white/[0.1] text-white py-3 uppercase tracking-widest text-[9px]">Annuler</button>
+                <button onclick="saveMasterMediaResource()" class="w-1/2 bg-bj-gold text-black py-3 uppercase tracking-widest text-[9px] font-semibold transition-all">Enregistrer le Visuel</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast system -->
+    <!-- Toast system container -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
 
     <!-- Armani Elegant Footer -->
@@ -1174,7 +1238,7 @@
             <span id="slide-progress" class="text-white tracking-widest">PAGE: 1/5</span>
         </div>
         <div class="flex items-center gap-4">
-            <p class="tracking-[0.2em] cursor-pointer select-none" ondblclick="openUnifiedPortalModal('client-tab')" title="Accès Configuration Écurie">
+            <p id="footer-copyright-note" class="edit-highlight tracking-[0.2em] cursor-pointer select-none" title="Espace Configuration Écurie">
                 ©2026 BENZJAMES MILANO. SWIPE LATÉRAL POUR EXPLORER.
             </p>
         </div>
@@ -1182,6 +1246,7 @@
 
     <!-- INTERACTIVE APP CORE SCRIPTS -->
     <script>
+        // Custom interactive system notifications
         function showToast(title, message, type = 'info') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -1230,6 +1295,7 @@
             }, 4000);
         }
 
+        // IndexedDB secure local storage for custom media
         const dbName = "BenzjamesDB";
         const storeName = "videos";
         function getDB() {
@@ -1310,7 +1376,7 @@
             }
         }
 
-        /* Armani Aesthetic customized collections */
+        // Armani Aesthetic customized collections default data
         const DEFAULT_CATEGORIES = [
             { id: "cat1", name: "Couture Outerwear" },
             { id: "cat2", name: "Footwear Performance" },
@@ -1340,16 +1406,20 @@
             { id: "race4", name: "Spa-Francorchamps", location: "Ardennes, Belgique", record: "01:41.252", desc: "Le toboggan des Ardennes. Une descente vertigineuse suivie du mythique raidillon de l'Eau Rouge.", likes: 298, comments: [{author: "Driver_Alpha", text: "Passer l'Eau Rouge à fond demande une confiance absolue."}] }
         ];
 
+        // Global state structures
         let products = [];
         let categories = [];
         let activeCategoryId = "cat1";
         let exchangeListings = [];
         let racesData = [];
         let pageTexts = {};
+        let customizedStyles = {}; // Stores font configs for all editable texts
+        let masterMediaUrls = {}; // Stores customizable images/backgrounds
         let isMaster = false;
         let tempImageData = "";
         let tempVideoFile = null;
         let tempRightMediaFile = null;
+        let tempMasterMediaFile = "";
         let currentUser = null;
         let activeCart = [];
         let currentPage = 0;
@@ -1357,78 +1427,209 @@
         const pageIds = ['page-home', 'page-collection', 'page-exchange', 'page-topspeed', 'page-preorder'];
         const angles = [-110, -55, 0, 55, 110];
 
-        /* Master title configs */
-        let introTitleText = "Benzjames";
-        let introTitleFont = "'Playfair Display', serif";
-        let introTitleSize = "5.5rem";
-        let introTitleColor = "#FFFFFF";
-
-        // Listeners for intro title color updates
+        // Initialize dynamic size listener in text customization modal
         document.addEventListener('DOMContentLoaded', () => {
-            const colorPicker = document.getElementById('intro-prop-color');
-            const colorHex = document.getElementById('intro-prop-color-hex');
+            const sizeSlider = document.getElementById('edit-text-size-slider');
+            const sizeInput = document.getElementById('edit-text-size');
+            if (sizeSlider && sizeInput) {
+                sizeSlider.addEventListener('input', (e) => {
+                    sizeInput.value = `${e.target.value}rem`;
+                });
+            }
+
+            const colorPicker = document.getElementById('edit-text-color');
+            const colorHex = document.getElementById('edit-text-color-hex');
             if (colorPicker && colorHex) {
                 colorPicker.addEventListener('input', (e) => {
                     colorHex.value = e.target.value.toUpperCase();
                 });
             }
-            
-            const sizeSlider = document.getElementById('intro-prop-size');
-            const sizeVal = document.getElementById('intro-prop-size-val');
-            if (sizeSlider && sizeVal) {
-                sizeSlider.addEventListener('input', (e) => {
-                    sizeVal.innerText = `${e.target.value}rem`;
-                });
-            }
         });
 
-        // Click on Intro Title
-        function handleIntroTitleClick() {
-            if (isMaster) {
-                // Open customized modal
-                document.getElementById('intro-prop-text').value = introTitleText;
-                document.getElementById('intro-prop-font').value = introTitleFont;
-                
-                // Extract size value
-                const sizeNum = parseFloat(introTitleSize) || 5.5;
-                document.getElementById('intro-prop-size').value = sizeNum;
-                document.getElementById('intro-prop-size-val').innerText = `${sizeNum}rem`;
-                
-                document.getElementById('intro-prop-color').value = introTitleColor;
-                document.getElementById('intro-prop-color-hex').value = introTitleColor.toUpperCase();
-                
-                document.getElementById('modal-intro-title-edit').classList.remove('hidden');
+        // Trigger dynamic master text editor modal
+        function handleMasterTextClick(element) {
+            if (!isMaster) return;
+            const targetId = element.id;
+            const currentText = element.innerText;
+            
+            // Get computed or saved styles
+            const saved = customizedStyles[targetId] || {};
+            const textValue = saved.text !== undefined ? saved.text : currentText;
+            const fontValue = saved.font || window.getComputedStyle(element).fontFamily.replace(/"/g, "'");
+            
+            let currentSize = window.getComputedStyle(element).fontSize;
+            // Convert pixels to rem approximately for the slider
+            let sizeRem = parseFloat(currentSize) / 16;
+            if (saved.size) {
+                sizeRem = parseFloat(saved.size);
+            }
+            
+            let colorValue = window.getComputedStyle(element).color;
+            // Convert rgb/rgba to hex for picker
+            let hexColor = rgbToHex(colorValue);
+            if (saved.color) {
+                hexColor = saved.color;
+            }
+
+            document.getElementById('edit-target-id').value = targetId;
+            document.getElementById('edit-text-value').value = textValue;
+            document.getElementById('edit-text-font').value = getClosestFontOption(fontValue);
+            
+            const slider = document.getElementById('edit-text-size-slider');
+            slider.value = sizeRem;
+            document.getElementById('edit-text-size').value = `${sizeRem}rem`;
+            
+            document.getElementById('edit-text-color').value = hexColor;
+            document.getElementById('edit-text-color-hex').value = hexColor;
+
+            document.getElementById('modal-text-edit').classList.remove('hidden');
+        }
+
+        function getClosestFontOption(fontStr) {
+            if (fontStr.includes('Playfair')) return "'Playfair Display', serif";
+            if (fontStr.includes('Cormorant')) return "'Cormorant Garamond', serif";
+            if (fontStr.includes('Montserrat')) return "'Montserrat', sans-serif";
+            if (fontStr.includes('Orbitron')) return "'Orbitron', sans-serif";
+            if (fontStr.includes('JetBrains')) return "'JetBrains Mono', monospace";
+            return "'Montserrat', sans-serif";
+        }
+
+        function rgbToHex(rgb) {
+            if (rgb.startsWith('#')) return rgb;
+            const match = rgb.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+            if (match) {
+                return "#" + ("0" + parseInt(match[1],10).toString(16)).slice(-2) +
+                             ("0" + parseInt(match[2],10).toString(16)).slice(-2) +
+                             ("0" + parseInt(match[3],10).toString(16)).slice(-2);
+            }
+            return "#FFFFFF";
+        }
+
+        function closeTextEditModal() {
+            document.getElementById('modal-text-edit').classList.add('hidden');
+        }
+
+        // Apply updated texts and custom CSS properties
+        function saveTextAndStyle() {
+            const targetId = document.getElementById('edit-target-id').value;
+            const textValue = document.getElementById('edit-text-value').value;
+            const fontValue = document.getElementById('edit-text-font').value;
+            const sizeValue = document.getElementById('edit-text-size').value;
+            const colorValue = document.getElementById('edit-text-color-hex').value;
+
+            // Save in cache & localStorage
+            customizedStyles[targetId] = {
+                text: textValue,
+                font: fontValue,
+                size: sizeValue,
+                color: colorValue
+            };
+            localStorage.setItem('bj_custom_styles', JSON.stringify(customizedStyles));
+
+            applySingleElementStyle(targetId);
+            closeTextEditModal();
+            showToast("VISUEL MODIFIÉ", "Modifications stylistiques sauvegardées sur l'élément.", "success");
+        }
+
+        function applySingleElementStyle(id) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            const saved = customizedStyles[id];
+            if (!saved) return;
+
+            if (saved.text !== undefined) element.innerText = saved.text;
+            if (saved.font) element.style.fontFamily = saved.font;
+            if (saved.size) element.style.fontSize = saved.size;
+            if (saved.color) element.style.color = saved.color;
+        }
+
+        function applyAllCustomStyles() {
+            for (const id in customizedStyles) {
+                applySingleElementStyle(id);
             }
         }
 
-        function closeIntroTitleModal() {
-            document.getElementById('modal-intro-title-edit').classList.add('hidden');
+        // Initialize customizable master media upload modal
+        function handleMasterMediaClick(element) {
+            if (!isMaster) return;
+            const targetId = element.id;
+            document.getElementById('edit-media-target-id').value = targetId;
+            document.getElementById('master-media-url').value = masterMediaUrls[targetId] || "";
+            document.getElementById('master-media-file-picker').value = "";
+            document.getElementById('master-media-file-label').innerText = "Sélectionner sur l'appareil";
+            tempMasterMediaFile = "";
+
+            document.getElementById('modal-master-media-upload').classList.remove('hidden');
         }
 
-        function saveIntroTitleProperties() {
-            introTitleText = document.getElementById('intro-prop-text').value.trim() || "Benzjames";
-            introTitleFont = document.getElementById('intro-prop-font').value;
-            introTitleSize = `${document.getElementById('intro-prop-size').value}rem`;
-            introTitleColor = document.getElementById('intro-prop-color').value;
-
-            // Save to localStorage
-            localStorage.setItem('bj_intro_title_text', introTitleText);
-            localStorage.setItem('bj_intro_title_font', introTitleFont);
-            localStorage.setItem('bj_intro_title_size', introTitleSize);
-            localStorage.setItem('bj_intro_title_color', introTitleColor);
-
-            applyIntroTitleStyles();
-            closeIntroTitleModal();
-            showToast("TITRE ACTUAlISÉ", "Les propriétés de style ont été enregistrées avec succès.", "success");
+        function closeMasterMediaModal() {
+            document.getElementById('modal-master-media-upload').classList.add('hidden');
         }
 
-        function applyIntroTitleStyles() {
-            const titleEl = document.getElementById('intro-brand-title');
-            if (titleEl) {
-                titleEl.innerText = introTitleText;
-                titleEl.style.fontFamily = introTitleFont;
-                titleEl.style.fontSize = introTitleSize;
-                titleEl.style.color = introTitleColor;
+        function handleMasterMediaFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                showToast("Fichier trop lourd", "Limite recommandée : 5 Mo.", "error");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                tempMasterMediaFile = event.target.result;
+                document.getElementById('master-media-file-label').innerText = file.name;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveMasterMediaResource() {
+            const targetId = document.getElementById('edit-media-target-id').value;
+            const urlVal = document.getElementById('master-media-url').value.trim();
+            const element = document.getElementById(targetId);
+
+            let chosenMedia = "";
+            if (tempMasterMediaFile) {
+                chosenMedia = tempMasterMediaFile;
+            } else if (urlVal) {
+                chosenMedia = urlVal;
+            }
+
+            if (!chosenMedia) {
+                showToast("Erreur", "Veuillez insérer un lien ou charger un fichier local.", "error");
+                return;
+            }
+
+            masterMediaUrls[targetId] = chosenMedia;
+            localStorage.setItem('bj_master_media_urls', JSON.stringify(masterMediaUrls));
+
+            applySingleMediaResource(targetId);
+            closeMasterMediaModal();
+            showToast("VISUEL MIS À JOUR", "La ressource visuelle a été reconfigurée avec succès.", "success");
+        }
+
+        function applySingleMediaResource(id) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            const mediaUrl = masterMediaUrls[id];
+            if (!mediaUrl) return;
+
+            // Handle div background vs img tag vs video tag
+            if (element.tagName === "IMG") {
+                element.src = mediaUrl;
+                element.classList.remove('hidden');
+            } else if (element.tagName === "VIDEO") {
+                element.src = mediaUrl;
+                element.load();
+                element.play().catch(() => {});
+            } else {
+                element.style.backgroundImage = `url('${mediaUrl}')`;
+                element.style.backgroundSize = "cover";
+                element.style.backgroundPosition = "center";
+            }
+        }
+
+        function applyAllMasterMedias() {
+            for (const id in masterMediaUrls) {
+                applySingleMediaResource(id);
             }
         }
 
@@ -1437,12 +1638,17 @@
             isMaster = localStorage.getItem('bj_master_logged') === 'true';
             updateMasterModeUI();
 
-            // Load title values
-            introTitleText = localStorage.getItem('bj_intro_title_text') || "Benzjames";
-            introTitleFont = localStorage.getItem('bj_intro_title_font') || "'Playfair Display', serif";
-            introTitleSize = localStorage.getItem('bj_intro_title_size') || "5.5rem";
-            introTitleColor = localStorage.getItem('bj_intro_title_color') || "#FFFFFF";
-            applyIntroTitleStyles();
+            // Load customized text styles from localStorage
+            const savedStyles = localStorage.getItem('bj_custom_styles');
+            if (savedStyles) {
+                customizedStyles = JSON.parse(savedStyles);
+            }
+
+            // Load customized media resources
+            const savedMediaUrls = localStorage.getItem('bj_master_media_urls');
+            if (savedMediaUrls) {
+                masterMediaUrls = JSON.parse(savedMediaUrls);
+            }
             
             const savedCategories = localStorage.getItem('bj_categories');
             if (savedCategories) {
@@ -1491,28 +1697,6 @@
                 if (inputRecovery) inputRecovery.value = savedRecoveryEmail;
             }
             
-            const savedTexts = localStorage.getItem('bj_page_texts');
-            if (savedTexts) {
-                pageTexts = JSON.parse(savedTexts);
-            } else {
-                pageTexts = {
-                    'txt-home-tag': 'SÉRIE ULTRA-LIMITÉE: 1000 PIÈCES CERTIFIÉES',
-                    'txt-home-scroller': "F1 // L'exigence de la Haute Couture // Benzjames Cyber-Couture V2 Pure //",
-                    'txt-col-tag': '// LA GAMME ATELIER CYBER',
-                    'txt-col-title': 'La Collection Exclusive',
-                    'txt-exchange-subtitle': "// EXCLUSIVITÉ & PROTOCOLE D'ÉCHANGE",
-                    'txt-exchange-title': "Bourse & Marché d'Échange Secondaire",
-                    'txt-eval-tag': '// VALUATION_PROTOCOL_CORE',
-                    'txt-eval-title': 'Estimer sa Pièce Unique',
-                    'txt-live-feed': '// TRANSACTIONS & OFFRES EN DIRECT',
-                    'txt-preorder-subtitle': '// ATELIER BENZJAMES SARTORIAL VIRTUAL',
-                    'txt-preorder-title': 'Configurez votre Modèle Unique',
-                    'txt-preorder-desc': "Si ce numéro est encore libre dans l'écurie, il sera gravé au laser sur le boîtier.",
-                    'intro-brand-subtitle': "L'Écurie Couture & Performance"
-                };
-                localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
-            }
-            
             try {
                 const savedVideo = await getVideoFromDB('home_video');
                 const player = document.getElementById('hud-video-player');
@@ -1531,6 +1715,31 @@
             renderRaces();
             initRacingChat();
             slideToPage(0);
+
+            // Bind master click handlers to editable objects dynamically
+            setupMasterInteractions();
+        }
+
+        // Setup the listeners for Master mode clicks
+        function setupMasterInteractions() {
+            document.querySelectorAll('.edit-highlight').forEach(el => {
+                el.removeAttribute('onclick'); // Purge previous individual text editors
+                el.addEventListener('click', (e) => {
+                    if (isMaster) {
+                        e.stopPropagation();
+                        handleMasterTextClick(el);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.image-highlight').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    if (isMaster) {
+                        e.stopPropagation();
+                        handleMasterMediaClick(el);
+                    }
+                });
+            });
         }
 
         function toggleMute(videoId, iconId) {
@@ -1678,21 +1887,20 @@
             if (!category) return;
             
             document.getElementById('edit-target-id').value = catId;
-            document.getElementById('edit-type').value = "category";
-            document.getElementById('text-edit-title-h3').innerText = "Renommer la catégorie de la collection";
+            document.getElementById('edit-text-value').value = category.name;
+            document.getElementById('edit-text-font').value = "'Montserrat', sans-serif";
+            document.getElementById('edit-text-size-slider').value = "1.0";
+            document.getElementById('edit-text-size').value = "1.0rem";
+            document.getElementById('edit-text-color').value = "#C5A059";
+            document.getElementById('edit-text-color-hex').value = "#C5A059";
             
-            const container = document.getElementById('text-edit-input-container');
-            container.innerHTML = `
-                <input type="text" id="edit-text-value" value="${category.name}" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
-            `;
             document.getElementById('modal-text-edit').classList.remove('hidden');
         }
 
         function renderApp() {
-            for (const [id, text] of Object.entries(pageTexts)) {
-                const el = document.getElementById(id);
-                if (el) el.innerText = text;
-            }
+            // Apply customized styles from master configuration
+            applyAllCustomStyles();
+            applyAllMasterMedias();
             
             const subfoldersContainer = document.getElementById('category-subfolders');
             if (subfoldersContainer) {
@@ -1746,7 +1954,7 @@
                     }
 
                     card.innerHTML = `
-                        <div class="w-full sm:w-2/5 aspect-square bg-neutral-950 relative overflow-hidden flex items-center justify-center p-3 border border-white/[0.06] shrink-0 select-none">
+                        <div class="image-highlight w-full sm:w-2/5 aspect-square bg-neutral-950 relative overflow-hidden flex items-center justify-center p-3 border border-white/[0.06] shrink-0 select-none" id="img-slot-prod-${product.id}">
                             <div class="absolute top-2 left-2 bg-bj-gold text-black text-[7px] font-bold px-2 py-0.5 tracking-widest uppercase font-mono">${product.badge}</div>
                             ${imageHTML}
                             ${isMaster ? `
@@ -1797,6 +2005,7 @@
             updatePreorderPrice();
             updatePreorderVisual();
             renderListings();
+            setupMasterInteractions();
         }
 
         function addProductToCart(productId) {
@@ -2563,52 +2772,6 @@
             closeProductModal();
         }
 
-        function editPageText(targetId, type = 'input') {
-            if (!isMaster) return;
-            const currentText = pageTexts[targetId] || document.getElementById(targetId).innerText;
-            document.getElementById('edit-target-id').value = targetId;
-            document.getElementById('edit-type').value = "text";
-            document.getElementById('text-edit-title-h3').innerText = "Modifier l'inscription";
-            
-            const container = document.getElementById('text-edit-input-container');
-            container.innerHTML = "";
-            if (type === 'textarea') {
-                container.innerHTML = `
-                    <textarea id="edit-text-value" rows="5" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm leading-relaxed">${currentText}</textarea>
-                `;
-            } else {
-                container.innerHTML = `
-                    <input type="text" id="edit-text-value" value="${currentText}" class="w-full bg-black border border-white/[0.08] rounded-none px-4 py-3 text-white focus:outline-none focus:border-bj-gold text-sm font-semibold">
-                `;
-            }
-            document.getElementById('modal-text-edit').classList.remove('hidden');
-        }
-
-        function closeTextEditModal() {
-            document.getElementById('modal-text-edit').classList.add('hidden');
-        }
-
-        function saveTextEdit() {
-            const targetId = document.getElementById('edit-target-id').value;
-            const editType = document.getElementById('edit-type').value;
-            const newVal = document.getElementById('edit-text-value').value.trim();
-            
-            if (editType === "category") {
-                const category = categories.find(c => c.id === targetId);
-                if (category) {
-                    category.name = newVal;
-                    localStorage.setItem('bj_categories', JSON.stringify(categories));
-                    showToast("Catégorie renommée", `La catégorie s'appelle désormais "${newVal}".`, "success");
-                }
-            } else {
-                pageTexts[targetId] = newVal;
-                localStorage.setItem('bj_page_texts', JSON.stringify(pageTexts));
-                showToast("CONTENU ENREGISTRÉ", "Modification textuelle validée.", "success");
-            }
-            renderApp();
-            closeTextEditModal();
-        }
-
         function openRaceEditModal(raceId) {
             const race = racesData.find(r => r.id === raceId);
             if (!race) return;
@@ -2937,7 +3100,7 @@
 
         const INITIAL_CHAT_MESSAGES = [
             { author: "Milano_Atelier", text: "L'assemblage de la Monza N°042 s'achève." },
-            { author: "Telemetry_AI", text: "Canal satellite haut de gamme initialisé avec succès." },
+            { author: "Telemetry_AI", text: "Canal satellite de communication écurie initialisé." },
             { author: "Ascari_Club", text: "Nous observons une forte progression de la cote sur la Kyoto." }
         ];
 
@@ -2960,7 +3123,7 @@
             box.innerHTML += `<p><span class="text-bj-gold font-serif">@${author}:</span> <span class="font-sans font-light text-white/80">${input.value.trim()}</span></p>`;
             input.value = "";
             box.scrollTop = box.scrollHeight;
-            showToast("SIGNAL EMIS", "Le rapport est envoyé sur le canal.", "success");
+            showToast("SIGNAL ÉMIS", "Le rapport est envoyé sur le canal.", "success");
         }
 
         document.addEventListener('keydown', function(e) {
@@ -2988,11 +3151,14 @@
             analyzeSwipe();
         }
 
+        // Optimize horizontal slides vs vertical scrolling on smartphones
         function analyzeSwipe() {
             const xDiff = touchStartX - touchEndX;
             const yDiff = touchStartY - touchEndY;
-            if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                if (Math.abs(xDiff) > 65) {
+            
+            // Only slide if swipe is primarily horizontal
+            if (Math.abs(xDiff) > Math.abs(yDiff) * 1.6) {
+                if (Math.abs(xDiff) > 60) {
                     if (xDiff > 0 && currentPage < totalPages - 1) {
                         slideToPage(currentPage + 1);
                     } else if (xDiff < 0 && currentPage > 0) {
