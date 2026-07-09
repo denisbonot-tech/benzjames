@@ -107,6 +107,61 @@
 <body class="font-armani bg-white text-neutral-900 select-none overflow-x-hidden min-h-full flex flex-col justify-between">
 
 <script>
+    const dbName = "BenzjamesDB";
+    const storeName = "videos";
+    function getDB() {
+        return new Promise((resolve, reject) => {
+            try {
+                const request = indexedDB.open(dbName, 1);
+                request.onupgradeneeded = function(e) {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        db.createObjectStore(storeName);
+                    }
+                };
+                request.onsuccess = function(e) {
+                    resolve(e.target.result);
+                };
+                request.onerror = function(e) {
+                    reject(new Error("IndexedDB bloqué ou inaccessible."));
+                };
+            } catch(err) {
+                reject(new Error("Accès IndexedDB refusé."));
+            }
+        });
+    }
+    async function saveVideoToDB(key, val) {
+        try {
+            const db = await getDB();
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            store.put(val, key);
+            return new Promise((resolve) => tx.oncomplete = resolve);
+        } catch (e) {
+            console.warn("IndexedDB indisponible pour écriture.");
+        }
+    }
+    async function getVideoFromDB(key) {
+        try {
+            const db = await getDB();
+            const tx = db.transaction(storeName, "readonly");
+            const store = tx.objectStore(storeName);
+            return new Promise((resolve) => {
+                const req = store.get(key);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => resolve(null);
+            });
+        } catch (e) {
+            console.warn("Impossible de récupérer le média depuis IndexedDB.");
+            return null;
+        }
+    }
+
+    // Temporary storage variables for uploaded media
+    let tempProductImageBlob = null;
+    let tempPostVideoBlob = null;
+    let tempIntroVideoBlob = null;
+
     // Audio Context Setup with resilience for Safari on Mac/iPhone
     let audioCtx = null;
     function initAudioContext() {
@@ -202,6 +257,13 @@
 </div>
 
 <div id="intro-screen" class="fixed inset-0 bg-black z-50 flex flex-col justify-center items-center py-12 px-6 transition-all duration-1000 ease-in-out relative">
+    <!-- Background Intro Video -->
+    <div class="absolute inset-0 z-0 bg-black overflow-hidden pointer-events-none">
+        <video id="intro-video-player" class="w-full h-full object-cover opacity-40" autoplay loop muted playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+    </div>
     
     <!-- White diagonal laser sweep decoration -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-10">
@@ -365,6 +427,13 @@
                                     <option value="https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4">Match Tennis</option>
                                     <option value="https://assets.mixkit.co/videos/preview/mixkit-boxer-training-inside-a-gym-with-low-light-40003-large.mp4">Entraînement Boxe</option>
                                 </select>
+                            </div>
+                            <div class="border-t border-dashed border-neutral-200 pt-2 font-mono">
+                                <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1 font-bold">// Option B: Importer votre propre vidéo (Fichier local)</label>
+                                <label class="flex flex-col items-center justify-center border border-dashed border-neutral-300 rounded p-3 bg-neutral-50 hover:bg-neutral-100/50 cursor-pointer transition-all">
+                                    <span class="text-[10px] text-neutral-600" id="post-video-upload-label"><i class="fa-solid fa-video mr-1"></i>Sélectionner une vidéo d'athlète</span>
+                                    <input type="file" id="post-video-file-picker" accept="video/*" class="hidden" onchange="handlePostVideoSelect(event)">
+                                </label>
                             </div>
                             <button onclick="addNewPost()" class="w-full py-3 bg-[#D4AF37] text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-950 transition-colors">Poster la vidéo</button>
                         </div>
@@ -656,6 +725,12 @@
                 <label class="block text-[10px] text-neutral-400 font-mono">Sous-Titre / Slogan</label>
                 <input type="text" id="cfg-intro-desc" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="Automotive & Fashion Innovation">
             </div>
+            <div class="pt-2 border-t border-neutral-200">
+                <label class="block text-[10px] text-neutral-400 font-mono">Option : Vidéo de fond d'Intro (Fichier local)</label>
+                <input type="file" id="cfg-intro-video-file-picker" accept="video/*" class="w-full text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 p-2" onchange="handleIntroVideoSelect(event)">
+                <p class="text-[9px] text-neutral-400 mt-1">Ou collez une URL directe de vidéo en ligne (MP4) :</p>
+                <input type="text" id="cfg-intro-video-url" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
+            </div>
         </div>
 
         <!-- Section Page 1 Config -->
@@ -704,7 +779,10 @@
                     <input type="number" id="new-item-visible" placeholder="N° Pièce (1-1000)" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" min="1" max="1000">
                 </div>
                 <div class="grid grid-cols-1 gap-2 mt-2">
-                    <input type="text" id="new-item-img" placeholder="Image URL" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
+                    <label class="block text-[10px] text-neutral-400 font-mono">Image du produit (Fichier local)</label>
+                    <input type="file" id="new-item-img-file" accept="image/*" class="w-full text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 p-2" onchange="handleProductImageSelect(event)">
+                    <p class="text-[9px] text-neutral-400 mt-0.5">Ou URL d'image alternative :</p>
+                    <input type="text" id="new-item-img" placeholder="https://example.com/image.jpg" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
                     <input type="text" id="new-item-comment" placeholder="Description courte produit" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
                 </div>
             </div>
@@ -1080,6 +1158,22 @@
             introDesc.style.color = state.styleConfig.intro.descColor;
         }
 
+        // Load background video for intro
+        const introPlayer = document.getElementById('intro-video-player');
+        if (introPlayer) {
+            getVideoFromDB('intro_video').then(savedIntro => {
+                if (savedIntro) {
+                    if (savedIntro instanceof Blob) {
+                        introPlayer.src = URL.createObjectURL(savedIntro);
+                    } else {
+                        introPlayer.src = savedIntro;
+                    }
+                    introPlayer.load();
+                    introPlayer.play().catch(() => {});
+                }
+            });
+        }
+
         // --- PAGE 1 (First) ---
         const heroVideo = document.getElementById('hero-video');
         if (heroVideo && state.styleConfig.page1.videoUrl) {
@@ -1140,7 +1234,7 @@
         document.getElementById('cfg-p4-title').value = state.styleConfig.page4.title;
     }
 
-    function saveAllMasterChanges() {
+    async function saveAllMasterChanges() {
         if (!state.user.isMaster) return;
 
         // Intro Config
@@ -1148,6 +1242,20 @@
         state.styleConfig.intro.titleFont = document.getElementById('cfg-intro-title-font').value;
         state.styleConfig.intro.titleColor = document.getElementById('cfg-intro-title-color').value;
         state.styleConfig.intro.desc = document.getElementById('cfg-intro-desc').value;
+
+        // Save Intro Background Video if picked
+        if (tempIntroVideoBlob) {
+            showFloatingNotify("Sauvegarde du visuel d'intro...");
+            await saveVideoToDB('intro_video', tempIntroVideoBlob);
+            state.styleConfig.intro.videoUrl = "indexeddb:intro_video";
+            tempIntroVideoBlob = null;
+        } else {
+            const urlVal = document.getElementById('cfg-intro-video-url').value.trim();
+            if (urlVal && urlVal !== state.styleConfig.intro.videoUrl) {
+                state.styleConfig.intro.videoUrl = urlVal;
+                await saveVideoToDB('intro_video', urlVal);
+            }
+        }
 
         // Page 1 Config
         state.styleConfig.page1.videoUrl = document.getElementById('cfg-p1-video-url').value;
@@ -1171,26 +1279,37 @@
 
         if (itemName && !isNaN(itemPrice) && !isNaN(itemNum)) {
             const secret = generateFakeSecret(itemCat, itemNum);
+            const itemId = `p_${Date.now()}`;
+            let finalImg = itemImg || `https://placehold.co/400x500/F9F9F9/D4AF37?text=${itemName}`;
+
+            if (tempProductImageBlob) {
+                finalImg = `indexeddb:product_image_${itemId}`;
+                await saveVideoToDB(`product_image_${itemId}`, tempProductImageBlob);
+                tempProductImageBlob = null;
+            }
+
             const newItem = {
-                id: `p_${Date.now()}`,
+                id: itemId,
                 category: itemCat,
                 name: itemName,
                 price: itemPrice,
                 rating: 5.0,
                 comment: itemComment || 'Série exclusive validée par le Master.',
-                image: itemImg || `https://placehold.co/400x500/F9F9F9/D4AF37?text=${itemName}`,
+                image: finalImg,
                 numberInSeries: itemNum,
                 privateSerial: secret
             };
 
             state.products.unshift(newItem);
             
-            // Clear inputs
+            // Clear inputs & files
             document.getElementById('new-item-name').value = '';
             document.getElementById('new-item-price').value = '';
             document.getElementById('new-item-visible').value = '';
             document.getElementById('new-item-comment').value = '';
             document.getElementById('new-item-img').value = '';
+            const fileInput = document.getElementById('new-item-img-file');
+            if (fileInput) fileInput.value = '';
         }
 
         playSuccessSound();
@@ -1201,12 +1320,57 @@
 </script>
 
 <script>
-    function handleHeroVideoSelect(event) {
+    async function handleHeroVideoSelect(event) {
         const file = event.target.files[0];
         if (file) {
+            if (file.size > 120 * 1024 * 1024) {
+                showFloatingNotify("Fichier trop volumineux (Max 120 Mo)");
+                return;
+            }
+            showFloatingNotify("Indexation de la vidéo d'accueil...");
+            await saveVideoToDB('home_video', file);
             const fileUrl = URL.createObjectURL(file);
             document.getElementById('cfg-p1-video-url').value = fileUrl;
             applyHeroVideoChange(fileUrl);
+            showFloatingNotify("Vidéo d'accueil enregistrée et activée !");
+        }
+    }
+
+    async function handleIntroVideoSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            if (file.size > 120 * 1024 * 1024) {
+                showFloatingNotify("Fichier trop volumineux (Max 120 Mo)");
+                return;
+            }
+            tempIntroVideoBlob = file;
+            showFloatingNotify("Vidéo d'intro chargée. Appliquer pour enregistrer !");
+        }
+    }
+
+    function handleProductImageSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                showFloatingNotify("Fichier image trop grand (Max 5 Mo)");
+                return;
+            }
+            tempProductImageBlob = file;
+            showFloatingNotify("Image produit chargée !");
+        }
+    }
+
+    function handlePostVideoSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            if (file.size > 120 * 1024 * 1024) {
+                showFloatingNotify("Fichier vidéo trop lourd (Max 120 Mo)");
+                return;
+            }
+            tempPostVideoBlob = file;
+            const label = document.getElementById("post-video-upload-label");
+            if (label) label.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Vidéo prête : ${file.name}`;
+            showFloatingNotify("Vidéo de performance prête !");
         }
     }
 
@@ -1438,7 +1602,7 @@
                     </span>
 
                     <div class="overflow-hidden bg-neutral-50 aspect-[4/5] mb-6 relative border border-neutral-100">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="handleImageError(this, '${p.name}')">
+                        <img id="img-${p.id}" src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="handleImageError(this, '${p.name}')">
                     </div>
 
                     <div>
@@ -1466,6 +1630,22 @@
                 </div>
             `;
             container.innerHTML += card;
+        });
+
+        // Resolve IndexedDB local images asynchronously after grid build
+        filtered.forEach(async p => {
+            if (p.image && p.image.startsWith('indexeddb:')) {
+                const key = p.image.replace('indexeddb:', '');
+                try {
+                    const blob = await getVideoFromDB(key);
+                    if (blob instanceof Blob) {
+                        const imgEl = document.getElementById(`img-${p.id}`);
+                        if (imgEl) imgEl.src = URL.createObjectURL(blob);
+                    }
+                } catch(e) {
+                    console.warn("Could not load dynamic showroom product image", e);
+                }
+            }
         });
     }
 
@@ -1576,7 +1756,7 @@
                     </div>
 
                     <div class="aspect-video bg-neutral-950 relative">
-                        <video class="w-full h-full object-cover" controls playsinline onerror="showVideoFallback(this)">
+                        <video id="vid-${post.id}" class="w-full h-full object-cover" controls playsinline onerror="showVideoFallback(this)">
                             <source src="${post.videoUrl}" type="video/mp4">
                         </video>
                     </div>
@@ -1608,6 +1788,25 @@
             `;
             feed.innerHTML += card;
         });
+
+        // Resolve IndexedDB local tchat post videos asynchronously after grid build
+        sortedPosts.forEach(async post => {
+            if (post.videoUrl && post.videoUrl.startsWith('indexeddb:')) {
+                const key = post.videoUrl.replace('indexeddb:', '');
+                try {
+                    const blob = await getVideoFromDB(key);
+                    if (blob instanceof Blob) {
+                        const vidEl = document.getElementById(`vid-${post.id}`);
+                        if (vidEl) {
+                            vidEl.src = URL.createObjectURL(blob);
+                            vidEl.load();
+                        }
+                    }
+                } catch(e) {
+                    console.warn("Could not load dynamic community video post", e);
+                }
+            }
+        });
     }
 
     function likePost(id) {
@@ -1631,7 +1830,7 @@
         }
     }
 
-    function addNewPost() {
+    async function addNewPost() {
         const title = document.getElementById('post-title');
         const user = document.getElementById('post-user');
         const video = document.getElementById('post-video-url');
@@ -1641,11 +1840,24 @@
             return;
         }
 
+        const postId = `post_${Date.now()}`;
+        let finalVideoUrl = video.value;
+
+        if (tempPostVideoBlob) {
+            finalVideoUrl = `indexeddb:post_video_${postId}`;
+            await saveVideoToDB(`post_video_${postId}`, tempPostVideoBlob);
+            tempPostVideoBlob = null;
+            const label = document.getElementById("post-video-upload-label");
+            if (label) label.innerHTML = `<i class="fa-solid fa-video mr-1"></i>Sélectionner une vidéo d'athlète`;
+            const filePicker = document.getElementById("post-video-file-picker");
+            if (filePicker) filePicker.value = '';
+        }
+
         const newPost = {
-            id: `post_${Date.now()}`,
+            id: postId,
             title: title.value.trim(),
             user: user.value.trim(),
-            videoUrl: video.value,
+            videoUrl: finalVideoUrl,
             likes: 1,
             comments: []
         };
@@ -1827,7 +2039,20 @@
 </script>
 
 <script>
-    window.onload = function() {
+    window.onload = async function() {
+        try {
+            const savedHero = await getVideoFromDB('home_video');
+            if (savedHero) {
+                if (savedHero instanceof Blob) {
+                    state.styleConfig.page1.videoUrl = URL.createObjectURL(savedHero);
+                } else {
+                    state.styleConfig.page1.videoUrl = savedHero;
+                }
+            }
+        } catch (e) {
+            console.warn("Could not load saved home video on startup.", e);
+        }
+
         applyDynamicStyles();
         renderShowroom();
 
