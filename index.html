@@ -11,7 +11,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght=0,100..900;1,100..900&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght=0,400..900;1,400..900&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <!-- Tone.js for high-fidelity audio synthesis -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     
@@ -24,10 +24,11 @@
                             gold: '#D4AF37',
                             red: '#E10600',
                             cyan: '#06B6D4',
-                            dark: '#0e0e0e',
+                            dark: '#111111',
                             black: '#050505',
-                            border: '#1b1b1b',
-                            textMuted: '#8E8E93'
+                            lightBg: '#FAFAFA',
+                            border: '#E5E5E5',
+                            textMuted: '#707070'
                         }
                     },
                     fontFamily: {
@@ -68,7 +69,7 @@
             height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #0e0e0e;
+            background: #F5F5F5;
         }
         ::-webkit-scrollbar-thumb {
             background: #D4AF37;
@@ -88,13 +89,13 @@
 
         /* Master editable fields visual guidance */
         .master-active .edit-highlight {
-            outline: 1px dashed rgba(212, 175, 55, 0.4);
+            outline: 1px dashed rgba(212, 175, 55, 0.5);
             cursor: pointer;
             transition: all 0.2s ease-in-out;
         }
         .master-active .edit-highlight:hover {
             outline: 2px dashed #D4AF37;
-            background-color: rgba(212, 175, 55, 0.15) !important;
+            background-color: rgba(212, 175, 55, 0.08) !important;
         }
 
         /* iOS tap-highlight-color removal */
@@ -103,7 +104,7 @@
         }
     </style>
 </head>
-<body class="font-armani bg-[#050505] text-neutral-100 select-none overflow-x-hidden min-h-full flex flex-col justify-between">
+<body class="font-armani bg-white text-neutral-900 select-none overflow-x-hidden min-h-full flex flex-col justify-between">
 
 <script>
     // Audio Context Setup with resilience for Safari on Mac/iPhone
@@ -171,20 +172,26 @@
         const parent = video.parentElement;
         if (parent) {
             const placeholder = document.createElement('div');
-            placeholder.className = "absolute inset-0 bg-gradient-to-tr from-neutral-950 via-neutral-900 to-neutral-800 flex flex-col justify-center items-center text-center p-6 select-none z-0";
+            // Premium light-mode visual fallback for Armani-style content
+            placeholder.className = "absolute inset-0 bg-neutral-100 flex flex-col justify-center items-center text-center p-6 select-none z-0 border border-neutral-200";
             placeholder.innerHTML = `
                 <div class="space-y-4 animate-pulse">
-                    <span class="font-sport font-black italic text-4xl md:text-5xl tracking-tighter text-white uppercase block opacity-25">BENZJAMES</span>
-                    <div class="inline-block p-4 rounded-full bg-white/5 border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-                        <i class="fa-solid fa-clapperboard text-white/40 text-xl"></i>
+                    <span class="font-sport font-black italic text-4xl md:text-5xl tracking-tighter text-neutral-800 uppercase block opacity-30">BENZJAMES</span>
+                    <div class="inline-block p-4 rounded-full bg-neutral-200/50 border border-neutral-300 shadow-sm">
+                        <i class="fa-solid fa-clapperboard text-neutral-500 text-xl"></i>
                     </div>
-                    <p class="text-[9px] tracking-[0.4em] text-neutral-400 uppercase font-bold">SEQUENCE VIDEO ACTIVE</p>
-                    <div class="w-12 h-[1px] bg-neutral-800 mx-auto"></div>
+                    <p class="text-[9px] tracking-[0.4em] text-neutral-500 uppercase font-bold">SEQUENCE VISUELLE ACTIVE</p>
+                    <div class="w-12 h-[1px] bg-neutral-300 mx-auto"></div>
                 </div>
             `;
             parent.appendChild(placeholder);
             video.style.display = 'none'; 
         }
+    }
+
+    function handleImageError(img, name) {
+        img.onerror = null; // Prevent endless loops
+        img.src = `https://placehold.co/600x750/FAFAFA/D4AF37?text=${encodeURIComponent(name || 'Benzjames')}`;
     }
 </script>
 
@@ -194,42 +201,30 @@
     <button onclick="logoutMaster()" class="bg-black text-white px-3 py-1 rounded text-[9px] hover:bg-red-600 transition-all font-bold font-sport uppercase tracking-wider">Quitter</button>
 </div>
 
-<!-- PAGE 0: INTRO SCREEN (Highly configurable for Master) -->
-<div id="intro-screen" class="fixed inset-0 bg-black z-50 flex flex-col justify-between items-center py-12 px-6 transition-all duration-1000 ease-in-out relative">
+<div id="intro-screen" class="fixed inset-0 bg-black z-50 flex flex-col justify-center items-center py-12 px-6 transition-all duration-1000 ease-in-out relative">
     
-    <!-- Video background configurable directly -->
-    <div class="absolute inset-0 overflow-hidden z-0 cursor-pointer" onclick="handleIntroMediaClick(event)">
-        <!-- Master screen click overlay indicator -->
-        <div class="absolute inset-0 bg-black/60 z-10 hover:bg-black/40 transition-colors flex items-center justify-center group">
-            <span class="master-only hidden text-[9px] uppercase tracking-widest font-mono text-[#D4AF37] border border-[#D4AF37]/40 bg-black/85 px-4 py-2 rounded group-hover:scale-105 transition-all">
-                <i class="fa-solid fa-photo-film mr-2"></i> Configurer la vidéo d'intro
-            </span>
-        </div>
-        <video id="intro-video-player" class="w-full h-full object-cover opacity-60" autoplay loop muted playsinline onerror="showVideoFallback(this)">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4" type="video/mp4">
-        </video>
-    </div>
-
+    <!-- White diagonal laser sweep decoration -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-10">
         <div class="laser-line-1 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
         <div class="laser-line-2 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
     </div>
 
-    <!-- Top Label -->
-    <div id="intro-subtitle-label" class="text-white text-[10px] tracking-[0.4em] uppercase font-light opacity-85 z-20 font-mono">// SÉRIE LIMITÉE • 1000 PIÈCES UNIVES //</div>
-
-    <!-- Center Brand Title (Editable directly in Master mode) -->
-    <div class="relative text-center flex flex-col items-center z-20 max-w-xl">
-        <h1 id="intro-main-title" onclick="handleTextClick(event, 'intro-main-title')" class="edit-highlight text-6xl md:text-9xl font-sport font-black tracking-tighter text-white uppercase italic scale-y-75 leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            Benzjames
-        </h1>
-        <p id="intro-desc-label" onclick="handleTextClick(event, 'intro-desc-label')" class="edit-highlight text-xs md:text-sm tracking-[0.6em] text-neutral-300 uppercase mt-4 font-mono">
-            Automotive & Fashion Innovation
-        </p>
+    <!-- Centered Intro Content Container -->
+    <div class="relative text-center flex flex-col items-center justify-center z-20 max-w-xl space-y-6 my-auto">
+        <div id="intro-subtitle-label" class="text-white text-[10px] tracking-[0.4em] uppercase font-light opacity-85 font-mono">// SÉRIE LIMITÉE • 1000 PIÈCES UNIQUES //</div>
+        
+        <div>
+            <h1 id="intro-main-title" onclick="handleTextClick(event, 'intro-main-title')" class="edit-highlight text-6xl md:text-9xl font-sport font-black tracking-tighter text-white uppercase italic scale-y-75 leading-none drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">
+                Benzjames
+            </h1>
+            <p id="intro-desc-label" onclick="handleTextClick(event, 'intro-desc-label')" class="edit-highlight text-xs md:text-sm tracking-[0.6em] text-neutral-300 uppercase mt-4 font-mono">
+                Automotive & Fashion Innovation
+            </p>
+        </div>
     </div>
 
     <!-- Entry Button -->
-    <div class="z-20 text-center space-y-4">
+    <div class="z-20 text-center space-y-4 mt-auto">
         <button onclick="enterApp()" class="group relative px-12 py-4 bg-white text-black font-sport font-bold uppercase tracking-[0.2em] text-xs overflow-hidden rounded-sm transition-all duration-300 hover:bg-neutral-900 hover:text-white border border-white shadow-xl">
             <span class="relative z-10">Entrer dans l'expérience</span>
             <div class="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-neutral-900 transition-transform duration-300 ease-out pointer-events-none"></div>
@@ -238,78 +233,76 @@
     </div>
 </div>
 
-<div id="app-container" class="hidden min-h-screen flex flex-col justify-between">
+<div id="app-container" class="hidden min-h-screen flex flex-col justify-between bg-white text-neutral-950">
 
-    <!-- Global Header -->
-    <header class="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-neutral-900 px-6 py-4 flex justify-between items-center transition-all duration-300">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200 px-6 py-4 flex justify-between items-center transition-all duration-300">
         <!-- Logo -->
         <div class="cursor-pointer" onclick="navigate('home')">
             <span class="font-sport font-black italic text-2xl tracking-tighter text-[#D4AF37] uppercase scale-y-90 inline-block">Benzjames</span>
-            <span class="text-[9px] tracking-widest text-neutral-400 block uppercase font-mono">Milan / Paris / London</span>
+            <span class="text-[9px] tracking-widest text-neutral-500 block uppercase font-mono">Milan / Paris / London</span>
         </div>
 
-        <!-- Navigation Tabs -->
-        <nav class="hidden md:flex space-x-10 text-[11px] tracking-[0.3em] uppercase font-medium text-neutral-400">
-            <button onclick="navigate('home')" class="nav-tab hover:text-white transition-colors duration-200 text-[#D4AF37] border-b border-[#D4AF37]" id="nav-home">First</button>
-            <button onclick="navigate('showroom')" class="nav-tab hover:text-white transition-colors duration-200" id="nav-showroom">Show room</button>
-            <button onclick="navigate('tchat')" class="nav-tab hover:text-white transition-colors duration-200" id="nav-tchat">Tchat passion</button>
-            <button onclick="navigate('market')" class="nav-tab hover:text-white transition-colors duration-200" id="nav-market">Cotes & Marché</button>
+        <!-- Navigation Tabs (With integrated First button) -->
+        <nav class="hidden md:flex space-x-10 text-[11px] tracking-[0.3em] uppercase font-medium text-neutral-500">
+            <button onclick="navigate('home')" class="nav-tab hover:text-neutral-950 transition-colors duration-200 text-neutral-950 border-b border-[#D4AF37]" id="nav-home">First</button>
+            <button onclick="navigate('showroom')" class="nav-tab hover:text-neutral-950 transition-colors duration-200" id="nav-showroom">Show room</button>
+            <button onclick="navigate('tchat')" class="nav-tab hover:text-neutral-950 transition-colors duration-200" id="nav-tchat">Tchat passion</button>
+            <button onclick="navigate('market')" class="nav-tab hover:text-neutral-950 transition-colors duration-200" id="nav-market">Cotes & Marché</button>
         </nav>
 
         <!-- Right Status / Login panel trigger -->
         <div class="flex items-center space-x-4">
-            <button id="abonné-btn" onclick="openAbonneModal()" class="relative group flex items-center space-x-2 p-2 px-3 rounded-full border border-neutral-800 hover:bg-neutral-900 transition-all duration-200">
+            <button id="abonné-btn" onclick="openAbonneModal()" class="relative group flex items-center space-x-2 p-2 px-3 rounded-full border border-neutral-300 hover:bg-neutral-100 transition-all duration-200">
                 <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" id="user-status-dot"></span>
-                <span class="text-[10px] uppercase tracking-widest font-mono text-neutral-300" id="user-status-label">Non identifié</span>
-                <i class="fa-regular fa-user text-neutral-300 text-sm"></i>
+                <span class="text-[10px] uppercase tracking-widest font-mono text-neutral-600" id="user-status-label">Non identifié</span>
+                <i class="fa-regular fa-user text-neutral-700 text-sm"></i>
             </button>
         </div>
     </header>
 
     <!-- Mobile Sub-Menu Tabs -->
-    <div class="md:hidden sticky top-[65px] z-30 bg-[#050505]/95 backdrop-blur-md border-b border-neutral-900 flex justify-around py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-400 font-mono">
-        <button onclick="navigate('home')" class="mobile-nav-tab py-1 px-2 border-b-2 border-[#D4AF37] text-white" id="m-nav-home">First</button>
-        <button onclick="navigate('showroom')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-showroom">Showroom</button>
+    <div class="md:hidden sticky top-[65px] z-30 bg-white/95 backdrop-blur-md border-b border-neutral-200 flex justify-around py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-500 font-mono">
+        <button onclick="navigate('home')" class="mobile-nav-tab py-1 px-2 border-b-2 border-[#D4AF37] text-neutral-950" id="m-nav-home">First</button>
+        <button onclick="navigate('showroom')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent animate-fade" id="m-nav-showroom">Showroom</button>
         <button onclick="navigate('tchat')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-tchat">Tchat</button>
         <button onclick="navigate('market')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-market">Cotes</button>
     </div>
 
-    <!-- PAGE 1: FIRST / HOME -->
-    <main id="page-home" class="page-section relative flex-1 bg-black flex flex-col justify-between">
-        <!-- Video screen layout with direct click configurations for Master -->
-        <div class="relative w-full h-[65vh] md:h-[75vh] overflow-hidden bg-neutral-950 border-b border-neutral-900 cursor-pointer" onclick="handleHeroMediaClick(event)">
-            <!-- Interactive Master visual overlay guide -->
-            <div class="absolute inset-0 bg-black/40 z-10 hover:bg-black/20 transition-all flex items-center justify-center group pointer-events-auto">
-                <span class="master-only hidden text-[9px] uppercase tracking-widest font-mono text-[#D4AF37] border border-[#D4AF37]/40 bg-black/90 px-5 py-3 rounded group-hover:scale-105 transition-all">
+    <main id="page-home" class="page-section relative flex-1 bg-white flex flex-col justify-between">
+        <!-- Main Video Screen -->
+        <div class="relative w-full h-[60vh] md:h-[70vh] overflow-hidden bg-neutral-100 border-b border-neutral-200 cursor-pointer" onclick="handleHeroMediaClick(event)">
+            <!-- Interactive Master Configurator overlay -->
+            <div class="absolute inset-0 bg-neutral-900/10 z-10 hover:bg-neutral-900/5 transition-all flex items-center justify-center group pointer-events-auto">
+                <span class="master-only hidden text-[9px] uppercase tracking-widest font-mono text-[#D4AF37] border border-[#D4AF37]/50 bg-black/90 px-5 py-3 rounded group-hover:scale-105 transition-all">
                     <i class="fa-solid fa-clapperboard mr-2"></i> Configurer la vidéo principale (Page 1)
                 </span>
             </div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 z-10 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/10 z-10 pointer-events-none"></div>
+            
             <video id="hero-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline onerror="showVideoFallback(this)">
                 <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4" type="video/mp4">
             </video>
         </div>
 
-        <!-- Hero texts -->
-        <div class="relative z-20 max-w-4xl mx-auto px-6 py-12 text-center text-white">
+        <!-- Hero Texts -->
+        <div class="relative z-20 max-w-4xl mx-auto px-6 py-12 text-center text-neutral-900">
             <span id="p1-subtitle" onclick="handleTextClick(event, 'p1-subtitle')" class="edit-highlight text-xs tracking-[0.5em] text-[#D4AF37] uppercase font-bold block mb-4 font-mono">Maison de Spéculation Athlétique</span>
-            <h2 id="p1-title" onclick="handleTextClick(event, 'p1-title')" class="edit-highlight text-4xl md:text-7xl font-sport italic uppercase scale-y-90 tracking-tighter mb-6">L'Édition Unique.</h2>
-            <p id="p1-desc" onclick="handleTextClick(event, 'p1-desc')" class="edit-highlight text-sm text-neutral-400 font-light tracking-wide leading-relaxed mb-8 max-w-2xl mx-auto">
+            <h2 id="p1-title" onclick="handleTextClick(event, 'p1-title')" class="edit-highlight text-4xl md:text-7xl font-sport italic uppercase scale-y-90 tracking-tighter mb-6 text-neutral-950">L'Édition Unique.</h2>
+            <p id="p1-desc" onclick="handleTextClick(event, 'p1-desc')" class="edit-highlight text-sm text-neutral-500 font-light tracking-wide leading-relaxed mb-8 max-w-2xl mx-auto">
                 Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <button onclick="navigate('showroom')" class="px-8 py-3.5 bg-white text-black font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-100 transition-colors">Découvrir le vestiaire</button>
-                <button onclick="navigate('market')" class="px-8 py-3.5 bg-transparent border border-neutral-700 text-white font-sport font-bold tracking-widest text-xs uppercase hover:bg-white hover:text-black transition-all">Consulter les cotes</button>
+                <button onclick="navigate('showroom')" class="px-8 py-3.5 bg-neutral-950 text-white font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-800 transition-colors">Découvrir le vestiaire</button>
+                <button onclick="navigate('market')" class="px-8 py-3.5 bg-transparent border border-neutral-300 text-neutral-800 font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-100 transition-all">Consulter les cotes</button>
             </div>
         </div>
     </main>
 
-    <!-- PAGE 2: SHOWROOM / COLLECTION -->
-    <main id="page-showroom" class="page-section hidden flex-1 bg-[#0a0a0a] p-6 md:p-12 border-t border-neutral-900">
+    <main id="page-showroom" class="page-section hidden flex-1 bg-white p-6 md:p-12 border-t border-neutral-200">
         <div class="max-w-7xl mx-auto">
             <!-- Navigation Backwards -->
             <div class="flex justify-start mb-6">
-                <button onclick="navigate('home')" class="text-xs tracking-[0.3em] uppercase text-neutral-500 hover:text-[#D4AF37] transition-colors font-mono">
+                <button onclick="navigate('home')" class="text-xs tracking-[0.3em] uppercase text-neutral-400 hover:text-[#D4AF37] transition-colors font-mono">
                     <i class="fa-solid fa-arrow-left mr-2"></i> First
                 </button>
             </div>
@@ -317,20 +310,20 @@
             <!-- Category Title & Philosophy -->
             <div class="text-center mb-12">
                 <span id="p2-subtitle" onclick="handleTextClick(event, 'p2-subtitle')" class="edit-highlight text-xs tracking-[0.5em] text-[#D4AF37] uppercase block mb-2 font-mono">Exclusive Wardrobe</span>
-                <h2 id="p2-title" onclick="handleTextClick(event, 'p2-title')" class="edit-highlight text-3xl md:text-5xl font-serif text-white tracking-wide font-light">Le Vestiaire Limité</h2>
+                <h2 id="p2-title" onclick="handleTextClick(event, 'p2-title')" class="edit-highlight text-3xl md:text-5xl font-serif text-neutral-950 tracking-wide font-light">Le Vestiaire Limité</h2>
                 <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mt-4"></div>
             </div>
 
             <!-- Catalogue Horizontal Navigation Tabs -->
-            <div class="flex overflow-x-auto pb-4 mb-10 justify-start md:justify-center space-x-4 md:space-x-8 scrollbar-thin border-b border-neutral-900">
-                <button onclick="filterShowroom('tous')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-white border-b border-white" id="cat-tous">Tous</button>
-                <button onclick="filterShowroom('casquette')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-casquette">Casquettes</button>
-                <button onclick="filterShowroom('basket')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-basket">Baskets</button>
-                <button onclick="filterShowroom('tshirt')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-tshirt">T-Shirts</button>
-                <button onclick="filterShowroom('sac')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-sac">Sacs à dos</button>
-                <button onclick="filterShowroom('gants')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-gants">Gants</button>
-                <button onclick="filterShowroom('montre')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-montre">Montres</button>
-                <button onclick="filterShowroom('sweat')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-sweat">Sweats</button>
+            <div class="flex overflow-x-auto pb-4 mb-10 justify-start md:justify-center space-x-4 md:space-x-8 scrollbar-thin border-b border-neutral-200">
+                <button onclick="filterShowroom('tous')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-900 border-b-2 border-neutral-900" id="cat-tous">Tous</button>
+                <button onclick="filterShowroom('casquette')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-casquette">Casquettes</button>
+                <button onclick="filterShowroom('basket')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-basket">Baskets</button>
+                <button onclick="filterShowroom('tshirt')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-tshirt">T-Shirts</button>
+                <button onclick="filterShowroom('sac')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-sac">Sacs à dos</button>
+                <button onclick="filterShowroom('gants')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-gants">Gants</button>
+                <button onclick="filterShowroom('montre')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-montre">Montres</button>
+                <button onclick="filterShowroom('sweat')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-sweat">Sweats</button>
             </div>
 
             <!-- Grid & Collection Display -->
@@ -340,41 +333,40 @@
         </div>
     </main>
 
-    <!-- PAGE 3: TCHAT PASSION (Optimized layout with sticky chat lounge on scroll) -->
-    <main id="page-tchat" class="page-section hidden flex-1 bg-[#050505] p-6 md:p-12 border-t border-neutral-900">
+    <main id="page-tchat" class="page-section hidden flex-1 bg-[#FAFAFA] p-6 md:p-12 border-t border-neutral-200">
         <div class="max-w-7xl mx-auto">
             <!-- Navigation Backwards -->
             <div class="flex justify-start mb-6">
-                <button onclick="navigate('home')" class="text-xs tracking-[0.3em] uppercase text-neutral-500 hover:text-[#D4AF37] transition-colors font-mono">
+                <button onclick="navigate('home')" class="text-xs tracking-[0.3em] uppercase text-neutral-400 hover:text-[#D4AF37] transition-colors font-mono">
                     <i class="fa-solid fa-arrow-left mr-2"></i> First
                 </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
-                <!-- Left Column: Video Posts list -->
+                <!-- Left Column: Video Posts list with verification checks -->
                 <div class="lg:col-span-7 flex flex-col space-y-8">
                     <div class="mb-4">
-                        <span id="p3-subtitle" onclick="handleTextClick(event, 'p3-subtitle')" class="edit-highlight text-xs tracking-[0.4em] text-neutral-500 uppercase font-mono">// COMMUNAUTÉ ACTIVE //</span>
-                        <h2 id="p3-title" onclick="handleTextClick(event, 'p3-title')" class="edit-highlight text-2xl font-serif text-white mt-1">Vidéos Passion de nos Membres</h2>
-                        <p class="text-xs text-neutral-400 mt-1">Les vidéos les plus appréciées dominent le classement.</p>
+                        <span id="p3-subtitle" onclick="handleTextClick(event, 'p3-subtitle')" class="edit-highlight text-xs tracking-[0.4em] text-neutral-400 uppercase font-mono">// COMMUNAUTÉ ACTIVE //</span>
+                        <h2 id="p3-title" onclick="handleTextClick(event, 'p3-title')" class="edit-highlight text-2xl font-serif text-neutral-950 mt-1">Vidéos Passion de nos Membres</h2>
+                        <p class="text-xs text-neutral-500 mt-1">Les vidéos les plus appréciées dominent le classement.</p>
                     </div>
 
                     <!-- Post Upload Area -->
-                    <div class="bg-[#0e0e0e] p-5 border border-neutral-900 rounded-sm shadow-sm">
+                    <div class="bg-white p-5 border border-neutral-200 rounded-sm shadow-sm">
                         <h3 class="text-xs uppercase tracking-widest font-bold mb-3 text-[#D4AF37] font-mono">// PARTAGER UNE PERFORMANCE</h3>
                         <div class="space-y-3">
-                            <input type="text" id="post-title" placeholder="Titre de votre session sportive (ex: Session run sous la pluie)" class="w-full text-xs p-3 bg-black border border-neutral-800 text-white outline-none focus:border-[#D4AF37] rounded-sm">
+                            <input type="text" id="post-title" placeholder="Titre de votre session sportive (ex: Session run sous la pluie)" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-900 outline-none focus:border-[#D4AF37] rounded-sm">
                             <div class="grid grid-cols-2 gap-2">
-                                <input type="text" id="post-user" placeholder="Votre Pseudo" class="text-xs p-3 bg-black border border-neutral-800 text-white outline-none focus:border-[#D4AF37] rounded-sm">
-                                <select id="post-video-url" class="text-xs p-3 bg-black border border-neutral-800 text-neutral-300 outline-none focus:border-[#D4AF37] rounded-sm">
+                                <input type="text" id="post-user" placeholder="Votre Pseudo" class="text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-900 outline-none focus:border-[#D4AF37] rounded-sm">
+                                <select id="post-video-url" class="text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-600 outline-none focus:border-[#D4AF37] rounded-sm">
                                     <option value="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4">Session d'athlétisme</option>
                                     <option value="https://assets.mixkit.co/videos/preview/mixkit-man-jogging-on-the-beach-at-sunset-31997-large.mp4">Jogging Plage</option>
                                     <option value="https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4">Match Tennis</option>
                                     <option value="https://assets.mixkit.co/videos/preview/mixkit-boxer-training-inside-a-gym-with-low-light-40003-large.mp4">Entraînement Boxe</option>
                                 </select>
                             </div>
-                            <button onclick="addNewPost()" class="w-full py-3 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-white transition-colors">Poster la vidéo</button>
+                            <button onclick="addNewPost()" class="w-full py-3 bg-[#D4AF37] text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-950 transition-colors">Poster la vidéo</button>
                         </div>
                     </div>
 
@@ -384,12 +376,12 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Sticky Realtime Chat Area (Always visible on scroll for Mac/MacBook) -->
-                <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col h-[600px] lg:h-[700px] bg-[#0e0e0e] border border-neutral-900 rounded-sm shadow-xl">
+                <!-- Right Column: Sticky Realtime Chat Area -->
+                <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col h-[600px] lg:h-[700px] bg-white border border-neutral-200 rounded-sm shadow-sm">
                     <!-- Chat Header -->
-                    <div class="p-4 border-b border-neutral-900 flex justify-between items-center bg-[#D4AF37] text-black">
+                    <div class="p-4 border-b border-neutral-200 flex justify-between items-center bg-[#D4AF37] text-white">
                         <div>
-                            <span class="text-[9px] tracking-widest text-neutral-800 uppercase font-mono">Live Discussion</span>
+                            <span class="text-[9px] tracking-widest text-neutral-100 uppercase font-mono">Live Discussion</span>
                             <h3 class="text-xs tracking-widest uppercase font-sport font-bold">Benzjames Lounge</h3>
                         </div>
                         <span class="flex h-2.5 w-2.5 relative">
@@ -404,14 +396,14 @@
                     </div>
 
                     <!-- Chat Input System -->
-                    <div class="p-4 border-t border-neutral-900 bg-black">
+                    <div class="p-4 border-t border-neutral-200 bg-neutral-50">
                         <div class="flex space-x-2 mb-2">
-                            <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-[#D4AF37] rounded-sm font-mono" value="Anonyme">
-                            <span class="text-xs text-neutral-500 self-center font-mono">canal d'écurie</span>
+                            <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 bg-white border border-neutral-200 text-neutral-800 outline-none focus:border-[#D4AF37] rounded-sm font-mono" value="Anonyme">
+                            <span class="text-xs text-neutral-400 self-center font-mono">canal d'écurie</span>
                         </div>
                         <div class="flex space-x-2">
-                            <input type="text" id="chat-text" placeholder="Entrez votre message..." class="flex-1 text-xs p-3 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-[#D4AF37] rounded-sm" onkeydown="if(event.key === 'Enter') sendChatMessage()">
-                            <button onclick="sendChatMessage()" class="px-5 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-white rounded-sm transition-colors">
+                            <input type="text" id="chat-text" placeholder="Entrez votre message..." class="flex-1 text-xs p-3 bg-white border border-neutral-200 text-neutral-800 outline-none focus:border-[#D4AF37] rounded-sm" onkeydown="if(event.key === 'Enter') sendChatMessage()">
+                            <button onclick="sendChatMessage()" class="px-5 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-850 rounded-sm transition-colors">
                                 <i class="fa-solid fa-paper-plane"></i>
                             </button>
                         </div>
@@ -422,33 +414,32 @@
         </div>
     </main>
 
-    <!-- PAGE 4: MARKET VALUATIONS & SECONDARY EXCHANGE (Optimized vertical stacking for easy reading on iPhone/Mac) -->
-    <main id="page-market" class="page-section hidden flex-1 bg-[#050505] p-6 md:p-12 border-t border-neutral-900">
+    <main id="page-market" class="page-section hidden flex-1 bg-[#FAFAFA] p-6 md:p-12 border-t border-neutral-200">
         <div class="max-w-4xl mx-auto space-y-12">
             <!-- Navigation Backwards -->
             <div class="flex justify-start">
-                <button onclick="navigate('home')" class="text-xs tracking-[0.3em] uppercase text-neutral-500 hover:text-[#D4AF37] transition-colors font-mono">
+                <button onclick="navigate('home')" class="text-xs tracking-[0.3em] uppercase text-neutral-400 hover:text-[#D4AF37] transition-colors font-mono">
                     <i class="fa-solid fa-arrow-left mr-2"></i> First
                 </button>
             </div>
 
             <!-- 1. Marché Secondaire Autonome / Titre & Philosophie -->
-            <div class="text-center bg-[#0e0e0e]/50 border border-neutral-900 p-8 rounded-sm">
+            <div class="text-center bg-white border border-neutral-200 p-8 rounded-sm shadow-sm">
                 <span id="p4-subtitle" onclick="handleTextClick(event, 'p4-subtitle')" class="edit-highlight text-xs tracking-[0.5em] text-[#D4AF37] uppercase block mb-2 font-mono">// MARCHÉ SECONDAIRE AUTONOME //</span>
-                <h2 id="p4-title" onclick="handleTextClick(event, 'p4-title')" class="edit-highlight text-3xl md:text-5xl font-serif text-white tracking-wide font-light">Spéculation & Authenticité</h2>
-                <p class="text-xs text-neutral-400 max-w-xl mx-auto mt-4 leading-relaxed">
+                <h2 id="p4-title" onclick="handleTextClick(event, 'p4-title')" class="edit-highlight text-3xl md:text-5xl font-serif text-neutral-900 tracking-wide font-light">Spéculation & Authenticité</h2>
+                <p class="text-xs text-neutral-500 max-w-xl mx-auto mt-4 leading-relaxed">
                     Le concept de rareté pure. Chaque pièce possède un numéro unique visible de 1/1000 à 1000/1000 et un algorithme matriciel d'authenticité cryptée garantissant son origine sur le marché secondaire.
                 </p>
                 <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mt-6"></div>
             </div>
 
-            <!-- 2. Laboratoire d'Authentification (The Authenticator Form) -->
-            <div class="p-6 md:p-8 bg-[#0e0e0e] text-white rounded-sm border border-neutral-900 shadow-xl space-y-6">
-                <div class="flex items-center space-x-3 border-b border-neutral-900 pb-4">
+            <!-- 2. Laboratoire d'Authentification -->
+            <div class="p-6 md:p-8 bg-white text-neutral-900 rounded-sm border border-neutral-200 shadow-sm space-y-6">
+                <div class="flex items-center space-x-3 border-b border-neutral-100 pb-4">
                     <i class="fa-solid fa-shield-halved text-2xl text-[#D4AF37]"></i>
-                    <h3 class="text-lg tracking-widest uppercase font-sport font-bold text-white">Laboratoire d'Authentification Matricielle</h3>
+                    <h3 class="text-lg tracking-widest uppercase font-sport font-bold text-neutral-900">Laboratoire d'Authentification Matricielle</h3>
                 </div>
-                <p class="text-xs text-neutral-400 leading-relaxed">
+                <p class="text-xs text-neutral-500 leading-relaxed">
                     Afin d'écarter toute contrefaçon de nos pièces de 1000 exemplaires, entrez la catégorie d'article, son numéro de série et la clé algorithmique secrète visible sur la carte d'écurie pour valider son origine.
                 </p>
                 
@@ -456,7 +447,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2 font-mono">Catégorie du vêtement</label>
-                        <select id="auth-category" class="w-full text-xs p-3 bg-black border border-neutral-800 rounded-sm text-white focus:outline-none focus:border-[#D4AF37] font-mono">
+                        <select id="auth-category" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 rounded-sm text-neutral-800 focus:outline-none focus:border-[#D4AF37] font-mono">
                             <option value="casquette">Casquette</option>
                             <option value="basket">Baskets</option>
                             <option value="tshirt">T-shirt</option>
@@ -467,78 +458,78 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2 font-mono">Numéro de Série (1 à 1000)</label>
-                            <input type="number" id="auth-visible-num" placeholder="Ex: 42" class="w-full text-xs p-3 bg-black border border-neutral-800 rounded-sm text-white focus:outline-none focus:border-[#D4AF37] font-mono font-bold">
+                            <input type="number" id="auth-visible-num" placeholder="Ex: 42" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 rounded-sm text-neutral-800 focus:outline-none focus:border-[#D4AF37] font-mono font-bold">
                         </div>
                         <div>
                             <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2 font-mono">Clé Secrète Authentique</label>
-                            <input type="text" id="auth-secret-num" placeholder="Ex: BJ-CAS-042-SECXXXX" class="w-full text-xs p-3 bg-black border border-neutral-800 rounded-sm text-white focus:outline-none focus:border-[#D4AF37] font-mono">
+                            <input type="text" id="auth-secret-num" placeholder="Ex: BJ-CAS-042-SECXXXX" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 rounded-sm text-neutral-800 focus:outline-none focus:border-[#D4AF37] font-mono">
                         </div>
                     </div>
                 </div>
 
                 <div class="pt-2">
-                    <button onclick="verifyProductAuthenticity()" class="w-full py-4 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-200 transition-colors">Vérifier l'authenticité</button>
+                    <button onclick="verifyProductAuthenticity()" class="w-full py-4 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">Vérifier l'authenticité</button>
                     <!-- Result Panel -->
                     <div id="auth-result" class="hidden mt-4 p-4 border border-dashed rounded-sm text-center"></div>
                 </div>
             </div>
 
-            <!-- 3. La Cote Officielle Benzjames (Variations de valeur) -->
-            <div class="p-6 md:p-8 bg-[#0e0e0e] border border-neutral-900 rounded-sm space-y-6">
-                <div class="border-b border-neutral-900 pb-4">
-                    <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-white flex items-center justify-between">
+            <!-- 3. La Cote Officielle Benzjames -->
+            <div class="p-6 md:p-8 bg-white border border-neutral-200 rounded-sm space-y-6 shadow-sm">
+                <div class="border-b border-neutral-100 pb-4">
+                    <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900 flex items-center justify-between">
                         <span>La Cote Officielle Benzjames</span>
-                        <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 font-mono tracking-widest">LIVE TRANSACTIONS</span>
+                        <span class="text-[10px] bg-emerald-500/10 text-emerald-600 px-2 py-0.5 font-mono tracking-widest">LIVE TRANSACTIONS</span>
                     </h3>
-                    <p class="text-xs text-neutral-400 mt-1">Variations de valeur constatées d'après les dernières transactions vérifiées.</p>
+                    <p class="text-xs text-neutral-500 mt-1">Variations de valeur constatées d'après les dernières transactions vérifiées.</p>
                 </div>
 
                 <!-- Market Index List -->
                 <div class="space-y-4 font-mono">
                     <!-- Item 1 -->
-                    <div class="flex justify-between items-center p-3 hover:bg-black transition-colors border-b border-neutral-900">
+                    <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
                         <div>
-                            <span class="text-xs font-bold text-white">AeroCap Nero-1 (Pièce #042/1000)</span>
-                            <span class="block text-[10px] text-neutral-500">Valeur d'origine : 420 €</span>
+                            <span class="text-xs font-bold text-neutral-900">AeroCap Nero-1 (Pièce #042/1000)</span>
+                            <span class="block text-[10px] text-neutral-400">Valeur d'origine : 420 €</span>
                         </div>
                         <div class="text-right">
-                            <span class="text-sm font-bold text-white">1 420 €</span>
-                            <span class="block text-[10px] text-emerald-400 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +238%</span>
+                            <span class="text-sm font-bold text-neutral-900">1 420 €</span>
+                            <span class="block text-[10px] text-emerald-500 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +238%</span>
                         </div>
                     </div>
                     <!-- Item 2 -->
-                    <div class="flex justify-between items-center p-3 hover:bg-black transition-colors border-b border-neutral-900">
+                    <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
                         <div>
-                            <span class="text-xs font-bold text-white">ChronoStrider Blanc (Pièce #145/1000)</span>
-                            <span class="block text-[10px] text-neutral-500">Valeur d'origine : 890 €</span>
+                            <span class="text-xs font-bold text-neutral-900">ChronoStrider Blanc (Pièce #145/1000)</span>
+                            <span class="block text-[10px] text-neutral-400">Valeur d'origine : 890 €</span>
                         </div>
                         <div class="text-right">
-                            <span class="text-sm font-bold text-white">2 100 €</span>
-                            <span class="block text-[10px] text-emerald-400 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +135%</span>
+                            <span class="text-sm font-bold text-neutral-900">2 100 €</span>
+                            <span class="block text-[10px] text-emerald-500 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +135%</span>
                         </div>
                     </div>
                     <!-- Item 3 -->
-                    <div class="flex justify-between items-center p-3 hover:bg-black transition-colors border-b border-neutral-900">
+                    <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
                         <div>
-                            <span class="text-xs font-bold text-white">ShieldPack Carbon (Pièce #777/1000)</span>
-                            <span class="block text-[10px] text-neutral-500">Valeur d'origine : 1 200 €</span>
+                            <span class="text-xs font-bold text-neutral-900">ShieldPack Carbon (Pièce #777/1000)</span>
+                            <span class="block text-[10px] text-neutral-400">Valeur d'origine : 1 200 €</span>
                         </div>
                         <div class="text-right">
-                            <span class="text-sm font-bold text-white">3 450 €</span>
-                            <span class="block text-[10px] text-emerald-400 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +187%</span>
+                            <span class="text-sm font-bold text-neutral-900">3 450 €</span>
+                            <span class="block text-[10px] text-emerald-500 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +187%</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. Enchères et Transactions Privées & Formulaire -->
-            <div class="p-6 md:p-8 bg-[#0e0e0e] border border-neutral-900 rounded-sm space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-neutral-900 pb-4 gap-4">
+            <!-- 4. Enchères et Transactions Privées -->
+            <div class="p-6 md:p-8 bg-white border border-neutral-200 rounded-sm space-y-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-neutral-100 pb-4 gap-4">
                     <div>
-                        <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-white">Enchères & Annonces en Direct</h3>
+                        <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900">Enchères & Annonces en Direct</h3>
                         <p class="text-xs text-neutral-400 mt-1">Échangez votre actif d'écurie ou suivez les enchères en cours.</p>
                     </div>
-                    <button onclick="openPostItemModal()" class="px-5 py-3 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold hover:bg-white transition-all font-sport">Mettre en vente</button>
+                    <button onclick="openPostItemModal()" class="px-5 py-3 bg-[#D4AF37] text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-950 transition-all font-sport">Mettre en vente</button>
                 </div>
 
                 <!-- Bidding Listings Stack -->
@@ -549,111 +540,108 @@
         </div>
     </main>
 
-    <!-- Footer Section -->
-    <footer class="bg-black text-neutral-500 text-xs py-8 px-6 border-t border-neutral-900 font-mono">
+    <footer class="bg-white text-neutral-400 text-xs py-8 px-6 border-t border-neutral-200 font-mono">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p>&copy; 2026 Benzjames. Tous droits réservés.</p>
-            <div class="flex space-x-6 text-neutral-500 tracking-wider">
-                <a href="#" class="hover:text-white transition-colors">Termes & Conditions</a>
+            <div class="flex space-x-6 text-neutral-400 tracking-wider">
+                <a href="#" class="hover:text-neutral-900 transition-colors">Termes & Conditions</a>
                 <a href="#" class="hover:text-[#D4AF37] transition-colors">Garantie Spécificité 1000</a>
-                <p onclick="openAbonneModal()" class="hover:text-white cursor-pointer select-none">Contact Master</p>
+                <p onclick="openAbonneModal()" class="hover:text-neutral-900 cursor-pointer select-none">Contact Master</p>
             </div>
         </div>
     </footer>
 
 </div>
 
-<!-- Modal 1 : S'identifier / Gérer les Coordonnées de l'Abonné -->
-<div id="abonne-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-[#0e0e0e] border border-neutral-800 max-w-lg w-full p-6 rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto">
-        <button onclick="closeAbonneModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-white">
+<div id="abonne-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-neutral-200 max-w-lg w-full p-6 rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <button onclick="closeAbonneModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-900">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
-        <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-[#D4AF37] border-b border-neutral-900 pb-2">Identité & Coordonnées Client</h3>
+        <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-[#D4AF37] border-b border-neutral-100 pb-2">Identité & Coordonnées Client</h3>
         
         <div class="space-y-4 text-xs">
             <div>
                 <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1 font-mono">Identifiant Client (Master: Denis007)</label>
-                <input type="text" id="user-id-input" placeholder="Ex: ClientPro42 ou Denis007" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                <input type="text" id="user-id-input" placeholder="Ex: ClientPro42 ou Denis007" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
             </div>
             <div>
                 <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1 font-mono">Pseudo Public</label>
-                <input type="text" id="user-pseudo-input" placeholder="Ex: Alex_Run" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                <input type="text" id="user-pseudo-input" placeholder="Ex: Alex_Run" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
             </div>
 
-            <div class="border-t border-neutral-900 pt-4">
+            <div class="border-t border-neutral-100 pt-4">
                 <h4 class="text-xs uppercase font-bold tracking-widest text-[#D4AF37] mb-3 font-mono">// Coordonnées de Livraison</h4>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Nom complet</label>
-                        <input type="text" id="user-fullname" placeholder="Jean Dupont" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                        <input type="text" id="user-fullname" placeholder="Jean Dupont" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
                     </div>
                     <div>
                         <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Téléphone</label>
-                        <input type="text" id="user-phone" placeholder="06 12 34 56 78" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                        <input type="text" id="user-phone" placeholder="06 12 34 56 78" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
                     </div>
                 </div>
                 <div class="mt-2">
                     <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Adresse de livraison</label>
-                    <input type="text" id="user-address" placeholder="Rue, Code Postal, Ville, Pays" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                    <input type="text" id="user-address" placeholder="Rue, Code Postal, Ville, Pays" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
                 </div>
             </div>
 
-            <div class="border-t border-neutral-900 pt-4 pb-2">
+            <div class="border-t border-neutral-100 pt-4 pb-2">
                 <h4 class="text-xs uppercase font-bold tracking-widest text-[#D4AF37] mb-3 font-mono">// Données Bancaires (Sécurisé Stripe)</h4>
                 <div>
                     <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Numéro de carte</label>
-                    <input type="text" id="user-cardnum" placeholder="4242 4242 4242 4242" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                    <input type="text" id="user-cardnum" placeholder="4242 4242 4242 4242" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
                 </div>
                 <div class="grid grid-cols-2 gap-2 mt-2">
                     <div>
                         <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Date d'expiration</label>
-                        <input type="text" id="user-cardexpiry" placeholder="MM/AA" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm text-center">
+                        <input type="text" id="user-cardexpiry" placeholder="MM/AA" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm text-center">
                     </div>
                     <div>
                         <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Code CVV</label>
-                        <input type="text" id="user-cardcvv" placeholder="123" class="w-full p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm text-center">
+                        <input type="text" id="user-cardcvv" placeholder="123" class="w-full p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm text-center">
                     </div>
                 </div>
             </div>
 
-            <button onclick="saveAbonneIdentity()" class="w-full py-4 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-white transition-colors">Enregistrer le profil</button>
-            <p id="abonne-info-banner" class="hidden text-center text-xs font-bold text-emerald-400 mt-2 bg-emerald-500/10 py-1.5 rounded-sm"><i class="fa-solid fa-circle-check"></i> Profil sauvegardé avec succès !</p>
+            <button onclick="saveAbonneIdentity()" class="w-full py-4 bg-[#D4AF37] text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-900 transition-colors">Enregistrer le profil</button>
+            <p id="abonne-info-banner" class="hidden text-center text-xs font-bold text-emerald-600 mt-2 bg-emerald-50 py-1.5 rounded-sm"><i class="fa-solid fa-circle-check"></i> Profil sauvegardé avec succès !</p>
         </div>
     </div>
 </div>
 
-<!-- Modal 2 : Panneau de Configuration Master (Text / Video Configurator Interface) -->
-<div id="master-config-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-[#0e0e0e] border border-neutral-800 max-w-2xl w-full p-6 rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto">
-        <button onclick="closeMasterModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-white">
+<div id="master-config-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-neutral-200 max-w-2xl w-full p-6 rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto text-neutral-900">
+        <button onclick="closeMasterModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-900">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
-        <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-[#D4AF37] border-b border-neutral-900 pb-2 flex justify-between items-center">
+        <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-[#D4AF37] border-b border-neutral-200 pb-2 flex justify-between items-center">
             <span>Panneau Configuration Master</span>
-            <span class="text-[10px] tracking-widest text-emerald-400 font-bold animate-pulse"><i class="fa-solid fa-circle"></i> Connecté</span>
+            <span class="text-[10px] tracking-widest text-emerald-600 font-bold animate-pulse"><i class="fa-solid fa-circle"></i> Connecté</span>
         </h3>
 
-        <!-- Navigation interne -->
-        <div class="flex space-x-2 border-b border-neutral-900 pb-3 mb-4 overflow-x-auto scrollbar-none font-mono">
+        <!-- Internal Tabs -->
+        <div class="flex space-x-2 border-b border-neutral-200 pb-3 mb-4 overflow-x-auto scrollbar-none font-mono">
             <button onclick="switchMasterSection('intro')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold border-b-2 border-[#D4AF37] text-[#D4AF37]" id="m-tab-intro">Intro (P0)</button>
-            <button onclick="switchMasterSection('page1')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-500" id="m-tab-page1">Page 1</button>
-            <button onclick="switchMasterSection('page2')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-500" id="m-tab-page2">Page 2</button>
-            <button onclick="switchMasterSection('page3')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-500" id="m-tab-page3">Page 3</button>
-            <button onclick="switchMasterSection('page4')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-500" id="m-tab-page4">Page 4</button>
+            <button onclick="switchMasterSection('page1')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-400" id="m-tab-page1">Page 1</button>
+            <button onclick="switchMasterSection('page2')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-400" id="m-tab-page2">Page 2</button>
+            <button onclick="switchMasterSection('page3')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-400" id="m-tab-page3">Page 3</button>
+            <button onclick="switchMasterSection('page4')" class="master-tab-btn px-3 py-1.5 text-[10px] tracking-widest uppercase font-bold text-neutral-400" id="m-tab-page4">Page 4</button>
         </div>
 
         <!-- Section Intro Config -->
         <div id="m-sec-intro" class="master-panel-section space-y-4 text-xs">
-            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-900 pb-1 font-mono">// PAGE INTRO (P0)</h4>
+            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-150 pb-1 font-mono">// PAGE INTRO (P0)</h4>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Titre Principal</label>
-                <input type="text" id="cfg-intro-title" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="Benzjames">
+                <input type="text" id="cfg-intro-title" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="Benzjames">
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <div>
                     <label class="block text-[10px] text-neutral-400 font-mono">Police</label>
-                    <select id="cfg-intro-title-font" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white">
+                    <select id="cfg-intro-title-font" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
                         <option value="font-sport">Sport (Oswald)</option>
                         <option value="font-armani">Armani (Montserrat)</option>
                         <option value="font-serif">Serif (Playfair)</option>
@@ -661,56 +649,48 @@
                 </div>
                 <div>
                     <label class="block text-[10px] text-neutral-400 font-mono">Couleur du Titre</label>
-                    <input type="color" id="cfg-intro-title-color" class="w-full h-9 bg-black border border-neutral-800 rounded-sm" value="#ffffff">
+                    <input type="color" id="cfg-intro-title-color" class="w-full h-9 bg-neutral-50 border border-neutral-200 rounded-sm" value="#ffffff">
                 </div>
             </div>
-            <div class="pt-2 border-t border-neutral-900">
+            <div class="pt-2 border-t border-neutral-200">
                 <label class="block text-[10px] text-neutral-400 font-mono">Sous-Titre / Slogan</label>
-                <input type="text" id="cfg-intro-desc" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="Automotive & Fashion Innovation">
-            </div>
-            
-            <!-- Direct Intro Background Media configuration -->
-            <div class="pt-2 border-t border-neutral-900 space-y-2">
-                <label class="block text-[10px] text-neutral-400 font-mono">Option : Télécharger un fichier vidéo local d'Intro</label>
-                <input type="file" id="intro-video-file-picker" accept="video/*" class="w-full text-xs text-neutral-400 bg-black border border-neutral-800 p-2" onchange="handleIntroVideoSelect(event)">
-                <p class="text-[9px] text-neutral-500">Ou collez une URL de vidéo en ligne (MP4) :</p>
-                <input type="text" id="cfg-intro-video-url" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4">
+                <input type="text" id="cfg-intro-desc" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="Automotive & Fashion Innovation">
             </div>
         </div>
 
         <!-- Section Page 1 Config -->
         <div id="m-sec-page1" class="master-panel-section hidden space-y-4 text-xs">
-            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-900 pb-1 font-mono">// PAGE 1 (First)</h4>
+            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-200 pb-1 font-mono">// PAGE 1 (First)</h4>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Option : Télécharger un fichier vidéo local d'Accueil (Page 1)</label>
-                <input type="file" id="hero-video-file-picker" accept="video/*" class="w-full text-xs text-neutral-400 bg-black border border-neutral-800 p-2" onchange="handleHeroVideoSelect(event)">
-                <p class="text-[9px] text-neutral-500 mt-1">Ou collez une URL directe de vidéo en ligne (MP4) :</p>
-                <input type="text" id="cfg-p1-video-url" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4">
+                <input type="file" id="hero-video-file-picker" accept="video/*" class="w-full text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 p-2" onchange="handleHeroVideoSelect(event)">
+                <p class="text-[9px] text-neutral-400 mt-1">Ou collez une URL directe de vidéo en ligne (MP4) :</p>
+                <input type="text" id="cfg-p1-video-url" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4">
             </div>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Titre de la Collection</label>
-                <input type="text" id="cfg-p1-title" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="L'Édition Unique.">
+                <input type="text" id="cfg-p1-title" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="L'Édition Unique.">
             </div>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Description principale</label>
-                <textarea id="cfg-p1-desc" rows="3" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white">Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.</textarea>
+                <textarea id="cfg-p1-desc" rows="3" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.</textarea>
             </div>
         </div>
 
         <!-- Section Page 2 Config -->
         <div id="m-sec-page2" class="master-panel-section hidden space-y-4 text-xs">
-            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-900 pb-1 font-mono">// SHOWROOM</h4>
+            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-200 pb-1 font-mono">// SHOWROOM</h4>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Titre du Showroom</label>
-                <input type="text" id="cfg-p2-title" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="Le Vestiaire Limité">
+                <input type="text" id="cfg-p2-title" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="Le Vestiaire Limité">
             </div>
 
-            <!-- Ajouter un nouvel article exclusif au catalogue -->
-            <div class="pt-4 border-t border-neutral-900">
+            <!-- Add new exclusive item -->
+            <div class="pt-4 border-t border-neutral-200">
                 <h5 class="text-xs font-bold uppercase text-[#D4AF37] mb-2 font-mono">// AJOUTER UN NOUVEL ARTICLE</h5>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="new-item-name" placeholder="Nom de l'article" class="text-xs p-2 bg-black border border-neutral-800 text-white">
-                    <select id="new-item-cat" class="text-xs p-2 bg-black border border-neutral-800 text-neutral-300">
+                    <input type="text" id="new-item-name" placeholder="Nom de l'article" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
+                    <select id="new-item-cat" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-600">
                         <option value="casquette">Casquette</option>
                         <option value="basket">Baskets</option>
                         <option value="tshirt">T-shirt</option>
@@ -720,89 +700,87 @@
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-2 mt-2">
-                    <input type="number" id="new-item-price" placeholder="Prix initial (€)" class="text-xs p-2 bg-black border border-neutral-800 text-white">
-                    <input type="number" id="new-item-visible" placeholder="N° Pièce (1-1000)" class="text-xs p-2 bg-black border border-neutral-800 text-white" min="1" max="1000">
+                    <input type="number" id="new-item-price" placeholder="Prix initial (€)" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
+                    <input type="number" id="new-item-visible" placeholder="N° Pièce (1-1000)" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" min="1" max="1000">
                 </div>
                 <div class="grid grid-cols-1 gap-2 mt-2">
-                    <input type="text" id="new-item-img" placeholder="Image URL (Unsplash / LoremFlickr)" class="text-xs p-2 bg-black border border-neutral-800 text-white">
-                    <input type="text" id="new-item-comment" placeholder="Description courte produit" class="text-xs p-2 bg-black border border-neutral-800 text-white">
+                    <input type="text" id="new-item-img" placeholder="Image URL" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
+                    <input type="text" id="new-item-comment" placeholder="Description courte produit" class="text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850">
                 </div>
             </div>
         </div>
 
         <!-- Section Page 3 Config -->
         <div id="m-sec-page3" class="master-panel-section hidden space-y-4 text-xs">
-            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-900 pb-1 font-mono">// TCHAT & COMMUNAUTÉ</h4>
+            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-200 pb-1 font-mono">// TCHAT & COMMUNAUTÉ</h4>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Titre Communauté</label>
-                <input type="text" id="cfg-p3-title" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="Vidéos Passion de nos Membres">
+                <input type="text" id="cfg-p3-title" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="Vidéos Passion de nos Membres">
             </div>
         </div>
 
         <!-- Section Page 4 Config -->
         <div id="m-sec-page4" class="master-panel-section hidden space-y-4 text-xs">
-            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-900 pb-1 font-mono">// SPÉCULATION & MARCHE</h4>
+            <h4 class="text-xs uppercase font-bold text-[#D4AF37] border-b border-neutral-200 pb-1 font-mono">// SPÉCULATION & MARCHE</h4>
             <div>
                 <label class="block text-[10px] text-neutral-400 font-mono">Titre Principal Marché</label>
-                <input type="text" id="cfg-p4-title" class="w-full text-xs p-2 bg-black border border-neutral-800 text-white" value="Spéculation & Authenticité">
+                <input type="text" id="cfg-p4-title" class="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-850" value="Spéculation & Authenticité">
             </div>
         </div>
 
         <!-- Action boutons configuration Master -->
-        <div class="mt-8 pt-4 border-t border-neutral-900 flex space-x-2 font-mono">
-            <button onclick="saveAllMasterChanges()" class="flex-grow py-3 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold hover:bg-white transition-all rounded-sm">Déployer les modifications</button>
-            <button onclick="closeMasterModal()" class="px-6 py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-800 transition-all rounded-sm">Fermer</button>
+        <div class="mt-8 pt-4 border-t border-neutral-200 flex space-x-2 font-mono">
+            <button onclick="saveAllMasterChanges()" class="flex-grow py-3 bg-[#D4AF37] text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-900 transition-all rounded-sm">Déployer les modifications</button>
+            <button onclick="closeMasterModal()" class="px-6 py-3 bg-neutral-100 text-neutral-800 text-xs uppercase tracking-widest font-bold hover:bg-neutral-200 transition-all rounded-sm">Fermer</button>
         </div>
     </div>
 </div>
 
-<!-- Modal 3 : Moyen de paiement Premium (Simulé) -->
-<div id="payment-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-neutral-950 border border-neutral-800 text-white max-w-md w-full p-6 rounded-sm shadow-2xl relative">
-        <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-white">
+<div id="payment-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-neutral-200 text-neutral-900 max-w-md w-full p-6 rounded-sm shadow-2xl relative">
+        <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-950">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
         <div class="text-center mb-6">
-            <i class="fa-solid fa-circle-check text-4xl text-emerald-400 mb-2"></i>
-            <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-white">Validation Commande</h3>
-            <p class="text-[10px] text-neutral-400 mt-1 uppercase font-mono">Achat sécurisé d'un actif unique Benzjames</p>
+            <i class="fa-solid fa-circle-check text-4xl text-[#D4AF37] mb-2 animate-pulse"></i>
+            <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900">Validation Commande</h3>
+            <p class="text-[10px] text-neutral-500 mt-1 uppercase font-mono">Achat sécurisé d'un actif unique Benzjames</p>
         </div>
 
-        <div id="payment-summary" class="bg-neutral-900 p-4 rounded-sm border border-neutral-800 mb-6 text-xs space-y-2">
+        <div id="payment-summary" class="bg-neutral-50 p-4 rounded-sm border border-neutral-200 mb-6 text-xs space-y-2">
             <!-- Dynamic inject -->
         </div>
 
-        <h4 class="text-xs uppercase tracking-widest font-bold text-neutral-400 mb-4 font-mono">// MODE DE PAIEMENT</h4>
+        <h4 class="text-xs uppercase tracking-widest font-bold text-neutral-500 mb-4 font-mono">// MODE DE PAIEMENT</h4>
         <div class="space-y-3 font-mono">
             <!-- Option 1: Apple Pay -->
-            <button onclick="processFinalPayment('Apple Pay')" class="w-full p-4 bg-white text-black font-semibold rounded-md flex justify-between items-center hover:bg-neutral-100 transition-colors">
+            <button onclick="processFinalPayment('Apple Pay')" class="w-full p-4 bg-neutral-900 text-white font-semibold rounded-md flex justify-between items-center hover:bg-neutral-800 transition-colors">
                 <span class="text-sm font-sport"><i class="fa-brands fa-apple text-lg align-middle mr-2"></i>Pay</span>
                 <span class="text-xs font-bold uppercase tracking-widest">Achat 1-clic</span>
             </button>
             
             <!-- Option 2: CB enregistrée -->
-            <button id="saved-card-btn" onclick="processFinalPayment('Carte Bancaire')" class="w-full p-4 bg-neutral-900 border border-neutral-800 text-white rounded-md flex justify-between items-center hover:bg-neutral-800 transition-colors">
+            <button id="saved-card-btn" onclick="processFinalPayment('Carte Bancaire')" class="w-full p-4 bg-neutral-50 border border-neutral-200 text-neutral-800 rounded-md flex justify-between items-center hover:bg-neutral-100 transition-colors">
                 <span class="text-xs font-bold uppercase tracking-widest"><i class="fa-regular fa-credit-card mr-2"></i>Carte Bancaire enregistrée</span>
-                <span id="saved-card-digits" class="text-xs text-neutral-400 font-mono">**** ****</span>
+                <span id="saved-card-digits" class="text-xs text-neutral-500 font-mono">**** ****</span>
             </button>
             
             <!-- Option 3: Virement direct -->
-            <button onclick="processFinalPayment('Virement Bancaire instantané')" class="w-full p-4 bg-neutral-900 border border-neutral-800 text-neutral-300 rounded-md flex justify-between items-center hover:bg-neutral-800 transition-colors">
+            <button onclick="processFinalPayment('Virement Bancaire instantané')" class="w-full p-4 bg-neutral-50 border border-neutral-200 text-neutral-700 rounded-md flex justify-between items-center hover:bg-neutral-100 transition-colors">
                 <span class="text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-building-columns mr-2"></i>Virement SEPA instantané</span>
                 <span class="text-[9px] text-neutral-500 uppercase font-semibold">France / Europe</span>
             </button>
         </div>
 
         <div class="mt-6 text-center">
-            <p class="text-[9px] text-neutral-500 uppercase tracking-widest">En confirmant, vous acceptez le contrat d'exclusivité 1/1000.</p>
+            <p class="text-[9px] text-neutral-400 uppercase tracking-widest">En confirmant, vous acceptez le contrat d'exclusivité 1/1000.</p>
         </div>
     </div>
 </div>
 
-<!-- Modal 4 : Vendre un article aux enchères -->
 <div id="post-item-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 font-mono">
-    <div class="bg-neutral-950 border border-neutral-800 max-w-md w-full p-6 rounded-sm shadow-2xl relative">
-        <button onclick="closePostItemModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-white">
+    <div class="bg-white border border-neutral-200 max-w-md w-full p-6 rounded-sm shadow-2xl relative text-neutral-900">
+        <button onclick="closePostItemModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-900">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
         <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-[#D4AF37]">Mettre un article aux enchères</h3>
@@ -810,50 +788,50 @@
         <div class="space-y-4 text-xs">
             <div>
                 <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Nom de la pièce</label>
-                <input type="text" id="auction-item-name" placeholder="Ex: AeroCap Nero" class="w-full text-xs p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                <input type="text" id="auction-item-name" placeholder="Ex: AeroCap Nero" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Numéro (X / 1000)</label>
-                    <input type="number" id="auction-item-num" placeholder="Ex: 145" class="w-full text-xs p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                    <input type="number" id="auction-item-num" placeholder="Ex: 145" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Prix de départ (€)</label>
-                    <input type="number" id="auction-item-price" placeholder="Ex: 500" class="w-full text-xs p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm">
+                    <input type="number" id="auction-item-price" placeholder="Ex: 500" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm">
                 </div>
             </div>
             <div>
                 <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Image URL</label>
-                <input type="text" id="auction-item-img" placeholder="URL de l'image de votre produit" class="w-full text-xs p-3 bg-black border border-neutral-800 text-white focus:outline-none focus:border-[#D4AF37] rounded-sm" value="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=600">
+                <input type="text" id="auction-item-img" placeholder="URL de l'image de votre produit" class="w-full text-xs p-3 bg-neutral-50 border border-neutral-200 text-neutral-800 focus:outline-none focus:border-[#D4AF37] rounded-sm" value="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=600">
             </div>
-            <button onclick="createAuction()" class="w-full py-4 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-white transition-colors">Lancer l'enchère</button>
+            <button onclick="createAuction()" class="w-full py-4 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">Lancer l'enchère</button>
         </div>
     </div>
 </div>
 
-<!-- Modal 5 : Notification de paiement réussi -->
-<div id="success-payment-banner" class="hidden fixed bottom-6 right-6 bg-[#050505] border border-emerald-500 text-white max-w-sm p-4 rounded-sm shadow-2xl z-50 flex items-center space-x-3">
-    <i class="fa-solid fa-circle-check text-2xl text-emerald-400 animate-bounce"></i>
+<!-- Success Banner -->
+<div id="success-payment-banner" class="hidden fixed bottom-6 right-6 bg-white border border-emerald-500 text-neutral-900 max-w-sm p-4 rounded-sm shadow-2xl z-50 flex items-center space-x-3">
+    <i class="fa-solid fa-circle-check text-2xl text-emerald-500 animate-bounce"></i>
     <div>
-        <p class="text-xs font-bold uppercase tracking-widest text-emerald-400">Paiement validé avec succès</p>
-        <p class="text-[10px] text-neutral-400">Votre actif est désormais réservé et en cours de préparation de livraison.</p>
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600">Paiement validé avec succès</p>
+        <p class="text-[10px] text-neutral-500">Votre actif est désormais réservé et en cours de préparation de livraison.</p>
     </div>
 </div>
 
-<!-- DYNAMIC GENERIC TEXT EDITING MODAL (Direct Master text configuration tool) -->
+<!-- Dynamic generic text editing modal -->
 <div id="modal-text-edit" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-[#0e0e0e] border border-neutral-800 p-6 rounded-sm w-full max-w-lg space-y-6">
-        <div class="font-mono">
+    <div class="bg-white border border-neutral-200 p-6 rounded-sm w-full max-w-lg space-y-6">
+        <div class="font-mono text-neutral-900">
             <span class="text-xs text-[#D4AF37] uppercase tracking-widest">// ÉDITEUR DIRECT MASTER</span>
-            <h3 class="text-lg font-bold text-white mt-1 uppercase" id="text-edit-title-h3">Modifier le texte sélectionné</h3>
+            <h3 class="text-lg font-bold text-neutral-900 mt-1 uppercase" id="text-edit-title-h3">Modifier le texte sélectionné</h3>
         </div>
         <input type="hidden" id="edit-target-id">
         <div class="font-mono text-xs">
-            <textarea id="edit-text-value" rows="4" class="w-full bg-black border border-neutral-800 rounded px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37] text-sm leading-relaxed"></textarea>
+            <textarea id="edit-text-value" rows="4" class="w-full bg-neutral-50 border border-neutral-200 rounded px-4 py-3 text-neutral-800 focus:outline-none focus:border-[#D4AF37] text-sm leading-relaxed"></textarea>
         </div>
         <div class="flex gap-3 pt-2 font-mono">
-            <button onclick="closeTextEditModal()" class="w-1/2 border border-neutral-800 text-white py-3 rounded text-xs uppercase tracking-widest font-bold">Annuler</button>
-            <button onclick="saveTextEdit()" class="w-1/2 bg-[#D4AF37] text-black py-3 rounded text-xs uppercase tracking-widest font-bold">Appliquer</button>
+            <button onclick="closeTextEditModal()" class="w-1/2 border border-neutral-200 text-neutral-700 py-3 rounded text-xs uppercase tracking-widest font-bold">Annuler</button>
+            <button onclick="saveTextEdit()" class="w-1/2 bg-[#D4AF37] text-white py-3 rounded text-xs uppercase tracking-widest font-bold">Appliquer</button>
         </div>
     </div>
 </div>
@@ -862,35 +840,33 @@
     // State of App
     const state = {
         currentPage: 'home',
-        // Global style parameters & customizable variables
         styleConfig: {
             intro: {
                 title: "Benzjames",
                 titleFont: "font-sport",
                 titleColor: "#ffffff",
                 desc: "Automotive & Fashion Innovation",
-                descColor: "#a3a3a3",
-                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-laser-beam-scanning-a-dark-room-42827-large.mp4"
+                descColor: "#a3a3a3"
             },
             page1: {
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4",
                 title: "L'Édition Unique.",
                 titleFont: "font-sport",
-                titleColor: "#ffffff",
+                titleColor: "#050505",
                 desc: "Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.",
-                descColor: "#d4d4d4"
+                descColor: "#707070"
             },
             page2: {
                 title: "Le Vestiaire Limité",
-                titleColor: "#ffffff"
+                titleColor: "#050505"
             },
             page3: {
                 title: "Vidéos Passion de nos Membres",
-                titleColor: "#ffffff"
+                titleColor: "#050505"
             },
             page4: {
                 title: "Spéculation & Authenticité",
-                titleColor: "#ffffff"
+                titleColor: "#050505"
             }
         },
         user: {
@@ -1017,7 +993,6 @@
         activeOrderProduct: null 
     };
 
-    // Helper function for authenticating items
     function generateFakeSecret(category, num) {
         const catCode = category.substring(0, 3).toUpperCase();
         const paddedNum = String(num).padStart(3, '0');
@@ -1059,24 +1034,24 @@
 
         // Active state styles for tabs
         document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.classList.remove('text-[#D4AF37]', 'border-b', 'border-[#D4AF37]');
-            tab.classList.add('text-neutral-400');
+            tab.classList.remove('text-[#D4AF37]', 'border-b', 'border-[#D4AF37]', 'text-neutral-950');
+            tab.classList.add('text-neutral-500');
         });
         document.querySelectorAll('.mobile-nav-tab').forEach(tab => {
-            tab.classList.remove('text-white', 'border-[#D4AF37]');
-            tab.classList.add('text-neutral-400', 'border-transparent');
+            tab.classList.remove('text-neutral-950', 'border-[#D4AF37]');
+            tab.classList.add('text-neutral-500', 'border-transparent');
         });
 
         // Highlight selected nav
         const activeNav = document.getElementById(`nav-${pageId}`);
         if (activeNav) {
-            activeNav.classList.add('text-white', 'border-b', 'border-[#D4AF37]');
-            activeNav.classList.remove('text-neutral-400');
+            activeNav.classList.add('text-neutral-950', 'border-b', 'border-[#D4AF37]');
+            activeNav.classList.remove('text-neutral-500');
         }
         const activeMobileNav = document.getElementById(`m-nav-${pageId}`);
         if (activeMobileNav) {
-            activeMobileNav.classList.add('text-white', 'border-[#D4AF37]');
-            activeMobileNav.classList.remove('text-neutral-400', 'border-transparent');
+            activeMobileNav.classList.add('text-neutral-950', 'border-[#D4AF37]');
+            activeMobileNav.classList.remove('text-neutral-500', 'border-transparent');
         }
 
         // Specific actions per page
@@ -1092,7 +1067,6 @@
 </script>
 
 <script>
-    // Appliquer les paramètres dynamiques configurés par le Master
     function applyDynamicStyles() {
         // --- PAGE INTRO (P0) ---
         const introTitle = document.getElementById('intro-main-title');
@@ -1100,19 +1074,10 @@
         if (introTitle && introDesc) {
             introTitle.innerText = state.styleConfig.intro.title;
             introTitle.style.color = state.styleConfig.intro.titleColor;
-            introTitle.className = `edit-highlight text-6xl md:text-9xl font-sport font-black tracking-tighter uppercase italic scale-y-75 leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] ${state.styleConfig.intro.titleFont}`;
+            introTitle.className = `edit-highlight text-6xl md:text-9xl font-sport font-black tracking-tighter uppercase italic scale-y-75 leading-none drop-shadow-[0_0_25px_rgba(255,255,255,0.3)] ${state.styleConfig.intro.titleFont}`;
 
             introDesc.innerText = state.styleConfig.intro.desc;
             introDesc.style.color = state.styleConfig.intro.descColor;
-        }
-
-        const introVideo = document.getElementById('intro-video-player');
-        if (introVideo && state.styleConfig.intro.videoUrl) {
-            if (introVideo.src !== state.styleConfig.intro.videoUrl) {
-                introVideo.src = state.styleConfig.intro.videoUrl;
-                introVideo.load();
-                introVideo.play().catch(e => console.warn(e));
-            }
         }
 
         // --- PAGE 1 (First) ---
@@ -1158,13 +1123,11 @@
         }
     }
 
-    // Charger les inputs du panneau d'administration
     function loadAdminInputs() {
         document.getElementById('cfg-intro-title').value = state.styleConfig.intro.title;
         document.getElementById('cfg-intro-title-font').value = state.styleConfig.intro.titleFont;
         document.getElementById('cfg-intro-title-color').value = state.styleConfig.intro.titleColor;
         document.getElementById('cfg-intro-desc').value = state.styleConfig.intro.desc;
-        document.getElementById('cfg-intro-video-url').value = state.styleConfig.intro.videoUrl;
 
         document.getElementById('cfg-p1-video-url').value = state.styleConfig.page1.videoUrl;
         document.getElementById('cfg-p1-title').value = state.styleConfig.page1.title;
@@ -1185,7 +1148,6 @@
         state.styleConfig.intro.titleFont = document.getElementById('cfg-intro-title-font').value;
         state.styleConfig.intro.titleColor = document.getElementById('cfg-intro-title-color').value;
         state.styleConfig.intro.desc = document.getElementById('cfg-intro-desc').value;
-        state.styleConfig.intro.videoUrl = document.getElementById('cfg-intro-video-url').value;
 
         // Page 1 Config
         state.styleConfig.page1.videoUrl = document.getElementById('cfg-p1-video-url').value;
@@ -1216,7 +1178,7 @@
                 price: itemPrice,
                 rating: 5.0,
                 comment: itemComment || 'Série exclusive validée par le Master.',
-                image: itemImg || `https://placehold.co/400x500/111111/D4AF37?text=${itemName}`,
+                image: itemImg || `https://placehold.co/400x500/F9F9F9/D4AF37?text=${itemName}`,
                 numberInSeries: itemNum,
                 privateSerial: secret
             };
@@ -1239,32 +1201,12 @@
 </script>
 
 <script>
-    // Local Video upload handlers for Direct Configuration
-    function handleIntroVideoSelect(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const fileUrl = URL.createObjectURL(file);
-            document.getElementById('cfg-intro-video-url').value = fileUrl;
-            applyIntroVideoChange(fileUrl);
-        }
-    }
-
     function handleHeroVideoSelect(event) {
         const file = event.target.files[0];
         if (file) {
             const fileUrl = URL.createObjectURL(file);
             document.getElementById('cfg-p1-video-url').value = fileUrl;
             applyHeroVideoChange(fileUrl);
-        }
-    }
-
-    function applyIntroVideoChange(url) {
-        state.styleConfig.intro.videoUrl = url;
-        const introVideo = document.getElementById('intro-video-player');
-        if (introVideo) {
-            introVideo.src = url;
-            introVideo.load();
-            introVideo.play().catch(e => console.warn(e));
         }
     }
 
@@ -1277,10 +1219,7 @@
             heroVideo.play().catch(e => console.warn(e));
         }
     }
-</script>
 
-<script>
-    // Direct configuration click listeners
     function handleTextClick(event, targetId) {
         if (!state.user.isMaster) return;
         event.stopPropagation();
@@ -1295,16 +1234,7 @@
         editModal.classList.remove('hidden');
     }
 
-    function handleIntroMediaClick(event) {
-        // Triggered by clicking intro background screen
-        if (!state.user.isMaster) return;
-        event.stopPropagation();
-        openMasterModal();
-        switchMasterSection('intro');
-    }
-
     function handleHeroMediaClick(event) {
-        // Triggered by clicking Page 1 hero video screen
         if (!state.user.isMaster) return;
         event.stopPropagation();
         openMasterModal();
@@ -1323,7 +1253,6 @@
         if (targetEl && newVal) {
             targetEl.innerText = newVal;
             
-            // Sync state style configurations
             if (targetId === 'intro-main-title') state.styleConfig.intro.title = newVal;
             if (targetId === 'intro-desc-label') state.styleConfig.intro.desc = newVal;
             if (targetId === 'p1-title') state.styleConfig.page1.title = newVal;
@@ -1339,7 +1268,6 @@
 </script>
 
 <script>
-    // Account Modal Functions
     function openAbonneModal() {
         document.getElementById('user-id-input').value = state.user.identifier;
         document.getElementById('user-pseudo-input').value = state.user.pseudo;
@@ -1369,9 +1297,8 @@
         const cardcvvVal = document.getElementById('user-cardcvv').value.trim();
 
         if (!idVal || !pseudoVal) {
-            // Replaced default alert with visual banner
             const errorBanner = document.getElementById('abonne-info-banner');
-            errorBanner.className = "text-center text-xs font-bold text-red-400 mt-2 bg-red-950/20 py-1.5 rounded-sm";
+            errorBanner.className = "text-center text-xs font-bold text-red-600 mt-2 bg-red-50 py-1.5 rounded-sm";
             errorBanner.innerText = "L'identifiant et le pseudo sont obligatoires.";
             errorBanner.classList.remove('hidden');
             return;
@@ -1387,15 +1314,13 @@
         state.user.cardcvv = cardcvvVal;
         state.user.loggedIn = true;
 
-        // Exclusive Master identifier
         if (idVal === "Denis007") {
             state.user.isMaster = true;
             document.body.classList.add('master-active');
-            document.getElementById('user-status-dot').className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+            document.getElementById('user-status-dot').className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
             document.getElementById('user-status-label').innerText = "Master " + pseudoVal;
             document.getElementById('master-banner').classList.remove('hidden');
             
-            // Show master options directly
             const masterOpts = document.querySelectorAll('.master-only');
             masterOpts.forEach(o => o.classList.remove('hidden'));
             
@@ -1407,7 +1332,7 @@
         } else {
             state.user.isMaster = false;
             document.body.classList.remove('master-active');
-            document.getElementById('user-status-dot').className = "w-2.5 h-2.5 rounded-full bg-blue-500";
+            document.getElementById('user-status-dot').className = "w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse";
             document.getElementById('user-status-label').innerText = pseudoVal;
             document.getElementById('master-banner').classList.add('hidden');
             
@@ -1415,7 +1340,7 @@
             masterOpts.forEach(o => o.classList.add('hidden'));
 
             playSuccessSound();
-            document.getElementById('abonne-info-banner').className = "text-center text-xs font-bold text-emerald-400 mt-2 bg-emerald-950/20 py-1.5 rounded-sm";
+            document.getElementById('abonne-info-banner').className = "text-center text-xs font-bold text-emerald-600 mt-2 bg-emerald-50 py-1.5 rounded-sm";
             document.getElementById('abonne-info-banner').innerText = "Profil enregistré avec succès !";
             document.getElementById('abonne-info-banner').classList.remove('hidden');
             setTimeout(() => {
@@ -1454,7 +1379,7 @@
         document.querySelectorAll('.master-panel-section').forEach(sec => sec.classList.add('hidden'));
         document.querySelectorAll('.master-tab-btn').forEach(btn => {
             btn.classList.remove('border-[#D4AF37]', 'text-[#D4AF37]');
-            btn.classList.add('text-neutral-500');
+            btn.classList.add('text-neutral-400');
         });
 
         document.getElementById(`m-sec-${sectionId}`).classList.remove('hidden');
@@ -1463,7 +1388,6 @@
 </script>
 
 <script>
-    // Showroom Dynamic Renderer
     function renderShowroom() {
         const container = document.getElementById('showroom-container');
         if (!container) return;
@@ -1478,26 +1402,25 @@
             const ratingStars = '<i class="fa-solid fa-star text-[#D4AF37]"></i> '.repeat(Math.floor(p.rating)) + 
                 (p.rating % 1 !== 0 ? '<i class="fa-solid fa-star-half-stroke text-[#D4AF37]"></i>' : '');
 
-            // Interactive hover overlays
             let overlayHtml = '';
             if (!state.user.loggedIn || !state.user.cardnum || !state.user.address) {
                 overlayHtml = `
-                    <div class="overlay absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col justify-center items-center p-6 text-center text-white z-20">
-                        <i class="fa-solid fa-lock text-2xl text-amber-500 mb-2"></i>
+                    <div class="overlay absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col justify-center items-center p-6 text-center text-neutral-900 z-20">
+                        <i class="fa-solid fa-lock text-2xl text-amber-500 mb-2 animate-bounce"></i>
                         <h4 class="text-xs uppercase tracking-widest font-bold mb-2">Identification requise</h4>
-                        <p class="text-[9px] text-neutral-400 uppercase tracking-widest mb-4 font-mono">Enregistrer vos coordonnées de livraison et de carte pour déverrouiller la commande</p>
-                        <button onclick="openAbonneModal()" class="px-6 py-2.5 bg-white text-black font-sport font-bold text-xs uppercase tracking-widest hover:bg-neutral-200 transition-colors rounded-sm">
+                        <p class="text-[9px] text-neutral-500 uppercase tracking-widest mb-4 font-mono">Enregistrer vos coordonnées de livraison et de carte pour déverrouiller la commande</p>
+                        <button onclick="openAbonneModal()" class="px-6 py-2.5 bg-neutral-900 text-white font-sport font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors rounded-sm">
                             S'identifier
                         </button>
                     </div>
                 `;
             } else {
                 overlayHtml = `
-                    <div class="overlay absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col justify-center items-center p-6 text-center text-white z-20">
-                        <i class="fa-solid fa-cart-shopping text-2xl text-emerald-400 mb-2"></i>
+                    <div class="overlay absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col justify-center items-center p-6 text-center text-neutral-900 z-20">
+                        <i class="fa-solid fa-cart-shopping text-2xl text-emerald-500 mb-2"></i>
                         <h4 class="text-xs uppercase tracking-widest font-bold mb-2">Pièce certifiée disponible</h4>
-                        <p class="text-[9px] text-neutral-400 uppercase tracking-widest mb-4 font-mono">Stock ultra-limité unique</p>
-                        <button onclick="triggerOrder('${p.id}')" class="px-6 py-2.5 bg-[#D4AF37] text-black font-sport font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors rounded-sm shadow-md">
+                        <p class="text-[9px] text-neutral-500 uppercase tracking-widest mb-4 font-mono">Stock ultra-limité unique</p>
+                        <button onclick="triggerOrder('${p.id}')" class="px-6 py-2.5 bg-[#D4AF37] text-white font-sport font-bold text-xs uppercase tracking-widest hover:bg-neutral-950 transition-colors rounded-sm shadow-md">
                             Passer commande
                         </button>
                     </div>
@@ -1505,37 +1428,37 @@
             }
 
             const card = `
-                <div class="showroom-card group flex flex-col justify-between bg-[#0e0e0e] border border-neutral-900 p-4 transition-all duration-300 hover:shadow-lg hover:border-neutral-800 relative rounded-sm overflow-hidden">
+                <div class="showroom-card group flex flex-col justify-between bg-white border border-neutral-200 p-4 transition-all duration-300 hover:shadow-lg hover:border-neutral-300 relative rounded-sm overflow-hidden">
                     
                     ${overlayHtml}
 
                     <!-- Corner Tag -->
-                    <span class="absolute top-6 left-6 z-10 bg-black/95 text-white text-[9px] font-sport font-bold px-3 py-1 uppercase tracking-widest rounded-sm border border-neutral-800">
+                    <span class="absolute top-6 left-6 z-10 bg-white/95 text-neutral-900 text-[9px] font-sport font-bold px-3 py-1 uppercase tracking-widest rounded-sm border border-neutral-200 shadow-sm">
                         Édition ${p.numberInSeries}/1000
                     </span>
 
-                    <div class="overflow-hidden bg-neutral-900 aspect-[4/5] mb-6 relative">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/111111/D4AF37?text=${p.name}'">
+                    <div class="overflow-hidden bg-neutral-50 aspect-[4/5] mb-6 relative border border-neutral-100">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="handleImageError(this, '${p.name}')">
                     </div>
 
                     <div>
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-sm font-bold tracking-widest uppercase text-white font-mono">${p.name}</h3>
+                            <h3 class="text-sm font-bold tracking-widest uppercase text-neutral-900 font-mono">${p.name}</h3>
                             <span class="text-sm font-medium tracking-wide text-[#D4AF37] font-sport">${p.price} €</span>
                         </div>
 
                         <div class="flex items-center space-x-2 text-[10px] mb-3">
                             <div class="flex">${ratingStars}</div>
-                            <span class="text-neutral-500">(${p.rating}/5)</span>
+                            <span class="text-neutral-400">(${p.rating}/5)</span>
                         </div>
 
-                        <p class="text-xs text-neutral-400 italic font-light mb-4 leading-relaxed">
+                        <p class="text-xs text-neutral-500 italic font-light mb-4 leading-relaxed">
                             "${p.comment}"
                         </p>
                     </div>
 
-                    <div class="border-t border-neutral-900 pt-4 flex justify-between items-center text-[9px] tracking-widest uppercase font-mono font-bold">
-                        <span class="text-neutral-500">Authenticité Certifiée</span>
+                    <div class="border-t border-neutral-150 pt-4 flex justify-between items-center text-[9px] tracking-widest uppercase font-mono font-bold">
+                        <span class="text-neutral-400">Authenticité Certifiée</span>
                         <button onclick="copyToClipboard('${generateFakeSecret(p.category, p.numberInSeries)}')" class="text-[#D4AF37] hover:underline flex items-center space-x-1">
                             <i class="fa-solid fa-key"></i> <span>Copier Clé</span>
                         </button>
@@ -1549,13 +1472,13 @@
     function filterShowroom(category) {
         state.showroomCategory = category;
         document.querySelectorAll('.cat-tab').forEach(tab => {
-            tab.classList.remove('text-white', 'border-b', 'border-white');
-            tab.classList.add('text-neutral-500');
+            tab.classList.remove('text-neutral-900', 'border-b-2', 'border-neutral-900');
+            tab.classList.add('text-neutral-400');
         });
         const activeTab = document.getElementById(`cat-${category}`);
         if (activeTab) {
-            activeTab.classList.add('text-white', 'border-b', 'border-white');
-            activeTab.classList.remove('text-neutral-500');
+            activeTab.classList.add('text-neutral-900', 'border-b-2', 'border-neutral-900');
+            activeTab.classList.remove('text-neutral-400');
         }
         renderShowroom();
     }
@@ -1568,14 +1491,12 @@
         document.execCommand('copy');
         document.body.removeChild(el);
         playSuccessSound();
-        
-        // Notify using feedback UI rather than blocking alerts
         showFloatingNotify(`Clé copiée : ${text}`);
     }
 
     function showFloatingNotify(msg) {
         const div = document.createElement('div');
-        div.className = "fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-[#D4AF37] text-black px-6 py-3 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl rounded-sm transition-opacity duration-300";
+        div.className = "fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-[#D4AF37] text-white px-6 py-3 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl rounded-sm transition-opacity duration-300";
         div.innerText = msg;
         document.body.appendChild(div);
         setTimeout(() => {
@@ -1586,7 +1507,6 @@
 </script>
 
 <script>
-    // Order and checkout process
     function triggerOrder(productId) {
         const product = state.products.find(p => p.id === productId);
         if (!product) return;
@@ -1596,14 +1516,14 @@
         const summaryBox = document.getElementById('payment-summary');
         summaryBox.innerHTML = `
             <div class="flex justify-between items-center">
-                <span class="font-bold text-white uppercase">${product.name}</span>
+                <span class="font-bold text-neutral-900 uppercase">${product.name}</span>
                 <span class="text-[#D4AF37] font-bold font-sport">${product.price} €</span>
             </div>
             <p class="text-[9px] text-neutral-400 uppercase font-mono">Série exclusive n° ${product.numberInSeries} / 1000</p>
-            <div class="border-t border-neutral-800 pt-2 mt-2 font-mono">
+            <div class="border-t border-neutral-200 pt-2 mt-2 font-mono text-neutral-800">
                 <p class="text-[9px] text-neutral-400"><i class="fa-solid fa-truck"></i> Adresse de livraison :</p>
-                <p class="font-semibold text-white mt-0.5">${state.user.fullname}</p>
-                <p class="text-neutral-400 font-light text-[10px]">${state.user.address}</p>
+                <p class="font-semibold text-neutral-900 mt-0.5">${state.user.fullname}</p>
+                <p class="text-neutral-500 font-light text-[10px]">${state.user.address}</p>
             </div>
         `;
 
@@ -1637,7 +1557,6 @@
 </script>
 
 <script>
-    // Forum and videos panel
     function renderTchatFeed() {
         const feed = document.getElementById('video-posts-feed');
         if (!feed) return;
@@ -1647,13 +1566,13 @@
 
         sortedPosts.forEach((post, index) => {
             const card = `
-                <div class="bg-[#0e0e0e] border border-neutral-900 rounded-sm shadow-sm overflow-hidden transition-all duration-300">
-                    <div class="bg-black text-white p-3 px-4 flex justify-between items-center border-b border-neutral-900">
+                <div class="bg-white border border-neutral-200 rounded-sm shadow-sm overflow-hidden transition-all duration-300">
+                    <div class="bg-neutral-50 text-neutral-900 p-3 px-4 flex justify-between items-center border-b border-neutral-200">
                         <div class="flex items-center space-x-2">
                             <span class="font-sport font-bold italic text-sm text-[#D4AF37]">#${index + 1}</span>
                             <span class="text-xs uppercase tracking-widest font-bold font-mono">${post.title}</span>
                         </div>
-                        <span class="text-[9px] text-neutral-500 font-mono">Par @${post.user}</span>
+                        <span class="text-[9px] text-neutral-400 font-mono">Par @${post.user}</span>
                     </div>
 
                     <div class="aspect-video bg-neutral-950 relative">
@@ -1662,18 +1581,18 @@
                         </video>
                     </div>
 
-                    <div class="p-4 bg-[#0e0e0e] space-y-4">
-                        <div class="flex justify-between items-center border-b border-neutral-900 pb-3">
-                            <button onclick="likePost('${post.id}')" class="flex items-center space-x-2 text-xs text-white hover:text-[#D4AF37] font-semibold">
+                    <div class="p-4 bg-white space-y-4">
+                        <div class="flex justify-between items-center border-b border-neutral-100 pb-3">
+                            <button onclick="likePost('${post.id}')" class="flex items-center space-x-2 text-xs text-neutral-800 hover:text-[#D4AF37] font-semibold">
                                 <i class="fa-solid fa-fire text-[#E10600] animate-pulse text-sm"></i>
                                 <span>${post.likes} Passionnés</span>
                             </button>
-                            <span class="text-[9px] text-neutral-500 font-mono uppercase tracking-widest">Active session</span>
+                            <span class="text-[9px] text-neutral-400 font-mono uppercase tracking-widest">Active session</span>
                         </div>
 
                         <div class="space-y-1.5 font-mono">
                             ${post.comments.map(c => `
-                                <div class="text-[11px] text-neutral-400 bg-black p-2 rounded-sm border border-neutral-900">
+                                <div class="text-[11px] text-neutral-600 bg-neutral-50 p-2 rounded-sm border border-neutral-150">
                                     <span class="font-bold text-[#D4AF37] block mb-0.5">@Membre</span>
                                     "${c}"
                                 </div>
@@ -1681,8 +1600,8 @@
                         </div>
 
                         <div class="flex space-x-2">
-                            <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis sur cette performance..." class="flex-1 text-xs p-2 bg-black border border-neutral-900 text-white outline-none focus:border-[#D4AF37] rounded-sm">
-                            <button onclick="addCommentToPost('${post.id}')" class="px-4 py-2 bg-[#D4AF37] text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-white transition-colors">Envoyer</button>
+                            <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis sur cette performance..." class="flex-1 text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-800 outline-none focus:border-[#D4AF37] rounded-sm">
+                            <button onclick="addCommentToPost('${post.id}')" class="px-4 py-2 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">Envoyer</button>
                         </div>
                     </div>
                 </div>
@@ -1736,10 +1655,7 @@
         user.value = '';
         renderTchatFeed();
     }
-</script>
 
-<script>
-    // Live Lounge Chat Functions
     function renderChatHistory() {
         const container = document.getElementById('chat-messages');
         if (!container) return;
@@ -1750,7 +1666,7 @@
             const bubble = `
                 <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
                     <span class="text-[9px] text-[#D4AF37] font-bold uppercase tracking-wider mb-1 font-mono">${msg.pseudo}</span>
-                    <div class="p-3 max-w-[85%] text-xs rounded-sm border ${isMe ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-black text-neutral-300 border-neutral-900'}">
+                    <div class="p-3 max-w-[85%] text-xs rounded-sm border ${isMe ? 'bg-[#D4AF37]/10 text-neutral-900 border-[#D4AF37]/30' : 'bg-neutral-50 text-neutral-800 border-neutral-200'}">
                         ${msg.text}
                     </div>
                 </div>
@@ -1780,7 +1696,6 @@
 </script>
 
 <script>
-    // Auctions and Secondary Market Functions
     function renderAuctions() {
         const container = document.getElementById('bids-container');
         if (!container) return;
@@ -1788,30 +1703,30 @@
 
         state.auctions.forEach(auc => {
             const card = `
-                <div class="bg-black border border-neutral-900 p-5 rounded-sm flex flex-col justify-between hover:border-neutral-800 transition-all duration-300 font-mono">
+                <div class="bg-white border border-neutral-200 p-5 rounded-sm flex flex-col justify-between hover:border-neutral-300 transition-all duration-300 font-mono">
                     <div class="flex space-x-4">
-                        <div class="w-24 h-24 bg-neutral-900 rounded-sm overflow-hidden flex-shrink-0 border border-neutral-800">
-                            <img src="${auc.image}" alt="${auc.name}" class="w-full h-full object-cover">
+                        <div class="w-24 h-24 bg-neutral-50 rounded-sm overflow-hidden flex-shrink-0 border border-neutral-150">
+                            <img src="${auc.image}" alt="${auc.name}" class="w-full h-full object-cover" onerror="handleImageError(this, '${auc.name}')">
                         </div>
-                        <div class="flex-1">
-                            <span class="text-[9px] bg-[#D4AF37] text-black px-2 py-0.5 tracking-widest uppercase font-sport font-bold rounded-sm">
+                        <div class="flex-grow">
+                            <span class="text-[9px] bg-[#D4AF37] text-white px-2 py-0.5 tracking-widest uppercase font-sport font-bold rounded-sm">
                                 Pièce #${auc.numberInSeries}/1000
                             </span>
-                            <h4 class="text-sm font-bold tracking-widest uppercase text-white mt-2 font-armani">${auc.name}</h4>
-                            <p class="text-xs text-neutral-500 mt-1">Mise à prix : ${auc.startingPrice} €</p>
+                            <h4 class="text-sm font-bold tracking-widest uppercase text-neutral-900 mt-2 font-armani">${auc.name}</h4>
+                            <p class="text-xs text-neutral-400 mt-1">Mise à prix : ${auc.startingPrice} €</p>
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-4 border-t border-neutral-900 flex justify-between items-center">
+                    <div class="mt-4 pt-4 border-t border-neutral-100 flex justify-between items-center">
                         <div>
-                            <span class="text-[9px] uppercase tracking-widest text-neutral-500 block">Dernière Enchère</span>
-                            <span class="text-base font-bold text-white font-sport">${auc.currentBid} €</span>
+                            <span class="text-[9px] uppercase tracking-widest text-neutral-400 block">Dernière Enchère</span>
+                            <span class="text-base font-bold text-neutral-900 font-sport">${auc.currentBid} €</span>
                             <span class="text-[9px] text-[#D4AF37] block">Par @${auc.bidder}</span>
                         </div>
 
                         <div class="flex space-x-2">
-                            <input type="number" id="bid-input-${auc.id}" placeholder="+50€" class="w-16 text-xs p-2 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-[#D4AF37] rounded-sm text-center">
-                            <button onclick="placeBid('${auc.id}')" class="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-200 transition-all rounded-sm">Miser</button>
+                            <input type="number" id="bid-input-${auc.id}" placeholder="+50€" class="w-16 text-xs p-2 bg-neutral-50 border border-neutral-200 text-neutral-800 outline-none focus:border-[#D4AF37] rounded-sm text-center">
+                            <button onclick="placeBid('${auc.id}')" class="px-4 py-2 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-all rounded-sm">Miser</button>
                         </div>
                     </div>
                 </div>
@@ -1841,6 +1756,7 @@
         document.getElementById('post-item-modal').classList.remove('hidden');
     }
 
+    // Direct close interface
     function closePostItemModal() {
         document.getElementById('post-item-modal').classList.add('hidden');
     }
@@ -1877,10 +1793,10 @@
         const secretKey = document.getElementById('auth-secret-num').value.trim();
 
         const resultBox = document.getElementById('auth-result');
-        resultBox.classList.remove('hidden', 'bg-emerald-950/20', 'border-emerald-500', 'text-emerald-400', 'bg-rose-950/20', 'border-rose-500', 'text-rose-400');
+        resultBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-500', 'text-emerald-700', 'bg-rose-50', 'border-rose-500', 'text-rose-700');
 
         if (isNaN(visibleNum) || visibleNum < 1 || visibleNum > 1000 || !secretKey) {
-            resultBox.classList.add('bg-rose-950/20', 'border-rose-500', 'text-rose-400');
+            resultBox.classList.add('bg-rose-5,0', 'border-rose-500', 'text-rose-700');
             resultBox.innerHTML = `
                 <i class="fa-solid fa-triangle-exclamation text-xl mb-1 block"></i>
                 <span class="text-xs font-bold uppercase tracking-widest block font-mono">Champs incorrects</span>
@@ -1892,17 +1808,17 @@
         const expectedKey = generateFakeSecret(category, visibleNum);
 
         if (secretKey === expectedKey) {
-            resultBox.classList.add('bg-emerald-950/20', 'border-emerald-500', 'text-emerald-400');
+            resultBox.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-700');
             resultBox.innerHTML = `
-                <i class="fa-solid fa-certificate text-xl mb-1 block text-emerald-400"></i>
+                <i class="fa-solid fa-certificate text-xl mb-1 block text-emerald-500"></i>
                 <span class="text-xs font-bold uppercase tracking-widest block font-mono">Authenticité Certifiée</span>
                 <span class="text-[10px] opacity-80">La pièce #${visibleNum} appartient à la formule matricielle. Signature valide.</span>
             `;
             playSuccessSound();
         } else {
-            resultBox.classList.add('bg-rose-950/20', 'border-rose-500', 'text-rose-400');
+            resultBox.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-700');
             resultBox.innerHTML = `
-                <i class="fa-solid fa-skull-crossbones text-xl mb-1 block text-rose-400"></i>
+                <i class="fa-solid fa-skull-crossbones text-xl mb-1 block text-rose-500"></i>
                 <span class="text-xs font-bold uppercase tracking-widest block font-mono">Alerte Contrefaçon</span>
                 <span class="text-[10px] opacity-80">La signature matricielle ne correspond pas à notre formule cryptographique.</span>
             `;
@@ -1915,7 +1831,7 @@
         applyDynamicStyles();
         renderShowroom();
 
-        // Mac & iPhone double-click shortcut anywhere on intro to open abonne modal for direct testing
+        // Mac & iPhone double-click shortcut anywhere on intro to open abonne modal
         document.getElementById('intro-screen').addEventListener('dblclick', function() {
             openAbonneModal();
         });
