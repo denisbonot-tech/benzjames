@@ -1,1178 +1,1645 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benzjames — High Performance Luxury</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font-Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Oswald for wide-flat sport style, Playfair/Montserrat for Armani style -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sport: ['Oswald', 'sans-serif'],
-                        armani: ['Montserrat', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        /* Custom Animations */
-        @keyframes laser-sweep-1 {
-            0% { transform: translate(-150%, -150%) rotate(45deg); opacity: 0; }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
-            100% { transform: translate(150%, 150%) rotate(45deg); opacity: 0; }
-        }
-        @keyframes laser-sweep-2 {
-            0% { transform: translate(150%, -150%) rotate(-45deg); opacity: 0; }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
-            100% { transform: translate(-150%, 150%) rotate(-45deg); opacity: 0; }
-        }
-        .laser-line-1 {
-            animation: laser-sweep-1 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        .laser-line-2 {
-            animation: laser-sweep-2 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            animation-delay: 2s;
-        }
-        .text-stroke {
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-            color: transparent;
-        }
-        
-        /* Premium custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #111;
-            border-radius: 2px;
-        }
-    </style>
-</head>
-<body class="font-armani bg-[#fafafa] text-neutral-900 select-none overflow-x-hidden">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benzjames - High Performance Luxury</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font-Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts: Oswald for wide-flat sport style, Playfair/Montserrat for Armani style -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
 <script>
-    // Audio engine using Web Audio API for futuristic sound effects
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    function playLaserSound() {
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-        // Synthesizer sweep for high-tech premium entry
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(80, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 1.2);
-        
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
-        
-        // Highpass filter for premium airy sweep sound
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'highpass';
-        filter.frequency.setValueAtTime(400, audioCtx.currentTime);
-        
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        osc.start();
-        osc.stop(audioCtx.currentTime + 1.2);
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sport: ['Oswald', 'sans-serif'],
+        armani: ['Montserrat', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
+      }
     }
+  }
+}
+</script>
 
-    function playSuccessSound() {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.4);
-    }
+<style>
+:root {
+  --master-title-font: 'Oswald', sans-serif;
+  --master-title-size: 3.5rem;
+  --master-title-color: #111111;
+  
+  --master-subtitle-font: 'Montserrat', sans-serif;
+  --master-subtitle-size: 0.75rem;
+  --master-subtitle-color: #737373;
+  
+  --master-body-font: 'Montserrat', sans-serif;
+  --master-body-size: 0.875rem;
+  --master-body-color: #404040;
+}
+
+/* Custom classes for Master dynamic styling override */
+.master-title {
+  font-family: var(--master-title-font) !important;
+  font-size: var(--master-title-size) !important;
+  color: var(--master-title-color) !important;
+}
+.master-subtitle {
+  font-family: var(--master-subtitle-font) !important;
+  font-size: var(--master-subtitle-size) !important;
+  color: var(--master-subtitle-color) !important;
+}
+.master-body {
+  font-family: var(--master-body-font) !important;
+  font-size: var(--master-body-size) !important;
+  color: var(--master-body-color) !important;
+}
+
+@keyframes laser-sweep-1 {
+  0% { transform: translate(-150%, -150%) rotate(45deg); opacity: 0; }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.8; }
+  100% { transform: translate(150%, 150%) rotate(45deg); opacity: 0; }
+}
+@keyframes laser-sweep-2 {
+  0% { transform: translate(150%, -150%) rotate(-45deg); opacity: 0; }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.8; }
+  100% { transform: translate(-150%, 150%) rotate(-45deg); opacity: 0; }
+}
+.laser-line-1 {
+  animation: laser-sweep-1 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.laser-line-2 {
+  animation: laser-sweep-2 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 2s;
+}
+.text-stroke {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
+}
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+::-webkit-scrollbar-thumb {
+  background: #111;
+  border-radius: 2px;
+}
+</style>
+</head>
+<body class="font-armani bg-[#fcfcfc] text-neutral-900 select-none overflow-x-hidden">
+
+<script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playLaserSound() {
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 1.2);
+  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'highpass';
+  filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 1.2);
+}
+
+function playSuccessSound() {
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+  osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
+  gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.4);
+}
+</script>
+
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+<script>
+function showToast(message, isError = false) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `p-4 rounded-sm shadow-xl text-xs uppercase tracking-widest font-bold transition-all duration-300 transform translate-y-2 opacity-0 flex items-center space-x-3 pointer-events-auto ${isError ? 'bg-red-950 text-red-200 border-l-4 border-red-500' : 'bg-neutral-900 text-white border-l-4 border-neutral-400'}`;
+  toast.innerHTML = `
+    <i class="${isError ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-circle-check'}"></i>
+    <span>${message}</span>
+  `;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.remove('translate-y-2', 'opacity-0');
+  }, 50);
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
 </script>
 
 <div id="intro-screen" class="fixed inset-0 bg-black z-50 flex flex-col justify-between items-center py-12 px-6 transition-all duration-1000 ease-in-out">
-    <!-- Laser effect elements -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="laser-line-1 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
-        <div class="laser-line-2 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
-    </div>
-
-    <!-- Top Branding -->
-    <div class="text-white text-xs tracking-[0.4em] uppercase font-light opacity-60">Série Limitée &bull; 1000 Pièces</div>
-
-    <!-- Center Wide/Flat Title -->
-    <div class="relative text-center flex flex-col items-center">
-        <h1 class="text-6xl md:text-9xl font-sport font-black tracking-tighter text-white uppercase italic scale-y-75 leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            Benzjames
-        </h1>
-        <p class="text-xs md:text-sm tracking-[0.6em] text-neutral-400 uppercase mt-4">Automotive & Fashion Innovation</p>
-    </div>
-
-    <!-- Entry Button -->
-    <button onclick="enterApp()" class="group relative px-12 py-4 bg-white text-black font-sport font-bold uppercase tracking-[0.2em] text-sm overflow-hidden rounded-sm transition-all duration-300 hover:bg-neutral-900 hover:text-white border border-white">
-        <span class="relative z-10">Entrer dans l'expérience</span>
-        <div class="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-neutral-900 transition-transform duration-300 ease-out pointer-events-none"></div>
-    </button>
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="laser-line-1 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
+    <div class="laser-line-2 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
+  </div>
+  <div class="text-white text-xs tracking-[0.4em] uppercase font-light opacity-60">Série Limitée &bull; 1000 Pièces</div>
+  <div class="relative text-center flex flex-col items-center">
+    <h1 class="text-6xl md:text-9xl font-sport font-black tracking-tighter text-white uppercase italic scale-y-75 leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+      Benzjames
+    </h1>
+    <p class="text-xs md:text-sm tracking-[0.6em] text-neutral-400 uppercase mt-4">Automotive & Fashion Innovation</p>
+  </div>
+  <button onclick="enterApp()" class="group relative px-12 py-4 bg-white text-black font-sport font-bold uppercase tracking-[0.2em] text-sm overflow-hidden rounded-sm transition-all duration-300 hover:bg-neutral-900 hover:text-white border border-white">
+    <span class="relative z-10">Entrer dans l'expérience</span>
+    <div class="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-neutral-900 transition-transform duration-300 ease-out pointer-events-none"></div>
+  </button>
 </div>
 
 <div id="app-container" class="hidden min-h-screen flex flex-col justify-between">
-
-    <!-- Global Header (Armani aesthetic: ultra-thin borders, minimal spacing) -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-neutral-100 px-6 py-4 flex justify-between items-center transition-all duration-300">
-        <!-- Logo -->
-        <div class="cursor-pointer" onclick="navigate('home')">
-            <span class="font-sport font-black italic text-2xl tracking-tighter uppercase scale-y-90 inline-block">Benzjames</span>
-            <span class="text-[9px] tracking-widest text-neutral-500 block uppercase font-light">Milan / Paris / London</span>
-        </div>
-
-        <!-- Armani Inspired Navigation Tabs -->
-        <nav class="hidden md:flex space-x-12 text-xs tracking-[0.3em] uppercase font-medium text-neutral-500">
-            <button onclick="navigate('showroom')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-showroom">Show room</button>
-            <button onclick="navigate('tchat')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-tchat">Tchat passion</button>
-            <button onclick="navigate('market')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-market">Cotes marché</button>
-        </nav>
-
-        <!-- Right: Admin Trigger & Mobile menu togglers -->
-        <div class="flex items-center space-x-6">
-            <!-- Admin activation Button -->
-            <button id="admin-indicator" onclick="openAdminModal()" class="relative group flex items-center space-x-1 p-2 rounded-full hover:bg-neutral-50 transition-colors duration-200" title="Accès Abonné / Master">
-                <span class="w-2.5 h-2.5 rounded-full bg-neutral-400 group-hover:bg-black transition-colors" id="admin-dot"></span>
-                <i class="fa-regular fa-user text-neutral-700 text-sm"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Mobile Sub-Menu Tabs (Kept clean at top of view for easy iPhone interaction) -->
-    <div class="md:hidden sticky top-[65px] z-30 bg-white/95 backdrop-blur-md border-b border-neutral-100 flex justify-around py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-500">
-        <button onclick="navigate('showroom')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-showroom">Showroom</button>
-        <button onclick="navigate('tchat')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-tchat">Tchat passion</button>
-        <button onclick="navigate('market')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-market">Cotes marché</button>
+  <!-- Global Header (Armani aesthetic: ultra-thin borders, minimal spacing) -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-neutral-100 px-6 py-4 flex justify-between items-center transition-all duration-300">
+    <div class="cursor-pointer" onclick="navigate('home')">
+      <span class="font-sport font-black italic text-2xl tracking-tighter uppercase scale-y-90 inline-block">Benzjames</span>
+      <span class="text-[9px] tracking-widest text-neutral-500 block uppercase font-light">Milan / Paris / London</span>
     </div>
+    
+    <!-- Armani Inspired Navigation Tabs with requested 'First' menu -->
+    <nav class="hidden md:flex space-x-12 text-xs tracking-[0.3em] uppercase font-medium text-neutral-500">
+      <button onclick="navigate('home')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-home">First</button>
+      <button onclick="navigate('showroom')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-showroom">Show room</button>
+      <button onclick="navigate('tchat')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-tchat">Tchat passion</button>
+      <button onclick="navigate('market')" class="nav-tab hover:text-black transition-colors duration-200" id="nav-market">Cotes marché</button>
+      <button onclick="navigate('cart')" class="nav-tab hover:text-black transition-colors duration-200 flex items-center space-x-1" id="nav-cart">
+        <span>Panier</span>
+        <span id="cart-count" class="bg-black text-white text-[9px] px-1.5 py-0.5 rounded-full hidden">0</span>
+      </button>
+    </nav>
+    
+    <!-- Right Header Elements -->
+    <div class="flex items-center space-x-6">
+      <button id="admin-indicator" onclick="openAdminModal()" class="relative group flex items-center space-x-2 p-2 border border-neutral-100 rounded-sm hover:bg-neutral-50 transition-colors duration-200" title="Accès Abonné / Master">
+        <span class="w-2.5 h-2.5 rounded-full bg-neutral-400 group-hover:bg-black transition-colors" id="admin-dot"></span>
+        <i class="fa-regular fa-user text-neutral-700 text-sm"></i>
+        <span id="header-user-status" class="text-[10px] tracking-wider text-neutral-500 font-bold uppercase hidden md:inline">Invité</span>
+      </button>
+    </div>
+  </header>
 
-    <main id="page-home" class="page-section relative flex-1 min-h-[calc(100vh-120px)] flex flex-col justify-end p-8 bg-black">
-        <!-- Background Video Loop -->
-        <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
-            <div class="absolute inset-0 bg-black/45 z-10 pointer-events-none"></div>
-            <!-- Dynamic video src that admin can change -->
-            <video id="hero-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline>
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4" type="video/mp4">
-            </video>
+  <!-- Mobile Sub-Menu Tabs (Optimized for iPhone touch targets) -->
+  <div class="md:hidden sticky top-[65px] z-30 bg-white/95 backdrop-blur-md border-b border-neutral-100 flex justify-around py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-500">
+    <button onclick="navigate('home')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-home">First</button>
+    <button onclick="navigate('showroom')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-showroom">Showroom</button>
+    <button onclick="navigate('tchat')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-tchat">Tchat</button>
+    <button onclick="navigate('market')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent" id="m-nav-market">Cotes</button>
+    <button onclick="navigate('cart')" class="mobile-nav-tab py-1 px-2 border-b-2 border-transparent flex items-center space-x-1" id="m-nav-cart">
+      <span>Panier</span>
+      <span id="cart-count-mobile" class="bg-black text-white text-[8px] px-1 rounded-full hidden">0</span>
+    </button>
+  </div>
+
+  <main id="page-home" class="page-section relative flex-1 min-h-[calc(100vh-120px)] flex flex-col justify-end p-8 bg-black">
+    <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
+      <div class="absolute inset-0 bg-black/55 z-10 pointer-events-none"></div>
+      <video id="hero-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4" type="video/mp4">
+      </video>
+    </div>
+    
+    <div class="relative z-20 max-w-2xl text-white mb-8">
+      <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase font-bold block mb-3 master-subtitle" id="hero-subtitle">Maison de Spéculation Athlétique</span>
+      <h2 class="text-4xl md:text-7xl font-sport italic uppercase scale-y-90 tracking-tighter mb-4 master-title" id="hero-title">L'Édition Unique.</h2>
+      <p class="text-sm text-neutral-300 font-light tracking-wide leading-relaxed mb-6 master-body" id="hero-desc">
+        Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.
+      </p>
+      <div class="flex space-x-4">
+        <button onclick="navigate('showroom')" class="px-8 py-3.5 bg-white text-black font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-100 transition-colors rounded-sm">Découvrir le vestiaire</button>
+        <button onclick="navigate('market')" class="px-8 py-3.5 bg-transparent border border-white text-white font-sport font-bold tracking-widest text-xs uppercase hover:bg-white hover:text-black transition-all rounded-sm">Consulter les cotes</button>
+      </div>
+    </div>
+  </main>
+
+  <main id="page-showroom" class="page-section hidden flex-1 bg-white p-6 md:p-12">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase block mb-2 master-subtitle" id="showroom-subtitle">Exclusive Wardrobe</span>
+        <h2 class="text-3xl md:text-5xl font-serif text-neutral-900 tracking-wide font-light master-title" id="showroom-title">Le Vestiaire Limité</h2>
+        <div class="w-12 h-[1px] bg-neutral-900 mx-auto mt-4"></div>
+      </div>
+
+      <!-- Categories Navigation -->
+      <div class="flex overflow-x-auto pb-4 mb-10 justify-start md:justify-center space-x-4 md:space-x-8 scrollbar-thin border-b border-neutral-100">
+        <button onclick="filterShowroom('tous')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-900 border-b border-neutral-900" id="cat-tous">Tous</button>
+        <button onclick="filterShowroom('casquette')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-casquette">Casquettes</button>
+        <button onclick="filterShowroom('basket')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-basket">Baskets</button>
+        <button onclick="filterShowroom('tshirt')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-tshirt">T-Shirts</button>
+        <button onclick="filterShowroom('sac')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-sac">Sacs à dos</button>
+        <button onclick="filterShowroom('gants')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-gants">Gants</button>
+        <button onclick="filterShowroom('montre')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-montre">Montres</button>
+        <button onclick="filterShowroom('sweat')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-sweat">Sweats</button>
+      </div>
+
+      <!-- Showroom Products Grid -->
+      <div id="showroom-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 transition-all duration-300">
+        <!-- Loaded via Javascript -->
+      </div>
+    </div>
+  </main>
+
+  <main id="page-tchat" class="page-section hidden flex-1 bg-[#fafafa] p-6 md:p-12">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Video feed area -->
+      <div class="lg:col-span-7 flex flex-col space-y-8">
+        <div class="mb-4">
+          <span class="text-xs tracking-[0.4em] text-neutral-400 uppercase master-subtitle" id="tchat-subtitle">Communauté Active</span>
+          <h2 class="text-2xl font-serif text-neutral-900 mt-1 master-title" id="tchat-title">Vidéos Passion de nos Membres</h2>
+          <p class="text-xs text-neutral-500 mt-1 master-body">Les vidéos les plus aimées dominent la liste de manière organique.</p>
         </div>
 
-        <!-- Hero brand statement -->
-        <div class="relative z-20 max-w-2xl text-white mb-8">
-            <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase font-bold block mb-3" id="hero-subtitle">Maison de Spéculation Athlétique</span>
-            <h2 class="text-4xl md:text-7xl font-sport italic uppercase scale-y-90 tracking-tighter mb-4" id="hero-title">L'Édition Unique.</h2>
-            <p class="text-sm text-neutral-300 font-light tracking-wide leading-relaxed mb-6" id="hero-desc">
-                Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.
-            </p>
-            <div class="flex space-x-4">
-                <button onclick="navigate('showroom')" class="px-8 py-3.5 bg-white text-black font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-100 transition-colors">Découvrir le vestiaire</button>
-                <button onclick="navigate('market')" class="px-8 py-3.5 bg-transparent border border-white text-white font-sport font-bold tracking-widest text-xs uppercase hover:bg-white hover:text-black transition-all">Consulter les cotes</button>
-            </div>
-        </div>
-    </main>
-
-    <main id="page-showroom" class="page-section hidden flex-1 bg-white p-6 md:p-12">
-        <div class="max-w-7xl mx-auto">
-            <!-- Category Title & Philosophy -->
-            <div class="text-center mb-12">
-                <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase block mb-2">Exclusive Wardrobe</span>
-                <h2 class="text-3xl md:text-5xl font-serif text-neutral-900 tracking-wide font-light">Le Vestiaire Limité</h2>
-                <div class="w-12 h-[1px] bg-neutral-900 mx-auto mt-4"></div>
-            </div>
-
-            <!-- Catalogue Horizontal Navigation Tabs -->
-            <div class="flex overflow-x-auto pb-4 mb-10 justify-start md:justify-center space-x-4 md:space-x-8 scrollbar-thin border-b border-neutral-100">
-                <button onclick="filterShowroom('tous')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-900 border-b border-neutral-900" id="cat-tous">Tous</button>
-                <button onclick="filterShowroom('casquette')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-casquette">Casquettes</button>
-                <button onclick="filterShowroom('basket')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-basket">Baskets</button>
-                <button onclick="filterShowroom('tshirt')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-tshirt">T-Shirts</button>
-                <button onclick="filterShowroom('sac')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-sac">Sacs à dos</button>
-                <button onclick="filterShowroom('gants')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-gants">Gants</button>
-                <button onclick="filterShowroom('montre')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-montre">Montres</button>
-                <button onclick="filterShowroom('sweat')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-400 hover:text-neutral-900" id="cat-sweat">Sweats</button>
-            </div>
-
-            <!-- Grid & Collection Display -->
-            <div id="showroom-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 transition-all duration-300">
-                <!-- Dynamically loaded via Javascript -->
-            </div>
-        </div>
-    </main>
-
-    <main id="page-tchat" class="page-section hidden flex-1 bg-[#fafafa] p-6 md:p-12">
-        <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <!-- Left Side: Sport Video Stack (Sorted by likes) -->
-            <div class="lg:col-span-7 flex flex-col space-y-8">
-                <div class="mb-4">
-                    <span class="text-xs tracking-[0.4em] text-neutral-400 uppercase">Communauté Active</span>
-                    <h2 class="text-2xl font-serif text-neutral-900 mt-1">Vidéos Passion de nos Membres</h2>
-                    <p class="text-xs text-neutral-500 mt-1">Les vidéos les plus aimées dominent la liste de manière organique.</p>
-                </div>
-
-                <!-- Post Upload Area -->
-                <div class="bg-white p-5 border border-neutral-100 rounded-sm shadow-sm">
-                    <h3 class="text-xs uppercase tracking-widest font-bold mb-3">Partager une performance</h3>
-                    <div class="space-y-3">
-                        <input type="text" id="post-title" placeholder="Titre de votre session sportive (ex: Run matinal sous la pluie)" class="w-full text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="post-user" placeholder="Votre Pseudo" class="text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm">
-                            <select id="post-video-url" class="text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white">
-                                <option value="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4">Session d'athlétisme</option>
-                                <option value="https://assets.mixkit.co/videos/preview/mixkit-man-jogging-on-the-beach-at-sunset-31997-large.mp4">Jogging Plage</option>
-                                <option value="https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4">Match Tennis</option>
-                                <option value="https://assets.mixkit.co/videos/preview/mixkit-boxer-training-inside-a-gym-with-low-light-40003-large.mp4">Entraînement Boxe</option>
-                            </select>
-                        </div>
-                        <button onclick="addNewPost()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">Poster la vidéo</button>
-                    </div>
-                </div>
-
-                <!-- Video Feed Stack -->
-                <div id="video-posts-feed" class="space-y-6">
-                    <!-- Dynamically populated and sorted -->
-                </div>
-            </div>
-
-            <!-- Right Side: Realtime Chat Area -->
-            <div class="lg:col-span-5 flex flex-col h-[600px] lg:h-[750px] bg-white border border-neutral-100 rounded-sm shadow-sm">
-                <!-- Chat Header -->
-                <div class="p-4 border-b border-neutral-100 flex justify-between items-center bg-neutral-900 text-white">
-                    <div>
-                        <span class="text-[10px] tracking-widest text-neutral-400 uppercase">Live Discussion</span>
-                        <h3 class="text-xs tracking-widest uppercase font-sport font-bold">Benzjames Lounge</h3>
-                    </div>
-                    <span class="flex h-2 w-2 relative">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                </div>
-
-                <!-- Messages Feed -->
-                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
-                    <!-- Dynamic chat messages -->
-                </div>
-
-                <!-- Chat Input System -->
-                <div class="p-4 border-t border-neutral-100 bg-neutral-50">
-                    <div class="flex space-x-2 mb-2">
-                        <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white" value="Anonyme">
-                        <span class="text-xs text-neutral-400 self-center">rejoint le salon</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <input type="text" id="chat-text" placeholder="Entrez votre message..." class="flex-1 text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white" onkeydown="if(event.key === 'Enter') sendChatMessage()">
-                        <button onclick="sendChatMessage()" class="px-5 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 rounded-sm transition-colors">
-                            <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <main id="page-market" class="page-section hidden flex-1 bg-white p-6 md:p-12">
-        <div class="max-w-7xl mx-auto space-y-16">
-            
-            <!-- Headline Section -->
-            <div class="text-center">
-                <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase block mb-2">Marché Secondaire Autonome</span>
-                <h2 class="text-3xl md:text-5xl font-serif text-neutral-900 tracking-wide font-light">Spéculation & Authenticité</h2>
-                <p class="text-xs text-neutral-500 max-w-xl mx-auto mt-4">
-                    Le concept de rareté pure. Chaque pièce possède un numéro visible de 1/1000 à 1000/1000 et un algorithme interne crypté garantissant son authenticité éternelle sur le marché secondaire.
-                </p>
-                <div class="w-12 h-[1px] bg-neutral-900 mx-auto mt-4"></div>
-            </div>
-
-            <!-- Dual Section: Left = Authenticator, Right = Market valuation -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                <!-- 1. The Algorithm Authenticator -->
-                <div class="p-6 md:p-8 bg-neutral-900 text-white rounded-sm border border-neutral-800 shadow-xl flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center space-x-3 mb-6">
-                            <i class="fa-solid fa-shield-halved text-2xl text-white"></i>
-                            <h3 class="text-lg tracking-widest uppercase font-sport font-bold">Laboratoire d'Authentification</h3>
-                        </div>
-                        <p class="text-xs text-neutral-400 mb-6 leading-relaxed">
-                            Afin d'éviter toute contrefaçon de nos éditions de 1000 pièces, entrez le type d'article, son numéro visible et le code secret caché dans la doublure du vêtement pour certifier son origine.
-                        </p>
-                        
-                        <!-- Authenticator Form -->
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">Sélectionnez la catégorie</label>
-                                <select id="auth-category" class="w-full text-xs p-3 bg-neutral-800 border border-neutral-700 rounded-sm text-white focus:outline-none focus:border-white">
-                                    <option value="casquette">Casquette</option>
-                                    <option value="basket">Baskets</option>
-                                    <option value="tshirt">T-shirt</option>
-                                    <option value="sac">Sac à dos</option>
-                                    <option value="montre">Montre</option>
-                                </select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">N° Apparent (1 à 1000)</label>
-                                    <input type="number" id="auth-visible-num" placeholder="Ex: 425" class="w-full text-xs p-3 bg-neutral-800 border border-neutral-700 rounded-sm text-white focus:outline-none focus:border-white">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">Clé Algorithme Secrète</label>
-                                    <input type="text" id="auth-secret-num" placeholder="Ex: BJ-CAS-425-SEC55A" class="w-full text-xs p-3 bg-neutral-800 border border-neutral-700 rounded-sm text-white focus:outline-none focus:border-white">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8">
-                        <button onclick="verifyProductAuthenticity()" class="w-full py-4 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-200 transition-colors">Vérifier l'authenticité</button>
-                        
-                        <!-- Result Panel -->
-                        <div id="auth-result" class="hidden mt-4 p-4 border border-dashed rounded-sm text-center">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Valuations and Live Trading (Cotes) -->
-                <div class="space-y-6">
-                    <div class="border-b border-neutral-200 pb-4">
-                        <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900">La Cote Officielle Benzjames</h3>
-                        <p class="text-xs text-neutral-500 mt-1">Variations de valeur mesurées lors des dernières transactions privées certifiées.</p>
-                    </div>
-
-                    <!-- Market Index List -->
-                    <div class="space-y-4">
-                        <!-- Casquette #001 -->
-                        <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
-                            <div>
-                                <span class="text-xs font-bold text-neutral-900">AeroCap Nero-1 (Pièce #001/1000)</span>
-                                <span class="block text-[10px] text-neutral-400">Valeur Originelle : 420 €</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-sm font-bold text-neutral-900">1 420 €</span>
-                                <span class="block text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +238%</span>
-                            </div>
-                        </div>
-                        <!-- Baskets #42 -->
-                        <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
-                            <div>
-                                <span class="text-xs font-bold text-neutral-900">ChronoStrider Blanc (Pièce #042/1000)</span>
-                                <span class="block text-[10px] text-neutral-400">Valeur Originelle : 890 €</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-sm font-bold text-neutral-900">2 100 €</span>
-                                <span class="block text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +135%</span>
-                            </div>
-                        </div>
-                        <!-- Sac #777 -->
-                        <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
-                            <div>
-                                <span class="text-xs font-bold text-neutral-900">Carbon Shield (Pièce #777/1000)</span>
-                                <span class="block text-[10px] text-neutral-400">Valeur Originelle : 1 200 €</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-sm font-bold text-neutral-900">3 450 €</span>
-                                <span class="block text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +187%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="border-t border-neutral-100 pt-12">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-                    <div>
-                        <h3 class="text-xl uppercase tracking-widest font-sport font-bold text-neutral-900">Enchères et Transactions Privées</h3>
-                        <p class="text-xs text-neutral-500 mt-1">Publiez votre article certifié ou misez sur une pièce en attente de vente.</p>
-                    </div>
-                    <button onclick="openPostItemModal()" class="mt-4 md:mt-0 px-6 py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-800 transition-colors">Vendre un article</button>
-                </div>
-
-                <!-- Bidding Listings -->
-                <div id="bids-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Dynamic auction lists -->
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- Global Footer -->
-    <footer class="bg-neutral-950 text-neutral-400 text-xs py-8 px-6 border-t border-neutral-900">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p>&copy; 2026 Benzjames. Tous droits réservés.</p>
-            <div class="flex space-x-6 text-neutral-500 tracking-wider">
-                <a href="#" class="hover:text-white transition-colors">Termes & Conditions</a>
-                <a href="#" class="hover:text-white transition-colors">Garantie Spécificité 1000</a>
-                <a href="#" class="hover:text-white transition-colors">Contact</a>
-            </div>
-        </div>
-    </footer>
-
-</div>
-
-<div id="post-item-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white max-w-md w-full p-6 rounded-sm shadow-2xl relative">
-        <button onclick="closePostItemModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black">
-            <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-        <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-neutral-900">Mettre un article aux enchères</h3>
-        
-        <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Nom de la pièce</label>
-                <input type="text" id="auction-item-name" placeholder="Ex: AeroCap Nero" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
-            </div>
+        <!-- Post Upload Form -->
+        <div class="bg-white p-5 border border-neutral-100 rounded-sm shadow-sm">
+          <h3 class="text-xs uppercase tracking-widest font-bold mb-3 master-subtitle">Partager une performance</h3>
+          <div class="space-y-3">
+            <input type="text" id="post-title" placeholder="Titre de votre session sportive (ex: Run matinal sous la pluie)" class="w-full text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm">
             <div class="grid grid-cols-2 gap-2">
+              <input type="text" id="post-user" placeholder="Votre Pseudo" class="text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm">
+              <select id="post-video-url" class="text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white">
+                <option value="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4">Session d'athlétisme</option>
+                <option value="https://assets.mixkit.co/videos/preview/mixkit-man-jogging-on-the-beach-at-sunset-31997-large.mp4">Jogging Plage</option>
+                <option value="https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4">Match Tennis</option>
+                <option value="https://assets.mixkit.co/videos/preview/mixkit-boxer-training-inside-a-gym-with-low-light-40003-large.mp4">Entraînement Boxe</option>
+              </select>
+            </div>
+            <button onclick="addNewPost()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors rounded-sm">Poster la vidéo</button>
+          </div>
+        </div>
+
+        <!-- Video posts stack -->
+        <div id="video-posts-feed" class="space-y-6"></div>
+      </div>
+
+      <!-- Chat area -->
+      <div class="lg:col-span-5 flex flex-col h-[600px] lg:h-[750px] bg-white border border-neutral-100 rounded-sm shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-neutral-100 flex justify-between items-center bg-neutral-900 text-white">
+          <div>
+            <span class="text-[10px] tracking-widest text-neutral-400 uppercase">Live Discussion</span>
+            <h3 class="text-xs tracking-widest uppercase font-sport font-bold">Benzjames Lounge</h3>
+          </div>
+          <span class="flex h-2 w-2 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+        </div>
+
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+
+        <div class="p-4 border-t border-neutral-100 bg-neutral-50">
+          <div class="flex space-x-2 mb-2">
+            <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white" value="Anonyme" disabled>
+            <span class="text-xs text-neutral-400 self-center">rejoint le salon</span>
+          </div>
+          <div class="flex space-x-2">
+            <input type="text" id="chat-text" placeholder="Entrez votre message..." class="flex-1 text-xs p-3 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white" onkeydown="if(event.key === 'Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()" class="px-5 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 rounded-sm transition-colors">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <main id="page-market" class="page-section hidden flex-1 bg-white p-6 md:p-12">
+    <div class="max-w-7xl mx-auto space-y-16">
+      <div class="text-center">
+        <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase block mb-2 master-subtitle" id="market-subtitle">Marché Secondaire Autonome</span>
+        <h2 class="text-3xl md:text-5xl font-serif text-neutral-900 tracking-wide font-light master-title" id="market-title">Spéculation & Authenticité</h2>
+        <p class="text-xs text-neutral-500 max-w-xl mx-auto mt-4 master-body" id="market-desc">
+          Le concept de rareté pure. Chaque pièce possède un numéro visible de 1/1000 à 1000/1000 et un algorithme interne crypté garantissant son authenticité éternelle sur le marché secondaire.
+        </p>
+        <div class="w-12 h-[1px] bg-neutral-900 mx-auto mt-4"></div>
+      </div>
+
+      <!-- Laboratory and Auctions Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div class="p-6 md:p-8 bg-neutral-900 text-white rounded-sm border border-neutral-800 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 mb-6">
+              <i class="fa-solid fa-shield-halved text-2xl text-white"></i>
+              <h3 class="text-lg tracking-widest uppercase font-sport font-bold">Laboratoire d'Authentification</h3>
+            </div>
+            <p class="text-xs text-neutral-400 mb-6 leading-relaxed">
+              Afin d'éviter toute contrefaçon de nos éditions de 1000 pièces, entrez le type d'article, son numéro visible et le code secret caché dans la doublure du vêtement pour certifier son origine.
+            </p>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">Sélectionnez la catégorie</label>
+                <select id="auth-category" class="w-full text-xs p-3 bg-neutral-800 border border-neutral-700 rounded-sm text-white focus:outline-none focus:border-white">
+                  <option value="casquette">Casquette</option>
+                  <option value="basket">Baskets</option>
+                  <option value="tshirt">T-shirt</option>
+                  <option value="sac">Sac à dos</option>
+                  <option value="montre">Montre</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Numéro (X / 1000)</label>
-                    <input type="number" id="auction-item-num" placeholder="Ex: 145" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
+                  <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">N° Apparent (1 à 1000)</label>
+                  <input type="number" id="auth-visible-num" placeholder="Ex: 425" class="w-full text-xs p-3 bg-neutral-800 border border-neutral-700 rounded-sm text-white focus:outline-none focus:border-white">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Prix de départ (€)</label>
-                    <input type="number" id="auction-item-price" placeholder="Ex: 500" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
+                  <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">Clé Algorithme Secrète</label>
+                  <input type="text" id="auth-secret-num" placeholder="Ex: BJ-CAS-425-SEC55A" class="w-full text-xs p-3 bg-neutral-800 border border-neutral-700 rounded-sm text-white focus:outline-none focus:border-white">
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8">
+            <button onclick="verifyProductAuthenticity()" class="w-full py-4 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-200 transition-colors rounded-sm">Vérifier l'authenticité</button>
+            <div id="auth-result" class="hidden mt-4 p-4 border border-dashed rounded-sm text-center"></div>
+          </div>
+        </div>
+
+        <!-- Live Trading Index -->
+        <div class="space-y-6">
+          <div class="border-b border-neutral-200 pb-4">
+            <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900">La Cote Officielle Benzjames</h3>
+            <p class="text-xs text-neutral-500 mt-1">Variations de valeur mesurées lors des dernières transactions privées certifiées.</p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
+              <div>
+                <span class="text-xs font-bold text-neutral-900">AeroCap Nero-1 (Pièce #001/1000)</span>
+                <span class="block text-[10px] text-neutral-400">Valeur Originelle: 420 €</span>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold text-neutral-900">1 420 €</span>
+                <span class="block text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +238%</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
+              <div>
+                <span class="text-xs font-bold text-neutral-900">ChronoStrider Blanc (Pièce #042/1000)</span>
+                <span class="block text-[10px] text-neutral-400">Valeur Originelle : 890 €</span>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold text-neutral-900">2 100 €</span>
+                <span class="block text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +135%</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center p-3 hover:bg-neutral-50 transition-colors border-b border-neutral-100">
+              <div>
+                <span class="text-xs font-bold text-neutral-900">Carbon Shield (Pièce #777/1000)</span>
+                <span class="block text-[10px] text-neutral-400">Valeur Originelle : 1 200 €</span>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold text-neutral-900">3 450 €</span>
+                <span class="block text-[10px] text-emerald-600 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> +187%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-neutral-100 pt-12">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+          <div>
+            <h3 class="text-xl uppercase tracking-widest font-sport font-bold text-neutral-900">Enchères et Transactions Privées</h3>
+            <p class="text-xs text-neutral-500 mt-1">Publiez votre article certifié ou misez sur une pièce en attente de vente.</p>
+          </div>
+          <button onclick="openPostItemModal()" class="mt-4 md:mt-0 px-6 py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-800 transition-colors rounded-sm">Vendre un article</button>
+        </div>
+        <div id="bids-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+      </div>
+    </div>
+  </main>
+
+  <main id="page-cart" class="page-section hidden flex-1 bg-white p-6 md:p-12">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-xs tracking-[0.5em] text-neutral-400 uppercase block mb-2 master-subtitle" id="cart-title-sub">Acquisition Exclusive</span>
+        <h2 class="text-3xl md:text-5xl font-serif text-neutral-900 tracking-wide font-light master-title" id="cart-title-main">Votre Vestiaire Sélectionné</h2>
+        <div class="w-12 h-[1px] bg-neutral-900 mx-auto mt-4"></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Cart Items List -->
+        <div class="lg:col-span-7 space-y-6">
+          <h3 class="text-xs uppercase tracking-widest font-bold border-b pb-2 mb-4">Articles du Panier</h3>
+          <div id="cart-items-list" class="space-y-4">
+            <!-- Dynamically populated -->
+          </div>
+          <div id="cart-empty-message" class="hidden text-center py-12 border border-dashed rounded-sm">
+            <i class="fa-solid fa-box-open text-3xl text-neutral-300 mb-2"></i>
+            <p class="text-xs tracking-wider text-neutral-500 uppercase">Votre panier est vide</p>
+            <button onclick="navigate('showroom')" class="mt-4 px-6 py-2 bg-neutral-900 text-white text-[10px] uppercase tracking-widest font-bold rounded-sm">Parcourir le vestiaire</button>
+          </div>
+        </div>
+
+        <!-- Checkout and Payment Details -->
+        <div class="lg:col-span-5 bg-neutral-50 p-6 border rounded-sm">
+          <h3 class="text-xs uppercase tracking-widest font-bold border-b pb-2 mb-4">Informations d'Expédition & Paiement</h3>
+          
+          <form id="checkout-form" onsubmit="processPayment(event)" class="space-y-4">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Prénom</label>
+                <input type="text" required id="ship-firstname" class="w-full text-xs p-2.5 border rounded-sm bg-white" placeholder="Jean">
+              </div>
+              <div>
+                <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Nom</label>
+                <input type="text" required id="ship-lastname" class="w-full text-xs p-2.5 border rounded-sm bg-white" placeholder="Dupont">
+              </div>
             </div>
             <div>
-                <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Image URL</label>
-                <input type="text" id="auction-item-img" placeholder="URL de l'image de votre produit" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm" value="https://placehold.co/400x300/e5e5e5/111111?text=AeroCap+Limited">
+              <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Email</label>
+              <input type="email" required id="ship-email" class="w-full text-xs p-2.5 border rounded-sm bg-white" placeholder="jean.dupont@example.com">
             </div>
-            <button onclick="createAuction()" class="w-full py-4 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">Lancer l'enchère</button>
+            <div>
+              <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Adresse de livraison</label>
+              <input type="text" required id="ship-address" class="w-full text-xs p-2.5 border rounded-sm bg-white" placeholder="12 Rue de la Paix, 75002 Paris">
+            </div>
+
+            <div class="border-t border-neutral-200 pt-4 mt-6">
+              <h4 class="text-[10px] uppercase tracking-widest font-bold text-neutral-600 mb-3"><i class="fa-solid fa-lock text-xs mr-1 text-emerald-600"></i> Simulation Paiement Sécurisé</h4>
+              <div>
+                <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Numéro de carte</label>
+                <div class="relative">
+                  <input type="text" required id="pay-cardnum" pattern="[0-9 ]{12,20}" class="w-full text-xs p-2.5 border rounded-sm bg-white pl-10" placeholder="4242 4242 4242 4242">
+                  <i class="fa-solid fa-credit-card absolute left-3 top-3.5 text-neutral-400 text-xs"></i>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 mt-2">
+                <div>
+                  <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Date d'Expiration</label>
+                  <input type="text" required id="pay-cardexp" placeholder="MM/AA" class="w-full text-xs p-2.5 border rounded-sm bg-white text-center">
+                </div>
+                <div>
+                  <label class="block text-[9px] uppercase tracking-wider text-neutral-500 mb-1">CVV / CVC</label>
+                  <input type="text" required id="pay-cardcvv" pattern="[0-9]{3}" placeholder="123" class="w-full text-xs p-2.5 border rounded-sm bg-white text-center">
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-neutral-200 pt-4 mt-6 space-y-2">
+              <div class="flex justify-between text-xs text-neutral-500">
+                <span>Sous-total Vestiaire</span>
+                <span id="summary-subtotal">0 €</span>
+              </div>
+              <div class="flex justify-between text-xs text-neutral-500">
+                <span>Frais de port (Assurance 1000 incluse)</span>
+                <span id="summary-shipping">Gratuit</span>
+              </div>
+              <div class="flex justify-between text-sm font-bold text-neutral-900 border-t pt-2 mt-2">
+                <span>Montant Total</span>
+                <span id="summary-total" class="font-sport">0 €</span>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-4 bg-black text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-900 transition-colors rounded-sm mt-4">
+              Finaliser la transaction
+            </button>
+          </form>
         </div>
+      </div>
     </div>
+  </main>
+
+  <footer class="bg-neutral-950 text-neutral-400 text-xs py-8 px-6 border-t border-neutral-900">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+      <p>&copy; 2026 Benzjames. Tous droits réservés.</p>
+      <div class="flex space-x-6 text-neutral-500 tracking-wider">
+        <a href="#" class="hover:text-white transition-colors">Termes & Conditions</a>
+        <a href="#" class="hover:text-white transition-colors">Garantie Spécificité 1000</a>
+        <a href="#" class="hover:text-white transition-colors">Contact</a>
+      </div>
+    </div>
+  </footer>
 </div>
 
+<!-- Auction Modal -->
+<div id="post-item-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-white max-w-md w-full p-6 rounded-sm shadow-2xl relative">
+    <button onclick="closePostItemModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black">
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+    <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-neutral-900">Mettre un article aux enchères</h3>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Nom de la pièce</label>
+        <input type="text" id="auction-item-name" placeholder="Ex: AeroCap Nero" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Numéro (X/1000)</label>
+          <input type="number" id="auction-item-num" placeholder="Ex: 145" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
+        </div>
+        <div>
+          <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Prix de départ (€)</label>
+          <input type="number" id="auction-item-price" placeholder="Ex: 500" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
+        </div>
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Image URL</label>
+        <input type="text" id="auction-item-img" placeholder="URL de l'image de votre produit" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm" value="https://placehold.co/400x300/e5e5e5/111111?text=AeroCap+Limited">
+      </div>
+      <button onclick="createAuction()" class="w-full py-4 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors rounded-sm">Lancer l'enchère</button>
+    </div>
+  </div>
+</div>
+
+<!-- Unified User & Admin Master Authentication Modal -->
 <div id="admin-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white max-w-lg w-full p-6 rounded-sm shadow-2xl relative">
-        <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black">
-            <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-        
-        <div id="admin-auth-panel">
-            <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-neutral-900">Identification Abonné Master</h3>
-            <p class="text-xs text-neutral-500 mb-4">Entrez votre passkey pour accéder à la modification en direct du vestiaire et des paramètres de l'application.</p>
-            <div class="space-y-4">
-                <input type="password" id="admin-pass" placeholder="Entrez le code..." class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
-                <button onclick="verifyAdminPass()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">S'identifier</button>
-                <p id="admin-auth-error" class="hidden text-xs text-red-600 mt-2 font-bold">Code erroné. Veuillez réessayer.</p>
-            </div>
-        </div>
-
-        <div id="admin-panel" class="hidden space-y-6">
-            <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900 border-b pb-2 flex items-center justify-between">
-                <span>Panneau de Configuration Master</span>
-                <span class="text-[10px] tracking-widest text-emerald-600 font-bold"><i class="fa-solid fa-circle"></i> Connecté</span>
-            </h3>
-
-            <!-- Setup elements editing -->
-            <div class="space-y-4">
-                <h4 class="text-xs uppercase font-bold tracking-widest text-neutral-400">Page 1 : Personnalisation Média</h4>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[10px] text-neutral-500">Titre Principal</label>
-                        <input type="text" id="edit-hero-title" class="w-full text-xs p-2 border border-neutral-200" value="L'Édition Unique.">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-neutral-500">Sous-Titre</label>
-                        <input type="text" id="edit-hero-subtitle" class="w-full text-xs p-2 border border-neutral-200" value="Maison de Spéculation Athlétique">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[10px] text-neutral-500">URL Boucle Vidéo (MP4)</label>
-                    <input type="text" id="edit-hero-video-url" class="w-full text-xs p-2 border border-neutral-200" value="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4">
-                </div>
-
-                <h4 class="text-xs uppercase font-bold tracking-widest text-neutral-400 pt-2 border-t">Page 2 : Créer un nouvel Article (Showroom)</h4>
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="new-item-name" placeholder="Nom de la création" class="text-xs p-2 border border-neutral-200">
-                    <select id="new-item-cat" class="text-xs p-2 border border-neutral-200">
-                        <option value="casquette">Casquette</option>
-                        <option value="basket">Baskets</option>
-                        <option value="tshirt">T-shirt</option>
-                        <option value="sac">Sac à dos</option>
-                        <option value="montre">Montre</option>
-                        <option value="sweat">Sweat</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="number" id="new-item-price" placeholder="Prix initial (€)" class="text-xs p-2 border border-neutral-200">
-                    <input type="number" id="new-item-visible" placeholder="N° Pièce" class="text-xs p-2 border border-neutral-200" min="1" max="1000">
-                </div>
-                <div>
-                    <input type="text" id="new-item-comment" placeholder="Commentaire client" class="w-full text-xs p-2 border border-neutral-200">
-                </div>
-
-                <button onclick="saveAdminChanges()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-800 transition-all">Enregistrer & Déployer</button>
-            </div>
-        </div>
+  <div class="bg-white max-w-lg w-full p-6 rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black z-10">
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+    
+    <!-- User Choice Tabs (Abonné vs Master) -->
+    <div id="auth-tabs" class="flex border-b border-neutral-200 mb-6">
+      <button onclick="switchAuthTab('subscriber')" id="tab-subscriber" class="flex-1 py-3 text-xs tracking-wider uppercase font-bold text-black border-b-2 border-black">S'identifier (Abonné)</button>
+      <button onclick="switchAuthTab('master')" id="tab-master" class="flex-1 py-3 text-xs tracking-wider uppercase font-bold text-neutral-400 hover:text-black">Authentification Master</button>
     </div>
+
+    <!-- 1. Subscriber Login Panel -->
+    <div id="subscriber-auth-panel" class="space-y-4">
+      <h3 class="text-xs uppercase tracking-widest font-bold text-neutral-900">Espace Privé Abonné</h3>
+      <p class="text-[11px] text-neutral-500 leading-relaxed">Saisissez votre pseudo pour interagir sur le salon Tchat passion, enchérir de manière nominative et explorer pleinement notre vestiaire sans blocage.</p>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-[9px] uppercase tracking-wider text-neutral-400 mb-1">Identifiant Personnel</label>
+          <input type="text" id="sub-id" placeholder="Ex: ABONNE-789" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm bg-white">
+        </div>
+        <div>
+          <label class="block text-[9px] uppercase tracking-wider text-neutral-400 mb-1">Votre Pseudo</label>
+          <input type="text" id="sub-pseudo" placeholder="Ex: SpeedCollector" class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm bg-white">
+        </div>
+        <button onclick="verifySubscriberLogin()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-800 transition-colors rounded-sm">Activer mon accès</button>
+      </div>
+    </div>
+
+    <!-- 2. Master Password Panel -->
+    <div id="admin-auth-panel" class="hidden space-y-4">
+      <h3 class="text-xs uppercase tracking-widest font-bold text-neutral-900">Accès Administrateur Master</h3>
+      <p class="text-[11px] text-neutral-500 leading-relaxed">Entrez votre passkey exclusif pour accéder en direct au panneau d'édition des textes, titres, styles globaux et ajouts du Showroom.</p>
+      <div class="space-y-4">
+        <input type="password" id="admin-pass" placeholder="Entrez le code Master..." class="w-full text-xs p-3 border border-neutral-200 focus:outline-none focus:border-black rounded-sm">
+        <button onclick="verifyAdminPass()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors rounded-sm">Se connecter</button>
+        <p id="admin-auth-error" class="hidden text-xs text-red-600 mt-2 font-bold">Code erroné. Veuillez réessayer.</p>
+      </div>
+    </div>
+
+    <!-- 3. Connected Master Panel (Control & Global Typography Customizer) -->
+    <div id="admin-panel" class="hidden space-y-6">
+      <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-neutral-900 border-b pb-2 flex items-center justify-between">
+        <span>Configuration Master</span>
+        <span class="text-[10px] tracking-widest text-emerald-600 font-bold"><i class="fa-solid fa-circle"></i> Connecté</span>
+      </h3>
+      
+      <!-- Typography Editor (Size, Font, Color) -->
+      <div class="space-y-4 p-4 bg-neutral-50 rounded-sm border border-neutral-200">
+        <h4 class="text-xs uppercase font-bold tracking-widest text-neutral-900 border-b pb-1"><i class="fa-solid fa-pen-nib mr-1"></i> Customiseur de Typographie Global</h4>
+        
+        <!-- Target: Titles -->
+        <div class="space-y-2 border-b pb-3">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-600">1. Titres Principaux (.master-title)</span>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Police</label>
+              <select id="master-title-font" class="w-full text-[10px] p-1.5 border bg-white rounded-sm">
+                <option value="Oswald">Oswald (Sport)</option>
+                <option value="Montserrat">Montserrat (Modern)</option>
+                <option value="Playfair Display">Playfair (Luxury)</option>
+                <option value="sans-serif">System Sans</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Taille (rem)</label>
+              <input type="number" step="0.25" min="1" max="8" id="master-title-size" class="w-full text-[10px] p-1.5 border bg-white rounded-sm" value="3.5">
+            </div>
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Couleur</label>
+              <input type="color" id="master-title-color" class="w-full h-8 border rounded-sm" value="#111111">
+            </div>
+          </div>
+        </div>
+
+        <!-- Target: Subtitles -->
+        <div class="space-y-2 border-b pb-3">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-600">2. Sous-Titres / Accents (.master-subtitle)</span>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Police</label>
+              <select id="master-subtitle-font" class="w-full text-[10px] p-1.5 border bg-white rounded-sm">
+                <option value="Montserrat" selected>Montserrat</option>
+                <option value="Oswald">Oswald</option>
+                <option value="Playfair Display">Playfair</option>
+                <option value="sans-serif">System Sans</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Taille (rem)</label>
+              <input type="number" step="0.05" min="0.5" max="3" id="master-subtitle-size" class="w-full text-[10px] p-1.5 border bg-white rounded-sm" value="0.75">
+            </div>
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Couleur</label>
+              <input type="color" id="master-subtitle-color" class="w-full h-8 border rounded-sm" value="#737373">
+            </div>
+          </div>
+        </div>
+
+        <!-- Target: Body Paragraphs -->
+        <div class="space-y-2">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-600">3. Paragraphes / Textes (.master-body)</span>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Police</label>
+              <select id="master-body-font" class="w-full text-[10px] p-1.5 border bg-white rounded-sm">
+                <option value="Montserrat" selected>Montserrat</option>
+                <option value="Oswald">Oswald</option>
+                <option value="Playfair Display">Playfair</option>
+                <option value="sans-serif">System Sans</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Taille (rem)</label>
+              <input type="number" step="0.05" min="0.5" max="2" id="master-body-size" class="w-full text-[10px] p-1.5 border bg-white rounded-sm" value="0.875">
+            </div>
+            <div>
+              <label class="text-[8px] text-neutral-500 uppercase">Couleur</label>
+              <input type="color" id="master-body-color" class="w-full h-8 border rounded-sm" value="#404040">
+            </div>
+          </div>
+        </div>
+        <button onclick="applyDynamicMasterStyles()" class="w-full py-2 bg-neutral-900 text-white text-[10px] uppercase tracking-widest font-bold rounded-sm hover:bg-black transition-colors">Appliquer les styles Master</button>
+      </div>
+
+      <!-- Video and product management details -->
+      <div class="space-y-4">
+        <h4 class="text-xs uppercase font-bold tracking-widest text-neutral-400">Page 1: Personnalisation Média</h4>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[10px] text-neutral-500">Titre Principal</label>
+            <input type="text" id="edit-hero-title" class="w-full text-xs p-2 border border-neutral-200 rounded-sm bg-white" value="L'Édition Unique.">
+          </div>
+          <div>
+            <label class="text-[10px] text-neutral-500">Sous-Titre</label>
+            <input type="text" id="edit-hero-subtitle" class="w-full text-xs p-2 border border-neutral-200 rounded-sm bg-white" value="Maison de Spéculation Athlétique">
+          </div>
+        </div>
+        <div>
+          <label class="text-[10px] text-neutral-500">URL Boucle Vidéo (MP4)</label>
+          <input type="text" id="edit-hero-video-url" class="w-full text-xs p-2 border border-neutral-200 rounded-sm bg-white" value="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4">
+        </div>
+        
+        <h4 class="text-xs uppercase font-bold tracking-widest text-neutral-400 pt-2 border-t">Créer un nouvel Article (Showroom)</h4>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="text" id="new-item-name" placeholder="Nom de la création" class="text-xs p-2 border border-neutral-200 rounded-sm bg-white">
+          <select id="new-item-cat" class="text-xs p-2 border border-neutral-200 rounded-sm bg-white">
+            <option value="casquette">Casquette</option>
+            <option value="basket">Baskets</option>
+            <option value="tshirt">T-shirt</option>
+            <option value="sac">Sac à dos</option>
+            <option value="montre">Montre</option>
+            <option value="sweat">Sweat</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="number" id="new-item-price" placeholder="Prix initial (€)" class="text-xs p-2 border border-neutral-200 rounded-sm bg-white">
+          <input type="number" id="new-item-visible" placeholder="N° Pièce (1-1000)" class="text-xs p-2 border border-neutral-200 rounded-sm bg-white" min="1" max="1000">
+        </div>
+        <div>
+          <input type="text" id="new-item-comment" placeholder="Commentaire client" class="w-full text-xs p-2 border border-neutral-200 rounded-sm bg-white">
+        </div>
+        <button onclick="saveAdminChanges()" class="w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest font-bold hover:bg-neutral-800 transition-all rounded-sm">Enregistrer & Déployer</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Dynamic CSS styling tag for real-time Master typography changes -->
+<style id="master-live-styles"></style>
 
 <script>
-    // State of App
-    const state = {
-        currentPage: 'intro',
-        isAdmin: false,
-        showroomCategory: 'tous',
-        products: [
-            {
-                id: 'p1',
-                category: 'casquette',
-                name: 'AeroCap Nero-1',
-                price: 420,
-                rating: 4.9,
-                comment: 'Incroyable coupe profilée en tissu hydrophobe pour la vitesse.',
-                image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=600',
-                numberInSeries: 42,
-                privateSerial: 'BJ-CAS-042-SEC49B2'
-            },
-            {
-                id: 'p2',
-                category: 'basket',
-                name: 'ChronoStrider Blanc',
-                price: 890,
-                rating: 5.0,
-                comment: 'Sensation de lévitation pure sur circuit urbain.',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600',
-                numberInSeries: 145,
-                privateSerial: 'BJ-BAS-145-SEC21F9'
-            },
-            {
-                id: 'p3',
-                category: 'tshirt',
-                name: 'Veloce Tee',
-                price: 290,
-                rating: 4.7,
-                comment: 'Coton de prestige, respirabilité supérieure.',
-                image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=600',
-                numberInSeries: 8,
-                privateSerial: 'BJ-TSH-008-SEC77X5'
-            },
-            {
-                id: 'p4',
-                category: 'sac',
-                name: 'ShieldPack Carbon',
-                price: 1200,
-                rating: 4.8,
-                comment: 'Coque de protection rigide infusée en fibre de carbone.',
-                image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600',
-                numberInSeries: 777,
-                privateSerial: 'BJ-SAC-777-SEC18A4'
-            },
-            {
-                id: 'p5',
-                category: 'montre',
-                name: 'Chronographe Squelette Stealth',
-                price: 3400,
-                rating: 4.9,
-                comment: 'Verre saphir inrayable, mécanisme suisse apparent.',
-                image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=600',
-                numberInSeries: 1,
-                privateSerial: 'BJ-MON-001-SEC99W2'
-            }
-        ],
-        posts: [
-            {
-                id: 'post1',
-                title: 'High Performance Run dans les rues de Tokyo',
-                user: 'Takumi_9',
-                videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4',
-                likes: 242,
-                comments: ['Légèreté absolue pour la vitesse !', 'Vraiment stylée la veste.']
-            },
-            {
-                id: 'post2',
-                title: 'Match-point au coucher de soleil',
-                user: 'FedererFan',
-                videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4',
-                likes: 189,
-                comments: ['Un coup droit incroyable !']
-            },
-            {
-                id: 'post3',
-                title: 'Entraînement cardio de haute intensité',
-                user: 'EliteFighter',
-                videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-boxer-training-inside-a-gym-with-low-light-40003-large.mp4',
-                likes: 310,
-                comments: ['Le mental au plus haut niveau.']
-            }
-        ],
-        chatMessages: [
-            { id: 1, pseudo: 'Julien_B', text: 'Est-ce que quelqu\'un a réussi à obtenir le numéro #007 de l\'AeroCap ?' },
-            { id: 2, pseudo: 'BenzJames_Fan', text: 'Je l\'ai vu passer en enchère hier à plus de 1500€ ! La cote explose.' },
-            { id: 3, pseudo: 'Arthur', text: 'Le t-shirt Veloce est d\'une qualité incroyable.' }
-        ],
-        auctions: [
-            {
-                id: 'auc1',
-                name: 'AeroCap Nero-1',
-                numberInSeries: 77,
-                startingPrice: 420,
-                currentBid: 980,
-                bidder: 'LuxCollector',
-                image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=600'
-            },
-            {
-                id: 'auc2',
-                name: 'ChronoStrider Blanc',
-                numberInSeries: 42,
-                startingPrice: 890,
-                currentBid: 1750,
-                bidder: 'SpeedDemon',
-                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600'
-            }
-        ]
+const state = {
+  currentPage: 'intro',
+  isAdmin: false,
+  isSubscriber: false,
+  currentUser: {
+    pseudo: 'Anonyme',
+    id: ''
+  },
+  showroomCategory: 'tous',
+  cart: [],
+  products: [
+    {
+      id: 'p1',
+      category: 'casquette',
+      name: 'AeroCap Nero-1',
+      price: 420,
+      rating: 4.9,
+      comment: 'Incroyable coupe profilée en tissu hydrophobe pour la vitesse.',
+      image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=600',
+      numberInSeries: 42,
+      privateSerial: 'BJ-CAS-042-SEC49B2'
+    },
+    {
+      id: 'p2',
+      category: 'basket',
+      name: 'ChronoStrider Blanc',
+      price: 890,
+      rating: 5.0,
+      comment: 'Sensation de lévitation pure sur circuit urbain.',
+      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600',
+      numberInSeries: 145,
+      privateSerial: 'BJ-BAS-145-SEC21F9'
+    },
+    {
+      id: 'p3',
+      category: 'tshirt',
+      name: 'Veloce Tee',
+      price: 290,
+      rating: 4.7,
+      comment: 'Coton de prestige, respirabilité supérieure.',
+      image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=600',
+      numberInSeries: 8,
+      privateSerial: 'BJ-TSH-008-SEC77X5'
+    },
+    {
+      id: 'p4',
+      category: 'sac',
+      name: 'ShieldPack Carbon',
+      price: 1200,
+      rating: 4.8,
+      comment: 'Coque de protection rigide infusée en fibre de carbone.',
+      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600',
+      numberInSeries: 777,
+      privateSerial: 'BJ-SAC-777-SEC18A4'
+    },
+    {
+      id: 'p5',
+      category: 'montre',
+      name: 'Chronographe Stealth',
+      price: 3400,
+      rating: 4.9,
+      comment: 'Verre saphir inrayable, mécanisme suisse apparent.',
+      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=600',
+      numberInSeries: 1,
+      privateSerial: 'BJ-MON-001-SEC99W2'
+    }
+  ],
+  posts: [
+    {
+      id: 'post1',
+      title: 'High Performance Run dans les rues de Tokyo',
+      user: 'Takumi_9',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4',
+      likes: 242,
+      comments: ['Légèreté absolue pour la vitesse !', 'Vraiment stylée la veste.']
+    },
+    {
+      id: 'post2',
+      title: 'Match-point au coucher de soleil',
+      user: 'FedererFan',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4',
+      likes: 189,
+      comments: ['Un coup droit incroyable!']
+    }
+  ],
+  chatMessages: [
+    { id: 1, pseudo: 'Julien_B', text: "Est-ce que quelqu'un a réussi à obtenir le numéro #007 de l'AeroCap ?" },
+    { id: 2, pseudo: 'BenzJames_Fan', text: "Je l'ai vu passer en enchère hier à plus de 1500€ ! La cote explose." },
+    { id: 3, pseudo: 'Arthur', text: "Le t-shirt Veloce est d'une qualité incroyable." }
+  ],
+  auctions: [
+    {
+      id: 'auc1',
+      name: 'AeroCap Nero-1',
+      numberInSeries: 77,
+      startingPrice: 420,
+      currentBid: 980,
+      bidder: 'LuxCollector',
+      image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=600'
+    },
+    {
+      id: 'auc2',
+      name: 'ChronoStrider Blanc',
+      numberInSeries: 42,
+      startingPrice: 890,
+      currentBid: 1750,
+      bidder: 'SpeedDemon',
+      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600'
+    }
+  ]
+};
+
+// Cryptographic Simulation
+function generateFakeSecret(category, num) {
+  const catCode = category.substring(0, 3).toUpperCase();
+  const paddedNum = String(num).padStart(3, '0');
+  let hash = 0;
+  const comb = catCode + paddedNum;
+  for (let i = 0; i < comb.length; i++) {
+    hash = (hash << 5) - hash + comb.charCodeAt(i);
+    hash |= 0;
+  }
+  const hex = Math.abs(hash).toString(16).toUpperCase().substring(0, 5);
+  return `BJ-${catCode}-${paddedNum}-SEC${hex}`;
+}
+</script>
+
+<script>
+function enterApp() {
+  playLaserSound();
+  const intro = document.getElementById('intro-screen');
+  intro.classList.add('opacity-0', 'pointer-events-none');
+  setTimeout(() => {
+    intro.classList.add('hidden');
+    document.getElementById('app-container').classList.remove('hidden');
+    navigate('home');
+  }, 1000);
+}
+
+function navigate(pageId) {
+  // Hide all sections
+  const pages = document.querySelectorAll('.page-section');
+  pages.forEach(p => p.classList.add('hidden'));
+
+  // Reveal active section
+  const activePage = document.getElementById(`page-${pageId}`);
+  if (activePage) {
+    activePage.classList.remove('hidden');
+  }
+
+  // Handle active class updates
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.classList.remove('text-black', 'border-b', 'border-black');
+    tab.classList.add('text-neutral-500');
+  });
+  document.querySelectorAll('.mobile-nav-tab').forEach(tab => {
+    tab.classList.remove('text-black', 'border-black');
+    tab.classList.add('text-neutral-500', 'border-transparent');
+  });
+
+  const activeNav = document.getElementById(`nav-${pageId}`);
+  if (activeNav) {
+    activeNav.classList.add('text-black', 'border-b', 'border-black');
+    activeNav.classList.remove('text-neutral-500');
+  }
+
+  const activeMobileNav = document.getElementById(`m-nav-${pageId}`);
+  if (activeMobileNav) {
+    activeMobileNav.classList.add('text-black', 'border-black');
+    activeMobileNav.classList.remove('text-neutral-500', 'border-transparent');
+  }
+
+  // Trigger page specific renders
+  if (pageId === 'showroom') {
+    renderShowroom();
+  } else if (pageId === 'tchat') {
+    renderTchatFeed();
+    renderChatHistory();
+  } else if (pageId === 'market') {
+    renderAuctions();
+  } else if (pageId === 'cart') {
+    renderCart();
+  }
+}
+</script>
+
+<script>
+function applyDynamicMasterStyles() {
+  const tFont = document.getElementById('master-title-font').value;
+  const tSize = document.getElementById('master-title-size').value;
+  const tColor = document.getElementById('master-title-color').value;
+
+  const sFont = document.getElementById('master-subtitle-font').value;
+  const sSize = document.getElementById('master-subtitle-size').value;
+  const sColor = document.getElementById('master-subtitle-color').value;
+
+  const bFont = document.getElementById('master-body-font').value;
+  const bSize = document.getElementById('master-body-size').value;
+  const bColor = document.getElementById('master-body-color').value;
+
+  // Compile CSS rule sets
+  const css = `
+    .master-title {
+      font-family: '${tFont}', sans-serif !important;
+      font-size: ${tSize}rem !important;
+      color: ${tColor} !important;
+    }
+    .master-subtitle {
+      font-family: '${sFont}', sans-serif !important;
+      font-size: ${sSize}rem !important;
+      color: ${sColor} !important;
+    }
+    .master-body {
+      font-family: '${bFont}', sans-serif !important;
+      font-size: ${bSize}rem !important;
+      color: ${bColor} !important;
+    }
+  `;
+  document.getElementById('master-live-styles').innerHTML = css;
+  showToast("Styles typographiques appliqués.");
+}
+</script>
+
+<script>
+function switchAuthTab(tabName) {
+  const subBtn = document.getElementById('tab-subscriber');
+  const masterBtn = document.getElementById('tab-master');
+  const subPanel = document.getElementById('subscriber-auth-panel');
+  const masterPanel = document.getElementById('admin-auth-panel');
+  const adminPanel = document.getElementById('admin-panel');
+
+  if (tabName === 'subscriber') {
+    subBtn.classList.add('text-black', 'border-b-2', 'border-black');
+    subBtn.classList.remove('text-neutral-400');
+    masterBtn.classList.remove('text-black', 'border-b-2', 'border-black');
+    masterBtn.classList.add('text-neutral-400');
+    subPanel.classList.remove('hidden');
+    masterPanel.classList.add('hidden');
+    adminPanel.classList.add('hidden');
+  } else {
+    masterBtn.classList.add('text-black', 'border-b-2', 'border-black');
+    masterBtn.classList.remove('text-neutral-400');
+    subBtn.classList.remove('text-black', 'border-b-2', 'border-black');
+    subBtn.classList.add('text-neutral-400');
+    subPanel.classList.add('hidden');
+    
+    if (state.isAdmin) {
+      adminPanel.classList.remove('hidden');
+      masterPanel.classList.add('hidden');
+    } else {
+      masterPanel.classList.remove('hidden');
+      adminPanel.classList.add('hidden');
+    }
+  }
+}
+
+function verifySubscriberLogin() {
+  const pseudo = document.getElementById('sub-pseudo').value.trim();
+  const id = document.getElementById('sub-id').value.trim();
+
+  if (!pseudo || !id) {
+    showToast("Veuillez renseigner un ID et un Pseudo.", true);
+    return;
+  }
+
+  state.isSubscriber = true;
+  state.currentUser.pseudo = pseudo;
+  state.currentUser.id = id;
+
+  // Sync to inputs
+  document.getElementById('chat-pseudo').value = pseudo;
+  document.getElementById('post-user').value = pseudo;
+
+  // Header update
+  const dot = document.getElementById('admin-dot');
+  dot.className = "w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse";
+  const userStatus = document.getElementById('header-user-status');
+  userStatus.innerText = pseudo;
+  userStatus.classList.remove('hidden');
+
+  playSuccessSound();
+  showToast(`Connecté en tant qu'Abonné : ${pseudo}`);
+  closeAdminModal();
+  renderShowroom(); // refresh hover states
+}
+
+function verifyAdminPass() {
+  const pass = document.getElementById('admin-pass').value;
+  const error = document.getElementById('admin-auth-error');
+  const authPanel = document.getElementById('admin-auth-panel');
+  const adminPanel = document.getElementById('admin-panel');
+
+  if (pass === 'Denis007') {
+    state.isAdmin = true;
+    playSuccessSound();
+    
+    // UI indicator
+    const dot = document.getElementById('admin-dot');
+    dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+    
+    const userStatus = document.getElementById('header-user-status');
+    userStatus.innerText = "Master";
+    userStatus.classList.remove('hidden');
+
+    authPanel.classList.add('hidden');
+    adminPanel.classList.remove('hidden');
+    showToast("Authentification Master réussie.");
+    renderShowroom();
+  } else {
+    error.classList.remove('hidden');
+    showToast("Passkey invalide", true);
+  }
+}
+</script>
+
+<script>
+function renderShowroom() {
+  const container = document.getElementById('showroom-container');
+  container.innerHTML = "";
+
+  const filtered = state.products.filter(p => {
+    if (state.showroomCategory === 'tous') return true;
+    return p.category === state.showroomCategory;
+  });
+
+  filtered.forEach(p => {
+    const ratingStars = '<i class="fa-solid fa-star text-neutral-900 text-[10px]"></i>'.repeat(Math.floor(p.rating)) +
+      (p.rating % 1 !== 0 ? '<i class="fa-solid fa-star-half-stroke text-neutral-900 text-[10px]"></i>' : "");
+
+    const isIdentified = state.isAdmin || state.isSubscriber;
+    
+    // Premium Product HTML Card Design
+    const card = `
+      <div class="group flex flex-col justify-between bg-white border border-neutral-100 p-4 transition-all duration-300 hover:shadow-lg relative rounded-sm overflow-hidden">
+        
+        <!-- Hover login overlay block if not logged in -->
+        ${!isIdentified ? `
+          <div class="absolute inset-0 bg-neutral-950/90 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center text-white">
+            <i class="fa-solid fa-lock text-2xl mb-3 text-neutral-400"></i>
+            <h4 class="text-xs uppercase tracking-widest font-bold font-sport mb-2">Espace Abonné Benzjames</h4>
+            <p class="text-[10px] text-neutral-400 mb-4 max-w-xs font-light">Veuillez vous identifier pour accéder au vestiaire de spéculation.</p>
+            <button onclick="openAdminModal()" class="px-6 py-2 bg-white text-black text-[10px] uppercase font-bold tracking-widest rounded-sm hover:bg-neutral-200 transition-colors">S'identifier</button>
+          </div>
+        ` : ''}
+
+        <!-- Corner Limited Edition Tag -->
+        <span class="absolute top-6 left-6 z-10 bg-black/90 text-white text-[9px] font-sport font-bold px-3 py-1 uppercase tracking-widest rounded-sm">
+          Édition ${p.numberInSeries}/1000
+        </span>
+        <div class="overflow-hidden bg-neutral-100 aspect-[4/5] mb-6 relative">
+          <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e5e5e5/111111?text=${p.name}'">
+        </div>
+        
+        <div>
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-xs font-bold tracking-widest uppercase text-neutral-900">${p.name}</h3>
+            <span class="text-xs font-medium tracking-wide text-neutral-700 font-sport">${p.price} €</span>
+          </div>
+          <div class="flex items-center space-x-2 text-[10px] mb-3">
+            <div class="flex text-neutral-900">${ratingStars}</div>
+            <span class="text-neutral-500 font-semibold text-[9px]">(${p.rating}/5)</span>
+          </div>
+          <p class="text-xs text-neutral-500 italic font-light mb-4 leading-relaxed font-armani master-body">
+            "${p.comment}"
+          </p>
+        </div>
+        
+        <div class="border-t border-neutral-100 pt-4 flex flex-col space-y-2 text-[10px] tracking-widest uppercase font-bold">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-neutral-400">Authenticité</span>
+            <button onclick="copyToClipboard('${generateFakeSecret(p.category, p.numberInSeries)}')" class="text-neutral-950 hover:underline flex items-center space-x-1">
+              <i class="fa-solid fa-key"></i> <span>Copier Clé</span>
+            </button>
+          </div>
+          <button onclick="addToCart('${p.id}')" class="w-full py-2 bg-neutral-900 text-white hover:bg-neutral-800 transition-colors text-center text-[9px] tracking-[0.2em] uppercase rounded-sm">
+            <i class="fa-solid fa-cart-shopping mr-2"></i> Acheter cet article
+          </button>
+        </div>
+      </div>
+    `;
+    container.innerHTML += card;
+  });
+}
+
+function filterShowroom(category) {
+  state.showroomCategory = category;
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    tab.classList.remove('text-neutral-900', 'border-b', 'border-neutral-900');
+    tab.classList.add('text-neutral-400');
+  });
+  const activeTab = document.getElementById(`cat-${category}`);
+  if (activeTab) {
+    activeTab.classList.add('text-neutral-900', 'border-b', 'border-neutral-900');
+    activeTab.classList.remove('text-neutral-400');
+  }
+  renderShowroom();
+}
+
+function copyToClipboard(text) {
+  const el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  playSuccessSound();
+  showToast("Clé copiée pour l'authentificateur");
+}
+</script>
+
+<script>
+function addToCart(productId) {
+  const product = state.products.find(p => p.id === productId);
+  if (!product) return;
+  
+  // Check if item already exists in cart
+  const cartItem = state.cart.find(item => item.product.id === productId);
+  if (cartItem) {
+    cartItem.quantity++;
+  } else {
+    state.cart.push({ product, quantity: 1 });
+  }
+  
+  playSuccessSound();
+  showToast(`${product.name} ajouté au panier`);
+  updateCartBadge();
+  navigate('cart');
+}
+
+function updateCartBadge() {
+  const count = state.cart.reduce((total, item) => total + item.quantity, 0);
+  const badge = document.getElementById('cart-count');
+  const badgeMobile = document.getElementById('cart-count-mobile');
+  
+  if (count > 0) {
+    badge.innerText = count;
+    badge.classList.remove('hidden');
+    badgeMobile.innerText = count;
+    badgeMobile.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+    badgeMobile.classList.add('hidden');
+  }
+}
+
+function renderCart() {
+  const listContainer = document.getElementById('cart-items-list');
+  const emptyMsg = document.getElementById('cart-empty-message');
+  listContainer.innerHTML = "";
+
+  if (state.cart.length === 0) {
+    emptyMsg.classList.remove('hidden');
+    listContainer.classList.add('hidden');
+    updateSummary(0);
+    return;
+  }
+
+  emptyMsg.classList.add('hidden');
+  listContainer.classList.remove('hidden');
+
+  let subtotal = 0;
+
+  state.cart.forEach(item => {
+    const itemTotal = item.product.price * item.quantity;
+    subtotal += itemTotal;
+
+    const row = `
+      <div class="flex items-center justify-between border-b border-neutral-100 pb-4">
+        <div class="flex items-center space-x-4">
+          <img src="${item.product.image}" class="w-16 h-20 object-cover rounded-sm" onerror="this.src='https://placehold.co/100x120/e5e5e5/111111?text=BJ'">
+          <div>
+            <h4 class="text-xs uppercase tracking-widest font-bold text-neutral-900">${item.product.name}</h4>
+            <span class="text-[10px] text-neutral-400 uppercase tracking-wider block">Numéro ${item.product.numberInSeries}/1000</span>
+            <span class="text-xs font-semibold text-neutral-700 block mt-1">${item.product.price} €</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-2 border rounded-sm">
+            <button onclick="updateCartQuantity('${item.product.id}', -1)" class="px-2 py-1 text-xs hover:bg-neutral-100">-</button>
+            <span class="text-xs font-bold px-1">${item.quantity}</span>
+            <button onclick="updateCartQuantity('${item.product.id}', 1)" class="px-2 py-1 text-xs hover:bg-neutral-100">+</button>
+          </div>
+          <span class="text-xs font-bold text-neutral-900 font-sport">${itemTotal} €</span>
+          <button onclick="removeFromCart('${item.product.id}')" class="text-neutral-400 hover:text-red-500 transition-colors">
+            <i class="fa-regular fa-trash-can text-sm"></i>
+          </button>
+        </div>
+      </div>
+    `;
+    listContainer.innerHTML += row;
+  });
+
+  updateSummary(subtotal);
+}
+
+function updateCartQuantity(productId, delta) {
+  const item = state.cart.find(i => i.product.id === productId);
+  if (item) {
+    item.quantity += delta;
+    if (item.quantity <= 0) {
+      removeFromCart(productId);
+    } else {
+      updateCartBadge();
+      renderCart();
+    }
+  }
+}
+
+function removeFromCart(productId) {
+  state.cart = state.cart.filter(item => item.product.id !== productId);
+  updateCartBadge();
+  renderCart();
+  showToast("Article retiré du panier");
+}
+
+function updateSummary(subtotal) {
+  document.getElementById('summary-subtotal').innerText = `${subtotal} €`;
+  document.getElementById('summary-total').innerText = `${subtotal} €`;
+}
+
+function processPayment(event) {
+  event.preventDefault();
+  
+  const fn = document.getElementById('ship-firstname').value;
+  const ln = document.getElementById('ship-lastname').value;
+  const address = document.getElementById('ship-address').value;
+  
+  if (state.cart.length === 0) {
+    showToast("Votre panier est vide", true);
+    return;
+  }
+
+  // Success flow simulation
+  playSuccessSound();
+  
+  // Custom Receipt Layout
+  const orderNumber = Math.floor(Math.random() * 900000) + 100000;
+  
+  // Clear cart
+  state.cart = [];
+  updateCartBadge();
+  
+  // Custom luxury order success screen injection on cart page
+  const cartPage = document.getElementById('page-cart');
+  cartPage.innerHTML = `
+    <div class="max-w-md mx-auto text-center py-16 px-6 bg-neutral-950 text-white rounded-sm border border-neutral-800 shadow-2xl">
+      <i class="fa-solid fa-certificate text-5xl text-neutral-300 animate-pulse mb-6"></i>
+      <h2 class="text-xl tracking-[0.3em] uppercase font-sport font-black italic mb-2">Acquisition Confirmée</h2>
+      <p class="text-[10px] text-neutral-400 uppercase tracking-widest mb-6">Bordereau de Propriété Certifié BJ-${orderNumber}</p>
+      
+      <div class="border-t border-b border-neutral-800 py-4 my-6 text-left text-xs space-y-2">
+        <div class="flex justify-between text-neutral-400"><span class="uppercase">Acquéreur:</span> <span class="font-bold text-white">${fn} ${ln}</span></div>
+        <div class="flex justify-between text-neutral-400"><span class="uppercase">Destination:</span> <span class="font-bold text-white truncate max-w-[200px]">${address}</span></div>
+        <div class="flex justify-between text-neutral-400"><span class="uppercase">Authenticité:</span> <span class="font-bold text-emerald-500">Garantie 1000 Pièces</span></div>
+      </div>
+      
+      <p class="text-xs text-neutral-400 font-light leading-relaxed mb-6">Une clé cryptographique unique a été associée à votre adresse. Expédition exclusive sous enveloppe sécurisée.</p>
+      
+      <button onclick="reloadCartPage()" class="w-full py-3 bg-white text-black font-sport font-bold uppercase tracking-widest text-xs rounded-sm hover:bg-neutral-200 transition-colors">
+        Retourner au showroom
+      </button>
+    </div>
+  `;
+}
+
+function reloadCartPage() {
+  // Restore initial HTML content structure of the Cart page for future operations
+  location.reload();
+}
+</script>
+
+<script>
+function renderTchatFeed() {
+  const feed = document.getElementById('video-posts-feed');
+  feed.innerHTML = "";
+
+  const sortedPosts = [...state.posts].sort((a, b) => b.likes - a.likes);
+  sortedPosts.forEach((post, index) => {
+    const card = `
+      <div class="bg-white border border-neutral-100 rounded-sm shadow-sm overflow-hidden transition-all duration-300">
+        <div class="bg-neutral-950 text-white p-3 px-4 flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <span class="font-sport font-bold italic text-sm text-neutral-300">#${index + 1}</span>
+            <span class="text-xs uppercase tracking-widest font-bold">${post.title}</span>
+          </div>
+          <span class="text-[10px] text-neutral-400 tracking-wider">Par @${post.user}</span>
+        </div>
+        <div class="aspect-video bg-neutral-900 relative">
+          <video class="w-full h-full object-cover" controls playsinline>
+            <source src="${post.videoUrl}" type="video/mp4">
+          </video>
+        </div>
+        <div class="p-4 bg-white space-y-4">
+          <div class="flex justify-between items-center border-b border-neutral-50 pb-3">
+            <button onclick="likePost('${post.id}')" class="flex items-center space-x-2 text-xs text-neutral-800 hover:text-black font-semibold">
+              <i class="fa-solid fa-fire text-orange-500 animate-pulse text-sm"></i>
+              <span>${post.likes} Passionné(s)</span>
+            </button>
+            <span class="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">Post Certifié</span>
+          </div>
+          <div class="space-y-1.5">
+            ${post.comments.map(c => `
+              <div class="text-xs text-neutral-600 bg-neutral-50 p-2 rounded-sm border border-neutral-100">
+                <span class="font-bold text-neutral-900 block mb-0.5">@Membre</span>
+                "${c}"
+              </div>
+            `).join("")}
+          </div>
+          <div class="flex space-x-2">
+            <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis..." class="flex-1 text-xs p-2 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white">
+            <button onclick="addCommentToPost('${post.id}')" class="px-4 py-2 bg-neutral-950 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors rounded-sm">Envoyer</button>
+          </div>
+        </div>
+      </div>
+    `;
+    feed.innerHTML += card;
+  });
+}
+
+function likePost(id) {
+  const post = state.posts.find(p => p.id === id);
+  if (post) {
+    post.likes++;
+    playSuccessSound();
+    renderTchatFeed();
+  }
+}
+
+function addCommentToPost(id) {
+  const input = document.getElementById(`comment-input-${id}`);
+  if (!input.value.trim()) return;
+  const post = state.posts.find(p => p.id === id);
+  if (post) {
+    post.comments.push(input.value.trim());
+    input.value = "";
+    renderTchatFeed();
+  }
+}
+
+function addNewPost() {
+  const title = document.getElementById('post-title');
+  const user = document.getElementById('post-user');
+  const video = document.getElementById('post-video-url');
+
+  if (!title.value.trim() || !user.value.trim()) {
+    showToast("Veuillez renseigner le titre et votre pseudo.", true);
+    return;
+  }
+
+  const newPost = {
+    id: `post_${Date.now()}`,
+    title: title.value.trim(),
+    user: user.value.trim(),
+    videoUrl: video.value,
+    likes: 1,
+    comments: []
+  };
+
+  state.posts.push(newPost);
+  title.value = "";
+  if (!state.isSubscriber) user.value = "";
+  
+  renderTchatFeed();
+  showToast("Vidéo publiée avec succès.");
+}
+
+function renderChatHistory() {
+  const container = document.getElementById('chat-messages');
+  container.innerHTML = "";
+  state.chatMessages.forEach(msg => {
+    const isMe = msg.pseudo === document.getElementById('chat-pseudo').value;
+    const bubble = `
+      <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+        <span class="text-[9px] text-neutral-400 font-bold uppercase tracking-wider mb-1">${msg.pseudo}</span>
+        <div class="p-3 max-w-[85%] text-xs rounded-sm border ${isMe ? 'bg-neutral-950 text-white border-neutral-900' : 'bg-neutral-50 text-neutral-800 border-neutral-100'}">
+          ${msg.text}
+        </div>
+      </div>
+    `;
+    container.innerHTML += bubble;
+  });
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendChatMessage() {
+  const textInput = document.getElementById('chat-text');
+  const pseudoInput = document.getElementById('chat-pseudo');
+  if (!textInput.value.trim()) return;
+
+  const msg = {
+    id: Date.now(),
+    pseudo: pseudoInput.value.trim() || 'Anonyme',
+    text: textInput.value.trim()
+  };
+
+  state.chatMessages.push(msg);
+  textInput.value = "";
+  renderChatHistory();
+}
+</script>
+
+<script>
+function renderAuctions() {
+  const container = document.getElementById('bids-container');
+  container.innerHTML = "";
+
+  state.auctions.forEach(auc => {
+    const card = `
+      <div class="bg-white border border-neutral-100 p-5 rounded-sm flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+        <div class="flex space-x-4">
+          <div class="w-24 h-24 bg-neutral-100 rounded-sm overflow-hidden flex-shrink-0">
+            <img src="${auc.image}" alt="${auc.name}" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-1">
+            <span class="text-[9px] bg-neutral-900 text-white px-2 py-0.5 tracking-widest uppercase font-sport font-bold rounded-sm">
+              Pièce #${auc.numberInSeries}/1000
+            </span>
+            <h4 class="text-sm font-bold tracking-widest uppercase text-neutral-900 mt-2">${auc.name}</h4>
+            <p class="text-xs text-neutral-400 mt-1">Mise à prix init.: ${auc.startingPrice} €</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-neutral-50 flex justify-between items-center">
+          <div>
+            <span class="text-[9px] uppercase tracking-widest text-neutral-400 block">Dernière Enchère</span>
+            <span class="text-lg font-bold text-neutral-900 font-sport">${auc.currentBid} €</span>
+            <span class="text-[9px] text-neutral-500 block">Par @${auc.bidder}</span>
+          </div>
+          <div class="flex space-x-2">
+            <input type="number" id="bid-input-${auc.id}" placeholder="+50€" class="w-16 text-xs p-2 border border-neutral-200 outline-none focus:border-black rounded-sm text-center">
+            <button onclick="placeBid('${auc.id}')" class="px-4 py-2 bg-neutral-950 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-all rounded-sm">Enchérir</button>
+          </div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += card;
+  });
+}
+
+function placeBid(id) {
+  const auc = state.auctions.find(a => a.id === id);
+  const input = document.getElementById(`bid-input-${auc.id}`);
+  const bidValue = parseInt(input.value);
+
+  if (!bidValue || bidValue <= 0) {
+    showToast("Veuillez entrer un montant d'enchère positif.", true);
+    return;
+  }
+
+  const requestedTotal = auc.currentBid + bidValue;
+  auc.currentBid = requestedTotal;
+  auc.bidder = state.currentUser.pseudo || 'Anonyme';
+  input.value = "";
+  
+  playSuccessSound();
+  renderAuctions();
+  showToast("Enchère enregistrée.");
+}
+
+function openPostItemModal() {
+  document.getElementById('post-item-modal').classList.remove('hidden');
+}
+function closePostItemModal() {
+  document.getElementById('post-item-modal').classList.add('hidden');
+}
+
+function createAuction() {
+  const name = document.getElementById('auction-item-name').value.trim();
+  const num = parseInt(document.getElementById('auction-item-num').value);
+  const price = parseInt(document.getElementById('auction-item-price').value);
+  const img = document.getElementById('auction-item-img').value;
+
+  if (!name || isNaN(num) || isNaN(price)) {
+    showToast("Veuillez remplir tous les champs.", true);
+    return;
+  }
+
+  const newAuction = {
+    id: `auc_${Date.now()}`,
+    name: name,
+    numberInSeries: num,
+    startingPrice: price,
+    currentBid: price,
+    bidder: state.currentUser.pseudo || 'Vendeur Initial',
+    image: img || 'https://placehold.co/400x300/e5e5e5/111111?text=Benzjames+Article'
+  };
+
+  state.auctions.push(newAuction);
+  closePostItemModal();
+  renderAuctions();
+  showToast("Enchère privée mise en ligne.");
+}
+
+function verifyProductAuthenticity() {
+  const category = document.getElementById('auth-category').value;
+  const visibleNum = parseInt(document.getElementById('auth-visible-num').value);
+  const secretKey = document.getElementById('auth-secret-num').value.trim();
+  const resultBox = document.getElementById('auth-result');
+
+  resultBox.className = "hidden mt-4 p-4 border border-dashed rounded-sm text-center";
+
+  if (isNaN(visibleNum) || visibleNum < 1 || visibleNum > 1000 || !secretKey) {
+    resultBox.classList.add('bg-red-950/20', 'border-red-500', 'text-red-400');
+    resultBox.innerHTML = `
+      <i class="fa-solid fa-triangle-exclamation text-xl mb-1 block"></i>
+      <span class="text-xs font-bold uppercase tracking-widest block">Erreur de format</span>
+      <span class="text-[10px] opacity-80 text-white">Veuillez spécifier un numéro valide (1 à 1000).</span>
+    `;
+    resultBox.classList.remove('hidden');
+    return;
+  }
+
+  const expectedKey = generateFakeSecret(category, visibleNum);
+  if (secretKey === expectedKey) {
+    resultBox.classList.add('bg-emerald-950/20', 'border-emerald-500', 'text-emerald-400');
+    resultBox.innerHTML = `
+      <i class="fa-solid fa-certificate text-xl mb-1 block text-emerald-400"></i>
+      <span class="text-xs font-bold uppercase tracking-widest block">Authentique Certifié</span>
+      <span class="text-[10px] opacity-80 text-white">La pièce #${visibleNum} est authentifiée avec succès.</span>
+    `;
+    playSuccessSound();
+  } else {
+    resultBox.classList.add('bg-red-950/20', 'border-red-500', 'text-red-400');
+    resultBox.innerHTML = `
+      <i class="fa-solid fa-skull-crossbones text-xl mb-1 block text-red-400"></i>
+      <span class="text-xs font-bold uppercase tracking-widest block">Alerte Contrefaçon</span>
+      <span class="text-[10px] opacity-80 text-white">Le code fourni ne correspond pas à notre signature cryptologique.</span>
+    `;
+  }
+  resultBox.classList.remove('hidden');
+}
+</script>
+
+<script>
+function openAdminModal() {
+  document.getElementById('admin-modal').classList.remove('hidden');
+  switchAuthTab('subscriber'); // default to Subscriber Login on open
+}
+function closeAdminModal() {
+  document.getElementById('admin-modal').classList.add('hidden');
+  document.getElementById('admin-auth-error').classList.add('hidden');
+}
+
+function saveAdminChanges() {
+  if (!state.isAdmin) return;
+
+  const newTitle = document.getElementById('edit-hero-title').value;
+  const newSubtitle = document.getElementById('edit-hero-subtitle').value;
+  const newVideo = document.getElementById('edit-hero-video-url').value;
+
+  document.getElementById('hero-title').innerText = newTitle;
+  document.getElementById('hero-subtitle').innerText = newSubtitle;
+
+  const videoElement = document.getElementById('hero-video');
+  if (videoElement.src !== newVideo) {
+    videoElement.src = newVideo;
+    videoElement.load();
+    videoElement.play();
+  }
+
+  // Add new item if details filled
+  const itemName = document.getElementById('new-item-name').value.trim();
+  const itemCat = document.getElementById('new-item-cat').value;
+  const itemPrice = parseInt(document.getElementById('new-item-price').value);
+  const itemNum = parseInt(document.getElementById('new-item-visible').value);
+  const itemComment = document.getElementById('new-item-comment').value.trim();
+
+  if (itemName && !isNaN(itemPrice) && !isNaN(itemNum)) {
+    const secret = generateFakeSecret(itemCat, itemNum);
+    const newItem = {
+      id: `p_${Date.now()}`,
+      category: itemCat,
+      name: itemName,
+      price: itemPrice,
+      rating: 5.0,
+      comment: itemComment || 'Série exclusive validée par le Master.',
+      image: `https://placehold.co/400x500/e5e5e5/111111?text=${encodeURIComponent(itemName)}`,
+      numberInSeries: itemNum,
+      privateSerial: secret
     };
 
-    // Helper functions for Cryptographic Authenticity Simulation
-    function generateFakeSecret(category, num) {
-        // Creates a secure looking serial key dynamically matching user inputs
-        const catCode = category.substring(0, 3).toUpperCase();
-        const paddedNum = String(num).padStart(3, '0');
-        // Simple predictable pseudo hash
-        let hash = 0;
-        const comb = catCode + paddedNum;
-        for (let i = 0; i < comb.length; i++) {
-            hash = (hash << 5) - hash + comb.charCodeAt(i);
-            hash |= 0;
-        }
-        const hex = Math.abs(hash).toString(16).toUpperCase().substring(0, 5);
-        return `BJ-${catCode}-${paddedNum}-SEC${hex}`;
-    }
+    state.products.unshift(newItem);
+
+    // Clear inputs
+    document.getElementById('new-item-name').value = "";
+    document.getElementById('new-item-price').value = "";
+    document.getElementById('new-item-visible').value = "";
+    document.getElementById('new-item-comment').value = "";
+  }
+
+  playSuccessSound();
+  closeAdminModal();
+  renderShowroom();
+  showToast("Modifications de l'application appliquées.");
+}
 </script>
-
-<script>
-    function enterApp() {
-        playLaserSound();
-        const intro = document.getElementById('intro-screen');
-        intro.classList.add('opacity-0', 'pointer-events-none');
-        setTimeout(() => {
-            intro.classList.add('hidden');
-            document.getElementById('app-container').classList.remove('hidden');
-            navigate('home');
-        }, 1000);
-    }
-
-    function navigate(pageId) {
-        // Hide all pages
-        const pages = document.querySelectorAll('.page-section');
-        pages.forEach(p => p.classList.add('hidden'));
-
-        // Show active page
-        const activePage = document.getElementById(`page-${pageId}`);
-        if (activePage) {
-            activePage.classList.remove('hidden');
-        }
-
-        // Active state styles for tabs
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.classList.remove('text-black', 'border-b', 'border-black');
-            tab.classList.add('text-neutral-500');
-        });
-        document.querySelectorAll('.mobile-nav-tab').forEach(tab => {
-            tab.classList.remove('text-black', 'border-black');
-            tab.classList.add('text-neutral-500', 'border-transparent');
-        });
-
-        // Highlight selected nav
-        const activeNav = document.getElementById(`nav-${pageId}`);
-        if (activeNav) {
-            activeNav.classList.add('text-black', 'border-b', 'border-black');
-            activeNav.classList.remove('text-neutral-500');
-        }
-        const activeMobileNav = document.getElementById(`m-nav-${pageId}`);
-        if (activeMobileNav) {
-            activeMobileNav.classList.add('text-black', 'border-black');
-            activeMobileNav.classList.remove('text-neutral-500', 'border-transparent');
-        }
-
-        // Specific actions per page
-        if (pageId === 'showroom') {
-            renderShowroom();
-        } else if (pageId === 'tchat') {
-            renderTchatFeed();
-            renderChatHistory();
-        } else if (pageId === 'market') {
-            renderAuctions();
-        }
-    }
-</script>
-
-<script>
-    function renderShowroom() {
-        const container = document.getElementById('showroom-container');
-        container.innerHTML = '';
-
-        // Filter based on active category selection
-        const filtered = state.products.filter(p => {
-            if (state.showroomCategory === 'tous') return true;
-            return p.category === state.showroomCategory;
-        });
-
-        filtered.forEach(p => {
-            const ratingStars = '<i class="fa-solid fa-star text-neutral-900"></i> '.repeat(Math.floor(p.rating)) + 
-                (p.rating % 1 !== 0 ? '<i class="fa-solid fa-star-half-stroke text-neutral-900"></i>' : '');
-
-            const card = `
-                <div class="group flex flex-col justify-between bg-white border border-neutral-100 p-4 transition-all duration-300 hover:shadow-lg relative rounded-sm">
-                    <!-- Corner Limited Edition Tag -->
-                    <span class="absolute top-6 left-6 z-10 bg-black/90 text-white text-[9px] font-sport font-bold px-3 py-1 uppercase tracking-widest rounded-sm">
-                        Édition ${p.numberInSeries}/1000
-                    </span>
-
-                    <div class="overflow-hidden bg-neutral-100 aspect-[4/5] mb-6 relative">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e5e5e5/111111?text=${p.name}'">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-sm font-bold tracking-widest uppercase text-neutral-900">${p.name}</h3>
-                            <span class="text-sm font-medium tracking-wide text-neutral-700 font-sport">${p.price} €</span>
-                        </div>
-
-                        <!-- Rating & Review block -->
-                        <div class="flex items-center space-x-2 text-[10px] mb-3">
-                            <div class="flex text-amber-500">${ratingStars}</div>
-                            <span class="text-neutral-500 font-semibold">(${p.rating}/5)</span>
-                        </div>
-
-                        <p class="text-xs text-neutral-500 italic font-light mb-4 leading-relaxed">
-                            "${p.comment}"
-                        </p>
-                    </div>
-
-                    <div class="border-t border-neutral-100 pt-4 flex justify-between items-center text-[10px] tracking-widest uppercase font-bold">
-                        <span class="text-neutral-400">Authenticité Certifiée</span>
-                        <button onclick="copyToClipboard('${generateFakeSecret(p.category, p.numberInSeries)}')" class="text-neutral-900 hover:underline flex items-center space-x-1">
-                            <i class="fa-solid fa-key"></i> <span>Copier Clé</span>
-                        </button>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += card;
-        });
-    }
-
-    function filterShowroom(category) {
-        state.showroomCategory = category;
-        // Tab styling update
-        document.querySelectorAll('.cat-tab').forEach(tab => {
-            tab.classList.remove('text-neutral-900', 'border-b', 'border-neutral-900');
-            tab.classList.add('text-neutral-400');
-        });
-        const activeTab = document.getElementById(`cat-${category}`);
-        if (activeTab) {
-            activeTab.classList.add('text-neutral-900', 'border-b', 'border-neutral-900');
-            activeTab.classList.remove('text-neutral-400');
-        }
-        renderShowroom();
-    }
-
-    function copyToClipboard(text) {
-        const el = document.createElement('textarea');
-        el.value = text;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        playSuccessSound();
-        alert(`Clé de sécurité copiée pour vérification dans l'authentificateur : ${text}`);
-    }
-</script>
-
-<script>
-    function renderTchatFeed() {
-        const feed = document.getElementById('video-posts-feed');
-        feed.innerHTML = '';
-
-        // Dynamic sorting: Highest likes at the top
-        const sortedPosts = [...state.posts].sort((a, b) => b.likes - a.likes);
-
-        sortedPosts.forEach((post, index) => {
-            const card = `
-                <div class="bg-white border border-neutral-100 rounded-sm shadow-sm overflow-hidden transition-all duration-300">
-                    <!-- Top rank badge based on likes -->
-                    <div class="bg-neutral-950 text-white p-3 px-4 flex justify-between items-center">
-                        <div class="flex items-center space-x-2">
-                            <span class="font-sport font-bold italic text-sm text-neutral-300">#${index + 1}</span>
-                            <span class="text-xs uppercase tracking-widest font-bold">${post.title}</span>
-                        </div>
-                        <span class="text-[10px] text-neutral-400 tracking-wider">Par @${post.user}</span>
-                    </div>
-
-                    <!-- Video Container -->
-                    <div class="aspect-video bg-neutral-900 relative">
-                        <video class="w-full h-full object-cover" controls playsinline>
-                            <source src="${post.videoUrl}" type="video/mp4">
-                        </video>
-                    </div>
-
-                    <!-- Actions & Live Comments -->
-                    <div class="p-4 bg-white space-y-4">
-                        <div class="flex justify-between items-center border-b border-neutral-50 pb-3">
-                            <button onclick="likePost('${post.id}')" class="flex items-center space-x-2 text-xs text-neutral-800 hover:text-black font-semibold">
-                                <i class="fa-solid fa-fire text-orange-500 animate-pulse text-sm"></i>
-                                <span>${post.likes} Passionné(s)</span>
-                            </button>
-                            <span class="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">Post Certifié</span>
-                        </div>
-
-                        <!-- Mini comments list -->
-                        <div class="space-y-1.5">
-                            ${post.comments.map(c => `
-                                <div class="text-xs text-neutral-600 bg-neutral-50 p-2 rounded-sm border border-neutral-100">
-                                    <span class="font-bold text-neutral-900 block mb-0.5">@Membre</span>
-                                    "${c}"
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <!-- Post new comment form -->
-                        <div class="flex space-x-2">
-                            <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis sur cette performance..." class="flex-1 text-xs p-2 border border-neutral-200 outline-none focus:border-black rounded-sm bg-white">
-                            <button onclick="addCommentToPost('${post.id}')" class="px-4 py-2 bg-neutral-950 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-colors">Envoyer</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            feed.innerHTML += card;
-        });
-    }
-
-    function likePost(id) {
-        const post = state.posts.find(p => p.id === id);
-        if (post) {
-            post.likes++;
-            playSuccessSound();
-            renderTchatFeed();
-        }
-    }
-
-    function addCommentToPost(id) {
-        const input = document.getElementById(`comment-input-${id}`);
-        if (!input.value.trim()) return;
-
-        const post = state.posts.find(p => p.id === id);
-        if (post) {
-            post.comments.push(input.value.trim());
-            input.value = '';
-            renderTchatFeed();
-        }
-    }
-
-    function addNewPost() {
-        const title = document.getElementById('post-title');
-        const user = document.getElementById('post-user');
-        const video = document.getElementById('post-video-url');
-
-        if (!title.value.trim() || !user.value.trim()) {
-            alert('Veuillez compléter le titre et votre pseudo.');
-            return;
-        }
-
-        const newPost = {
-            id: `post_${Date.now()}`,
-            title: title.value.trim(),
-            user: user.value.trim(),
-            videoUrl: video.value,
-            likes: 1, // Fresh post gets initialized with 1 like
-            comments: []
-        };
-
-        state.posts.push(newPost);
-        title.value = '';
-        user.value = '';
-        renderTchatFeed();
-    }
-</script>
-
-<script>
-    function renderChatHistory() {
-        const container = document.getElementById('chat-messages');
-        container.innerHTML = '';
-
-        state.chatMessages.forEach(msg => {
-            const isMe = msg.pseudo === document.getElementById('chat-pseudo').value;
-            const bubble = `
-                <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                    <span class="text-[9px] text-neutral-400 font-bold uppercase tracking-wider mb-1">${msg.pseudo}</span>
-                    <div class="p-3 max-w-[85%] text-xs rounded-sm border ${isMe ? 'bg-neutral-950 text-white border-neutral-900' : 'bg-neutral-50 text-neutral-800 border-neutral-100'}">
-                        ${msg.text}
-                    </div>
-                </div>
-            `;
-            container.innerHTML += bubble;
-        });
-
-        // Scroll to bottom of chat
-        container.scrollTop = container.scrollHeight;
-    }
-
-    function sendChatMessage() {
-        const textInput = document.getElementById('chat-text');
-        const pseudoInput = document.getElementById('chat-pseudo');
-
-        if (!textInput.value.trim()) return;
-
-        const msg = {
-            id: Date.now(),
-            pseudo: pseudoInput.value.trim() || 'Anonyme',
-            text: textInput.value.trim()
-        };
-
-        state.chatMessages.push(msg);
-        textInput.value = '';
-        renderChatHistory();
-    }
-</script>
-
-<script>
-    function renderAuctions() {
-        const container = document.getElementById('bids-container');
-        container.innerHTML = '';
-
-        state.auctions.forEach(auc => {
-            const card = `
-                <div class="bg-white border border-neutral-100 p-5 rounded-sm flex flex-col justify-between hover:shadow-lg transition-all duration-300">
-                    <div class="flex space-x-4">
-                        <div class="w-24 h-24 bg-neutral-100 rounded-sm overflow-hidden flex-shrink-0">
-                            <img src="${auc.image}" alt="${auc.name}" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-1">
-                            <span class="text-[9px] bg-neutral-900 text-white px-2 py-0.5 tracking-widest uppercase font-sport font-bold rounded-sm">
-                                Pièce #${auc.numberInSeries}/1000
-                            </span>
-                            <h4 class="text-sm font-bold tracking-widest uppercase text-neutral-900 mt-2">${auc.name}</h4>
-                            <p class="text-xs text-neutral-400 mt-1">Mise à prix init. : ${auc.startingPrice} €</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-t border-neutral-50 flex justify-between items-center">
-                        <div>
-                            <span class="text-[9px] uppercase tracking-widest text-neutral-400 block">Dernière Enchère</span>
-                            <span class="text-lg font-bold text-neutral-900 font-sport">${auc.currentBid} €</span>
-                            <span class="text-[9px] text-neutral-500 block">Par @${auc.bidder}</span>
-                        </div>
-
-                        <div class="flex space-x-2">
-                            <input type="number" id="bid-input-${auc.id}" placeholder="+50€" class="w-16 text-xs p-2 border border-neutral-200 outline-none focus:border-black rounded-sm text-center">
-                            <button onclick="placeBid('${auc.id}')" class="px-4 py-2 bg-neutral-950 text-white text-xs uppercase tracking-widest font-bold font-sport hover:bg-neutral-800 transition-all rounded-sm">Surenchérir</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += card;
-        });
-    }
-
-    function placeBid(id) {
-        const auc = state.auctions.find(a => a.id === id);
-        const input = document.getElementById(`bid-input-${auc.id}`);
-        const bidValue = parseInt(input.value);
-
-        if (!bidValue || bidValue <= 0) {
-            alert('Veuillez entrer un montant d\'enchère positif.');
-            return;
-        }
-
-        const minimalBid = auc.currentBid + 10; // At least 10 Euros increments
-        const requestedTotal = auc.currentBid + bidValue;
-
-        auc.currentBid = requestedTotal;
-        auc.bidder = document.getElementById('chat-pseudo').value || 'Anonyme';
-        input.value = '';
-        playSuccessSound();
-        renderAuctions();
-    }
-
-    function openPostItemModal() {
-        document.getElementById('post-item-modal').classList.remove('hidden');
-    }
-
-    function closePostItemModal() {
-        document.getElementById('post-item-modal').classList.add('hidden');
-    }
-
-    function createAuction() {
-        const name = document.getElementById('auction-item-name').value.trim();
-        const num = parseInt(document.getElementById('auction-item-num').value);
-        const price = parseInt(document.getElementById('auction-item-price').value);
-        const img = document.getElementById('auction-item-img').value;
-
-        if (!name || isNaN(num) || isNaN(price)) {
-            alert('Veuillez remplir correctement tous les champs de l\'enchère.');
-            return;
-        }
-
-        const newAuction = {
-            id: `auc_${Date.now()}`,
-            name: name,
-            numberInSeries: num,
-            startingPrice: price,
-            currentBid: price,
-            bidder: 'Vendeur Originel',
-            image: img || 'https://placehold.co/400x300/e5e5e5/111111?text=Benzjames+Article'
-        };
-
-        state.auctions.push(newAuction);
-        closePostItemModal();
-        renderAuctions();
-    }
-
-    // Authenticité Algorithm Check
-    function verifyProductAuthenticity() {
-        const category = document.getElementById('auth-category').value;
-        const visibleNum = parseInt(document.getElementById('auth-visible-num').value);
-        const secretKey = document.getElementById('auth-secret-num').value.trim();
-
-        const resultBox = document.getElementById('auth-result');
-        resultBox.classList.remove('hidden', 'bg-emerald-950/20', 'border-emerald-500', 'text-emerald-400', 'bg-rose-950/20', 'border-rose-500', 'text-rose-400');
-
-        if (isNaN(visibleNum) || visibleNum < 1 || visibleNum > 1000 || !secretKey) {
-            resultBox.classList.add('bg-rose-950/20', 'border-rose-500', 'text-rose-400');
-            resultBox.innerHTML = `
-                <i class="fa-solid fa-triangle-exclamation text-xl mb-1 block"></i>
-                <span class="text-xs font-bold uppercase tracking-widest block">Erreur de format</span>
-                <span class="text-[10px] opacity-80">Remplissez les champs avec des valeurs valides (Numéro de 1 à 1000).</span>
-            `;
-            return;
-        }
-
-        // Generate expected cryptographic key using pure JS reversibility formula
-        const expectedKey = generateFakeSecret(category, visibleNum);
-
-        if (secretKey === expectedKey) {
-            resultBox.classList.add('bg-emerald-950/20', 'border-emerald-500', 'text-emerald-400');
-            resultBox.innerHTML = `
-                <i class="fa-solid fa-certificate text-xl mb-1 block text-emerald-400"></i>
-                <span class="text-xs font-bold uppercase tracking-widest block">Authentique Certifié</span>
-                <span class="text-[10px] opacity-80">La pièce #${visibleNum} appartient légitimement à la série de 1000. Algorithme validé.</span>
-            `;
-            playSuccessSound();
-        } else {
-            resultBox.classList.add('bg-rose-950/20', 'border-rose-500', 'text-rose-400');
-            resultBox.innerHTML = `
-                <i class="fa-solid fa-skull-crossbones text-xl mb-1 block text-rose-400"></i>
-                <span class="text-xs font-bold uppercase tracking-widest block">Alerte Contrefaçon</span>
-                <span class="text-[10px] opacity-80">La signature secrète ne correspond pas à notre formule matricielle.</span>
-            `;
-        }
-    }
-</script>
-
-<script>
-    function openAdminModal() {
-        document.getElementById('admin-modal').classList.remove('hidden');
-    }
-
-    function closeAdminModal() {
-        document.getElementById('admin-modal').classList.add('hidden');
-        document.getElementById('admin-auth-error').classList.add('hidden');
-    }
-
-    function verifyAdminPass() {
-        const pass = document.getElementById('admin-pass').value;
-        const error = document.getElementById('admin-auth-error');
-        const authPanel = document.getElementById('admin-auth-panel');
-        const adminPanel = document.getElementById('admin-panel');
-
-        if (pass === 'Denis007') {
-            state.isAdmin = true;
-            playSuccessSound();
-            
-            // UI Update
-            document.getElementById('admin-dot').classList.remove('bg-neutral-400');
-            document.getElementById('admin-dot').classList.add('bg-emerald-500', 'animate-pulse');
-            
-            // Switch panels
-            authPanel.classList.add('hidden');
-            adminPanel.classList.remove('hidden');
-        } else {
-            error.classList.remove('hidden');
-        }
-    }
-
-    function saveAdminChanges() {
-        if (!state.isAdmin) return;
-
-        // Save Page 1 Video Customization
-        const newTitle = document.getElementById('edit-hero-title').value;
-        const newSubtitle = document.getElementById('edit-hero-subtitle').value;
-        const newVideo = document.getElementById('edit-hero-video-url').value;
-
-        document.getElementById('hero-title').innerText = newTitle;
-        document.getElementById('hero-subtitle').innerText = newSubtitle;
-        
-        const videoElement = document.getElementById('hero-video');
-        if (videoElement.src !== newVideo) {
-            videoElement.src = newVideo;
-            videoElement.load();
-            videoElement.play();
-        }
-
-        // Add new item if created
-        const itemName = document.getElementById('new-item-name').value.trim();
-        const itemCat = document.getElementById('new-item-cat').value;
-        const itemPrice = parseInt(document.getElementById('new-item-price').value);
-        const itemNum = parseInt(document.getElementById('new-item-visible').value);
-        const itemComment = document.getElementById('new-item-comment').value.trim();
-
-        if (itemName && !isNaN(itemPrice) && !isNaN(itemNum)) {
-            const secret = generateFakeSecret(itemCat, itemNum);
-            const newItem = {
-                id: `p_${Date.now()}`,
-                category: itemCat,
-                name: itemName,
-                price: itemPrice,
-                rating: 5.0,
-                comment: itemComment || 'Série exclusive validée par le Master.',
-                image: `https://placehold.co/400x500/e5e5e5/111111?text=${itemName}`,
-                numberInSeries: itemNum,
-                privateSerial: secret
-            };
-
-            state.products.unshift(newItem);
-            
-            // Clear creation inputs
-            document.getElementById('new-item-name').value = '';
-            document.getElementById('new-item-price').value = '';
-            document.getElementById('new-item-visible').value = '';
-            document.getElementById('new-item-comment').value = '';
-        }
-
-        playSuccessSound();
-        closeAdminModal();
-        renderShowroom();
-    }
-</script>
-
 </body>
 </html>
