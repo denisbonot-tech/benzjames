@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font-Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Oswald for sports style, Montserrat for premium armani style, Playfair Display for editorial serif -->
+    <!-- Google Fonts: Oswald pour le style sport automobile, Montserrat pour l'esthétique luxe Armani, Playfair pour l'éditorial -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@400;700;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -67,7 +67,7 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #d4af37;
         }
-        /* Master Mode Editable Element Highlights */
+        /* Master Mode Editable Highlights */
         .editable-active {
             position: relative;
             cursor: pointer;
@@ -76,10 +76,10 @@
             transition: all 0.2s ease-in-out;
         }
         .editable-active:hover {
-            background-color: rgba(212, 175, 55, 0.1) !important;
+            background-color: rgba(212, 175, 55, 0.15) !important;
         }
         .editable-active::after {
-            content: "✎ MASTER EDIT";
+            content: "✎ EDIT TEXT";
             position: absolute;
             top: -18px;
             right: 0;
@@ -155,20 +155,18 @@
             const toast = document.createElement('div');
             toast.className = `p-4 rounded-sm border backdrop-blur-md transition-all duration-300 transform translate-y-2 opacity-0 flex items-center space-x-3 pointer-events-auto shadow-2xl text-xs tracking-widest uppercase font-sport ${
                 type === 'success' 
-                ? 'bg-neutral-900/90 border-emerald-500/50 text-emerald-400' 
-                : 'bg-neutral-900/90 border-red-500/50 text-red-400'
+                ? 'bg-neutral-900/95 border-emerald-500/50 text-emerald-400' 
+                : 'bg-neutral-900/95 border-red-500/50 text-red-400'
             }`;
             
             const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
             toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i> <span>${message}</span>`;
             container.appendChild(toast);
             
-            // Trigger animation
             setTimeout(() => {
                 toast.classList.remove('translate-y-2', 'opacity-0');
             }, 50);
             
-            // Remove toast
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
@@ -176,19 +174,20 @@
         }
     </script>
 
+    <!-- Intro Screen: Hover anywhere to enter with sound effect -->
     <div id="intro-screen" onmouseenter="handleIntroHover()" onclick="handleIntroTouch()" class="fixed inset-0 bg-black z-50 flex flex-col justify-between items-center py-16 px-6 transition-all duration-1000 ease-in-out cursor-pointer group">
-        <!-- Laser effect elements -->
+        <!-- Laser sweep lines -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="laser-line-1 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
             <div class="laser-line-2 absolute top-1/2 left-1/2 w-[200%] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_#fff]"></div>
         </div>
 
-        <!-- Top Branding -->
+        <!-- Top branding text (Editable by Master) -->
         <div class="text-white text-xs tracking-[0.4em] uppercase font-light opacity-60 relative z-10">
             <span class="editable-text" data-key="introLimitTag">Série Limitée &bull; 1000 Pièces</span>
         </div>
 
-        <!-- Center Wide/Flat Title -->
+        <!-- Center wide-flat Title (Editable by Master) -->
         <div class="relative text-center flex flex-col items-center z-10 max-w-4xl">
             <h1 class="text-7xl md:text-[11rem] font-sport font-black tracking-tighter text-white uppercase italic scale-y-75 leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] select-none transition-transform duration-500 group-hover:scale-105">
                 <span class="editable-text" data-key="introTitle">Benzjames</span>
@@ -198,39 +197,40 @@
             </p>
         </div>
 
-        <!-- Interactive Visual Indicator for Entry -->
+        <!-- Touch/Hover visual prompt -->
         <div class="flex flex-col items-center space-y-4 z-10">
             <div class="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:border-white group-hover:scale-110">
                 <div class="absolute inset-0 bg-white/10 scale-y-0 origin-bottom transition-transform duration-700 group-hover:scale-y-100"></div>
                 <i class="fa-solid fa-angles-down text-white text-sm animate-bounce"></i>
             </div>
             <span class="text-[9px] tracking-[0.5em] text-white/50 uppercase group-hover:text-white transition-colors duration-300">
-                Survolez pour entrer • Hover to enter
+                Glissez votre curseur pour entrer
             </span>
             <span class="md:hidden text-[8px] tracking-[0.3em] text-neutral-500 uppercase">
-                (Ou touchez sur mobile)
+                (Ou touchez l'écran sur mobile)
             </span>
         </div>
     </div>
 
     <div id="app-container" class="hidden min-h-screen flex flex-col justify-between">
         
-        <!-- Global Header -->
+        <!-- Global Header with Armani Aesthetic -->
         <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-neutral-900 px-6 py-4 flex justify-between items-center transition-all duration-300">
-            <!-- Logo -->
-            <div class="cursor-pointer flex flex-col" onclick="navigate('home')">
+            <!-- Brand Logo -->
+            <div class="cursor-pointer flex flex-col animate-pulse" onclick="navigate('first')">
                 <span class="font-sport font-black italic text-2xl tracking-tighter uppercase scale-y-90 inline-block text-white">Benzjames</span>
                 <span class="text-[9px] tracking-widest text-neutral-500 block uppercase font-light">Milan / Paris / London</span>
             </div>
 
-            <!-- Armani Inspired Navigation Tabs -->
+            <!-- Header Navigation tabs (Including "First" Page) -->
             <nav class="hidden md:flex space-x-12 text-xs tracking-[0.3em] uppercase font-medium text-neutral-400">
+                <button onclick="navigate('first')" class="nav-tab hover:text-white transition-colors duration-200 py-2 border-b-2 border-transparent" id="nav-first">First</button>
                 <button onclick="navigate('showroom')" class="nav-tab hover:text-white transition-colors duration-200 py-2 border-b-2 border-transparent" id="nav-showroom">Show room</button>
                 <button onclick="navigate('tchat')" class="nav-tab hover:text-white transition-colors duration-200 py-2 border-b-2 border-transparent" id="nav-tchat">Tchat passion</button>
                 <button onclick="navigate('market')" class="nav-tab hover:text-white transition-colors duration-200 py-2 border-b-2 border-transparent" id="nav-market">Cotes marché</button>
             </nav>
 
-            <!-- Right: Admin Trigger -->
+            <!-- Master Account Icon Selector -->
             <div class="flex items-center space-x-6">
                 <button id="admin-indicator" onclick="openAdminModal()" class="relative group flex items-center space-x-2 p-2 rounded-full hover:bg-neutral-900 transition-colors duration-200" title="Accès Abonné / Master">
                     <span class="w-2.5 h-2.5 rounded-full bg-neutral-600 group-hover:bg-amber-400 transition-colors duration-300" id="admin-dot"></span>
@@ -240,26 +240,38 @@
             </div>
         </header>
 
-        <!-- Mobile Sub-Menu Tabs -->
+        <!-- Mobile Sub-Menu navigation tabs (Including "First") -->
         <div class="md:hidden sticky top-[65px] z-30 bg-black/95 backdrop-blur-md border-b border-neutral-900 flex justify-around py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-400">
+            <button onclick="navigate('first')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-first">First</button>
             <button onclick="navigate('showroom')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-showroom">Showroom</button>
-            <button onclick="navigate('tchat')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-tchat">Tchat passion</button>
-            <button onclick="navigate('market')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-market">Cotes marché</button>
+            <button onclick="navigate('tchat')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-tchat">Tchat</button>
+            <button onclick="navigate('market')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-market">Marché</button>
         </div>
 
-        <main id="page-home" class="page-section relative flex-1 min-h-[calc(100vh-130px)] flex flex-col justify-end p-8 md:p-16 overflow-hidden">
-            <!-- Full Screen Background Media Container -->
-            <div class="absolute inset-0 w-full h-full overflow-hidden z-0" id="hero-media-container">
+        <!-- PAGE 1: FIRST (Grand Écran Vidéo Pleine Page) -->
+        <main id="page-first" class="page-section relative flex-1 min-h-[calc(100vh-130px)] flex flex-col justify-end p-8 md:p-16 overflow-hidden">
+            <!-- Fullscreen Video/Media Container -->
+            <div class="absolute inset-0 w-full h-full overflow-hidden z-0" id="first-media-viewport">
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none"></div>
-                <!-- Default Video Loop -->
-                <video id="hero-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline>
+                
+                <!-- Main Fullscreen Background Video -->
+                <video id="first-bg-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline>
                     <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4" type="video/mp4">
                 </video>
-                <!-- Image container (hidden by default) -->
-                <img id="hero-img" class="w-full h-full object-cover transition-opacity duration-1000 hidden" src="" alt="First Page Background">
+                <!-- Fallback background image if uploaded file is image type -->
+                <img id="first-bg-img" class="w-full h-full object-cover transition-opacity duration-1000 hidden" src="" alt="First Page Background">
             </div>
 
-            <!-- Hero brand statement -->
+            <!-- Direct Master Video/Image Uploader (Visible only when Master is active) -->
+            <div id="first-direct-uploader-container" class="hidden absolute top-8 left-8 z-30 max-w-sm bg-black/80 backdrop-blur-md border border-amber-400/50 p-4 rounded-sm shadow-2xl">
+                <span class="block text-[10px] uppercase tracking-widest text-amber-400 font-sport font-black mb-2">
+                    <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Changer la Vidéo First (Local)
+                </span>
+                <input type="file" id="direct-video-uploader" accept="video/*, image/*" onchange="directFirstPageUpload(event)" class="block w-full text-xs text-neutral-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:bg-amber-400 file:text-black hover:file:bg-white transition-colors cursor-pointer">
+                <p class="text-[8px] text-neutral-400 mt-2">Choisissez n'importe quel fichier vidéo (.mp4) ou photo de votre iPhone/Mac.</p>
+            </div>
+
+            <!-- Hero Brand Content (Directly Clickable and Editable in Master Mode) -->
             <div class="relative z-20 max-w-3xl text-white mb-12">
                 <span class="text-xs tracking-[0.5em] text-amber-400 uppercase font-bold block mb-4">
                     <span class="editable-text" data-key="firstSubtitle">Maison de Spéculation Athlétique</span>
@@ -273,7 +285,7 @@
                     </span>
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="navigate('showroom')" class="px-8 py-4 bg-white text-black font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-200 transition-colors rounded-sm">
+                    <button onclick="navigate('showroom')" class="px-8 py-4 bg-white text-black font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-200 transition-colors rounded-sm shadow-xl">
                         Découvrir le vestiaire
                     </button>
                     <button onclick="navigate('market')" class="px-8 py-4 bg-transparent border border-white text-white font-sport font-bold tracking-widest text-xs uppercase hover:bg-white hover:text-black transition-all rounded-sm">
@@ -283,6 +295,7 @@
             </div>
         </main>
 
+        <!-- PAGE 2: SHOWROOM (Le Vestiaire Limité) -->
         <main id="page-showroom" class="page-section hidden flex-1 bg-[#0d0d0d] p-6 md:p-12 relative">
             <div class="absolute top-0 left-0 w-full h-[300px] overflow-hidden z-0">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-[#0d0d0d] z-10"></div>
@@ -290,7 +303,7 @@
             </div>
 
             <div class="max-w-7xl mx-auto relative z-10">
-                <!-- Category Title & Philosophy -->
+                <!-- Title & Philosophy (Clickable edit) -->
                 <div class="text-center mb-12 pt-8">
                     <span class="text-xs tracking-[0.5em] text-amber-400 uppercase block mb-3">
                         <span class="editable-text" data-key="showroomCategoryTag">Exclusive Wardrobe</span>
@@ -301,8 +314,8 @@
                     <div class="w-16 h-[1px] bg-amber-400 mx-auto mt-6"></div>
                 </div>
 
-                <!-- Catalogue Horizontal Navigation Tabs -->
-                <div class="flex overflow-x-auto pb-4 mb-10 justify-start md:justify-center space-x-4 md:space-x-8 scrollbar-thin border-b border-neutral-950">
+                <!-- Catalog Category Switchers -->
+                <div class="flex overflow-x-auto pb-4 mb-10 justify-start md:justify-center space-x-4 md:space-x-8 scrollbar-thin border-b border-neutral-900">
                     <button onclick="filterShowroom('tous')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-white border-b-2 border-amber-400" id="cat-tous">Tous</button>
                     <button onclick="filterShowroom('casquette')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-casquette">Casquettes</button>
                     <button onclick="filterShowroom('basket')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-basket">Baskets</button>
@@ -313,16 +326,18 @@
                     <button onclick="filterShowroom('sweat')" class="cat-tab px-4 py-2 text-xs tracking-widest uppercase font-bold text-neutral-500 hover:text-white" id="cat-sweat">Sweats</button>
                 </div>
 
-                <!-- Grid Display -->
+                <!-- Grid Products list -->
                 <div id="showroom-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300">
-                    <!-- Loaded dynamically -->
+                    <!-- Populated dynamically -->
                 </div>
             </div>
         </main>
 
+        <!-- PAGE 3: TCHAT PASSION (Vidéos Interactives & Live chat) -->
         <main id="page-tchat" class="page-section hidden flex-1 bg-[#0c0c0c] p-6 md:p-12 relative">
             <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
-                <!-- Left Side: Sport Video Stack (Sorted by likes) -->
+                
+                <!-- Left Side: Interactive video stack with direct video addition inside preview screen -->
                 <div class="lg:col-span-7 flex flex-col space-y-8">
                     <div class="mb-2">
                         <span class="text-xs tracking-[0.4em] text-amber-400 uppercase">
@@ -332,19 +347,31 @@
                             <span class="editable-text" data-key="tchatTitle">Vidéos Passion de nos Membres</span>
                         </h2>
                         <p class="text-xs text-neutral-400 mt-2">
-                            <span class="editable-text" data-key="tchatDesc">Les vidéos les plus aimées dominent la liste de manière organique.</span>
+                            <span class="editable-text" data-key="tchatDesc">Ajoutez vos exploits directement via l'écran vidéo ou déposez un fichier.</span>
                         </p>
                     </div>
 
-                    <!-- Post Upload Area -->
+                    <!-- Direct Video Drop/Uploader Inside Video Screen Zone -->
+                    <div class="group relative aspect-video bg-neutral-900 border-2 border-dashed border-neutral-800 hover:border-amber-400 rounded-sm flex flex-col items-center justify-center p-6 text-center cursor-pointer overflow-hidden transition-all duration-300">
+                        <input type="file" id="direct-tchat-media-uploader" accept="video/*" onchange="directTchatVideoUpload(event)" class="absolute inset-0 opacity-0 z-20 cursor-pointer">
+                        <div class="relative z-10 space-y-4">
+                            <i class="fa-solid fa-circle-play text-4xl text-amber-400 animate-bounce"></i>
+                            <div class="space-y-1">
+                                <span class="block text-xs uppercase tracking-widest font-bold text-white">Ajouter une vidéo depuis cet écran</span>
+                                <span class="block text-[10px] text-neutral-500">Glissez-déposez ou cliquez pour charger votre fichier (.mp4 local)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post Upload input form -->
                     <div class="bg-neutral-900 p-6 border border-neutral-800 rounded-sm shadow-xl">
-                        <h3 class="text-xs uppercase tracking-widest font-bold text-white mb-4">Partager une performance</h3>
+                        <h3 class="text-xs uppercase tracking-widest font-bold text-white mb-4">Poster une performance</h3>
                         <div class="space-y-4">
                             <input type="text" id="post-title" placeholder="Titre de votre session sportive (ex: Run matinal)" class="w-full text-xs p-3 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <input type="text" id="post-user" placeholder="Votre Pseudo" class="text-xs p-3 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
                                 <div class="flex flex-col justify-center">
-                                    <label class="text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Sélectionner Vidéo</label>
+                                    <label class="text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Sélectionner un exemple</label>
                                     <select id="post-video-url" class="text-xs p-2.5 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
                                         <option value="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4">Session d'athlétisme</option>
                                         <option value="https://assets.mixkit.co/videos/preview/mixkit-man-jogging-on-the-beach-at-sunset-31997-large.mp4">Jogging Plage</option>
@@ -354,7 +381,7 @@
                                 </div>
                             </div>
                             <button onclick="addNewPost()" class="w-full py-3 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-all">
-                                Poster la vidéo
+                                Publier la vidéo
                             </button>
                         </div>
                     </div>
@@ -365,8 +392,8 @@
                     </div>
                 </div>
 
+                <!-- Right Side: Live Lounge Chat -->
                 <div class="lg:col-span-5 flex flex-col h-[600px] lg:h-[750px] bg-neutral-950 border border-neutral-900 rounded-sm shadow-2xl">
-                    <!-- Chat Header -->
                     <div class="p-4 border-b border-neutral-900 flex justify-between items-center bg-neutral-900 text-white">
                         <div>
                             <span class="text-[10px] tracking-widest text-amber-400 uppercase">Live Discussion</span>
@@ -378,12 +405,11 @@
                         </span>
                     </div>
 
-                    <!-- Messages Feed -->
                     <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40">
-                        <!-- Dynamic chat messages -->
+                        <!-- Messages loaded dynamically -->
                     </div>
 
-                    <!-- Chat Input System -->
+                    <!-- Interactive message inputs -->
                     <div class="p-4 border-t border-neutral-900 bg-neutral-900">
                         <div class="flex space-x-2 mb-3">
                             <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm" value="Anonyme">
@@ -400,9 +426,10 @@
             </div>
         </main>
 
+        <!-- PAGE 4: COTES MARCHE (Spéculation & Authenticité) -->
         <main id="page-market" class="page-section hidden flex-1 bg-[#0b0b0b] p-6 md:p-12 relative">
             <div class="max-w-7xl mx-auto space-y-16">
-                <!-- Headline Section -->
+                <!-- Header -->
                 <div class="text-center pt-6">
                     <span class="text-xs tracking-[0.5em] text-amber-400 uppercase block mb-3">
                         <span class="editable-text" data-key="marketTag">Marché Secondaire Autonome</span>
@@ -418,9 +445,10 @@
                     <div class="w-16 h-[1px] bg-amber-400 mx-auto mt-6"></div>
                 </div>
 
-                <!-- Dual Section: Left = Authenticator, Right = Market valuation -->
+                <!-- Dual Layout: Authenticator & Market values -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <!-- 1. The Algorithm Authenticator -->
+                    
+                    <!-- 1. Authenticator verification tool -->
                     <div class="p-8 bg-neutral-950 text-white rounded-sm border border-neutral-900 shadow-2xl flex flex-col justify-between">
                         <div>
                             <div class="flex items-center space-x-4 mb-6">
@@ -431,7 +459,6 @@
                                 Afin d'éviter toute contrefaçon de nos éditions limitées de 1000 pièces, entrez la catégorie de l'article, son numéro visible et la clé secrète pour certifier son origine.
                             </p>
 
-                            <!-- Authenticator Form -->
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-[10px] tracking-widest uppercase text-neutral-400 mb-2">Sélectionnez la catégorie</label>
@@ -465,14 +492,14 @@
                         </div>
                     </div>
 
-                    <!-- 2. Valuations and Live Trading -->
+                    <!-- 2. Live trading cotes -->
                     <div class="space-y-6">
                         <div class="border-b border-neutral-900 pb-4">
                             <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-white">La Cote Officielle Benzjames</h3>
                             <p class="text-xs text-neutral-400 mt-1">Variations de valeur certifiées lors des dernières transactions privées.</p>
                         </div>
 
-                        <!-- Market Index List -->
+                        <!-- Index lists -->
                         <div class="space-y-4">
                             <div class="flex justify-between items-center p-4 hover:bg-neutral-950 transition-colors border-b border-neutral-900">
                                 <div>
@@ -516,12 +543,12 @@
                             <h3 class="text-2xl uppercase tracking-widest font-sport font-bold text-white">Enchères et Transactions Privées</h3>
                             <p class="text-xs text-neutral-400 mt-1">Publiez votre article certifié ou misez sur une pièce d'exception.</p>
                         </div>
-                        <button onclick="openPostItemModal()" class="px-6 py-3.5 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-amber-400 hover:text-black transition-all rounded-sm">
+                        <button onclick="openPostItemModal()" class="px-6 py-3.5 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-amber-400 hover:text-black transition-all rounded-sm shadow-lg">
                             Vendre un article
                         </button>
                     </div>
 
-                    <!-- Bidding Listings -->
+                    <!-- Bids listings card grid -->
                     <div id="bids-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Loaded dynamically -->
                     </div>
@@ -529,6 +556,7 @@
             </div>
         </main>
 
+        <!-- Global Footer -->
         <footer class="bg-black text-neutral-500 text-[10px] py-12 px-6 border-t border-neutral-900">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
                 <p class="tracking-widest">&copy; 2026 Benzjames. Tous droits réservés.</p>
@@ -541,6 +569,7 @@
         </footer>
     </div>
 
+    <!-- Bid Auction Modal -->
     <div id="post-item-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-neutral-950 max-w-md w-full p-6 rounded-sm border border-neutral-800 shadow-2xl relative">
             <button onclick="closePostItemModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white">
@@ -566,7 +595,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Image de l'article</label>
+                    <label class="block text-[10px] uppercase tracking-widest text-neutral-400 mb-1">Photo de l'article</label>
                     <select id="auction-item-img-select" class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm mb-2">
                         <option value="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=400">Casquette Luxe Noire</option>
                         <option value="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400">Basket Chrono Strider</option>
@@ -582,6 +611,7 @@
         </div>
     </div>
 
+    <!-- Master Control Hub Modal -->
     <div id="admin-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-neutral-950 max-w-lg w-full p-6 rounded-sm border border-neutral-800 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white">
@@ -590,55 +620,48 @@
             
             <div id="admin-auth-panel">
                 <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-white">Identification Abonné Master</h3>
-                <p class="text-xs text-neutral-400 mb-4 leading-relaxed">Entrez votre code secret pour débloquer les commandes créatives en direct.</p>
+                <p class="text-xs text-neutral-400 mb-4 leading-relaxed">Entrez le passkey pour activer l'édition de texte au clic et les fonctions vidéo avancées.</p>
                 <div class="space-y-4">
-                    <input type="password" id="admin-pass" placeholder="Entrez le code..." class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm">
+                    <input type="password" id="admin-pass" placeholder="Code secret (Denis007)..." class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm">
                     <button onclick="verifyAdminPass()" class="w-full py-3 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-colors">
                         S'identifier
                     </button>
-                    <p id="admin-auth-error" class="hidden text-xs text-red-500 font-bold tracking-wider">CODE ERRONÉ. VEUILLEZ RÉESSAYER.</p>
+                    <p id="admin-auth-error" class="hidden text-xs text-red-500 font-bold tracking-wider uppercase mt-2">CODE ERRONÉ.</p>
                 </div>
             </div>
 
             <div id="admin-panel" class="hidden space-y-6 text-neutral-300">
                 <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-white border-b border-neutral-900 pb-3 flex items-center justify-between">
-                    <span>Panneau Configuration Master</span>
+                    <span>Configuration Master</span>
                     <span class="text-[10px] tracking-widest text-emerald-400 font-bold"><i class="fa-solid fa-circle animate-pulse"></i> Connecté</span>
                 </h3>
 
                 <!-- Setup Media Customization with Local Uploads -->
                 <div class="space-y-4">
-                    <div class="p-4 bg-neutral-900/60 rounded border border-neutral-800">
-                        <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400 mb-3">Personnalisation Intro / First (Média)</h4>
-                        
-                        <!-- Upload Page 1 Background (Photo or Video stored on Mac/iPhone) -->
-                        <div class="space-y-3">
-                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider">Importer Photo/Vidéo (Stocké sur iPhone/Mac)</label>
-                            <input type="file" id="media-uploader" accept="video/*, image/*" onchange="uploadLocalMedia(event, 'first')" class="block w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-white file:text-black hover:file:bg-amber-400">
-                            <span class="text-[9px] text-neutral-500 block">Permet l'intégration de fichiers lourds haute fidélité.</span>
+                    <div class="p-4 bg-neutral-900/60 rounded border border-neutral-800 space-y-3">
+                        <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400">Média Page First (Accueil)</h4>
+                        <input type="file" accept="video/*, image/*" onchange="directFirstPageUpload(event)" class="block w-full text-xs text-neutral-400">
+                        <span class="text-[8px] text-neutral-500">Note: Modifiable également directement depuis l'écran First !</span>
+                    </div>
+
+                    <!-- Other pages media upload configurations -->
+                    <div class="p-4 bg-neutral-900/60 rounded border border-neutral-800 space-y-4">
+                        <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400">Média des Autres Pages</h4>
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Bannière Showroom</label>
+                            <input type="file" accept="image/*" onchange="uploadLocalMedia(event, 'showroom')" class="block w-full text-xs text-neutral-400">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Média de Fond Tchat</label>
+                            <input type="file" accept="video/*, image/*" onchange="uploadLocalMedia(event, 'tchat')" class="block w-full text-xs text-neutral-400">
                         </div>
                     </div>
 
-                    <!-- Customize Media on other pages -->
+                    <!-- New Product Insertion -->
                     <div class="p-4 bg-neutral-900/60 rounded border border-neutral-800 space-y-4">
-                        <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400">Personnalisation Autres Pages</h4>
-                        
-                        <div>
-                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Média Fond Showroom</label>
-                            <input type="file" accept="image/*, video/*" onchange="uploadLocalMedia(event, 'showroom')" class="block w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:bg-white file:text-black">
-                        </div>
-
-                        <div>
-                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Média Tchat Banner / Posts</label>
-                            <input type="file" accept="video/*" onchange="uploadLocalMedia(event, 'tchat')" class="block w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:bg-white file:text-black">
-                        </div>
-                    </div>
-
-                    <!-- New Item Creation in Showroom -->
-                    <div class="p-4 bg-neutral-900/60 rounded border border-neutral-800 space-y-4">
-                        <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400">Nouveau Produit au Vestiaire</h4>
+                        <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400">Ajouter une Pièce au Vestiaire</h4>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="new-item-name" placeholder="Nom de la création" class="text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
+                            <input type="text" id="new-item-name" placeholder="Nom de l'article" class="text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
                             <select id="new-item-cat" class="text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
                                 <option value="casquette">Casquette</option>
                                 <option value="basket">Baskets</option>
@@ -649,26 +672,25 @@
                             </select>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="new-item-price" placeholder="Prix initial (€)" class="text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
+                            <input type="number" id="new-item-price" placeholder="Prix (€)" class="text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
                             <input type="number" id="new-item-visible" placeholder="N° Pièce (1-1000)" class="text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded" min="1" max="1000">
                         </div>
-                        <input type="text" id="new-item-comment" placeholder="Commentaire client" class="w-full text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
-                        
-                        <!-- Local product image -->
+                        <input type="text" id="new-item-comment" placeholder="Commentaire / Description" class="w-full text-xs p-2 bg-neutral-950 border border-neutral-800 text-white rounded">
                         <div>
-                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Photo Produit Local</label>
+                            <label class="block text-[10px] text-neutral-400 uppercase mb-1">Image Produit</label>
                             <input type="file" id="new-item-img-file" accept="image/*" class="block w-full text-xs text-neutral-400">
                         </div>
                     </div>
 
                     <button onclick="saveAdminChanges()" class="w-full py-4 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-all">
-                        Enregistrer & Actualiser
+                        Fermer & Actualiser
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Direct Text Editor Modal triggered by clicking inline elements in Master Mode -->
     <div id="text-editor-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-neutral-950 max-w-md w-full p-6 rounded-sm border border-neutral-800 shadow-2xl">
             <h3 class="text-xs uppercase tracking-widest font-sport font-bold text-amber-400 mb-4">Modification Master de Texte</h3>
@@ -686,13 +708,14 @@
         </div>
     </div>
 
+    <!-- PRIMARY APP CODE LOGIC & DATA STATE -->
     <script>
         const state = {
-            currentPage: 'intro',
+            currentPage: 'first',
             isAdmin: false,
             showroomCategory: 'tous',
             
-            // Custom text storage matching elements on all screens
+            // Customizeable strings
             customTexts: {
                 introLimitTag: "Série Limitée • 1000 Pièces",
                 introTitle: "Benzjames",
@@ -710,13 +733,14 @@
                 marketDesc: "Le concept de rareté pure. Chaque pièce possède un numéro unique de 1/1000 à 1000/1000 et un algorithme crypté exclusif garantissant son authenticité éternelle sur le marché secondaire."
             },
 
-            // Media references
+            // Media tracks and state references
             media: {
                 first: { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4' },
                 showroom: { type: 'image', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1200' },
                 tchat: { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4' }
             },
 
+            // Products list
             products: [
                 {
                     id: 'p1',
@@ -774,6 +798,8 @@
                     privateSerial: 'BJ-MON-001-SEC99W2'
                 }
             ],
+
+            // Video feeds posts
             posts: [
                 {
                     id: 'post1',
@@ -792,11 +818,15 @@
                     comments: ['Un coup droit incroyable!']
                 }
             ],
+
+            // Chat records
             chatMessages: [
                 { id: 1, pseudo: 'Julien_B', text: "Est-ce que quelqu'un a réussi à obtenir le numéro #007 de l'AeroCap ?" },
                 { id: 2, pseudo: 'BenzJames_Fan', text: "Je l'ai vu passer en enchère hier à plus de 1500€ ! La cote explose." },
                 { id: 3, pseudo: 'Arthur', text: "Le t-shirt Veloce est d'une qualité incroyable." }
             ],
+
+            // Auction objects
             auctions: [
                 {
                     id: 'auc1',
@@ -819,17 +849,16 @@
             ]
         };
 
-        // Persistent custom text recovery
-        if (localStorage.getItem('bj_custom_texts')) {
+        // Cache recovery of texts
+        if (localStorage.getItem('bj_custom_texts_2026')) {
             try {
-                state.customTexts = JSON.parse(localStorage.getItem('bj_custom_texts'));
+                state.customTexts = JSON.parse(localStorage.getItem('bj_custom_texts_2026'));
             } catch(e) {}
         }
     </script>
 
     <script>
         let hasEntered = false;
-        let entryTimeout = null;
 
         function enterApp() {
             if (hasEntered) return;
@@ -842,18 +871,16 @@
             setTimeout(() => {
                 intro.classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
-                navigate('home');
-                showToast("Bienvenue dans l'univers Benzjames", "success");
+                navigate('first');
+                showToast("Univers Benzjames débloqué", "success");
             }, 1000);
         }
 
-        // Mouse hover handler (triggered on PC/Mac)
         function handleIntroHover() {
-            if (state.isAdmin) return; // Prevent enter when clicking edit tags in admin mode
+            if (state.isAdmin) return;
             enterApp();
         }
 
-        // Mobile touch fallback handler (triggered on iOS/iPhone screen taps)
         function handleIntroTouch() {
             if (state.isAdmin) return;
             enterApp();
@@ -862,16 +889,16 @@
         function navigate(pageId) {
             state.currentPage = pageId;
             
-            // Hide all pages
+            // Hide sections
             document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
             
-            // Show current
+            // Show active page
             const activePage = document.getElementById(`page-${pageId}`);
             if (activePage) {
                 activePage.classList.remove('hidden');
             }
 
-            // Desktop tab highlighting
+            // Desktop highlights tabs
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.remove('text-white', 'border-amber-400');
                 tab.classList.add('text-neutral-400', 'border-transparent');
@@ -882,7 +909,7 @@
                 activeTab.classList.add('text-white', 'border-amber-400');
             }
 
-            // Mobile tab highlighting
+            // Mobile highlights tabs
             document.querySelectorAll('.mobile-nav-tab').forEach(tab => {
                 tab.classList.remove('text-white', 'border-amber-400');
                 tab.classList.add('text-neutral-400', 'border-transparent');
@@ -893,7 +920,7 @@
                 activeMobileTab.classList.add('text-white', 'border-amber-400');
             }
 
-            // Perform page updates
+            // Page triggers
             if (pageId === 'showroom') {
                 renderShowroom();
             } else if (pageId === 'tchat') {
@@ -903,12 +930,51 @@
                 renderAuctions();
             }
 
-            // Apply text modifications to currently rendered elements
             applyAllTexts();
         }
     </script>
 
     <script>
+        // Direct first page uploader directly from home page layout
+        function directFirstPageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const localURL = URL.createObjectURL(file);
+            const isVideo = file.type.startsWith('video/');
+
+            state.media.first = {
+                type: isVideo ? 'video' : 'image',
+                url: localURL
+            };
+
+            applyFirstPageMedia();
+            showToast("Vidéo First mise à jour en direct !", "success");
+        }
+
+        // Direct tchat video upload
+        function directTchatVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const localURL = URL.createObjectURL(file);
+            const pseudo = document.getElementById('chat-pseudo').value || 'Membre';
+
+            const newPost = {
+                id: `post_direct_${Date.now()}`,
+                title: file.name.substring(0, 35) || "Vidéo passion chargée en direct",
+                user: pseudo,
+                videoUrl: localURL,
+                likes: 1,
+                comments: ["Nouvelle vidéo importée directement via l'écran !"]
+            };
+
+            state.posts.unshift(newPost);
+            renderTchatFeed();
+            showToast("Votre vidéo locale a été ajoutée au flux !", "success");
+        }
+
+        // Standard uploader for multiple sources
         function uploadLocalMedia(event, targetPage) {
             const file = event.target.files[0];
             if (!file) return;
@@ -921,19 +987,18 @@
                 url: localURL
             };
 
-            showToast(`Média chargé avec succès pour la page: ${targetPage.toUpperCase()}`, "success");
+            showToast(`Média de ${targetPage.toUpperCase()} modifié.`, "success");
             
-            // Apply media directly if on relevant page
             if (targetPage === 'first') {
-                applyHeroMedia();
+                applyFirstPageMedia();
             } else if (targetPage === 'showroom') {
                 applyShowroomMedia();
             }
         }
 
-        function applyHeroMedia() {
-            const videoEl = document.getElementById('hero-video');
-            const imgEl = document.getElementById('hero-img');
+        function applyFirstPageMedia() {
+            const videoEl = document.getElementById('first-bg-video');
+            const imgEl = document.getElementById('first-bg-img');
             const mediaConfig = state.media.first;
 
             if (mediaConfig.type === 'video') {
@@ -941,7 +1006,7 @@
                 videoEl.classList.remove('hidden');
                 videoEl.src = mediaConfig.url;
                 videoEl.load();
-                videoEl.play().catch(e => console.log("Video auto play deferred."));
+                videoEl.play().catch(e => console.log("Auto-play delayed."));
             } else {
                 videoEl.classList.add('hidden');
                 imgEl.classList.remove('hidden');
@@ -960,7 +1025,6 @@
     <script>
         let editingKey = null;
 
-        // Apply state content to the DOM
         function applyAllTexts() {
             document.querySelectorAll('.editable-text').forEach(elem => {
                 const key = elem.getAttribute('data-key');
@@ -968,7 +1032,7 @@
                     elem.innerText = state.customTexts[key];
                 }
 
-                // Add or remove visual outlines depending on Master Mode status
+                // Add pointer cursor/borders if master is online
                 if (state.isAdmin) {
                     elem.classList.add('editable-active');
                     elem.onclick = (e) => {
@@ -981,6 +1045,14 @@
                     elem.onclick = null;
                 }
             });
+
+            // Toggle inline direct video uploader visibility based on master status
+            const directUploader = document.getElementById('first-direct-uploader-container');
+            if (state.isAdmin) {
+                directUploader.classList.remove('hidden');
+            } else {
+                directUploader.classList.add('hidden');
+            }
         }
 
         function openTextEditor(key) {
@@ -1001,8 +1073,8 @@
             const updatedText = document.getElementById('text-editor-input').value.trim();
             if (updatedText) {
                 state.customTexts[editingKey] = updatedText;
-                localStorage.setItem('bj_custom_texts', JSON.stringify(state.customTexts));
-                showToast("Texte actualisé", "success");
+                localStorage.setItem('bj_custom_texts_2026', JSON.stringify(state.customTexts));
+                showToast("Texte actualisé en direct !", "success");
                 applyAllTexts();
             }
             closeTextEditor();
@@ -1025,7 +1097,6 @@
 
                 const card = `
                     <div class="group flex flex-col justify-between bg-neutral-900 border border-neutral-800 p-4 transition-all duration-300 hover:shadow-2xl relative rounded-sm">
-                        <!-- Corner Series Tag -->
                         <span class="absolute top-6 left-6 z-10 bg-amber-400 text-black text-[9px] font-sport font-black px-3 py-1 uppercase tracking-widest rounded-sm shadow-md">
                             Édition ${p.numberInSeries}/1000
                         </span>
@@ -1086,7 +1157,7 @@
             document.execCommand('copy');
             document.body.removeChild(el);
             playSuccessSound();
-            showToast("Clé de sécurité copiée pour l'authentificateur", "success");
+            showToast("Clé de sécurité copiée pour vérification !", "success");
         }
     </script>
 
@@ -1108,14 +1179,13 @@
                             <span class="text-[10px] text-neutral-400 tracking-wider font-light">@${post.user}</span>
                         </div>
 
-                        <!-- Video Container -->
-                        <div class="aspect-video bg-black relative">
+                        <!-- Main Video Block with inline Direct Uploader on Double-Click or overlay -->
+                        <div class="aspect-video bg-black relative group">
                             <video class="w-full h-full object-cover" controls playsinline>
                                 <source src="${post.videoUrl}" type="video/mp4">
                             </video>
                         </div>
 
-                        <!-- Comments Section -->
                         <div class="p-4 bg-neutral-900 space-y-4">
                             <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
                                 <button onclick="likePost('${post.id}')" class="flex items-center space-x-2 text-xs text-white hover:text-amber-400 transition-colors font-bold">
@@ -1135,7 +1205,7 @@
                             </div>
 
                             <div class="flex space-x-2">
-                                <input type="text" id="comment-input-${post.id}" placeholder="Ajouter votre commentaire..." class="flex-1 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
+                                <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis sur cette performance..." class="flex-1 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
                                 <button onclick="addCommentToPost('${post.id}')" class="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-amber-400 transition-colors">Envoyer</button>
                             </div>
                         </div>
@@ -1162,7 +1232,7 @@
                 post.comments.push(input.value.trim());
                 input.value = "";
                 renderTchatFeed();
-                showToast("Avis publié", "success");
+                showToast("Avis ajouté avec succès", "success");
             }
         }
 
@@ -1172,7 +1242,7 @@
             const video = document.getElementById('post-video-url');
 
             if (!title.value.trim() || !user.value.trim()) {
-                showToast("Remplissez le titre et le pseudo !", "error");
+                showToast("Veuillez remplir le titre et votre pseudo !", "error");
                 return;
             }
 
@@ -1185,11 +1255,11 @@
                 comments: []
             };
 
-            state.posts.push(newPost);
+            state.posts.unshift(newPost);
             title.value = "";
             user.value = "";
             renderTchatFeed();
-            showToast("Vidéo ajoutée à l'expérience", "success");
+            showToast("Votre publication de performance a été postée !", "success");
         }
     </script>
 
@@ -1252,7 +1322,7 @@
                                     Pièce #${auc.numberInSeries}/1000
                                 </span>
                                 <h4 class="text-sm font-bold tracking-widest uppercase text-white mt-3">${auc.name}</h4>
-                                <p class="text-xs text-neutral-500 mt-1">Mise à prix init.: ${auc.startingPrice} €</p>
+                                <p class="text-xs text-neutral-400 mt-1">Mise à prix init.: ${auc.startingPrice} €</p>
                             </div>
                         </div>
 
@@ -1264,9 +1334,9 @@
                             </div>
 
                             <div class="flex space-x-2 w-full sm:w-auto">
-                                <input type="number" id="bid-input-${auc.id}" placeholder="+50€" class="w-20 text-xs p-2 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm text-center">
+                                <input type="number" id="bid-input-${auc.id}" placeholder="+50€" class="w-20 text-xs p-2 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm text-center font-bold">
                                 <button onclick="placeBid('${auc.id}')" class="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-all rounded-sm flex-1 sm:flex-none">
-                                    Surenchérir
+                                    Miser
                                 </button>
                             </div>
                         </div>
@@ -1282,7 +1352,7 @@
             const bidValue = parseInt(input.value);
 
             if (!bidValue || bidValue <= 0) {
-                showToast("Entrez une mise positive.", "error");
+                showToast("Entrez un montant valide.", "error");
                 return;
             }
 
@@ -1291,7 +1361,7 @@
             input.value = "";
             playSuccessSound();
             renderAuctions();
-            showToast("Votre enchère a été transmise", "success");
+            showToast("Votre enchère a été validée !", "success");
         }
 
         function openPostItemModal() {
@@ -1309,7 +1379,7 @@
             const img = document.getElementById('auction-item-img-select').value;
 
             if (!name || isNaN(num) || isNaN(price)) {
-                showToast("Remplissez tous les champs de l'enchère !", "error");
+                showToast("Veuillez remplir tous les champs !", "error");
                 return;
             }
 
@@ -1326,7 +1396,7 @@
             state.auctions.push(newAuc);
             closePostItemModal();
             renderAuctions();
-            showToast("Article répertorié sur le marché", "success");
+            showToast("Votre pièce a été répertoriée avec succès !", "success");
         }
     </script>
 
@@ -1356,7 +1426,7 @@
                 resultBox.classList.add('bg-rose-950/20', 'border-red-500', 'text-red-400');
                 resultBox.innerHTML = `
                     <i class="fa-solid fa-triangle-exclamation text-xl mb-1 block"></i>
-                    <span class="text-xs font-bold uppercase tracking-widest block">Format Invalide</span>
+                    <span class="text-xs font-bold uppercase tracking-widest block">Format non conforme</span>
                 `;
                 return;
             }
@@ -1367,7 +1437,7 @@
                 resultBox.innerHTML = `
                     <i class="fa-solid fa-certificate text-xl mb-1 block"></i>
                     <span class="text-xs font-bold uppercase tracking-widest block">Authentique Certifié</span>
-                    <span class="text-[9px] block opacity-80 mt-1">Série valide 1000 Benzjames. Signature confirmée.</span>
+                    <span class="text-[9px] block opacity-80 mt-1">Série légitime validée. Signature numérique concordante.</span>
                 `;
                 playSuccessSound();
             } else {
@@ -1375,7 +1445,7 @@
                 resultBox.innerHTML = `
                     <i class="fa-solid fa-skull-crossbones text-xl mb-1 block"></i>
                     <span class="text-xs font-bold uppercase tracking-widest block">Alerte Contrefaçon</span>
-                    <span class="text-[9px] block opacity-80 mt-1">Clé signature non concordante. Origine non garantie.</span>
+                    <span class="text-[9px] block opacity-80 mt-1">La signature secrète ne correspond pas à nos matrices d'origine.</span>
                 `;
             }
         }
@@ -1401,7 +1471,7 @@
                 state.isAdmin = true;
                 playSuccessSound();
                 
-                // Activate indicator UI
+                // Switch activation flags
                 document.getElementById('admin-dot').classList.remove('bg-neutral-600');
                 document.getElementById('admin-dot').classList.add('bg-amber-400', 'animate-pulse');
                 document.getElementById('master-indicator-label').classList.remove('hidden');
@@ -1409,9 +1479,8 @@
                 authPanel.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
                 
-                // Apply visual markers & edit interactions
                 applyAllTexts();
-                showToast("Accès Master Activé", "success");
+                showToast("Compte Master Certifié", "success");
             } else {
                 error.classList.remove('hidden');
             }
@@ -1420,7 +1489,7 @@
         function saveAdminChanges() {
             if (!state.isAdmin) return;
 
-            // Check if there is a new product created in admin panel
+            // Optional new item creation checks
             const name = document.getElementById('new-item-name').value.trim();
             const cat = document.getElementById('new-item-cat').value;
             const price = parseInt(document.getElementById('new-item-price').value);
@@ -1442,7 +1511,7 @@
                     name: name,
                     price: price,
                     rating: 5.0,
-                    comment: comment || 'Validation Master Benzjames.',
+                    comment: comment || 'Approbation de l\'atelier Master.',
                     image: imgURL,
                     numberInSeries: visible,
                     privateSerial: secret
@@ -1461,15 +1530,14 @@
             playSuccessSound();
             closeAdminModal();
             renderShowroom();
-            showToast("Modifications actualisées !", "success");
+            showToast("Modifications de l'atelier enregistrées !", "success");
         }
     </script>
 
     <script>
         window.onload = function() {
-            // Apply customizable elements on first page boot
             applyAllTexts();
-            applyHeroMedia();
+            applyFirstPageMedia();
             applyShowroomMedia();
         }
     </script>
