@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font-Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Oswald pour le style sport automobile, Montserrat pour l'esthétique luxe Armani, Playfair pour l'éditorial -->
+    <!-- Google Fonts: Oswald pour le style sport, Montserrat pour le minimalisme Armani, Playfair pour l'éditorial -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@400;700;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -48,10 +48,6 @@
             animation: laser-sweep-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             animation-delay: 2.5s;
         }
-        .text-stroke {
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-            color: transparent;
-        }
         /* Custom Premium Scrollbars */
         ::-webkit-scrollbar {
             width: 5px;
@@ -79,7 +75,7 @@
             background-color: rgba(212, 175, 55, 0.15) !important;
         }
         .editable-active::after {
-            content: "✎ EDIT TEXT";
+            content: "✎ DESIGN & EDIT";
             position: absolute;
             top: -18px;
             right: 0;
@@ -148,7 +144,9 @@
         }
     </script>
 
+    <!-- Toast Notifications Container -->
     <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+    
     <script>
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -249,10 +247,11 @@
         </div>
 
         <!-- PAGE 1: FIRST (Grand Écran Vidéo Pleine Page) -->
-        <main id="page-first" class="page-section relative flex-1 min-h-[calc(100vh-130px)] flex flex-col justify-end p-8 md:p-16 overflow-hidden">
+        <main id="page-first" class="page-section relative flex-1 min-h-[calc(100vh-130px)] flex flex-col justify-end items-end p-8 md:p-16 overflow-hidden">
             <!-- Fullscreen Video/Media Container -->
             <div class="absolute inset-0 w-full h-full overflow-hidden z-0" id="first-media-viewport">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-l from-black/60 via-transparent to-transparent z-10 pointer-events-none"></div>
                 
                 <!-- Main Fullscreen Background Video -->
                 <video id="first-bg-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline>
@@ -271,27 +270,21 @@
                 <p class="text-[8px] text-neutral-400 mt-2">Choisissez n'importe quel fichier vidéo (.mp4) ou photo de votre iPhone/Mac.</p>
             </div>
 
-            <!-- Hero Brand Content (Directly Clickable and Editable in Master Mode) -->
-            <div class="relative z-20 max-w-3xl text-white mb-12">
-                <span class="text-xs tracking-[0.5em] text-amber-400 uppercase font-bold block mb-4">
-                    <span class="editable-text" data-key="firstSubtitle">Maison de Spéculation Athlétique</span>
+            <!-- Hero Brand Content (Directly Clickable and Styleable in Master Mode) -->
+            <div class="relative z-20 max-w-2xl text-right flex flex-col items-end mb-12 mr-2 md:mr-6">
+                <span class="block mb-3 uppercase tracking-[0.5em] font-bold" id="style-subtitle-wrapper">
+                    <span class="editable-text" data-key="firstSubtitle" id="el-firstSubtitle">Maison de Spéculation Athlétique</span>
                 </span>
-                <h2 class="text-5xl md:text-8xl font-sport italic uppercase scale-y-90 tracking-tighter mb-6 leading-none">
-                    <span class="editable-text" data-key="firstTitle">L'Édition Unique.</span>
+                <h2 class="italic uppercase tracking-tighter mb-4 leading-tight" id="style-title-wrapper">
+                    <span class="editable-text" data-key="firstTitle" id="el-firstTitle">L'Édition Unique.</span>
                 </h2>
-                <p class="text-sm text-neutral-300 font-light tracking-wide leading-relaxed mb-8 max-w-2xl">
-                    <span class="editable-text" data-key="firstDesc">
+                <p class="font-light tracking-wide leading-relaxed max-w-lg" id="style-desc-wrapper">
+                    <span class="editable-text" data-key="firstDesc" id="el-firstDesc">
                         Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.
                     </span>
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="navigate('showroom')" class="px-8 py-4 bg-white text-black font-sport font-bold tracking-widest text-xs uppercase hover:bg-neutral-200 transition-colors rounded-sm shadow-xl">
-                        Découvrir le vestiaire
-                    </button>
-                    <button onclick="navigate('market')" class="px-8 py-4 bg-transparent border border-white text-white font-sport font-bold tracking-widest text-xs uppercase hover:bg-white hover:text-black transition-all rounded-sm">
-                        Consulter les cotes
-                    </button>
-                </div>
+                
+                <!-- Buttons are completely removed per request -->
             </div>
         </main>
 
@@ -559,7 +552,7 @@
         <!-- Global Footer -->
         <footer class="bg-black text-neutral-500 text-[10px] py-12 px-6 border-t border-neutral-900">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
-                <p class="tracking-widest">&copy; 2026 Benzjames. Tous droits réservés.</p>
+                <p class="tracking-widest">&copy; 2026 Benzjames. Tous droits réservés. Référence technique : Benzjamesapplicode9juillet26.pdf</p>
                 <div class="flex space-x-8 tracking-widest uppercase">
                     <a href="#" class="hover:text-white transition-colors">Termes & Conditions</a>
                     <a href="#" class="hover:text-white transition-colors">Garantie Spécificité 1000</a>
@@ -620,7 +613,7 @@
             
             <div id="admin-auth-panel">
                 <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-white">Identification Abonné Master</h3>
-                <p class="text-xs text-neutral-400 mb-4 leading-relaxed">Entrez le passkey pour activer l'édition de texte au clic et les fonctions vidéo avancées.</p>
+                <p class="text-xs text-neutral-400 mb-4 leading-relaxed">Entrez le passkey pour activer l'édition de texte au clic et les fonctions média avancées.</p>
                 <div class="space-y-4">
                     <input type="password" id="admin-pass" placeholder="Code secret (Denis007)..." class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm">
                     <button onclick="verifyAdminPass()" class="w-full py-3 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-colors">
@@ -650,10 +643,6 @@
                         <div>
                             <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Bannière Showroom</label>
                             <input type="file" accept="image/*" onchange="uploadLocalMedia(event, 'showroom')" class="block w-full text-xs text-neutral-400">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Média de Fond Tchat</label>
-                            <input type="file" accept="video/*, image/*" onchange="uploadLocalMedia(event, 'tchat')" class="block w-full text-xs text-neutral-400">
                         </div>
                     </div>
 
@@ -690,17 +679,66 @@
         </div>
     </div>
 
-    <!-- Direct Text Editor Modal triggered by clicking inline elements in Master Mode -->
-    <div id="text-editor-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-neutral-950 max-w-md w-full p-6 rounded-sm border border-neutral-800 shadow-2xl">
-            <h3 class="text-xs uppercase tracking-widest font-sport font-bold text-amber-400 mb-4">Modification Master de Texte</h3>
+    <!-- Direct Text Editor Modal with Advanced parameters (Font, Color, Size) -->
+    <div id="text-editor-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-neutral-950 max-w-md w-full p-6 rounded-sm border border-neutral-800 shadow-2xl space-y-4">
+            <h3 class="text-xs uppercase tracking-widest font-sport font-bold text-amber-400 flex justify-between items-center">
+                <span>Atelier Master de Design Typographique</span>
+                <i class="fa-solid fa-sliders text-amber-400 text-sm"></i>
+            </h3>
+            
             <div class="space-y-4">
-                <textarea id="text-editor-input" rows="4" class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm"></textarea>
-                <div class="flex space-x-3">
-                    <button onclick="closeTextEditor()" class="flex-1 py-2 bg-neutral-900 text-white text-xs uppercase tracking-widest border border-neutral-800">
+                <!-- Text Area Input -->
+                <div>
+                    <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-2">Contenu du Texte</label>
+                    <textarea id="text-editor-input" rows="4" class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm"></textarea>
+                </div>
+
+                <!-- Custom Parameters (Visible especially for Page First style configs) -->
+                <div id="first-only-parameters" class="space-y-4 border-t border-neutral-900 pt-4">
+                    <span class="block text-[10px] font-bold text-neutral-300 uppercase tracking-wider">Style Visuel (Édition en Direct)</span>
+                    
+                    <!-- Font Family Selector -->
+                    <div>
+                        <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Police de Caractère (Font)</label>
+                        <select id="text-editor-font" class="w-full text-xs p-2 bg-neutral-900 border border-neutral-800 rounded text-white focus:border-amber-400">
+                            <option value="font-sport">Sport / Automobile (Oswald)</option>
+                            <option value="font-armani">Luxe Armani (Montserrat)</option>
+                            <option value="font-serif">Éditorial Prestige (Playfair Serif)</option>
+                        </select>
+                    </div>
+
+                    <!-- Size (Tailwind class or raw style mapping) -->
+                    <div>
+                        <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1 flex justify-between">
+                            <span>Taille de Police (Size)</span>
+                            <span id="text-editor-size-label" class="text-amber-400 font-bold">16px</span>
+                        </label>
+                        <input type="range" id="text-editor-size" min="10" max="110" value="16" oninput="updateSizeSliderLabel(this.value)" class="w-full accent-amber-400">
+                    </div>
+
+                    <!-- Color Picker -->
+                    <div>
+                        <label class="block text-[9px] uppercase tracking-widest text-neutral-400 mb-1">Couleur du Texte (Color)</label>
+                        <div class="flex items-center space-x-3">
+                            <input type="color" id="text-editor-color" class="w-10 h-10 bg-neutral-900 border border-neutral-800 cursor-pointer rounded-sm">
+                            <input type="text" id="text-editor-color-hex" class="flex-1 text-xs p-2 bg-neutral-900 border border-neutral-800 text-white rounded uppercase" placeholder="#FFFFFF" oninput="syncColorPicker(this.value)">
+                        </div>
+                        <div class="flex space-x-2 mt-2">
+                            <button onclick="setFastColor('#ffffff')" class="w-4 h-4 rounded-full bg-white border border-neutral-800" title="Blanc pur"></button>
+                            <button onclick="setFastColor('#d4af37')" class="w-4 h-4 rounded-full bg-[#d4af37] border border-neutral-800" title="Or de prestige"></button>
+                            <button onclick="setFastColor('#a3a3a3')" class="w-4 h-4 rounded-full bg-[#a3a3a3] border border-neutral-800" title="Platine"></button>
+                            <button onclick="setFastColor('#fbcfe8')" class="w-4 h-4 rounded-full bg-[#fbcfe8] border border-neutral-800" title="Rose poudré"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex space-x-3 border-t border-neutral-900 pt-4">
+                    <button onclick="closeTextEditor()" class="flex-1 py-2.5 bg-neutral-900 text-white text-xs uppercase tracking-widest border border-neutral-800 rounded-sm">
                         Annuler
                     </button>
-                    <button onclick="saveTextEditor()" class="flex-1 py-2 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-amber-400 hover:text-black">
+                    <button onclick="saveTextEditor()" class="flex-1 py-2.5 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-amber-400 hover:text-black transition-colors rounded-sm">
                         Confirmer
                     </button>
                 </div>
@@ -731,6 +769,25 @@
                 marketTag: "Marché Secondaire Autonome",
                 marketTitle: "Spéculation & Authenticité",
                 marketDesc: "Le concept de rareté pure. Chaque pièce possède un numéro unique de 1/1000 à 1000/1000 et un algorithme crypté exclusif garantissant son authenticité éternelle sur le marché secondaire."
+            },
+
+            // Dynamic Styling Configuration for Page First Hero elements
+            firstStyles: {
+                firstSubtitle: {
+                    font: "font-sport",
+                    color: "#f59e0b",
+                    size: "12"
+                },
+                firstTitle: {
+                    font: "font-sport",
+                    color: "#ffffff",
+                    size: "72"
+                },
+                firstDesc: {
+                    font: "font-armani",
+                    color: "#d4d4d8",
+                    size: "14"
+                }
             },
 
             // Media tracks and state references
@@ -849,10 +906,15 @@
             ]
         };
 
-        // Cache recovery of texts
+        // Cache recovery of custom configurations
         if (localStorage.getItem('bj_custom_texts_2026')) {
             try {
                 state.customTexts = JSON.parse(localStorage.getItem('bj_custom_texts_2026'));
+            } catch(e) {}
+        }
+        if (localStorage.getItem('bj_first_styles_2026')) {
+            try {
+                state.firstStyles = JSON.parse(localStorage.getItem('bj_first_styles_2026'));
             } catch(e) {}
         }
     </script>
@@ -931,11 +993,12 @@
             }
 
             applyAllTexts();
+            applyCustomFirstStyles();
         }
     </script>
 
     <script>
-        // Direct first page uploader directly from home page layout
+        // Direct first page background video or image uploader
         function directFirstPageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -949,7 +1012,7 @@
             };
 
             applyFirstPageMedia();
-            showToast("Vidéo First mise à jour en direct !", "success");
+            showToast("Fond de la page First mis à jour en direct !", "success");
         }
 
         // Direct tchat video upload
@@ -966,7 +1029,7 @@
                 user: pseudo,
                 videoUrl: localURL,
                 likes: 1,
-                comments: ["Nouvelle vidéo importée directement via l'écran !"]
+                comments: ["Nouvelle performance importée directement via l'écran !"]
             };
 
             state.posts.unshift(newPost);
@@ -1055,12 +1118,75 @@
             }
         }
 
+        function applyCustomFirstStyles() {
+            // Mapping styles dynamically to DOM Elements on the First Page
+            const elements = {
+                firstSubtitle: { el: document.getElementById('el-firstSubtitle'), wrapper: document.getElementById('style-subtitle-wrapper') },
+                firstTitle: { el: document.getElementById('el-firstTitle'), wrapper: document.getElementById('style-title-wrapper') },
+                firstDesc: { el: document.getElementById('el-firstDesc'), wrapper: document.getElementById('style-desc-wrapper') }
+            };
+
+            for (const [key, obj] of Object.entries(elements)) {
+                if (obj.el && state.firstStyles[key]) {
+                    const styleConf = state.firstStyles[key];
+                    
+                    // Reset class font configurations
+                    obj.wrapper.className = "block mb-4 tracking-[0.5em] uppercase font-bold";
+                    if (key === 'firstTitle') {
+                        obj.wrapper.className = "italic uppercase tracking-tighter mb-4 leading-tight";
+                    } else if (key === 'firstDesc') {
+                        obj.wrapper.className = "font-light tracking-wide leading-relaxed max-w-lg";
+                    }
+
+                    // Apply Custom Font class
+                    obj.wrapper.classList.add(styleConf.font);
+                    
+                    // Apply Inline custom size & color
+                    obj.el.style.color = styleConf.color;
+                    obj.el.style.fontSize = styleConf.size + "px";
+                }
+            }
+        }
+
         function openTextEditor(key) {
             editingKey = key;
             const textModal = document.getElementById('text-editor-modal');
             const textInput = document.getElementById('text-editor-input');
+            const paramsPanel = document.getElementById('first-only-parameters');
+            
             textInput.value = state.customTexts[key];
+            
+            // Show advanced style customizers only if editing a Page First key
+            if (key === 'firstTitle' || key === 'firstSubtitle' || key === 'firstDesc') {
+                paramsPanel.classList.remove('hidden');
+                
+                // Set initial parameters values
+                const currentStyle = state.firstStyles[key];
+                document.getElementById('text-editor-font').value = currentStyle.font;
+                document.getElementById('text-editor-size').value = currentStyle.size;
+                updateSizeSliderLabel(currentStyle.size);
+                document.getElementById('text-editor-color').value = currentStyle.color;
+                document.getElementById('text-editor-color-hex').value = currentStyle.color.toUpperCase();
+            } else {
+                paramsPanel.classList.add('hidden');
+            }
+
             textModal.classList.remove('hidden');
+        }
+
+        function updateSizeSliderLabel(val) {
+            document.getElementById('text-editor-size-label').innerText = val + "px";
+        }
+
+        function syncColorPicker(hex) {
+            if (hex.startsWith('#') && hex.length === 7) {
+                document.getElementById('text-editor-color').value = hex;
+            }
+        }
+
+        function setFastColor(hex) {
+            document.getElementById('text-editor-color').value = hex;
+            document.getElementById('text-editor-color-hex').value = hex.toUpperCase();
         }
 
         function closeTextEditor() {
@@ -1074,7 +1200,19 @@
             if (updatedText) {
                 state.customTexts[editingKey] = updatedText;
                 localStorage.setItem('bj_custom_texts_2026', JSON.stringify(state.customTexts));
-                showToast("Texte actualisé en direct !", "success");
+                
+                // Save Styling Parameters if applicable
+                if (editingKey === 'firstTitle' || editingKey === 'firstSubtitle' || editingKey === 'firstDesc') {
+                    state.firstStyles[editingKey] = {
+                        font: document.getElementById('text-editor-font').value,
+                        color: document.getElementById('text-editor-color').value,
+                        size: document.getElementById('text-editor-size').value
+                    };
+                    localStorage.setItem('bj_first_styles_2026', JSON.stringify(state.firstStyles));
+                    applyCustomFirstStyles();
+                }
+
+                showToast("Modifications appliquées en direct !", "success");
                 applyAllTexts();
             }
             closeTextEditor();
@@ -1157,7 +1295,7 @@
             document.execCommand('copy');
             document.body.removeChild(el);
             playSuccessSound();
-            showToast("Clé de sécurité copiée pour vérification !", "success");
+            showToast("Clé de sécurité copiée pour l'authentificateur !", "success");
         }
     </script>
 
@@ -1179,7 +1317,7 @@
                             <span class="text-[10px] text-neutral-400 tracking-wider font-light">@${post.user}</span>
                         </div>
 
-                        <!-- Main Video Block with inline Direct Uploader on Double-Click or overlay -->
+                        <!-- Main Video Block -->
                         <div class="aspect-video bg-black relative group">
                             <video class="w-full h-full object-cover" controls playsinline>
                                 <source src="${post.videoUrl}" type="video/mp4">
@@ -1480,6 +1618,7 @@
                 adminPanel.classList.remove('hidden');
                 
                 applyAllTexts();
+                applyCustomFirstStyles();
                 showToast("Compte Master Certifié", "success");
             } else {
                 error.classList.remove('hidden');
@@ -1539,6 +1678,7 @@
             applyAllTexts();
             applyFirstPageMedia();
             applyShowroomMedia();
+            applyCustomFirstStyles();
         }
     </script>
 </body>
