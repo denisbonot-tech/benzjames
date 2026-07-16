@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font-Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Oswald pour le style sport, Montserrat pour le minimalisme Armani, Playfair pour l'éditorial -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@400;700;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -29,6 +29,38 @@
     </script>
     
     <style>
+        :root {
+            --subtitle-size: 12px;
+            --title-size: 72px;
+            --desc-size: 14px;
+        }
+
+        /* 50% scale reduction on iPhone/mobile screens for Page First text elements */
+        #el-firstSubtitle {
+            font-size: var(--subtitle-size);
+        }
+        #el-firstTitle {
+            font-size: var(--title-size);
+        }
+        #el-firstDesc {
+            font-size: var(--desc-size);
+        }
+
+        @media (max-width: 767px) {
+            #el-firstSubtitle {
+                font-size: calc(var(--subtitle-size) * 0.5) !important;
+                line-height: 1.2 !important;
+            }
+            #el-firstTitle {
+                font-size: calc(var(--title-size) * 0.5) !important;
+                line-height: 1.0 !important;
+            }
+            #el-firstDesc {
+                font-size: calc(var(--desc-size) * 0.5) !important;
+                line-height: 1.4 !important;
+            }
+        }
+
         @keyframes laser-sweep-1 {
             0% { transform: translate(-150%, -150%) rotate(45deg); opacity: 0; }
             15% { opacity: 0.8; }
@@ -48,7 +80,7 @@
             animation: laser-sweep-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             animation-delay: 2.5s;
         }
-        /* Custom Premium Scrollbars */
+        /* Premium Scrollbars */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -95,82 +127,8 @@
 
 <body class="font-armani bg-[#0b0b0b] text-neutral-100 select-none overflow-x-hidden min-h-screen flex flex-col justify-between">
 
-    <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function playLaserSound() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(60, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(920, audioCtx.currentTime + 1.5);
-            
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-            
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.setValueAtTime(350, audioCtx.currentTime);
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + 1.5);
-        }
-
-        function playSuccessSound() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.15); // E5
-            osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.3); // G5
-            
-            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.6);
-        }
-    </script>
-
     <!-- Toast Notifications Container -->
     <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
-    
-    <script>
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `p-4 rounded-sm border backdrop-blur-md transition-all duration-300 transform translate-y-2 opacity-0 flex items-center space-x-3 pointer-events-auto shadow-2xl text-xs tracking-widest uppercase font-sport ${
-                type === 'success' 
-                ? 'bg-neutral-900/95 border-emerald-500/50 text-emerald-400' 
-                : 'bg-neutral-900/95 border-red-500/50 text-red-400'
-            }`;
-            
-            const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
-            toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i> <span>${message}</span>`;
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 50);
-            
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-    </script>
 
     <!-- Intro Screen: Hover anywhere to enter with sound effect -->
     <div id="intro-screen" onmouseenter="handleIntroHover()" onclick="handleIntroTouch()" class="fixed inset-0 bg-black z-50 flex flex-col justify-between items-center py-16 px-6 transition-all duration-1000 ease-in-out cursor-pointer group">
@@ -220,7 +178,7 @@
                 <span class="text-[9px] tracking-widest text-neutral-500 block uppercase font-light">Milan / Paris / London</span>
             </div>
 
-            <!-- Header Navigation tabs (Including "First" Page) -->
+            <!-- Header Navigation tabs -->
             <nav class="hidden md:flex space-x-12 text-xs tracking-[0.3em] uppercase font-medium text-neutral-400">
                 <button onclick="navigate('first')" class="nav-tab hover:text-white transition-colors duration-200 py-2 border-b-2 border-transparent" id="nav-first">First</button>
                 <button onclick="navigate('showroom')" class="nav-tab hover:text-white transition-colors duration-200 py-2 border-b-2 border-transparent" id="nav-showroom">Show room</button>
@@ -238,7 +196,7 @@
             </div>
         </header>
 
-        <!-- Mobile Sub-Menu navigation tabs (Including "First") -->
+        <!-- Mobile Sub-Menu navigation tabs (clean header for responsive layouts) -->
         <div class="md:hidden sticky top-[65px] z-30 bg-black/95 backdrop-blur-md border-b border-neutral-900 flex justify-around py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-400">
             <button onclick="navigate('first')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-first">First</button>
             <button onclick="navigate('showroom')" class="mobile-nav-tab py-1 px-3 border-b-2 border-transparent" id="m-nav-showroom">Showroom</button>
@@ -253,13 +211,23 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
                 <div class="absolute inset-0 bg-gradient-to-l from-black/60 via-transparent to-transparent z-10 pointer-events-none"></div>
                 
-                <!-- Main Fullscreen Background Video -->
-                <video id="first-bg-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop muted playsinline>
+                <!-- Main Fullscreen Background Video with Sound capabilities -->
+                <video id="first-bg-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop playsinline>
                     <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4" type="video/mp4">
                 </video>
                 <!-- Fallback background image if uploaded file is image type -->
                 <img id="first-bg-img" class="w-full h-full object-cover transition-opacity duration-1000 hidden" src="" alt="First Page Background">
             </div>
+
+            <!-- Audio floating controller for First Page -->
+            <button id="first-audio-controller" onclick="toggleFirstAudio()" class="absolute bottom-8 left-8 z-30 flex items-center space-x-2 bg-black/80 backdrop-blur-md border border-neutral-800 hover:border-amber-400 px-4 py-2.5 rounded-sm text-neutral-300 hover:text-white transition-all text-[9px] tracking-widest font-sport uppercase">
+                <span class="flex h-1.5 w-1.5 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" id="audio-wave-dot"></span>
+                </span>
+                <i class="fa-solid fa-volume-xmark" id="audio-btn-icon"></i>
+                <span id="audio-btn-text">Son désactivé (Moteur coupé)</span>
+            </button>
 
             <!-- Direct Master Video/Image Uploader (Visible only when Master is active) -->
             <div id="first-direct-uploader-container" class="hidden absolute top-8 left-8 z-30 max-w-sm bg-black/80 backdrop-blur-md border border-amber-400/50 p-4 rounded-sm shadow-2xl">
@@ -270,7 +238,7 @@
                 <p class="text-[8px] text-neutral-400 mt-2">Choisissez n'importe quel fichier vidéo (.mp4) ou photo de votre iPhone/Mac.</p>
             </div>
 
-            <!-- Hero Brand Content (Directly Clickable and Styleable in Master Mode) -->
+            <!-- Hero Brand Content (Directly Clickable and Styleable in Master Mode) - Adjusted to bottom-right -->
             <div class="relative z-20 max-w-2xl text-right flex flex-col items-end mb-12 mr-2 md:mr-6">
                 <span class="block mb-3 uppercase tracking-[0.5em] font-bold" id="style-subtitle-wrapper">
                     <span class="editable-text" data-key="firstSubtitle" id="el-firstSubtitle">Maison de Spéculation Athlétique</span>
@@ -283,8 +251,6 @@
                         Chaque pièce de nos collections exclusives est numérotée de 1 à 1000. Une fois la limite mondiale franchie, le modèle cesse d'être produit pour intégrer l'histoire et la spéculation boursière de la marque.
                     </span>
                 </p>
-                
-                <!-- Buttons are completely removed per request -->
             </div>
         </main>
 
@@ -340,7 +306,7 @@
                             <span class="editable-text" data-key="tchatTitle">Vidéos Passion de nos Membres</span>
                         </h2>
                         <p class="text-xs text-neutral-400 mt-2">
-                            <span class="editable-text" data-key="tchatDesc">Ajoutez vos exploits directement via l'écran vidéo ou déposez un fichier.</span>
+                            <span class="editable-text" data-key="tchatDesc">Ajoutez vos exploits directement via l'écran vidéo ou déposez un fichier avec le son actif.</span>
                         </p>
                     </div>
 
@@ -613,7 +579,7 @@
             
             <div id="admin-auth-panel">
                 <h3 class="text-lg uppercase tracking-widest font-sport font-bold mb-4 text-white">Identification Abonné Master</h3>
-                <p class="text-xs text-neutral-400 mb-4 leading-relaxed">Entrez le passkey pour activer l'édition de texte au clic et les fonctions média avancées.</p>
+                <p class="text-xs text-neutral-400 mb-4 leading-relaxed">Entrez le passkey pour activer l'édition de texte au clic, les fonctions de déconnexion et d'import de médias.</p>
                 <div class="space-y-4">
                     <input type="password" id="admin-pass" placeholder="Code secret (Denis007)..." class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-amber-400 rounded-sm">
                     <button onclick="verifyAdminPass()" class="w-full py-3 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-colors">
@@ -623,11 +589,20 @@
                 </div>
             </div>
 
+            <!-- Master Dashboard layout (Visible only when authenticated) -->
             <div id="admin-panel" class="hidden space-y-6 text-neutral-300">
                 <h3 class="text-lg uppercase tracking-widest font-sport font-bold text-white border-b border-neutral-900 pb-3 flex items-center justify-between">
-                    <span>Configuration Master</span>
+                    <span>Panneau Master</span>
                     <span class="text-[10px] tracking-widest text-emerald-400 font-bold"><i class="fa-solid fa-circle animate-pulse"></i> Connecté</span>
                 </h3>
+
+                <!-- Deactivate Master button -->
+                <div class="p-4 bg-neutral-900/40 rounded border border-neutral-800 space-y-2">
+                    <h4 class="text-xs uppercase font-bold tracking-widest text-amber-400">Statut du Compte</h4>
+                    <button onclick="deactivateMasterMode()" class="w-full py-3 bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-500/30 text-xs uppercase tracking-widest font-bold font-sport rounded-sm transition-colors">
+                        <i class="fa-solid fa-power-off mr-2"></i>Désactiver le Mode Master
+                    </button>
+                </div>
 
                 <!-- Setup Media Customization with Local Uploads -->
                 <div class="space-y-4">
@@ -679,7 +654,7 @@
         </div>
     </div>
 
-    <!-- Direct Text Editor Modal with Advanced parameters (Font, Color, Size) -->
+    <!-- Direct Text Editor Modal with Advanced parameters -->
     <div id="text-editor-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-neutral-950 max-w-md w-full p-6 rounded-sm border border-neutral-800 shadow-2xl space-y-4">
             <h3 class="text-xs uppercase tracking-widest font-sport font-bold text-amber-400 flex justify-between items-center">
@@ -746,8 +721,95 @@
         </div>
     </div>
 
-    <!-- PRIMARY APP CODE LOGIC & DATA STATE -->
     <script>
+        // Web Audio Context fallback to guarantee error-free setup in sandboxed preview frames
+        let audioCtxInstance = null;
+        function getAudioCtx() {
+            if (!audioCtxInstance) {
+                try {
+                    audioCtxInstance = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.warn("AudioContext initialization blocked or unsupported by browser sandbox policy.");
+                }
+            }
+            return audioCtxInstance;
+        }
+
+        function playLaserSound() {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(60, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(920, ctx.currentTime + 1.5);
+            
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+            
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(350, ctx.currentTime);
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.start();
+            osc.stop(ctx.currentTime + 1.5);
+        }
+
+        function playSuccessSound() {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+            osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3); // G5
+            
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.6);
+        }
+
+        // Custom High-End Toast Notification system
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-sm border backdrop-blur-md transition-all duration-300 transform translate-y-2 opacity-0 flex items-center space-x-3 pointer-events-auto shadow-2xl text-xs tracking-widest uppercase font-sport ${
+                type === 'success' 
+                ? 'bg-neutral-900/95 border-emerald-500/50 text-emerald-400' 
+                : 'bg-neutral-900/95 border-red-500/50 text-red-400'
+            }`;
+            
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+            toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Global State Management
         const state = {
             currentPage: 'first',
             isAdmin: false,
@@ -917,9 +979,7 @@
                 state.firstStyles = JSON.parse(localStorage.getItem('bj_first_styles_2026'));
             } catch(e) {}
         }
-    </script>
 
-    <script>
         let hasEntered = false;
 
         function enterApp() {
@@ -995,9 +1055,7 @@
             applyAllTexts();
             applyCustomFirstStyles();
         }
-    </script>
 
-    <script>
         // Direct first page background video or image uploader
         function directFirstPageUpload(event) {
             const file = event.target.files[0];
@@ -1029,12 +1087,12 @@
                 user: pseudo,
                 videoUrl: localURL,
                 likes: 1,
-                comments: ["Nouvelle performance importée directement via l'écran !"]
+                comments: ["Nouvelle performance importée directement avec le son actif !"]
             };
 
             state.posts.unshift(newPost);
             renderTchatFeed();
-            showToast("Votre vidéo locale a été ajoutée au flux !", "success");
+            showToast("Votre vidéo a été ajoutée au flux de discussion !", "success");
         }
 
         // Standard uploader for multiple sources
@@ -1059,6 +1117,7 @@
             }
         }
 
+        // Handle Audio Control specifically for first page video
         function applyFirstPageMedia() {
             const videoEl = document.getElementById('first-bg-video');
             const imgEl = document.getElementById('first-bg-img');
@@ -1068,12 +1127,39 @@
                 imgEl.classList.add('hidden');
                 videoEl.classList.remove('hidden');
                 videoEl.src = mediaConfig.url;
+                
+                // Set default muted state to secure autoplay, then rely on toggle
+                videoEl.muted = true;
                 videoEl.load();
-                videoEl.play().catch(e => console.log("Auto-play delayed."));
+                videoEl.play().catch(e => console.log("Autoplay context triggered. Click toggle to unmute."));
             } else {
                 videoEl.classList.add('hidden');
                 imgEl.classList.remove('hidden');
                 imgEl.src = mediaConfig.url;
+            }
+        }
+
+        function toggleFirstAudio() {
+            const videoEl = document.getElementById('first-bg-video');
+            const iconEl = document.getElementById('audio-btn-icon');
+            const textEl = document.getElementById('audio-btn-text');
+            const dotEl = document.getElementById('audio-wave-dot');
+
+            if (!videoEl) return;
+
+            if (videoEl.muted) {
+                videoEl.muted = false;
+                iconEl.className = "fa-solid fa-volume-high text-amber-400";
+                textEl.innerText = "Audio Actif (Échappement Sport)";
+                dotEl.className = "relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500";
+                showToast("Moteur Benzjames vrombrissant", "success");
+                playSuccessSound();
+            } else {
+                videoEl.muted = true;
+                iconEl.className = "fa-solid fa-volume-xmark";
+                textEl.innerText = "Son désactivé (Moteur coupé)";
+                dotEl.className = "relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500";
+                showToast("Audio mis en sourdine", "success");
             }
         }
 
@@ -1083,9 +1169,7 @@
                 bgEl.src = state.media.showroom.url;
             }
         }
-    </script>
 
-    <script>
         let editingKey = null;
 
         function applyAllTexts() {
@@ -1119,31 +1203,32 @@
         }
 
         function applyCustomFirstStyles() {
-            // Mapping styles dynamically to DOM Elements on the First Page
-            const elements = {
-                firstSubtitle: { el: document.getElementById('el-firstSubtitle'), wrapper: document.getElementById('style-subtitle-wrapper') },
-                firstTitle: { el: document.getElementById('el-firstTitle'), wrapper: document.getElementById('style-title-wrapper') },
-                firstDesc: { el: document.getElementById('el-firstDesc'), wrapper: document.getElementById('style-desc-wrapper') }
-            };
+            const root = document.documentElement;
+            
+            if (state.firstStyles.firstSubtitle) {
+                root.style.setProperty('--subtitle-size', state.firstStyles.firstSubtitle.size + 'px');
+                const subWrapper = document.getElementById('style-subtitle-wrapper');
+                if (subWrapper) {
+                    subWrapper.className = "block mb-4 tracking-[0.5em] uppercase font-bold " + state.firstStyles.firstSubtitle.font;
+                    document.getElementById('el-firstSubtitle').style.color = state.firstStyles.firstSubtitle.color;
+                }
+            }
 
-            for (const [key, obj] of Object.entries(elements)) {
-                if (obj.el && state.firstStyles[key]) {
-                    const styleConf = state.firstStyles[key];
-                    
-                    // Reset class font configurations
-                    obj.wrapper.className = "block mb-4 tracking-[0.5em] uppercase font-bold";
-                    if (key === 'firstTitle') {
-                        obj.wrapper.className = "italic uppercase tracking-tighter mb-4 leading-tight";
-                    } else if (key === 'firstDesc') {
-                        obj.wrapper.className = "font-light tracking-wide leading-relaxed max-w-lg";
-                    }
+            if (state.firstStyles.firstTitle) {
+                root.style.setProperty('--title-size', state.firstStyles.firstTitle.size + 'px');
+                const titleWrapper = document.getElementById('style-title-wrapper');
+                if (titleWrapper) {
+                    titleWrapper.className = "italic uppercase tracking-tighter mb-4 leading-tight " + state.firstStyles.firstTitle.font;
+                    document.getElementById('el-firstTitle').style.color = state.firstStyles.firstTitle.color;
+                }
+            }
 
-                    // Apply Custom Font class
-                    obj.wrapper.classList.add(styleConf.font);
-                    
-                    // Apply Inline custom size & color
-                    obj.el.style.color = styleConf.color;
-                    obj.el.style.fontSize = styleConf.size + "px";
+            if (state.firstStyles.firstDesc) {
+                root.style.setProperty('--desc-size', state.firstStyles.firstDesc.size + 'px');
+                const descWrapper = document.getElementById('style-desc-wrapper');
+                if (descWrapper) {
+                    descWrapper.className = "font-light tracking-wide leading-relaxed max-w-lg " + state.firstStyles.firstDesc.font;
+                    document.getElementById('el-firstDesc').style.color = state.firstStyles.firstDesc.color;
                 }
             }
         }
@@ -1160,7 +1245,6 @@
             if (key === 'firstTitle' || key === 'firstSubtitle' || key === 'firstDesc') {
                 paramsPanel.classList.remove('hidden');
                 
-                // Set initial parameters values
                 const currentStyle = state.firstStyles[key];
                 document.getElementById('text-editor-font').value = currentStyle.font;
                 document.getElementById('text-editor-size').value = currentStyle.size;
@@ -1201,7 +1285,6 @@
                 state.customTexts[editingKey] = updatedText;
                 localStorage.setItem('bj_custom_texts_2026', JSON.stringify(state.customTexts));
                 
-                // Save Styling Parameters if applicable
                 if (editingKey === 'firstTitle' || editingKey === 'firstSubtitle' || editingKey === 'firstDesc') {
                     state.firstStyles[editingKey] = {
                         font: document.getElementById('text-editor-font').value,
@@ -1217,9 +1300,7 @@
             }
             closeTextEditor();
         }
-    </script>
 
-    <script>
         function renderShowroom() {
             const container = document.getElementById('showroom-container');
             container.innerHTML = "";
@@ -1297,11 +1378,10 @@
             playSuccessSound();
             showToast("Clé de sécurité copiée pour l'authentificateur !", "success");
         }
-    </script>
 
-    <script>
         function renderTchatFeed() {
             const feed = document.getElementById('video-posts-feed');
+            if (!feed) return;
             feed.innerHTML = "";
 
             const sortedPosts = [...state.posts].sort((a, b) => b.likes - a.likes);
@@ -1364,7 +1444,7 @@
 
         function addCommentToPost(id) {
             const input = document.getElementById(`comment-input-${id}`);
-            if (!input.value.trim()) return;
+            if (!input || !input.value.trim()) return;
             const post = state.posts.find(p => p.id === id);
             if (post) {
                 post.comments.push(input.value.trim());
@@ -1379,7 +1459,7 @@
             const user = document.getElementById('post-user');
             const video = document.getElementById('post-video-url');
 
-            if (!title.value.trim() || !user.value.trim()) {
+            if (!title || !user || !video || !title.value.trim() || !user.value.trim()) {
                 showToast("Veuillez remplir le titre et votre pseudo !", "error");
                 return;
             }
@@ -1399,11 +1479,10 @@
             renderTchatFeed();
             showToast("Votre publication de performance a été postée !", "success");
         }
-    </script>
 
-    <script>
         function renderChatHistory() {
             const container = document.getElementById('chat-messages');
+            if (!container) return;
             container.innerHTML = "";
 
             state.chatMessages.forEach(msg => {
@@ -1429,7 +1508,7 @@
             const textInput = document.getElementById('chat-text');
             const pseudoInput = document.getElementById('chat-pseudo');
 
-            if (!textInput.value.trim()) return;
+            if (!textInput || !textInput.value.trim()) return;
 
             const msg = {
                 id: Date.now(),
@@ -1441,11 +1520,10 @@
             textInput.value = "";
             renderChatHistory();
         }
-    </script>
 
-    <script>
         function renderAuctions() {
             const container = document.getElementById('bids-container');
+            if (!container) return;
             container.innerHTML = "";
 
             state.auctions.forEach(auc => {
@@ -1487,6 +1565,7 @@
         function placeBid(id) {
             const auc = state.auctions.find(a => a.id === id);
             const input = document.getElementById(`bid-input-${auc.id}`);
+            if (!input) return;
             const bidValue = parseInt(input.value);
 
             if (!bidValue || bidValue <= 0) {
@@ -1536,9 +1615,7 @@
             renderAuctions();
             showToast("Votre pièce a été répertoriée avec succès !", "success");
         }
-    </script>
 
-    <script>
         function generateFakeSecret(category, num) {
             const catCode = category.substring(0, 3).toUpperCase();
             const paddedNum = String(num).padStart(3, '0');
@@ -1587,9 +1664,7 @@
                 `;
             }
         }
-    </script>
 
-    <script>
         function openAdminModal() {
             document.getElementById('admin-modal').classList.remove('hidden');
         }
@@ -1609,7 +1684,6 @@
                 state.isAdmin = true;
                 playSuccessSound();
                 
-                // Switch activation flags
                 document.getElementById('admin-dot').classList.remove('bg-neutral-600');
                 document.getElementById('admin-dot').classList.add('bg-amber-400', 'animate-pulse');
                 document.getElementById('master-indicator-label').classList.remove('hidden');
@@ -1625,10 +1699,26 @@
             }
         }
 
+        function deactivateMasterMode() {
+            state.isAdmin = false;
+            playLaserSound();
+
+            document.getElementById('admin-dot').className = 'w-2.5 h-2.5 rounded-full bg-neutral-600 group-hover:bg-amber-400 transition-colors duration-300';
+            document.getElementById('master-indicator-label').classList.add('hidden');
+
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('admin-auth-panel').classList.remove('hidden');
+            document.getElementById('admin-pass').value = "";
+
+            closeAdminModal();
+            applyAllTexts();
+            applyCustomFirstStyles();
+            showToast("Mode Master désactivé", "success");
+        }
+
         function saveAdminChanges() {
             if (!state.isAdmin) return;
 
-            // Optional new item creation checks
             const name = document.getElementById('new-item-name').value.trim();
             const cat = document.getElementById('new-item-cat').value;
             const price = parseInt(document.getElementById('new-item-price').value);
@@ -1658,7 +1748,6 @@
 
                 state.products.unshift(newItem);
 
-                // Clear fields
                 document.getElementById('new-item-name').value = "";
                 document.getElementById('new-item-price').value = "";
                 document.getElementById('new-item-visible').value = "";
@@ -1671,9 +1760,8 @@
             renderShowroom();
             showToast("Modifications de l'atelier enregistrées !", "success");
         }
-    </script>
 
-    <script>
+        // Initialize App once document is fully loaded
         window.onload = function() {
             applyAllTexts();
             applyFirstPageMedia();
