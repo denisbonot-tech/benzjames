@@ -36,15 +36,9 @@
         }
 
         /* 50% scale reduction on iPhone/mobile screens for Page First text elements */
-        #el-firstSubtitle {
-            font-size: var(--subtitle-size);
-        }
-        #el-firstTitle {
-            font-size: var(--title-size);
-        }
-        #el-firstDesc {
-            font-size: var(--desc-size);
-        }
+        #el-firstSubtitle { font-size: var(--subtitle-size); }
+        #el-firstTitle { font-size: var(--title-size); }
+        #el-firstDesc { font-size: var(--desc-size); }
 
         @media (max-width: 767px) {
             #el-firstSubtitle {
@@ -80,7 +74,7 @@
             animation: laser-sweep-2 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             animation-delay: 2.5s;
         }
-        /* Premium Scrollbars */
+        /* Premium Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -293,92 +287,124 @@
         </main>
 
         <!-- PAGE 3: TCHAT PASSION (Vidéos Interactives & Live chat) -->
-        <main id="page-tchat" class="page-section hidden flex-1 bg-[#0c0c0c] p-6 md:p-12 relative">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
+        <main id="page-tchat" class="page-section hidden flex-1 bg-[#0c0c0c] p-4 md:p-8 relative">
+            <div class="max-w-7xl mx-auto space-y-8">
                 
-                <!-- Left Side: Interactive video stack with direct video addition inside preview screen -->
-                <div class="lg:col-span-7 flex flex-col space-y-8">
-                    <div class="mb-2">
-                        <span class="text-xs tracking-[0.4em] text-amber-400 uppercase">
-                            <span class="editable-text" data-key="tchatTag">Communauté Active</span>
-                        </span>
-                        <h2 class="text-3xl font-serif text-white mt-2">
-                            <span class="editable-text" data-key="tchatTitle">Vidéos Passion de nos Membres</span>
-                        </h2>
-                        <p class="text-xs text-neutral-400 mt-2">
-                            <span class="editable-text" data-key="tchatDesc">Ajoutez vos exploits directement via l'écran vidéo ou déposez un fichier avec le son actif.</span>
-                        </p>
-                    </div>
+                <!-- Headline Intro Section -->
+                <div>
+                    <span class="text-xs tracking-[0.4em] text-amber-400 uppercase">
+                        <span class="editable-text" data-key="tchatTag">Communauté Active</span>
+                    </span>
+                    <h2 class="text-3xl font-serif text-white mt-2">
+                        <span class="editable-text" data-key="tchatTitle">Vidéos Passion de nos Membres</span>
+                    </h2>
+                    <p class="text-xs text-neutral-400 mt-2">
+                        <span class="editable-text" data-key="tchatDesc">Ajoutez vos exploits directement via l'écran vidéo ou déposez un fichier avec le son actif.</span>
+                    </p>
+                </div>
 
-                    <!-- Direct Video Drop/Uploader Inside Video Screen Zone -->
-                    <div class="group relative aspect-video bg-neutral-900 border-2 border-dashed border-neutral-800 hover:border-amber-400 rounded-sm flex flex-col items-center justify-center p-6 text-center cursor-pointer overflow-hidden transition-all duration-300">
-                        <input type="file" id="direct-tchat-media-uploader" accept="video/*" onchange="directTchatVideoUpload(event)" class="absolute inset-0 opacity-0 z-20 cursor-pointer">
-                        <div class="relative z-10 space-y-4">
-                            <i class="fa-solid fa-circle-play text-4xl text-amber-400 animate-bounce"></i>
-                            <div class="space-y-1">
-                                <span class="block text-xs uppercase tracking-widest font-bold text-white">Ajouter une vidéo depuis cet écran</span>
-                                <span class="block text-[10px] text-neutral-500">Glissez-déposez ou cliquez pour charger votre fichier (.mp4 local)</span>
+                <!-- THEATER LAYOUT: TOP SECTION -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    
+                    <!-- 1. Left Aspect: Outstanding Feature Video (MAXIMUM SPACE) -->
+                    <div class="lg:col-span-8 flex flex-col justify-between bg-neutral-900 border border-neutral-800 p-4 rounded-sm relative">
+                        <span class="absolute top-6 left-6 z-10 bg-amber-400 text-black text-[9px] font-sport font-black px-3 py-1 uppercase tracking-widest rounded-sm shadow-md">
+                            Dernier Chef-D'Œuvre Publié
+                        </span>
+                        
+                        <!-- Premium Large Player Frame -->
+                        <div class="aspect-video bg-black relative group rounded-sm overflow-hidden border border-neutral-950 shadow-2xl">
+                            <video id="tchat-featured-video" class="w-full h-full object-cover" controls playsinline>
+                                <source src="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        
+                        <!-- Featured Video Description / Context -->
+                        <div class="mt-4 flex flex-col md:flex-row justify-between items-start md:items-center border-t border-neutral-800 pt-3 gap-2">
+                            <div>
+                                <h3 id="tchat-featured-title" class="text-sm font-bold tracking-widest text-white uppercase">AeroCap Aero Performance</h3>
+                                <p id="tchat-featured-user" class="text-[10px] text-amber-400 mt-1 uppercase font-sport tracking-wider">Par @Takumi_9</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="likeFeaturedPost()" class="flex items-center space-x-2 text-xs text-white hover:text-amber-400 transition-colors font-bold">
+                                    <i class="fa-solid fa-fire text-amber-500 animate-pulse"></i>
+                                    <span id="tchat-featured-likes">242 Passionnés</span>
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Post Upload input form -->
-                    <div class="bg-neutral-900 p-6 border border-neutral-800 rounded-sm shadow-xl">
-                        <h3 class="text-xs uppercase tracking-widest font-bold text-white mb-4">Poster une performance</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="post-title" placeholder="Titre de votre session sportive (ex: Run matinal)" class="w-full text-xs p-3 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <input type="text" id="post-user" placeholder="Votre Pseudo" class="text-xs p-3 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
-                                <div class="flex flex-col justify-center">
-                                    <label class="text-[10px] text-neutral-400 uppercase tracking-wider mb-1">Sélectionner un exemple</label>
-                                    <select id="post-video-url" class="text-xs p-2.5 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
-                                        <option value="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4">Session d'athlétisme</option>
-                                        <option value="https://assets.mixkit.co/videos/preview/mixkit-man-jogging-on-the-beach-at-sunset-31997-large.mp4">Jogging Plage</option>
-                                        <option value="https://assets.mixkit.co/videos/preview/mixkit-professional-tennis-player-hitting-a-ball-with-racket-40439-large.mp4">Match Tennis</option>
-                                        <option value="https://assets.mixkit.co/videos/preview/mixkit-boxer-training-inside-a-gym-with-low-light-40003-large.mp4">Entraînement Boxe</option>
-                                    </select>
+                    <!-- 2. Right Aspect: Video Posting / Local Uploading Zone -->
+                    <div class="lg:col-span-4 bg-neutral-950 border border-neutral-900 p-6 rounded-sm flex flex-col justify-between shadow-2xl">
+                        <div>
+                            <span class="block text-[10px] uppercase tracking-[0.2em] font-sport font-black text-amber-400 mb-2">Partager une Expérience</span>
+                            <h3 class="text-xs text-neutral-300 font-light mb-6">Importez votre propre performance (MP4) depuis votre Mac ou iPhone.</h3>
+                            
+                            <!-- Direct Video Drop/Uploader Inside Video Screen Zone -->
+                            <div class="group relative aspect-video bg-neutral-900 border-2 border-dashed border-neutral-800 hover:border-amber-400 rounded-sm flex flex-col items-center justify-center p-4 text-center cursor-pointer overflow-hidden transition-all duration-300 mb-6">
+                                <input type="file" id="direct-tchat-media-uploader" accept="video/*" onchange="directTchatVideoUpload(event)" class="absolute inset-0 opacity-0 z-20 cursor-pointer">
+                                <div class="relative z-10 space-y-2 pointer-events-none">
+                                    <i class="fa-solid fa-circle-play text-3xl text-amber-400 group-hover:scale-110 transition-transform duration-300"></i>
+                                    <div class="space-y-1">
+                                        <span class="block text-[11px] uppercase tracking-widest font-bold text-white">Importer une Vidéo</span>
+                                        <span class="block text-[8px] text-neutral-500">Choisir un fichier local .mp4</span>
+                                    </div>
                                 </div>
                             </div>
-                            <button onclick="addNewPost()" class="w-full py-3 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 hover:text-black transition-all">
-                                Publier la vidéo
-                            </button>
-                        </div>
-                    </div>
 
-                    <!-- Video Feed Stack -->
-                    <div id="video-posts-feed" class="space-y-6">
-                        <!-- Loaded dynamically -->
+                            <!-- Post Input Fields -->
+                            <div class="space-y-3">
+                                <input type="text" id="post-title" placeholder="Titre de votre session sportive..." class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
+                                <input type="text" id="post-user" placeholder="Votre Pseudo" class="w-full text-xs p-3 bg-neutral-900 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
+                            </div>
+                        </div>
+
+                        <button onclick="addNewPost()" class="w-full mt-4 py-3 bg-white text-black text-xs uppercase tracking-widest font-bold font-sport hover:bg-amber-400 transition-colors rounded-sm">
+                            Publier la vidéo
+                        </button>
                     </div>
                 </div>
 
-                <!-- Right Side: Live Lounge Chat -->
-                <div class="lg:col-span-5 flex flex-col h-[600px] lg:h-[750px] bg-neutral-950 border border-neutral-900 rounded-sm shadow-2xl">
-                    <div class="p-4 border-b border-neutral-900 flex justify-between items-center bg-neutral-900 text-white">
-                        <div>
-                            <span class="text-[10px] tracking-widest text-amber-400 uppercase">Live Discussion</span>
-                            <h3 class="text-xs tracking-widest uppercase font-sport font-bold">Benzjames Lounge</h3>
+                <!-- THEATER LAYOUT: BOTTOM SECTION (Other Videos & Live Discussion) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8 border-t border-neutral-900">
+                    
+                    <!-- Left Aspect: Feed stack of secondary publications -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <h4 class="text-xs tracking-widest uppercase font-sport font-bold text-neutral-400 mb-4">Autres Publications</h4>
+                        <div id="video-posts-feed" class="space-y-6">
+                            <!-- Loaded dynamically -->
                         </div>
-                        <span class="flex h-2.5 w-2.5 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                        </span>
                     </div>
 
-                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40">
-                        <!-- Messages loaded dynamically -->
-                    </div>
-
-                    <!-- Interactive message inputs -->
-                    <div class="p-4 border-t border-neutral-900 bg-neutral-900">
-                        <div class="flex space-x-2 mb-3">
-                            <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm" value="Anonyme">
-                            <span class="text-[10px] text-neutral-500 self-center uppercase tracking-wider">rejoint le salon</span>
+                    <!-- Right Aspect: Lounge Chat -->
+                    <div class="lg:col-span-5 flex flex-col h-[550px] bg-neutral-950 border border-neutral-900 rounded-sm shadow-2xl">
+                        <div class="p-4 border-b border-neutral-900 flex justify-between items-center bg-neutral-900 text-white">
+                            <div>
+                                <span class="text-[10px] tracking-widest text-amber-400 uppercase">Live Discussion</span>
+                                <h3 class="text-xs tracking-widest uppercase font-sport font-bold">Benzjames Lounge</h3>
+                            </div>
+                            <span class="flex h-2.5 w-2.5 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            </span>
                         </div>
-                        <div class="flex space-x-2">
-                            <input type="text" id="chat-text" placeholder="Entrez votre message..." class="flex-1 text-xs p-3 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm" onkeydown="if(event.key === 'Enter') sendChatMessage()">
-                            <button onclick="sendChatMessage()" class="px-5 bg-white text-black hover:bg-amber-400 hover:text-black transition-colors rounded-sm">
-                                <i class="fa-solid fa-paper-plane"></i>
-                            </button>
+
+                        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40">
+                            <!-- Messages loaded dynamically -->
+                        </div>
+
+                        <!-- Interactive message inputs -->
+                        <div class="p-4 border-t border-neutral-900 bg-neutral-900">
+                            <div class="flex space-x-2 mb-3">
+                                <input type="text" id="chat-pseudo" placeholder="Pseudo" class="w-1/3 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm" value="Anonyme">
+                                <span class="text-[10px] text-neutral-500 self-center uppercase tracking-wider">rejoint le salon</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <input type="text" id="chat-text" placeholder="Entrez votre message..." class="flex-1 text-xs p-3 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm" onkeydown="if(event.key === 'Enter') sendChatMessage()">
+                                <button onclick="sendChatMessage()" class="px-5 bg-white text-black hover:bg-amber-400 hover:text-black transition-colors rounded-sm">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -809,13 +835,58 @@
             }, 3500);
         }
 
-        // Global State Management
+        // IndexedDB database manager for heavy media storage (iPhone/Mac local storage fallback)
+        const DB_NAME = 'BenzjamesDB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'mediaStore';
+
+        function getDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME);
+                    }
+                };
+                request.onsuccess = (e) => resolve(e.target.result);
+                request.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function saveMediaToDB(key, data) {
+            try {
+                const db = await getDB();
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                store.put(data, key);
+                return new Promise((resolve) => tx.oncomplete = () => resolve(true));
+            } catch (e) {
+                console.error("Failed to save media in IndexedDB:", e);
+            }
+        }
+
+        async function getMediaFromDB(key) {
+            try {
+                const db = await getDB();
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const store = tx.objectStore(STORE_NAME);
+                const request = store.get(key);
+                return new Promise((resolve) => {
+                    request.onsuccess = () => resolve(request.result);
+                });
+            } catch (e) {
+                console.error("Failed to fetch media from IndexedDB:", e);
+                return null;
+            }
+        }
+
         const state = {
             currentPage: 'first',
             isAdmin: false,
             showroomCategory: 'tous',
             
-            // Customizeable strings
+            // Customizable strings
             customTexts: {
                 introLimitTag: "Série Limitée • 1000 Pièces",
                 introTitle: "Benzjames",
@@ -835,28 +906,15 @@
 
             // Dynamic Styling Configuration for Page First Hero elements
             firstStyles: {
-                firstSubtitle: {
-                    font: "font-sport",
-                    color: "#f59e0b",
-                    size: "12"
-                },
-                firstTitle: {
-                    font: "font-sport",
-                    color: "#ffffff",
-                    size: "72"
-                },
-                firstDesc: {
-                    font: "font-armani",
-                    color: "#d4d4d8",
-                    size: "14"
-                }
+                firstSubtitle: { font: "font-sport", color: "#f59e0b", size: "12" },
+                firstTitle: { font: "font-sport", color: "#ffffff", size: "72" },
+                firstDesc: { font: "font-armani", color: "#d4d4d8", size: "14" }
             },
 
             // Media tracks and state references
             media: {
                 first: { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4' },
-                showroom: { type: 'image', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1200' },
-                tchat: { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4' }
+                showroom: { type: 'image', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1200' }
             },
 
             // Products list
@@ -1056,59 +1114,70 @@
             applyCustomFirstStyles();
         }
 
-        // Direct first page background video or image uploader
-        function directFirstPageUpload(event) {
+        async function directFirstPageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const localURL = URL.createObjectURL(file);
             const isVideo = file.type.startsWith('video/');
-
+            const blob = new Blob([file], { type: file.type });
+            
+            // Persistent storage in IndexedDB (conserve for next opening)
+            await saveMediaToDB('first_media', { blob, type: isVideo ? 'video' : 'image' });
+            
+            const localURL = URL.createObjectURL(blob);
             state.media.first = {
                 type: isVideo ? 'video' : 'image',
                 url: localURL
             };
 
             applyFirstPageMedia();
-            showToast("Fond de la page First mis à jour en direct !", "success");
+            showToast("Média de la page First enregistré et conservé !", "success");
         }
 
-        // Direct tchat video upload
-        function directTchatVideoUpload(event) {
+        async function directTchatVideoUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const localURL = URL.createObjectURL(file);
             const pseudo = document.getElementById('chat-pseudo').value || 'Membre';
+            const titleInput = document.getElementById('post-title').value.trim() || file.name.substring(0, 35) || "Vidéo passion en direct";
+            const blob = new Blob([file], { type: file.type });
 
+            // Store raw file in persistent storage (IndexedDB) as latest community post
+            await saveMediaToDB('tchat_latest_post', { blob, title: titleInput, user: pseudo });
+
+            const localURL = URL.createObjectURL(blob);
             const newPost = {
                 id: `post_direct_${Date.now()}`,
-                title: file.name.substring(0, 35) || "Vidéo passion chargée en direct",
+                title: titleInput,
                 user: pseudo,
                 videoUrl: localURL,
                 likes: 1,
-                comments: ["Nouvelle performance importée directement avec le son actif !"]
+                comments: ["Nouvelle performance importée en direct avec le son actif !"]
             };
 
             state.posts.unshift(newPost);
             renderTchatFeed();
-            showToast("Votre vidéo a été ajoutée au flux de discussion !", "success");
+            showToast("Votre vidéo a été publiée et conservée !", "success");
         }
 
-        // Standard uploader for multiple sources
-        function uploadLocalMedia(event, targetPage) {
+        // Standard uploader for multiple sources (including background showroom)
+        async function uploadLocalMedia(event, targetPage) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const localURL = URL.createObjectURL(file);
             const isVideo = file.type.startsWith('video/');
+            const blob = new Blob([file], { type: file.type });
 
+            // Save showroom media background
+            await saveMediaToDB(`${targetPage}_media`, { blob, type: isVideo ? 'video' : 'image' });
+
+            const localURL = URL.createObjectURL(blob);
             state.media[targetPage] = {
                 type: isVideo ? 'video' : 'image',
                 url: localURL
             };
 
-            showToast(`Média de ${targetPage.toUpperCase()} modifié.`, "success");
+            showToast(`Média de ${targetPage.toUpperCase()} modifié et persistant !`, "success");
             
             if (targetPage === 'first') {
                 applyFirstPageMedia();
@@ -1117,7 +1186,6 @@
             }
         }
 
-        // Handle Audio Control specifically for first page video
         function applyFirstPageMedia() {
             const videoEl = document.getElementById('first-bg-video');
             const imgEl = document.getElementById('first-bg-img');
@@ -1127,11 +1195,9 @@
                 imgEl.classList.add('hidden');
                 videoEl.classList.remove('hidden');
                 videoEl.src = mediaConfig.url;
-                
-                // Set default muted state to secure autoplay, then rely on toggle
                 videoEl.muted = true;
                 videoEl.load();
-                videoEl.play().catch(e => console.log("Autoplay context triggered. Click toggle to unmute."));
+                videoEl.play().catch(e => console.log("Autoplay context triggered. Click audio indicator to play sound."));
             } else {
                 videoEl.classList.add('hidden');
                 imgEl.classList.remove('hidden');
@@ -1380,25 +1446,43 @@
         }
 
         function renderTchatFeed() {
-            const feed = document.getElementById('video-posts-feed');
-            if (!feed) return;
-            feed.innerHTML = "";
+            if (state.posts.length === 0) return;
 
-            const sortedPosts = [...state.posts].sort((a, b) => b.likes - a.likes);
+            // Highlight the absolute latest video at the top (en tête) with maximized visual space
+            const latestPost = state.posts[0];
+            
+            // Set the main theater video
+            const featuredVideoPlayer = document.getElementById('tchat-featured-video');
+            if (featuredVideoPlayer) {
+                featuredVideoPlayer.src = latestPost.videoUrl;
+            }
+            
+            document.getElementById('tchat-featured-title').innerText = latestPost.title;
+            document.getElementById('tchat-featured-user').innerText = `Par @${latestPost.user}`;
+            document.getElementById('tchat-featured-likes').innerHTML = `
+                <i class="fa-solid fa-fire text-amber-500 animate-pulse"></i> ${latestPost.likes} Passionnés
+            `;
 
-            sortedPosts.forEach((post, index) => {
+            // Remaining posts rendered below (excluding the newest one which is spotlighted)
+            const remainingFeed = document.getElementById('video-posts-feed');
+            if (!remainingFeed) return;
+            remainingFeed.innerHTML = "";
+
+            const olderPosts = state.posts.slice(1);
+            if (olderPosts.length === 0) {
+                remainingFeed.innerHTML = `<p class="text-xs text-neutral-500 italic">Aucun autre média publié pour l'instant.</p>`;
+                return;
+            }
+
+            olderPosts.forEach((post) => {
                 const card = `
                     <div class="bg-neutral-900 border border-neutral-800 rounded-sm shadow-xl overflow-hidden">
                         <div class="bg-neutral-950 p-4 flex justify-between items-center">
-                            <div class="flex items-center space-x-3">
-                                <span class="font-sport font-black italic text-base text-amber-400">#${index + 1}</span>
-                                <span class="text-xs uppercase tracking-widest font-bold text-white">${post.title}</span>
-                            </div>
-                            <span class="text-[10px] text-neutral-400 tracking-wider font-light">@${post.user}</span>
+                            <span class="text-xs uppercase tracking-widest font-bold text-white">${post.title}</span>
+                            <span class="text-[10px] text-neutral-400 tracking-wider">@${post.user}</span>
                         </div>
 
-                        <!-- Main Video Block -->
-                        <div class="aspect-video bg-black relative group">
+                        <div class="aspect-video bg-black relative">
                             <video class="w-full h-full object-cover" controls playsinline>
                                 <source src="${post.videoUrl}" type="video/mp4">
                             </video>
@@ -1407,8 +1491,8 @@
                         <div class="p-4 bg-neutral-900 space-y-4">
                             <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
                                 <button onclick="likePost('${post.id}')" class="flex items-center space-x-2 text-xs text-white hover:text-amber-400 transition-colors font-bold">
-                                    <i class="fa-solid fa-fire text-amber-400 text-sm animate-pulse"></i>
-                                    <span>${post.likes} Passionné(s)</span>
+                                    <i class="fa-solid fa-fire text-amber-400 text-sm"></i>
+                                    <span>${post.likes} Passionnés</span>
                                 </button>
                                 <span class="text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Contrôle Certifié</span>
                             </div>
@@ -1423,14 +1507,22 @@
                             </div>
 
                             <div class="flex space-x-2">
-                                <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis sur cette performance..." class="flex-1 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
+                                <input type="text" id="comment-input-${post.id}" placeholder="Ajouter un avis..." class="flex-1 text-xs p-2 bg-neutral-950 border border-neutral-800 text-white outline-none focus:border-amber-400 rounded-sm">
                                 <button onclick="addCommentToPost('${post.id}')" class="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-amber-400 transition-colors">Envoyer</button>
                             </div>
                         </div>
                     </div>
                 `;
-                feed.innerHTML += card;
+                remainingFeed.innerHTML += card;
             });
+        }
+
+        function likeFeaturedPost() {
+            if (state.posts.length > 0) {
+                state.posts[0].likes++;
+                playSuccessSound();
+                renderTchatFeed();
+            }
         }
 
         function likePost(id) {
@@ -1457,9 +1549,8 @@
         function addNewPost() {
             const title = document.getElementById('post-title');
             const user = document.getElementById('post-user');
-            const video = document.getElementById('post-video-url');
 
-            if (!title || !user || !video || !title.value.trim() || !user.value.trim()) {
+            if (!title || !user || !title.value.trim() || !user.value.trim()) {
                 showToast("Veuillez remplir le titre et votre pseudo !", "error");
                 return;
             }
@@ -1468,7 +1559,7 @@
                 id: `post_${Date.now()}`,
                 title: title.value.trim(),
                 user: user.value.trim(),
-                videoUrl: video.value,
+                videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4',
                 likes: 1,
                 comments: []
             };
@@ -1761,8 +1852,46 @@
             showToast("Modifications de l'atelier enregistrées !", "success");
         }
 
+        async function loadPersistedMedia() {
+            try {
+                // 1. Recover First Page Background Media (Video/Image)
+                const firstMedia = await getMediaFromDB('first_media');
+                if (firstMedia) {
+                    const objectURL = URL.createObjectURL(firstMedia.blob);
+                    state.media.first = { type: firstMedia.type, url: objectURL };
+                    applyFirstPageMedia();
+                }
+
+                // 2. Recover Showroom Background Media
+                const showroomMedia = await getMediaFromDB('showroom_media');
+                if (showroomMedia) {
+                    const objectURL = URL.createObjectURL(showroomMedia.blob);
+                    state.media.showroom = { type: showroomMedia.type, url: objectURL };
+                    applyShowroomMedia();
+                }
+
+                // 3. Recover Latest Tchat Video Post
+                const tchatMedia = await getMediaFromDB('tchat_latest_post');
+                if (tchatMedia) {
+                    const objectURL = URL.createObjectURL(tchatMedia.blob);
+                    const restoredPost = {
+                        id: `post_restored_${Date.now()}`,
+                        title: tchatMedia.title,
+                        user: tchatMedia.user,
+                        videoUrl: objectURL,
+                        likes: 242,
+                        comments: ["Dernière performance restaurée depuis le stockage local de votre iPhone/Mac."]
+                    };
+                    state.posts.unshift(restoredPost);
+                }
+            } catch (e) {
+                console.warn("Storage restoration failed or empty indexedDB instance:", e);
+            }
+        }
+
         // Initialize App once document is fully loaded
-        window.onload = function() {
+        window.onload = async function() {
+            await loadPersistedMedia();
             applyAllTexts();
             applyFirstPageMedia();
             applyShowroomMedia();
