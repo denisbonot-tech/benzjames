@@ -206,7 +206,7 @@
                 <div class="absolute inset-0 bg-gradient-to-l from-black/60 via-transparent to-transparent z-10 pointer-events-none"></div>
                 
                 <!-- Main Fullscreen Background Video with Sound capabilities -->
-                <video id="first-bg-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop playsinline>
+                <video id="first-bg-video" class="w-full h-full object-cover transition-opacity duration-1000" autoplay loop playsinline onerror="handleFirstVideoError(this)">
                     <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-road-at-sunset-40286-large.mp4" type="video/mp4">
                 </video>
                 <!-- Fallback background image if uploaded file is image type -->
@@ -307,14 +307,14 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                     
                     <!-- 1. Left Aspect: Outstanding Feature Video (MAXIMUM SPACE) -->
-                    <div class="lg:col-span-8 flex flex-col justify-between bg-neutral-900 border border-neutral-800 p-4 rounded-sm relative">
+                    <div id="featured-post-container" class="lg:col-span-8 flex flex-col justify-between bg-neutral-900 border border-neutral-800 p-4 rounded-sm relative">
                         <span class="absolute top-6 left-6 z-10 bg-amber-400 text-black text-[9px] font-sport font-black px-3 py-1 uppercase tracking-widest rounded-sm shadow-md">
                             Dernier Chef-D'Œuvre Publié
                         </span>
                         
                         <!-- Premium Large Player Frame -->
                         <div class="aspect-video bg-black relative group rounded-sm overflow-hidden border border-neutral-950 shadow-2xl">
-                            <video id="tchat-featured-video" class="w-full h-full object-cover" controls playsinline>
+                            <video id="tchat-featured-video" class="w-full h-full object-cover" controls playsinline onerror="handleVideoError(this)">
                                 <source src="https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -338,7 +338,7 @@
                     <div class="lg:col-span-4 bg-neutral-950 border border-neutral-900 p-6 rounded-sm flex flex-col justify-between shadow-2xl">
                         <div>
                             <span class="block text-[10px] uppercase tracking-[0.2em] font-sport font-black text-amber-400 mb-2">Partager une Expérience</span>
-                            <h3 class="text-xs text-neutral-300 font-light mb-6">Importez votre propre performance (MP4) depuis votre Mac ou iPhone.</h3>
+                            <h3 class="text-xs text-neutral-300 font-light mb-6">Importez votre propre performance (MP4) depuis votre Mac ou iPhone. Seules les publications avec une vidéo chargée s'afficheront.</h3>
                             
                             <!-- Direct Video Drop/Uploader Inside Video Screen Zone -->
                             <div class="group relative aspect-video bg-neutral-900 border-2 border-dashed border-neutral-800 hover:border-amber-400 rounded-sm flex flex-col items-center justify-center p-4 text-center cursor-pointer overflow-hidden transition-all duration-300 mb-6">
@@ -810,7 +810,7 @@
             osc.stop(ctx.currentTime + 0.6);
         }
 
-        // Custom High-End Toast Notification system
+        // Custom High-End Toast Notification system (Replacing default system alerts completely)
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -835,7 +835,7 @@
             }, 3500);
         }
 
-        // IndexedDB database manager for heavy media storage (iPhone/Mac local storage fallback)
+        // IndexedDB database manager to serialize and deserialize heavy media using ArrayBuffers
         const DB_NAME = 'BenzjamesDB';
         const DB_VERSION = 1;
         const STORE_NAME = 'mediaStore';
@@ -881,6 +881,16 @@
             }
         }
 
+        // Helper to convert File/Blob object to binary ArrayBuffer securely
+        function fileToArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (e) => reject(e);
+            });
+        }
+
         const state = {
             currentPage: 'first',
             isAdmin: false,
@@ -898,7 +908,7 @@
                 showroomTitle: "Le Vestiaire Limité",
                 tchatTag: "Communauté Active",
                 tchatTitle: "Vidéos Passion de nos Membres",
-                tchatDesc: "Les vidéos les plus aimées dominent la liste de manière organique.",
+                tchatDesc: "Seuls les écrans contenant une vidéo chargée s'affichent de manière organique.",
                 marketTag: "Marché Secondaire Autonome",
                 marketTitle: "Spéculation & Authenticité",
                 marketDesc: "Le concept de rareté pure. Chaque pièce possède un numéro unique de 1/1000 à 1000/1000 et un algorithme crypté exclusif garantissant son authenticité éternelle sur le marché secondaire."
@@ -1066,6 +1076,23 @@
             enterApp();
         }
 
+        // Dynamic Video Error Handling on Tchat page (Hides failed or empty media posts gracefully)
+        function handleVideoError(videoElement) {
+            console.warn("Video failed to load: ", videoElement.src);
+            const parentPost = videoElement.closest('.bg-neutral-900') || videoElement.closest('.bg-white') || videoElement.closest('#featured-post-container');
+            if (parentPost) {
+                parentPost.style.display = 'none';
+                showToast("Une publication incomplète a été masquée automatiquement.", "error");
+            }
+        }
+
+        function handleFirstVideoError(videoElement) {
+            console.warn("Hero video failed to load, switching to poster image.");
+            document.getElementById('first-bg-img').src = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1200";
+            document.getElementById('first-bg-img').classList.remove('hidden');
+            videoElement.classList.add('hidden');
+        }
+
         function navigate(pageId) {
             state.currentPage = pageId;
             
@@ -1118,71 +1145,92 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            const isVideo = file.type.startsWith('video/');
-            const blob = new Blob([file], { type: file.type });
-            
-            // Persistent storage in IndexedDB (conserve for next opening)
-            await saveMediaToDB('first_media', { blob, type: isVideo ? 'video' : 'image' });
-            
-            const localURL = URL.createObjectURL(blob);
-            state.media.first = {
-                type: isVideo ? 'video' : 'image',
-                url: localURL
-            };
+            try {
+                const isVideo = file.type.startsWith('video/');
+                const arrayBuffer = await fileToArrayBuffer(file);
+                
+                // Store arrayBuffer + type natively inside IndexedDB
+                await saveMediaToDB('first_media', { arrayBuffer, type: file.type });
+                
+                const blob = new Blob([arrayBuffer], { type: file.type });
+                const localURL = URL.createObjectURL(blob);
+                
+                state.media.first = {
+                    type: isVideo ? 'video' : 'image',
+                    url: localURL
+                };
 
-            applyFirstPageMedia();
-            showToast("Média de la page First enregistré et conservé !", "success");
+                applyFirstPageMedia();
+                showToast("Média de la page First enregistré et conservé !", "success");
+            } catch (err) {
+                console.error("Storage error:", err);
+                showToast("Erreur lors de la sauvegarde locale.", "error");
+            }
         }
 
         async function directTchatVideoUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const pseudo = document.getElementById('chat-pseudo').value || 'Membre';
-            const titleInput = document.getElementById('post-title').value.trim() || file.name.substring(0, 35) || "Vidéo passion en direct";
-            const blob = new Blob([file], { type: file.type });
+            try {
+                const pseudo = document.getElementById('chat-pseudo').value || 'Membre';
+                const titleInput = document.getElementById('post-title').value.trim() || file.name.substring(0, 35) || "Vidéo passion en direct";
+                
+                const arrayBuffer = await fileToArrayBuffer(file);
+                
+                // Store raw binary ArrayBuffer natively inside IndexedDB
+                await saveMediaToDB('tchat_latest_post', { arrayBuffer, type: file.type, title: titleInput, user: pseudo });
 
-            // Store raw file in persistent storage (IndexedDB) as latest community post
-            await saveMediaToDB('tchat_latest_post', { blob, title: titleInput, user: pseudo });
+                const blob = new Blob([arrayBuffer], { type: file.type });
+                const localURL = URL.createObjectURL(blob);
+                
+                const newPost = {
+                    id: `post_direct_${Date.now()}`,
+                    title: titleInput,
+                    user: pseudo,
+                    videoUrl: localURL,
+                    likes: 1,
+                    comments: ["Nouvelle performance importée en direct avec le son actif !"]
+                };
 
-            const localURL = URL.createObjectURL(blob);
-            const newPost = {
-                id: `post_direct_${Date.now()}`,
-                title: titleInput,
-                user: pseudo,
-                videoUrl: localURL,
-                likes: 1,
-                comments: ["Nouvelle performance importée en direct avec le son actif !"]
-            };
-
-            state.posts.unshift(newPost);
-            renderTchatFeed();
-            showToast("Votre vidéo a été publiée et conservée !", "success");
+                state.posts.unshift(newPost);
+                renderTchatFeed();
+                showToast("Votre vidéo a été publiée et conservée !", "success");
+            } catch (err) {
+                console.error("Tchat upload failure:", err);
+                showToast("Erreur lors de la publication.", "error");
+            }
         }
 
-        // Standard uploader for multiple sources (including background showroom)
+        // Standard uploader for multiple sources (including background showroom banner)
         async function uploadLocalMedia(event, targetPage) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const isVideo = file.type.startsWith('video/');
-            const blob = new Blob([file], { type: file.type });
+            try {
+                const isVideo = file.type.startsWith('video/');
+                const arrayBuffer = await fileToArrayBuffer(file);
 
-            // Save showroom media background
-            await saveMediaToDB(`${targetPage}_media`, { blob, type: isVideo ? 'video' : 'image' });
+                await saveMediaToDB(`${targetPage}_media`, { arrayBuffer, type: file.type });
 
-            const localURL = URL.createObjectURL(blob);
-            state.media[targetPage] = {
-                type: isVideo ? 'video' : 'image',
-                url: localURL
-            };
+                const blob = new Blob([arrayBuffer], { type: file.type });
+                const localURL = URL.createObjectURL(blob);
+                
+                state.media[targetPage] = {
+                    type: isVideo ? 'video' : 'image',
+                    url: localURL
+                };
 
-            showToast(`Média de ${targetPage.toUpperCase()} modifié et persistant !`, "success");
-            
-            if (targetPage === 'first') {
-                applyFirstPageMedia();
-            } else if (targetPage === 'showroom') {
-                applyShowroomMedia();
+                showToast(`Média de ${targetPage.toUpperCase()} modifié et persistant !`, "success");
+                
+                if (targetPage === 'first') {
+                    applyFirstPageMedia();
+                } else if (targetPage === 'showroom') {
+                    applyShowroomMedia();
+                }
+            } catch (err) {
+                console.error("Showroom banner upload error:", err);
+                showToast("Échec de la sauvegarde locale.", "error");
             }
         }
 
@@ -1195,9 +1243,9 @@
                 imgEl.classList.add('hidden');
                 videoEl.classList.remove('hidden');
                 videoEl.src = mediaConfig.url;
-                videoEl.muted = true;
+                videoEl.muted = true; // Kept muted by default for browser sandbox policies, toggled via audio control
                 videoEl.load();
-                videoEl.play().catch(e => console.log("Autoplay context triggered. Click audio indicator to play sound."));
+                videoEl.play().catch(e => console.log("Autoplay policies caught context. Audio button enables high-fidelity sounds."));
             } else {
                 videoEl.classList.add('hidden');
                 imgEl.classList.remove('hidden');
@@ -1448,13 +1496,24 @@
         function renderTchatFeed() {
             if (state.posts.length === 0) return;
 
-            // Highlight the absolute latest video at the top (en tête) with maximized visual space
-            const latestPost = state.posts[0];
+            // Enforce filters to ensure only items with existing, loaded video URLs are shown
+            const validPosts = state.posts.filter(p => p.videoUrl && p.videoUrl.trim() !== "");
+            
+            if (validPosts.length === 0) {
+                document.getElementById('featured-post-container').style.display = 'none';
+                document.getElementById('video-posts-feed').innerHTML = `<p class="text-xs text-neutral-500 italic">Aucun média passion n'a de vidéo chargée actuellement.</p>`;
+                return;
+            }
+
+            // Highlight the absolute latest video at the top with maximized visual space
+            const latestPost = validPosts[0];
+            document.getElementById('featured-post-container').style.display = 'flex';
             
             // Set the main theater video
             const featuredVideoPlayer = document.getElementById('tchat-featured-video');
             if (featuredVideoPlayer) {
                 featuredVideoPlayer.src = latestPost.videoUrl;
+                featuredVideoPlayer.load();
             }
             
             document.getElementById('tchat-featured-title').innerText = latestPost.title;
@@ -1468,7 +1527,7 @@
             if (!remainingFeed) return;
             remainingFeed.innerHTML = "";
 
-            const olderPosts = state.posts.slice(1);
+            const olderPosts = validPosts.slice(1);
             if (olderPosts.length === 0) {
                 remainingFeed.innerHTML = `<p class="text-xs text-neutral-500 italic">Aucun autre média publié pour l'instant.</p>`;
                 return;
@@ -1483,7 +1542,7 @@
                         </div>
 
                         <div class="aspect-video bg-black relative">
-                            <video class="w-full h-full object-cover" controls playsinline>
+                            <video class="w-full h-full object-cover" controls playsinline onerror="handleVideoError(this)">
                                 <source src="${post.videoUrl}" type="video/mp4">
                             </video>
                         </div>
@@ -1555,11 +1614,14 @@
                 return;
             }
 
+            // High performance luxury fallback loop video from Assets
+            const fallbackVideoUrl = 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4';
+
             const newPost = {
                 id: `post_${Date.now()}`,
                 title: title.value.trim(),
                 user: user.value.trim(),
-                videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-on-a-sunny-day-43403-large.mp4',
+                videoUrl: fallbackVideoUrl,
                 likes: 1,
                 comments: []
             };
@@ -1852,40 +1914,47 @@
             showToast("Modifications de l'atelier enregistrées !", "success");
         }
 
+        // Recovers persisted media raw ArrayBuffers from local client machine on startup
         async function loadPersistedMedia() {
             try {
                 // 1. Recover First Page Background Media (Video/Image)
                 const firstMedia = await getMediaFromDB('first_media');
-                if (firstMedia) {
-                    const objectURL = URL.createObjectURL(firstMedia.blob);
-                    state.media.first = { type: firstMedia.type, url: objectURL };
+                if (firstMedia && firstMedia.arrayBuffer) {
+                    const blob = new Blob([firstMedia.arrayBuffer], { type: firstMedia.type });
+                    const objectURL = URL.createObjectURL(blob);
+                    state.media.first = { type: firstMedia.type.startsWith('video/') ? 'video' : 'image', url: objectURL };
                     applyFirstPageMedia();
+                    console.info("Recovered and reconstructed First media from native client storage.");
                 }
 
                 // 2. Recover Showroom Background Media
                 const showroomMedia = await getMediaFromDB('showroom_media');
-                if (showroomMedia) {
-                    const objectURL = URL.createObjectURL(showroomMedia.blob);
-                    state.media.showroom = { type: showroomMedia.type, url: objectURL };
+                if (showroomMedia && showroomMedia.arrayBuffer) {
+                    const blob = new Blob([showroomMedia.arrayBuffer], { type: showroomMedia.type });
+                    const objectURL = URL.createObjectURL(blob);
+                    state.media.showroom = { type: showroomMedia.type.startsWith('video/') ? 'video' : 'image', url: objectURL };
                     applyShowroomMedia();
+                    console.info("Recovered and reconstructed Showroom media from native client storage.");
                 }
 
                 // 3. Recover Latest Tchat Video Post
                 const tchatMedia = await getMediaFromDB('tchat_latest_post');
-                if (tchatMedia) {
-                    const objectURL = URL.createObjectURL(tchatMedia.blob);
+                if (tchatMedia && tchatMedia.arrayBuffer) {
+                    const blob = new Blob([tchatMedia.arrayBuffer], { type: tchatMedia.type });
+                    const objectURL = URL.createObjectURL(blob);
                     const restoredPost = {
                         id: `post_restored_${Date.now()}`,
-                        title: tchatMedia.title,
-                        user: tchatMedia.user,
+                        title: tchatMedia.title || "Performance d'Exception",
+                        user: tchatMedia.user || "Abonné_Master",
                         videoUrl: objectURL,
                         likes: 242,
-                        comments: ["Dernière performance restaurée depuis le stockage local de votre iPhone/Mac."]
+                        comments: ["Dernière performance restaurée depuis le stockage physique de votre appareil."]
                     };
                     state.posts.unshift(restoredPost);
+                    console.info("Recovered and reconstructed latest Tchat community post.");
                 }
             } catch (e) {
-                console.warn("Storage restoration failed or empty indexedDB instance:", e);
+                console.warn("Storage restoration empty or indexedDB blocked:", e);
             }
         }
 
